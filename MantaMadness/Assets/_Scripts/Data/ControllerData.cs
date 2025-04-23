@@ -9,4 +9,6 @@ public class ControllerData : ScriptableObject
     public float baseSpeedModifier;
     public float baseTurnSpeed;
     public float brakeForce;
+    [Range(0f,1f)]
+    public float gripForce;
 }

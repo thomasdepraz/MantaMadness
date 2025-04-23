@@ -1,7 +1,4 @@
-using Unity.VisualScripting;
-using UnityEditor.Timeline.Actions;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class SimpleController : MonoBehaviour
 {
@@ -40,6 +37,11 @@ public class SimpleController : MonoBehaviour
         }
 
         float steer = turn * controllerData.baseTurnSpeed;
+
+        float steeringVelocity = Vector3.Dot(transform.right, Velocity);
+        float desiredVelocityChange = -steeringVelocity * controllerData.gripForce * Time.fixedDeltaTime;
+        rb.AddForce(transform.right * desiredVelocityChange, ForceMode.VelocityChange);
+
 
         //Apply forces
         rb.AddForce(transform.forward * forward * 0.02f);
