@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
@@ -21,6 +22,7 @@ public class InputManager : MonoBehaviour
     public InputActionReference brake;
     public InputActionReference dive;
     public InputActionReference jump;
+    public InputActionReference airControl;
 
     private void OnEnable()
     {
@@ -28,6 +30,7 @@ public class InputManager : MonoBehaviour
         turn.action.Enable();
         brake.action.Enable();
         dive.action.Enable();
+        airControl.action.Enable();
     }
 
     private void OnDisable()
@@ -36,5 +39,6 @@ public class InputManager : MonoBehaviour
         turn.action.Disable();
         brake.action.Disable();
         jump.action.Disable();
+        airControl.action.Disable();
     }
 }

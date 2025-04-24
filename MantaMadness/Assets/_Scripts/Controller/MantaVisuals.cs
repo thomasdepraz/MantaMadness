@@ -34,6 +34,13 @@ public class MantaVisuals : MonoBehaviour
         }
 
         //Falling
+        if(mantaController.State == ControllerState.FALLING)
+        {
+            float magnitude = mantaController.HorizontalVelocity.magnitude;
+            float pitch = Vector3.Dot(mantaController.HorizontalVelocity.normalized, transform.forward);
+            float roll = Vector3.Dot(mantaController.HorizontalVelocity.normalized, transform.right);
+            targetRotation = Quaternion.Euler(pitch * magnitude * 2, 0, -roll * magnitude * 2);
+        }
 
         //Diving
         if(mantaController.State == ControllerState.DIVING)

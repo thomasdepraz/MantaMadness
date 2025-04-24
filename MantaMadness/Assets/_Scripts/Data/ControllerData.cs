@@ -34,4 +34,9 @@ public class ControllerData : ScriptableObject
     [Header("Swimming parameters")]
     public float minimumFloatingForce;
     public float floatingForceMultiplier;
+
+    [Header("Air Control")]
+    public float maxAirControl;
+    public float fallingAirControl;
+    public float divingAirControl;
 }

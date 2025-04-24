@@ -38,6 +38,7 @@ public class SimpleController : MonoBehaviour
     private InputManager inputs;
     private float defaultDrag;
     float thrust, turn, brake = 0f;
+    Vector2 airControl;
 
     private ControllerState state;
     private WaterBlock currentWaterBlock;
@@ -128,6 +129,9 @@ public class SimpleController : MonoBehaviour
         thrust = inputs.thrust.action.ReadValue<float>();
         turn = inputs.turn.action.ReadValue<float>();
         brake = inputs.brake.action.ReadValue<float>();
+        airControl = inputs.airControl.action.ReadValue<Vector2>();
+
+        Debug.Log(airControl);
     }
 
     bool hasHit = false;
@@ -212,37 +216,58 @@ public class SimpleController : MonoBehaviour
         }
 
         //movement
-        if (State == ControllerState.SURFING || State == ControllerState.DIVING || State == ControllerState.SWIMMING)
+        if (State == ControllerState.SURFING || State == ControllerState.SWIMMING)
         {
-            float speed = controllerData.baseSpeed * controllerData.baseSpeedModifier;
-
-            float forward = 0.0f;
-            if (thrust > 0.0)
-            {
-                forward = thrust * speed;
-            }
-
-            float steer = turn * controllerData.baseTurnSpeed;
-
-            float steeringVelocity = Vector3.Dot(transform.right, Velocity);
-            float desiredVelocityChange = -steeringVelocity * controllerData.gripForce * Time.fixedDeltaTime;
-
-            //Apply forces (grip - thrust - steer)
-            rb.AddForce(transform.right * desiredVelocityChange, ForceMode.VelocityChange);
-            rb.AddForce(transform.forward * forward * 0.02f);
-            rb.AddTorque(new Vector3(0.0f, steer * 0.02f, 0.0f));
-
-            //Apply drag if braking
-            if (brake > 0.0f)
-            {
-                rb.linearDamping = Mathf.Lerp(defaultDrag, controllerData.brakeForce, brake);
-            }
-            else
-            {
-                rb.linearDamping = defaultDrag;
-            }
+            Movement();
         }
 
+        if(State == ControllerState.FALLING || State == ControllerState.DIVING)
+        {
+            AirControl();
+        }
+
+    }
+
+    private void AirControl()
+    {
+        rb.linearDamping = 0;
+        float inputMagnitude = Mathf.Max(Mathf.Abs(airControl.x), Mathf.Abs(airControl.y));
+        Vector2 direction = airControl.normalized * inputMagnitude;
+        float coeff = State == ControllerState.FALLING ? controllerData.fallingAirControl : controllerData.divingAirControl;
+
+        rb.AddForce(transform.TransformDirection(new Vector3(direction.x, 0, direction.y)) * coeff * Time.fixedDeltaTime, ForceMode.VelocityChange);
+        rb.linearVelocity = ClampHorizontalVelocity(Velocity, controllerData.maxAirControl);
+    }
+
+    private void Movement()
+    {
+        float speed = controllerData.baseSpeed * controllerData.baseSpeedModifier;
+
+        float forward = 0.0f;
+        if (thrust > 0.0)
+        {
+            forward = thrust * speed;
+        }
+
+        float steer = turn * controllerData.baseTurnSpeed;
+
+        float steeringVelocity = Vector3.Dot(transform.right, Velocity);
+        float desiredVelocityChange = -steeringVelocity * controllerData.gripForce * Time.fixedDeltaTime;
+
+        //Apply forces (grip - thrust - steer)
+        rb.AddForce(transform.right * desiredVelocityChange, ForceMode.VelocityChange);
+        rb.AddForce(transform.forward * forward * 0.02f);
+        rb.AddTorque(new Vector3(0.0f, steer * 0.02f, 0.0f));
+
+        //Apply drag if braking
+        if (brake > 0.0f)
+        {
+            rb.linearDamping = Mathf.Lerp(defaultDrag, controllerData.brakeForce, brake);
+        }
+        else
+        {
+            rb.linearDamping = defaultDrag;
+        }
     }
 
     private void SurfHover(RaycastHit info)
@@ -322,5 +347,12 @@ public class SimpleController : MonoBehaviour
     private Vector3 ClampYVelocity(Vector3 velocity, float minY, float maxY)
     {
         return new Vector3(velocity.x, Mathf.Clamp(velocity.y, minY, maxY), velocity.z);
+    }
+
+    private Vector3 ClampHorizontalVelocity(Vector3 velocity, float maxLength)
+    {
+        Vector3 clamped = Vector3.ClampMagnitude(velocity, maxLength);
+
+        return new Vector3(clamped.x, velocity.y, clamped.z);
     }
 }
