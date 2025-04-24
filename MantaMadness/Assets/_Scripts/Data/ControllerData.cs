@@ -24,10 +24,12 @@ public class ControllerData : ScriptableObject
     public float baseDivingForce = 5f;
     public float underwaterDrag = 4f;
     public float jumpMultiplier = 1.2f;
+    public float maxDivingFallingSpeed = 5;
 
     [Header("Jump parameters")]
     public float forwardImpulseForce;
     public float upwardImpulseForce;
+    public float maxFallingSpeed;
 
     [Header("Swimming parameters")]
     public float minimumFloatingForce;
