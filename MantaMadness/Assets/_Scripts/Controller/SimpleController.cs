@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public enum ControllerState
@@ -130,8 +129,6 @@ public class SimpleController : MonoBehaviour
         turn = inputs.turn.action.ReadValue<float>();
         brake = inputs.brake.action.ReadValue<float>();
         airControl = inputs.airControl.action.ReadValue<Vector2>();
-
-        Debug.Log(airControl);
     }
 
     bool hasHit = false;
