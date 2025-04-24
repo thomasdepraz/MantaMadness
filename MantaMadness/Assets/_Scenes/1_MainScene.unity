@@ -17,7 +17,7 @@ RenderSettings:
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.01
+  m_FogDensity: 1
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
@@ -69554,6 +69554,30 @@ PrefabInstance:
     - target: {fileID: 1630504113041504160, guid: dca7f13816397624b95432a30aded4ae, type: 3}
       propertyPath: maxFOV
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2806133684233491783, guid: dca7f13816397624b95432a30aded4ae, type: 3}
+      propertyPath: m_ClearFlags
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2806133684233491783, guid: dca7f13816397624b95432a30aded4ae, type: 3}
+      propertyPath: far clip plane
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 2806133684233491783, guid: dca7f13816397624b95432a30aded4ae, type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2806133684233491783, guid: dca7f13816397624b95432a30aded4ae, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0.2784314
+      objectReference: {fileID: 0}
+    - target: {fileID: 2806133684233491783, guid: dca7f13816397624b95432a30aded4ae, type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0.2784314
+      objectReference: {fileID: 0}
+    - target: {fileID: 2806133684233491783, guid: dca7f13816397624b95432a30aded4ae, type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0.2784314
       objectReference: {fileID: 0}
     - target: {fileID: 3085066077877558464, guid: dca7f13816397624b95432a30aded4ae, type: 3}
       propertyPath: m_AngularDrag

@@ -18,6 +18,7 @@ public class SimpleController : MonoBehaviour
     [SerializeField] private ControllerData controllerData;
 
     public Vector3 Velocity => this.rb.linearVelocity;
+    public Vector3 HorizontalVelocity => new Vector3(this.rb.linearVelocity.x, 0f, this.rb.linearVelocity.z);
     public Vector3 AngularVelocity => this.rb.angularVelocity;
 
     public ControllerState State {
@@ -62,7 +63,7 @@ public class SimpleController : MonoBehaviour
             // spin when falling
             state = ControllerState.JUMPING;
             jumpCount++;
-            rb.linearVelocity = GetHorizontalVelocity(rb.linearVelocity);
+            rb.linearVelocity = HorizontalVelocity;
             rb.AddForce(Vector3.forward * controllerData.forwardImpulseForce + Vector3.up * controllerData.upwardImpulseForce, ForceMode.Impulse);
         }
 
@@ -71,7 +72,7 @@ public class SimpleController : MonoBehaviour
             // spin when surfing
             state = ControllerState.JUMPING;
             jumpCount++;
-            rb.linearVelocity = GetHorizontalVelocity(rb.linearVelocity);
+            rb.linearVelocity = HorizontalVelocity;
             rb.AddForce(Vector3.forward * controllerData.forwardImpulseForce + Vector3.up * controllerData.upwardImpulseForce, ForceMode.Impulse);
         }
     }
@@ -92,7 +93,7 @@ public class SimpleController : MonoBehaviour
             float currentDepth = currentWaterBlock.GetDepthAtPosition(transform.position, out _);
 
             //Kill vertical velocity before jumping
-            rb.linearVelocity = GetHorizontalVelocity(rb.linearVelocity);
+            rb.linearVelocity = HorizontalVelocity;
 
             //Jump impulse
             rb.AddForce(Vector3.up * currentDepth * controllerData.jumpMultiplier, ForceMode.Impulse);
@@ -257,10 +258,5 @@ public class SimpleController : MonoBehaviour
         {
             State = ControllerState.FALLING;
         }
-    }
-
-    private Vector3 GetHorizontalVelocity(Vector3 vel)
-    {
-        return new Vector3(vel.x, 0, vel.z);
     }
 }
