@@ -29,4 +29,7 @@ public class ControllerData : ScriptableObject
     public float forwardImpulseForce;
     public float upwardImpulseForce;
 
+    [Header("Swimming parameters")]
+    public float minimumFloatingForce;
+    public float floatingForceMultiplier;
 }
