@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using UnityEngine;
 
 public enum ControllerState
@@ -7,7 +5,8 @@ public enum ControllerState
     FALLING, 
     JUMPING,
     SURFING,
-    DIVING
+    DIVING, 
+    SWIMMING,
 }
 
 public class SimpleController : MonoBehaviour
@@ -21,18 +20,31 @@ public class SimpleController : MonoBehaviour
     public Vector3 Velocity => this.rb.linearVelocity;
     public Vector3 AngularVelocity => this.rb.angularVelocity;
 
+    public ControllerState State {
+        get
+        { 
+            return state; 
+        }
+        set
+        {
+            Debug.Log($"Previous state = {state} // new state : {value}");
+            state = value;
+        }
+    }
+
     private InputManager inputs;
     private float defaultDrag;
     float thrust, turn, brake = 0f;
 
     private ControllerState state;
     private WaterBlock currentWaterBlock;
+    private int jumpCount;
 
     private void Start()
     {
         inputs = InputManager.Instance;
         defaultDrag = rb.linearDamping;
-        state = ControllerState.FALLING;
+        State = ControllerState.FALLING;
 
         inputs.dive.action.performed += Dive;
         inputs.dive.action.canceled += DiveReleased;
@@ -42,25 +54,50 @@ public class SimpleController : MonoBehaviour
 
     private void Jump(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
+        if (state == ControllerState.DIVING || state == ControllerState.SWIMMING)
+            return;
+
+        if(state == ControllerState.FALLING && jumpCount < 1)
+        {
+            // spin when falling
+            state = ControllerState.JUMPING;
+            jumpCount++;
+            rb.linearVelocity = GetHorizontalVelocity(rb.linearVelocity);
+            rb.AddForce(Vector3.forward * controllerData.forwardImpulseForce + Vector3.up * controllerData.upwardImpulseForce, ForceMode.Impulse);
+        }
+
+        if(state == ControllerState.SURFING && jumpCount < 1)
+        {
+            // spin when surfing
+            state = ControllerState.JUMPING;
+            jumpCount++;
+            rb.linearVelocity = GetHorizontalVelocity(rb.linearVelocity);
+            rb.AddForce(Vector3.forward * controllerData.forwardImpulseForce + Vector3.up * controllerData.upwardImpulseForce, ForceMode.Impulse);
+        }
     }
 
     private void Dive(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if(state == ControllerState.SURFING)
+        if(State == ControllerState.SURFING)
         {
-            state = ControllerState.DIVING;
+            State = ControllerState.DIVING;
             rb.AddForce(Vector3.down * controllerData.baseDivingForce, ForceMode.Impulse);
         }
     }
 
     private void DiveReleased(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if(state == ControllerState.DIVING && currentWaterBlock != null)
+        if(State == ControllerState.DIVING && currentWaterBlock != null)
         {
             float currentDepth = currentWaterBlock.GetDepthAtPosition(transform.position, out _);
+
+            //Kill vertical velocity before jumping
+            rb.linearVelocity = GetHorizontalVelocity(rb.linearVelocity);
+
+            //Jump impulse
             rb.AddForce(Vector3.up * currentDepth * controllerData.jumpMultiplier, ForceMode.Impulse);
 
-            state = ControllerState.JUMPING;
+            State = ControllerState.JUMPING;
         }
     }
 
@@ -71,32 +108,35 @@ public class SimpleController : MonoBehaviour
         brake = inputs.brake.action.ReadValue<float>();
     }
 
+    bool hasHit = false;
     private void FixedUpdate()
     {
-        bool hasHit = Physics.Raycast(transform.position, -transform.up, out RaycastHit info, controllerData.hoverRaycastLength);
+        hasHit = Physics.Raycast(transform.position, -transform.up, out RaycastHit info, controllerData.hoverRaycastLength);
 
-        if (state == ControllerState.FALLING)
+        if (State == ControllerState.FALLING)
         {
             if (hasHit)
-                state = ControllerState.SURFING;
+            {
+                State = ControllerState.SURFING;
+                jumpCount = 0;
+            }
         }
 
-        if(state == ControllerState.JUMPING && rb.linearVelocity.y < 0)
+        if(State == ControllerState.JUMPING && rb.linearVelocity.y < 0 && currentWaterBlock == null)
         {
-            state = ControllerState.FALLING;
-            Debug.Log("Start Falling");
+            State = ControllerState.FALLING;
         }
 
         //Apply gravity
-        if (state == ControllerState.JUMPING ||
-            state ==  ControllerState.FALLING ||
-            state == ControllerState.SURFING)
+        if (State == ControllerState.JUMPING ||
+            State ==  ControllerState.FALLING ||
+            State == ControllerState.SURFING)
         {
             rb.AddForce(Vector3.down * 9.8f);
         }
 
         //Hover on water
-        if (state == ControllerState.SURFING)
+        if (State == ControllerState.SURFING)
         {
             if(hasHit)
             {
@@ -104,13 +144,12 @@ public class SimpleController : MonoBehaviour
             }
             else
             {
-                state = ControllerState.FALLING;
-                Debug.Log("Fall off block top");
+                State = ControllerState.FALLING;
             }
         }
 
         //diving y force 
-        if(state == ControllerState.DIVING && currentWaterBlock != null)
+        if(State == ControllerState.DIVING && currentWaterBlock != null)
         {
             float currentDepth = currentWaterBlock.GetDepthAtPosition(transform.position, out _);
             if (currentDepth > 0 && rb.linearVelocity.y < 0)
@@ -129,7 +168,7 @@ public class SimpleController : MonoBehaviour
         }
 
         //movement
-        if(state == ControllerState.SURFING || state == ControllerState.DIVING)
+        if(State == ControllerState.SURFING || State == ControllerState.DIVING)
         {
             float speed = controllerData.baseSpeed * controllerData.baseSpeedModifier;
 
@@ -195,28 +234,33 @@ public class SimpleController : MonoBehaviour
         {
             return;
         }
+
         currentWaterBlock = waterBlock;
 
-        if(state == ControllerState.FALLING)
+        if(State == ControllerState.FALLING)
         {
             float currentDepth = currentWaterBlock.GetDepthAtPosition(transform.position, out _);
+
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * currentDepth * controllerData.jumpMultiplier, ForceMode.Impulse);
 
-            state = ControllerState.JUMPING;
+            State = ControllerState.JUMPING;
         }
     }
-
 
     private void OnTriggerExit(Collider collision)
     {
         if (collision.gameObject.TryGetComponent<WaterBlock>(out _))
             currentWaterBlock = null;
 
-        if (state != ControllerState.JUMPING)
+        if (State != ControllerState.JUMPING && hasHit == false)
         {
-            state = ControllerState.FALLING;
-            Debug.Log("Fall of block side");
+            State = ControllerState.FALLING;
         }
+    }
+
+    private Vector3 GetHorizontalVelocity(Vector3 vel)
+    {
+        return new Vector3(vel.x, 0, vel.z);
     }
 }

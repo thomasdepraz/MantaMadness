@@ -25,4 +25,8 @@ public class ControllerData : ScriptableObject
     public float underwaterDrag = 4f;
     public float jumpMultiplier = 1.2f;
 
+    [Header("Jump parameters")]
+    public float forwardImpulseForce;
+    public float upwardImpulseForce;
+
 }

@@ -22,9 +22,12 @@ public class FOVController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Vector3 horizontalVel = controller.Velocity;
+        horizontalVel.y = 0;
+
         mainCamera.fieldOfView = Mathf.Lerp(
             defaultFOV, 
             maxFOV, 
-            Mathf.Clamp01(FOVProgression.Evaluate(controller.Velocity.magnitude / maxAvatarSpeed)));   
+            Mathf.Clamp01(FOVProgression.Evaluate(horizontalVel.magnitude / maxAvatarSpeed)));   
     }
 }
