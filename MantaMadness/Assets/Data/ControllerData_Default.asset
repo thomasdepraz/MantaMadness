@@ -22,6 +22,40 @@ MonoBehaviour:
   hoverStrength: 400
   hoverDamper: 10
   baseDivingDepth: 5
+  maxDivingDepth: 20
+  VelocityToDivingDepthRatio:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.29989547
+      value: 0.0027116537
+      inSlope: 0.009041997
+      outSlope: 2.85275
+      tangentMode: 5
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.0654192
+    - serializedVersion: 3
+      time: 1.0006104
+      value: 1
+      inSlope: 0.69391155
+      outSlope: 0.69391155
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.085182965
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   baseDivingForce: 8
   underwaterDrag: 2
   jumpMultiplier: 1

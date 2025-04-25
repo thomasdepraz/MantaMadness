@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class MantaVisuals : MonoBehaviour
 {
@@ -10,11 +11,21 @@ public class MantaVisuals : MonoBehaviour
 
     [Header("Parameters")]
     public ParticleSystem surfParticles;
+    public ParticleSystem splashParticles;
   
 
     private void Awake()
     {
         mantaController = GetComponent<SimpleController>();
+        mantaController.stateChanged += UpdateState;
+    }
+
+    private void UpdateState(ControllerState previous, ControllerState newState)
+    {
+        if(previous == ControllerState.FALLING && newState == ControllerState.SURFING)
+        {
+            SplashParticles();
+        }
     }
 
     private void Update()
@@ -71,7 +82,10 @@ public class MantaVisuals : MonoBehaviour
         {
             surfParticles.Stop();
         }
-        
     }
 
+    private void SplashParticles()
+    {
+        splashParticles.Play();
+    }
 }

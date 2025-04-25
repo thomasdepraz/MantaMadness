@@ -21,8 +21,10 @@ public class ControllerData : ScriptableObject
 
     [Header("Diving parameters")]
     public float baseDivingDepth = 5f;
+    public float maxDivingDepth = 20f;
+    public AnimationCurve VelocityToDivingDepthRatio;
     public float baseDivingForce = 5f;
-    public float underwaterDrag = 4f;
+    public float underwaterDrag = 3f;
     public float jumpMultiplier = 1.2f;
     public float maxDivingFallingSpeed = 5;
 

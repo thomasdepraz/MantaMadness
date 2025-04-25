@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum ControllerState
@@ -21,6 +22,7 @@ public class SimpleController : MonoBehaviour
     public Vector3 HorizontalVelocity => new Vector3(this.rb.linearVelocity.x, 0f, this.rb.linearVelocity.z);
     public Vector3 AngularVelocity => this.rb.angularVelocity;
     public float CurrentDepth => currentWaterBlock is null ? 0 : currentWaterBlock.GetDepthAtPosition(transform.position, out _);
+    public float MaxDepth => currentWaterBlock is null ? 0 : maxDepth;
 
     public ControllerState State {
         get
@@ -29,7 +31,7 @@ public class SimpleController : MonoBehaviour
         }
         set
         {
-            Debug.Log($"Previous state = {state} // new state : {value}");
+            stateChanged.Invoke(state, value);
             state = value;
         }
     }
@@ -43,6 +45,8 @@ public class SimpleController : MonoBehaviour
     private WaterBlock currentWaterBlock;
     private float maxDepth;
     private int jumpCount;
+
+    public Action<ControllerState, ControllerState> stateChanged;
 
     private void Start()
     {
@@ -176,8 +180,6 @@ public class SimpleController : MonoBehaviour
         if(currentWaterBlock != null)
         {
             float currentDepth = currentWaterBlock.GetDepthAtPosition(transform.position, out _);
-            if (currentDepth > maxDepth)
-                maxDepth = currentDepth;
             
             //diving y force 
             if (State == ControllerState.DIVING)
@@ -189,7 +191,7 @@ public class SimpleController : MonoBehaviour
                         //Drag on y velocity - the deeper the higher the drag 
                         rb.AddForce(new Vector3(0.0f, -rb.linearVelocity.y, 0.0f) * (currentDepth / controllerData.baseDivingDepth) * controllerData.underwaterDrag * Time.fixedDeltaTime, ForceMode.VelocityChange);
                     }
-                    else if (currentDepth > controllerData.baseDivingDepth)
+                    else if (currentDepth > Mathf.Min(controllerData.maxDivingDepth, maxDepth))
                     {
                         //Stop when hitting max depth
                         rb.AddForce(new Vector3(0.0f, -rb.linearVelocity.y, 0.0f), ForceMode.VelocityChange);
@@ -304,10 +306,24 @@ public class SimpleController : MonoBehaviour
         currentWaterBlock = waterBlock;
         maxDepth = 0;
 
+        if(State == ControllerState.DIVING && Velocity.y < 0)
+        {
+            float speedRatio = Mathf.Clamp01((Mathf.Abs(Velocity.y) - controllerData.baseDivingForce) / (controllerData.maxDivingFallingSpeed - controllerData.baseDivingForce));
+            maxDepth = Mathf.Lerp(controllerData.baseDivingDepth, controllerData.maxDivingDepth, controllerData.VelocityToDivingDepthRatio.Evaluate(speedRatio));
+        }
+
         if(State == ControllerState.FALLING || State == ControllerState.JUMPING)
         {
             State = ControllerState.SWIMMING;
             rb.linearVelocity = HorizontalVelocity;
+            return;
+        }
+
+        Vector3 normal = (transform.position - collision.ClosestPoint(transform.position)).normalized;
+        if (State == ControllerState.SURFING && Vector3.Dot(normal, Vector3.up) < 0.1f) 
+        {
+            //Enter from the side
+            State = ControllerState.SWIMMING;
         }
     }
 
@@ -348,7 +364,8 @@ public class SimpleController : MonoBehaviour
 
     private Vector3 ClampHorizontalVelocity(Vector3 velocity, float maxLength)
     {
-        Vector3 clamped = Vector3.ClampMagnitude(velocity, maxLength);
+        Vector3 toClamp = new Vector3(velocity.x, 0, velocity.z);
+        Vector3 clamped = Vector3.ClampMagnitude(toClamp, maxLength);
 
         return new Vector3(clamped.x, velocity.y, clamped.z);
     }
