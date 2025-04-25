@@ -22,7 +22,7 @@ public class SimpleController : MonoBehaviour
     public Vector3 HorizontalVelocity => new Vector3(this.rb.linearVelocity.x, 0f, this.rb.linearVelocity.z);
     public Vector3 AngularVelocity => this.rb.angularVelocity;
     public float CurrentDepth => currentWaterBlock is null ? 0 : currentWaterBlock.GetDepthAtPosition(transform.position, out _);
-    public float MaxDepth => currentWaterBlock is null ? 0 : maxDepth;
+    public float MaxDepth => currentWaterBlock is null ? 0 : maxDivingDepth;
 
     public ControllerState State {
         get
@@ -43,6 +43,7 @@ public class SimpleController : MonoBehaviour
 
     private ControllerState state;
     private WaterBlock currentWaterBlock;
+    private float maxDivingDepth;
     private float maxDepth;
     private int jumpCount;
 
@@ -180,6 +181,8 @@ public class SimpleController : MonoBehaviour
         if(currentWaterBlock != null)
         {
             float currentDepth = currentWaterBlock.GetDepthAtPosition(transform.position, out _);
+            if (currentDepth > maxDepth)
+                maxDepth = currentDepth;
             
             //diving y force 
             if (State == ControllerState.DIVING)
@@ -191,7 +194,7 @@ public class SimpleController : MonoBehaviour
                         //Drag on y velocity - the deeper the higher the drag 
                         rb.AddForce(new Vector3(0.0f, -rb.linearVelocity.y, 0.0f) * (currentDepth / controllerData.baseDivingDepth) * controllerData.underwaterDrag * Time.fixedDeltaTime, ForceMode.VelocityChange);
                     }
-                    else if (currentDepth > Mathf.Min(controllerData.maxDivingDepth, maxDepth))
+                    else if (currentDepth > Mathf.Min(controllerData.maxDivingDepth, maxDivingDepth))
                     {
                         //Stop when hitting max depth
                         rb.AddForce(new Vector3(0.0f, -rb.linearVelocity.y, 0.0f), ForceMode.VelocityChange);
@@ -309,7 +312,7 @@ public class SimpleController : MonoBehaviour
         if(State == ControllerState.DIVING && Velocity.y < 0)
         {
             float speedRatio = Mathf.Clamp01((Mathf.Abs(Velocity.y) - controllerData.baseDivingForce) / (controllerData.maxDivingFallingSpeed - controllerData.baseDivingForce));
-            maxDepth = Mathf.Lerp(controllerData.baseDivingDepth, controllerData.maxDivingDepth, controllerData.VelocityToDivingDepthRatio.Evaluate(speedRatio));
+            maxDivingDepth = Mathf.Lerp(controllerData.baseDivingDepth, controllerData.maxDivingDepth, controllerData.VelocityToDivingDepthRatio.Evaluate(speedRatio));
         }
 
         if(State == ControllerState.FALLING || State == ControllerState.JUMPING)
