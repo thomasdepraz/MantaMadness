@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8165c5f1327d46249aa039486e9e5915, type: 3}
   m_Name: ControllerData_Default
   m_EditorClassIdentifier: 
-  baseSpeed: 400
+  baseSpeed: 800
   baseSpeedModifier: 1
   baseTurnSpeed: 90
   brakeForce: 2.25
-  gripForce: 0.7
+  gripForce: 0.2
   hoverRaycastLength: 1
   hoverHeight: 0.7
   hoverStrength: 400
@@ -65,6 +65,6 @@ MonoBehaviour:
   maxFallingSpeed: 16
   minimumFloatingForce: 2
   floatingForceMultiplier: 5
-  maxAirControl: 10
+  maxAirControl: 1000
   fallingAirControl: 10
   divingAirControl: 5
