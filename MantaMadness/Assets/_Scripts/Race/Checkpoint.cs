@@ -28,7 +28,7 @@ public class Checkpoint : MonoBehaviour
     {
         if(other.gameObject.TryGetComponent(out SimpleController controller))
         {
-            if(Vector3.Dot(transform.forward, controller.Velocity) > 0)
+            if(Vector3.Dot(transform.forward, controller.Velocity) > 0 && canBePassed)
             {
                 checkpointPassed.Invoke(this);
                 canBePassed = false;

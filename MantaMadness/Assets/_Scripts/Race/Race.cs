@@ -46,9 +46,11 @@ public class Race : MonoBehaviour
     private void CheckpointPassed(Checkpoint checkpoint)
     {
         lastCheckpointPassed = checkpoint;
+        Debug.Log($"Checkpoint {checkpoint.RaceIndex} passed");
 
         if(checkpoint == startCheckpoint)
         {
+            Debug.Log($"LapCount = {currentLapCount + 1} / {lapCount}");
             checkpointCountThisLap = 0;
             if(++currentLapCount >= lapCount)
             {
@@ -66,6 +68,12 @@ public class Race : MonoBehaviour
 
     private void EndRace()
     {
-
+        //Victory animation
+        Debug.Log($"RaceEnded");
+        for (int i = 0; i < CheckpointCount; i++)
+        {
+            checkpoints[i].checkpointPassed -= CheckpointPassed;
+            checkpoints[i].Deactivate();
+        }
     }
 }
