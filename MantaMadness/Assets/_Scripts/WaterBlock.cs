@@ -19,7 +19,7 @@ public class WaterBlock : MonoBehaviour
     {
         isOut = false;
         float depth = topHeight - position.y;
-        if(depth < bottomHeight)
+        if(topHeight - depth < bottomHeight)
         {
             depth = 0;
             isOut = false;

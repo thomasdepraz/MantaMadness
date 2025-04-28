@@ -207,7 +207,8 @@ public class SimpleController : MonoBehaviour
 
             if(State == ControllerState.SWIMMING)
             {
-                rb.AddForce(Vector3.up * Mathf.Max(controllerData.minimumFloatingForce, maxDepth * controllerData.floatingForceMultiplier), ForceMode.Force);
+                float force = Mathf.Min(controllerData.maximumFloatingForce, Mathf.Max(controllerData.minimumFloatingForce, maxDepth * controllerData.floatingForceMultiplier));
+                rb.AddForce(Vector3.up * force);
             }
         }
         else //IN AIR
