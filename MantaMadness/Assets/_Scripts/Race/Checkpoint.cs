@@ -7,6 +7,7 @@ public class Checkpoint : MonoBehaviour
     private bool canBePassed = false;
     private int raceIndex;
     public int RaceIndex { get => raceIndex; }
+    public Transform respawnTransform;
 
     public void Activate(int raceIndex)
     {

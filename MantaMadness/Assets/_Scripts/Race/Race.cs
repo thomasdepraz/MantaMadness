@@ -76,4 +76,9 @@ public class Race : MonoBehaviour
             checkpoints[i].Deactivate();
         }
     }
+
+    public Transform GetRespawnTransform()
+    {
+        return lastCheckpointPassed.respawnTransform;
+    }
 }
