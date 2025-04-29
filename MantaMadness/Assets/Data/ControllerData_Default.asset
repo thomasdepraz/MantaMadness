@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8165c5f1327d46249aa039486e9e5915, type: 3}
   m_Name: ControllerData_Default
   m_EditorClassIdentifier: 
-  baseSpeed: 800
-  baseSpeedModifier: 1
-  baseTurnSpeed: 90
+  acceleration: 60
+  maxSpeed: 30
+  baseTurnSpeed: 3
   brakeForce: 2.25
-  gripForce: 0.2
+  grip: 0.3
   hoverRaycastLength: 1
   hoverHeight: 0.7
-  hoverStrength: 400
-  hoverDamper: 10
+  hoverStrength: 5
+  hoverDamper: 1
   baseDivingDepth: 5
   maxDivingDepth: 20
   VelocityToDivingDepthRatio:
@@ -69,3 +69,5 @@ MonoBehaviour:
   maxAirControl: 1000
   fallingAirControl: 10
   divingAirControl: 5
+  steeringMult: 1.25
+  driftingGrip: 0

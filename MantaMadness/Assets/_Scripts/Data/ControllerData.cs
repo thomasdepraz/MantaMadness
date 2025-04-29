@@ -6,12 +6,12 @@ using UnityEngine;
 public class ControllerData : ScriptableObject
 {
     [Header("Global parameters")]
-    public float baseSpeed;
-    public float baseSpeedModifier;
+    public float acceleration;
+    public float maxSpeed;
     public float baseTurnSpeed;
     public float brakeForce;
     [Range(0f,1f)]
-    public float gripForce;
+    public float grip;
 
     [Header("Surfing parameters")]
     public float hoverRaycastLength = 2f;
@@ -42,4 +42,8 @@ public class ControllerData : ScriptableObject
     public float maxAirControl;
     public float fallingAirControl;
     public float divingAirControl;
+
+    [Header("Drift")]
+    [Min(1)]public float steeringMult;
+    public float driftingGrip;
 }

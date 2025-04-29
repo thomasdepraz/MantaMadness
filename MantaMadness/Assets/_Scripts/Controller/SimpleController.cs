@@ -1,7 +1,5 @@
 using System;
-using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityEngine.InputSystem.XR.Haptics;
 
 public enum ControllerState
 {
@@ -16,6 +14,7 @@ public class SimpleController : MonoBehaviour
 {
     [SerializeField]
     private Rigidbody rb;
+    private ControllerStats stats;
 
     [Header("Parameters")]
     [SerializeField] private ControllerData controllerData;
@@ -25,6 +24,7 @@ public class SimpleController : MonoBehaviour
     public Vector3 AngularVelocity => this.rb.angularVelocity;
     public float CurrentDepth => currentWaterBlock is null ? 0 : currentWaterBlock.GetDepthAtPosition(transform.position, out _);
     public float MaxDepth => currentWaterBlock is null ? 0 : maxDivingDepth;
+    public bool IsDrifting => drifting;
 
     public ControllerState State {
         get
@@ -48,8 +48,15 @@ public class SimpleController : MonoBehaviour
     private float maxDivingDepth;
     private float maxDepth;
     private int jumpCount;
+    private bool drifting;
+    private int driftDir;
 
     public Action<ControllerState, ControllerState> stateChanged;
+
+    private void Awake()
+    {
+        stats = new ControllerStats(this, this.controllerData);
+    }
 
     private void Start()
     {
@@ -74,7 +81,7 @@ public class SimpleController : MonoBehaviour
             state = ControllerState.JUMPING;
             jumpCount++;
             rb.linearVelocity = HorizontalVelocity;
-            rb.AddForce(Vector3.forward * controllerData.forwardImpulseForce + Vector3.up * controllerData.upwardImpulseForce, ForceMode.Impulse);
+            rb.AddForce(Vector3.forward * controllerData.forwardImpulseForce + Vector3.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
         }
 
         if(state == ControllerState.SURFING && jumpCount < 1)
@@ -83,7 +90,7 @@ public class SimpleController : MonoBehaviour
             state = ControllerState.JUMPING;
             jumpCount++;
             rb.linearVelocity = HorizontalVelocity;
-            rb.AddForce(Vector3.forward * controllerData.forwardImpulseForce + Vector3.up * controllerData.upwardImpulseForce, ForceMode.Impulse);
+            rb.AddForce(Vector3.forward * controllerData.forwardImpulseForce + Vector3.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
         }
     }
 
@@ -97,7 +104,7 @@ public class SimpleController : MonoBehaviour
         if(State == ControllerState.SURFING)
         {
             State = ControllerState.DIVING;
-            rb.AddForce(Vector3.down * controllerData.baseDivingForce, ForceMode.Impulse);
+            rb.AddForce(Vector3.down * controllerData.baseDivingForce, ForceMode.VelocityChange);
         }
     }
 
@@ -136,6 +143,16 @@ public class SimpleController : MonoBehaviour
         turn = inputs.turn.action.ReadValue<float>();
         brake = inputs.brake.action.ReadValue<float>();
         airControl = inputs.airControl.action.ReadValue<Vector2>();
+
+        if (turn != 0 && Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            driftDir = turn > 0 ? 1 : -1;
+            drifting = true;
+        }
+        if (drifting && Input.GetKeyUp(KeyCode.LeftControl))
+        {
+            drifting = false;
+        }
     }
 
     bool hasHit = false;
@@ -162,7 +179,7 @@ public class SimpleController : MonoBehaviour
             State ==  ControllerState.FALLING ||
             State == ControllerState.SURFING)
         {
-            rb.AddForce(Vector3.down * 9.8f);
+            rb.AddForce(Vector3.down * 9.8f, ForceMode.Acceleration);
             rb.linearVelocity = ClampYVelocity(Velocity, -controllerData.maxFallingSpeed, float.MaxValue);
         }
 
@@ -208,14 +225,14 @@ public class SimpleController : MonoBehaviour
             if(State == ControllerState.SWIMMING)
             {
                 float force = Mathf.Min(controllerData.maximumFloatingForce, Mathf.Max(controllerData.minimumFloatingForce, maxDepth * controllerData.floatingForceMultiplier));
-                rb.AddForce(Vector3.up * force);
+                rb.AddForce(Vector3.up * force, ForceMode.Acceleration);
             }
         }
         else //IN AIR
         {
             if(State == ControllerState.DIVING)
             {
-                rb.AddForce(Vector3.down * controllerData.baseDivingForce);
+                rb.AddForce(Vector3.down * controllerData.baseDivingForce, ForceMode.Acceleration);
                 rb.linearVelocity = ClampYVelocity(Velocity, -controllerData.maxDivingFallingSpeed, float.MaxValue);
             }
         }
@@ -246,23 +263,27 @@ public class SimpleController : MonoBehaviour
 
     private void Movement()
     {
-        float speed = controllerData.baseSpeed * controllerData.baseSpeedModifier;
+        float speed = controllerData.acceleration;
 
         float forward = 0.0f;
-        if (thrust > 0.0)
+        if (thrust > 0.0 && HorizontalVelocity.sqrMagnitude < controllerData.maxSpeed * controllerData.maxSpeed)
         {
             forward = thrust * speed;
         }
 
-        float steer = turn * controllerData.baseTurnSpeed;
-
+        float steer = stats.GetSteering(turn, false);
         float steeringVelocity = Vector3.Dot(transform.right, Velocity);
-        float desiredVelocityChange = -steeringVelocity * controllerData.gripForce * Time.fixedDeltaTime;
+        float desiredVelocityChange = -steeringVelocity * stats.GetGrip() * Time.fixedDeltaTime;
 
         //Apply forces (grip - thrust - steer)
         rb.AddForce(transform.right * desiredVelocityChange, ForceMode.VelocityChange);
-        rb.AddForce(transform.forward * forward * 0.02f);
-        rb.AddTorque(new Vector3(0.0f, steer * 0.02f, 0.0f));
+        rb.AddForce(transform.forward * forward, ForceMode.Acceleration);
+        Steer(steer);
+
+        if (drifting)
+        {
+            Steer(stats.GetSteering(turn, true, driftDir));
+        }
 
         //Apply drag if braking
         if (brake > 0.0f)
@@ -275,6 +296,11 @@ public class SimpleController : MonoBehaviour
         }
     }
 
+    private void Steer(float steerAmount)
+    {
+        rb.AddTorque(new Vector3(0.0f, steerAmount, 0.0f), ForceMode.Acceleration);
+    }
+    
     private void SurfHover(RaycastHit info)
     {
         Vector3 velocity = rb.linearVelocity;
@@ -293,7 +319,7 @@ public class SimpleController : MonoBehaviour
         float relativeVelocity = rayDirVel - otherDirVel;
         float x = info.distance - controllerData.hoverHeight;
         float springForce = (x * controllerData.hoverStrength) - (relativeVelocity * controllerData.hoverDamper);
-        rb.AddForce(rayDir * springForce);
+        rb.AddForce(rayDir * springForce, ForceMode.VelocityChange);
 
         //add force on touched object
         if (otherRb != null)
@@ -360,7 +386,7 @@ public class SimpleController : MonoBehaviour
 
     private void ExitWaterBlock(Vector3 normal)
     {
-        rb.AddForce(normal * controllerData.upwardImpulseForce * controllerData.jumpMultiplier, ForceMode.Impulse);
+        rb.AddForce(normal * controllerData.upwardImpulseForce * controllerData.jumpMultiplier, ForceMode.VelocityChange);
     }
 
     private Vector3 ClampYVelocity(Vector3 velocity, float minY, float maxY)
