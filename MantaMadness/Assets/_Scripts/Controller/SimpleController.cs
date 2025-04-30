@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public enum ControllerState
 {
@@ -8,6 +9,7 @@ public enum ControllerState
     SURFING,
     DIVING, 
     SWIMMING,
+    AIRRIDE,
 }
 
 public class SimpleController : MonoBehaviour
@@ -50,6 +52,9 @@ public class SimpleController : MonoBehaviour
     private int jumpCount;
     private bool drifting;
     private int driftDir;
+    private bool isCoyote => currentCoyoteTime > 0;
+    private float currentCoyoteTime;
+    private bool hasPerfectJump;
 
     public Action<ControllerState, ControllerState> stateChanged;
 
@@ -75,7 +80,17 @@ public class SimpleController : MonoBehaviour
         if (state == ControllerState.DIVING || state == ControllerState.SWIMMING)
             return;
 
-        if(state == ControllerState.FALLING && jumpCount < 1)
+        if (jumpCount > 0)
+            return;
+
+        if (isCoyote)
+        {
+            //reset coyote
+            currentCoyoteTime = 0;
+            hasPerfectJump = true;
+        }
+
+        if(state == ControllerState.FALLING)
         {
             // spin when falling
             state = ControllerState.JUMPING;
@@ -84,7 +99,7 @@ public class SimpleController : MonoBehaviour
             rb.AddForce(Vector3.forward * controllerData.forwardImpulseForce + Vector3.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
         }
 
-        if(state == ControllerState.SURFING && jumpCount < 1)
+        if(state == ControllerState.SURFING)
         {
             // spin when surfing
             state = ControllerState.JUMPING;
@@ -160,26 +175,49 @@ public class SimpleController : MonoBehaviour
     {
         hasHit = Physics.Raycast(transform.position, -transform.up, out RaycastHit info, controllerData.hoverRaycastLength);
 
+
+        //Falling to Surfing
         if (State == ControllerState.FALLING)
         {
             if (hasHit)
             {
                 State = ControllerState.SURFING;
                 jumpCount = 0;
+
+                if(hasPerfectJump)
+                {
+                    rb.AddForce(transform.forward * controllerData.perfectLandingForce, ForceMode.VelocityChange);
+                    hasPerfectJump = false;
+                }
             }
         }
 
-        if(State == ControllerState.JUMPING && rb.linearVelocity.y < 0 && currentWaterBlock == null)
+        //Jumping/AirRide to Falling
+        if((State == ControllerState.JUMPING || State == ControllerState.AIRRIDE) && rb.linearVelocity.y < 0 && currentWaterBlock == null)
         {
             State = ControllerState.FALLING;
+        }
+
+        //Jumping to AirRide
+        if(State == ControllerState.JUMPING)
+        {
+            if(Velocity.y > controllerData.airRideVelocityThreshold)
+            {
+                State = ControllerState.AIRRIDE;
+            }
         }
 
         //Apply gravity
         if (State == ControllerState.JUMPING ||
             State ==  ControllerState.FALLING ||
-            State == ControllerState.SURFING)
+            State == ControllerState.SURFING ||
+            State == ControllerState.AIRRIDE)
         {
-            rb.AddForce(Vector3.down * 9.8f, ForceMode.Acceleration);
+            float force = controllerData.gravity;
+            if (State == ControllerState.AIRRIDE)
+                force *= controllerData.airRideGravityScale;
+
+            rb.AddForce(Vector3.down * force, ForceMode.Acceleration);
             rb.linearVelocity = ClampYVelocity(Velocity, -controllerData.maxFallingSpeed, float.MaxValue);
         }
 
@@ -192,7 +230,12 @@ public class SimpleController : MonoBehaviour
             }
             else
             {
-                State = ControllerState.FALLING;
+                currentCoyoteTime += Time.fixedDeltaTime;
+                if(currentCoyoteTime > controllerData.coyoteTime)
+                {
+                    State = ControllerState.FALLING;
+                    currentCoyoteTime = 0; 
+                }
             }
         }
 
@@ -344,7 +387,7 @@ public class SimpleController : MonoBehaviour
             maxDivingDepth = Mathf.Lerp(controllerData.baseDivingDepth, controllerData.maxDivingDepth, controllerData.VelocityToDivingDepthRatio.Evaluate(speedRatio));
         }
 
-        if(State == ControllerState.FALLING || State == ControllerState.JUMPING)
+        if(State == ControllerState.FALLING || State == ControllerState.JUMPING || State == ControllerState.AIRRIDE)
         {
             State = ControllerState.SWIMMING;
             rb.linearVelocity = HorizontalVelocity;

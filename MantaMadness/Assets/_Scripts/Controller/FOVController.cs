@@ -1,31 +1,44 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class FOVController : MonoBehaviour
 {
-    private Camera mainCamera;
+    private CinemachineBrain brain;
     [Header("Parameters")]
     public float maxAvatarSpeed;
     public float maxFOV;
     public AnimationCurve FOVProgression;
     private float defaultFOV;
+    CinemachineCamera current;
+    float currentFOV;
 
     private SimpleController controller;
-    void Start()
+    private void Awake()
     {
-        mainCamera = Camera.main;
         controller = GetComponent<SimpleController>();
-        defaultFOV = mainCamera.fieldOfView;
     }
 
-    // Update is called once per frame
+    void Start()
+    {
+        brain = Camera.main.gameObject.GetComponent<CinemachineBrain>();
+        current = brain.ActiveVirtualCamera as CinemachineCamera;
+        defaultFOV = current.Lens.FieldOfView;
+        currentFOV = defaultFOV;
+    }
+
+    
     void Update()
     {
         Vector3 horizontalVel = controller.Velocity;
         horizontalVel.y = 0;
 
-        mainCamera.fieldOfView = Mathf.Lerp(
-            defaultFOV, 
-            maxFOV, 
-            Mathf.Clamp01(FOVProgression.Evaluate(horizontalVel.magnitude / maxAvatarSpeed)));   
+        float targetFOV = Mathf.Lerp(
+           defaultFOV,
+           maxFOV,
+           Mathf.Clamp01(FOVProgression.Evaluate(horizontalVel.magnitude / maxAvatarSpeed)));
+
+        currentFOV = Mathf.Lerp(currentFOV, targetFOV, Time.deltaTime);
+
+        current.Lens.FieldOfView = currentFOV;
     }
 }

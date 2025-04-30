@@ -17,6 +17,7 @@ MonoBehaviour:
   baseTurnSpeed: 3
   brakeForce: 2.25
   grip: 0.3
+  gravity: 9.8
   hoverRaycastLength: 1
   hoverHeight: 0.7
   hoverStrength: 5
@@ -60,9 +61,11 @@ MonoBehaviour:
   underwaterDrag: 2
   jumpMultiplier: 1
   maxDivingFallingSpeed: 30
+  coyoteTime: 0.2
   forwardImpulseForce: 1
   upwardImpulseForce: 5
   maxFallingSpeed: 16
+  perfectLandingForce: 50
   minimumFloatingForce: 2
   maximumFloatingForce: 50
   floatingForceMultiplier: 5
@@ -71,3 +74,5 @@ MonoBehaviour:
   divingAirControl: 5
   steeringMult: 1.25
   driftingGrip: 0
+  airRideVelocityThreshold: 10
+  airRideGravityScale: 0.2

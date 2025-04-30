@@ -22,6 +22,8 @@ public class Race : MonoBehaviour
     [SerializeField] private List<Checkpoint> checkpoints = new List<Checkpoint>();
 
     public int CheckpointCount { get => checkpoints.Count;}
+    public int CurrentLap => currentLapCount;
+    public int MaxLaps => lapCount;
     private int currentLapCount;
     private int checkpointCountThisLap;
     private Checkpoint startCheckpoint;
@@ -39,8 +41,10 @@ public class Race : MonoBehaviour
         }
 
         checkpoints[1].Reset();
-        currentLapCount = 0;
+        currentLapCount = 1;
         checkpointCountThisLap = 0;
+
+        UIManager.Instance.raceInterface.Init(this);
     }
 
     private void CheckpointPassed(Checkpoint checkpoint)
@@ -52,7 +56,7 @@ public class Race : MonoBehaviour
         {
             Debug.Log($"LapCount = {currentLapCount + 1} / {lapCount}");
             checkpointCountThisLap = 0;
-            if(++currentLapCount >= lapCount)
+            if(++currentLapCount > lapCount)
             {
                 EndRace();
             }
@@ -75,6 +79,8 @@ public class Race : MonoBehaviour
             checkpoints[i].checkpointPassed -= CheckpointPassed;
             checkpoints[i].Deactivate();
         }
+
+        UIManager.Instance.raceInterface.Hide();
     }
 
     public Transform GetRespawnTransform()

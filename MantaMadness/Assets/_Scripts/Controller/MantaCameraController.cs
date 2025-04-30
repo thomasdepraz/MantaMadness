@@ -1,27 +1,45 @@
-﻿using Unity.Cinemachine;
+﻿using System;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class MantaCameraController : MonoBehaviour
 {
     public float fallingSpeedThreshold;
+    public float airRideSpeedThreshold;
     public CinemachineCamera followCamera;
+    public CinemachineCamera divingCamera;
+    public CinemachineCamera airRideCamera;
 
     private SimpleController mantaController;
 
     private void Awake()
     {
         mantaController = GetComponent<SimpleController>();
+        mantaController.stateChanged += UpdateState;
     }
 
-    private void Update()
+    private void UpdateState(ControllerState previousState, ControllerState newState)
     {
-        if(mantaController.CurrentDepth == 0 && mantaController.Velocity.y < 0 && Mathf.Abs(mantaController.Velocity.y) > fallingSpeedThreshold)
+        if (newState == ControllerState.AIRRIDE)
         {
             followCamera.gameObject.SetActive(false);
+            divingCamera.gameObject.SetActive(false);
+            airRideCamera.gameObject.SetActive(true);
+            return;
         }
-        else
+
+        //if (newState == ControllerState.DIVING)
+        //{
+        //    followCamera.gameObject.SetActive(false);
+        //    divingCamera.gameObject.SetActive(true);
+        //    airRideCamera.gameObject.SetActive(false);
+        //    return;
+        //}
+
+        if (previousState == ControllerState.AIRRIDE)
         {
             followCamera.gameObject.SetActive(true);
+            airRideCamera.gameObject.SetActive(false);
         }
     }
 }

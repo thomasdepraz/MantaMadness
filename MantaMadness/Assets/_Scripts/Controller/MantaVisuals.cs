@@ -5,6 +5,8 @@ public class MantaVisuals : MonoBehaviour
 {
     SimpleController mantaController;
 
+    public Animator mantaAnimator;
+
     [Header("Rotation parameters")]
     public Transform modelTransform;
     public float rotationSpeed;
@@ -25,6 +27,11 @@ public class MantaVisuals : MonoBehaviour
         if(previous == ControllerState.FALLING && newState == ControllerState.SURFING)
         {
             SplashParticles();
+        }
+
+        if(newState == ControllerState.JUMPING)
+        {
+            mantaAnimator.SetTrigger("Spin");
         }
     }
 

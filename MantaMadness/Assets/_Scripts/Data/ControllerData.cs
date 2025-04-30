@@ -12,6 +12,7 @@ public class ControllerData : ScriptableObject
     public float brakeForce;
     [Range(0f,1f)]
     public float grip;
+    public float gravity;
 
     [Header("Surfing parameters")]
     public float hoverRaycastLength = 2f;
@@ -29,9 +30,11 @@ public class ControllerData : ScriptableObject
     public float maxDivingFallingSpeed = 5;
 
     [Header("Jump parameters")]
+    public float coyoteTime;
     public float forwardImpulseForce;
     public float upwardImpulseForce;
     public float maxFallingSpeed;
+    public float perfectLandingForce;
 
     [Header("Swimming parameters")]
     public float minimumFloatingForce;
@@ -46,4 +49,8 @@ public class ControllerData : ScriptableObject
     [Header("Drift")]
     [Min(1)]public float steeringMult;
     public float driftingGrip;
+
+    [Header("Air ride")]
+    public float airRideVelocityThreshold;
+    public float airRideGravityScale;
 }
