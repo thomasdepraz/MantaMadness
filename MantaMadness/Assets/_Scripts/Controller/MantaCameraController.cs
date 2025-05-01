@@ -20,6 +20,13 @@ public class MantaCameraController : MonoBehaviour
 
     private void UpdateState(ControllerState previousState, ControllerState newState)
     {
+        if(newState == ControllerState.SURFING)
+        {
+            followCamera.gameObject.SetActive(true);
+            airRideCamera.gameObject.SetActive(false);
+            divingCamera.gameObject.SetActive(false);
+        }
+
         if (newState == ControllerState.AIRRIDE)
         {
             followCamera.gameObject.SetActive(false);
@@ -28,13 +35,13 @@ public class MantaCameraController : MonoBehaviour
             return;
         }
 
-        //if (newState == ControllerState.DIVING)
-        //{
-        //    followCamera.gameObject.SetActive(false);
-        //    divingCamera.gameObject.SetActive(true);
-        //    airRideCamera.gameObject.SetActive(false);
-        //    return;
-        //}
+        if (newState == ControllerState.DIVING && previousState != ControllerState.SURFING)
+        {
+            followCamera.gameObject.SetActive(false);
+            divingCamera.gameObject.SetActive(true);
+            airRideCamera.gameObject.SetActive(false);
+            return;
+        }
 
         if (previousState == ControllerState.AIRRIDE)
         {

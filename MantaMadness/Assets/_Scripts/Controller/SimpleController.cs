@@ -145,6 +145,15 @@ public class SimpleController : MonoBehaviour
     {
         if(State == ControllerState.FALLING || State == ControllerState.JUMPING)
         {
+            if (rb.linearVelocity.y > 0)
+                rb.linearVelocity = HorizontalVelocity;
+
+            State = ControllerState.DIVING;
+        }
+
+        if(State == ControllerState.AIRRIDE)
+        {
+            rb.linearVelocity = HorizontalVelocity;
             State = ControllerState.DIVING;
         }
 
