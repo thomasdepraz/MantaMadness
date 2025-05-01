@@ -49,6 +49,8 @@ public class ControllerData : ScriptableObject
     [Header("Drift")]
     [Min(1)]public float steeringMult;
     public float driftingGrip;
+    public float driftBoostForce;
+    public float driftBoostTimer;
 
     [Header("Air ride")]
     public float airRideVelocityThreshold;

@@ -27,6 +27,7 @@ public class SimpleController : MonoBehaviour
     public float CurrentDepth => currentWaterBlock is null ? 0 : currentWaterBlock.GetDepthAtPosition(transform.position, out _);
     public float MaxDepth => currentWaterBlock is null ? 0 : maxDivingDepth;
     public bool IsDrifting => drifting;
+    public int DriftDirection => driftDir;
 
     public ControllerState State {
         get
@@ -54,6 +55,7 @@ public class SimpleController : MonoBehaviour
     private int driftDir;
     private bool isCoyote => currentCoyoteTime > 0;
     private float currentCoyoteTime;
+    private float currentDriftTime;
     private bool hasPerfectJump;
 
     public Action<ControllerState, ControllerState> stateChanged;
@@ -72,12 +74,42 @@ public class SimpleController : MonoBehaviour
         inputs.dive.action.performed += Dive;
         inputs.dive.action.canceled += DiveReleased;
         inputs.jump.action.performed += Jump;
+        inputs.drift.action.performed += Drift;
+        inputs.drift.action.canceled += DriftReleased;
     }
 
 
+    private void Drift(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if (State == ControllerState.SURFING)
+        {
+            if (turn == 0)
+                return;
+
+            driftDir = turn > 0 ? 1 : -1;
+            drifting = true;
+        }
+        
+        //Backflip
+        if(state == ControllerState.AIRRIDE)
+        {
+            rb.linearVelocity = HorizontalVelocity;
+        }
+    }
+
+    private void DriftReleased(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if(IsDrifting && State == ControllerState.SURFING)
+        {
+            DriftBoost();
+        }
+        drifting = false;
+        currentDriftTime = 0;
+    }
+
     private void Jump(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if (state == ControllerState.DIVING || state == ControllerState.SWIMMING)
+        if (State == ControllerState.DIVING || State == ControllerState.SWIMMING)
             return;
 
         if (jumpCount > 0)
@@ -90,19 +122,19 @@ public class SimpleController : MonoBehaviour
             hasPerfectJump = true;
         }
 
-        if(state == ControllerState.FALLING)
+        if(State == ControllerState.FALLING)
         {
             // spin when falling
-            state = ControllerState.JUMPING;
+            State = ControllerState.JUMPING;
             jumpCount++;
             rb.linearVelocity = HorizontalVelocity;
             rb.AddForce(Vector3.forward * controllerData.forwardImpulseForce + Vector3.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
         }
 
-        if(state == ControllerState.SURFING)
+        if(State == ControllerState.SURFING)
         {
             // spin when surfing
-            state = ControllerState.JUMPING;
+            State = ControllerState.JUMPING;
             jumpCount++;
             rb.linearVelocity = HorizontalVelocity;
             rb.AddForce(Vector3.forward * controllerData.forwardImpulseForce + Vector3.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
@@ -158,16 +190,6 @@ public class SimpleController : MonoBehaviour
         turn = inputs.turn.action.ReadValue<float>();
         brake = inputs.brake.action.ReadValue<float>();
         airControl = inputs.airControl.action.ReadValue<Vector2>();
-
-        if (turn != 0 && Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            driftDir = turn > 0 ? 1 : -1;
-            drifting = true;
-        }
-        if (drifting && Input.GetKeyUp(KeyCode.LeftControl))
-        {
-            drifting = false;
-        }
     }
 
     bool hasHit = false;
@@ -175,6 +197,17 @@ public class SimpleController : MonoBehaviour
     {
         hasHit = Physics.Raycast(transform.position, -transform.up, out RaycastHit info, controllerData.hoverRaycastLength);
 
+        if(IsDrifting)
+        {
+            if(State != ControllerState.SURFING)
+            {
+                //Stop drifting
+                drifting = false;
+                currentDriftTime = 0;
+            }
+
+            currentDriftTime += Time.fixedDeltaTime;
+        }
 
         //Falling to Surfing
         if (State == ControllerState.FALLING)
@@ -260,7 +293,7 @@ public class SimpleController : MonoBehaviour
                     {
                         //Stop when hitting max depth
                         rb.AddForce(new Vector3(0.0f, -rb.linearVelocity.y, 0.0f), ForceMode.VelocityChange);
-                        state = ControllerState.SWIMMING;
+                        State = ControllerState.SWIMMING;
                     }
                 }
             }
@@ -371,6 +404,19 @@ public class SimpleController : MonoBehaviour
         }
     }
 
+    private void ExitWaterBlock(Vector3 normal)
+    {
+        rb.AddForce(normal * controllerData.upwardImpulseForce * controllerData.jumpMultiplier, ForceMode.VelocityChange);
+    }
+    
+    private void DriftBoost()
+    {
+        if (currentDriftTime > controllerData.driftBoostTimer)
+        {
+            rb.AddForce(transform.forward * controllerData.driftBoostForce, ForceMode.VelocityChange);
+        }
+    }
+
     private void OnTriggerEnter(Collider collision)
     {
         if (false == collision.gameObject.TryGetComponent<WaterBlock>(out WaterBlock waterBlock))
@@ -425,11 +471,6 @@ public class SimpleController : MonoBehaviour
             State = ControllerState.JUMPING;
             ExitWaterBlock(normal);
         }
-    }
-
-    private void ExitWaterBlock(Vector3 normal)
-    {
-        rb.AddForce(normal * controllerData.upwardImpulseForce * controllerData.jumpMultiplier, ForceMode.VelocityChange);
     }
 
     private Vector3 ClampYVelocity(Vector3 velocity, float minY, float maxY)

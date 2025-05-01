@@ -14,6 +14,9 @@ public class MantaVisuals : MonoBehaviour
     [Header("Parameters")]
     public ParticleSystem surfParticles;
     public ParticleSystem splashParticles;
+
+    public int driftId = Animator.StringToHash("Drifting");
+    public int driftDirId = Animator.StringToHash("DriftDirection");
   
 
     private void Awake()
@@ -39,6 +42,9 @@ public class MantaVisuals : MonoBehaviour
     {
         UpdateModelRoll();
         UpdateParticles();
+
+        mantaAnimator.SetBool(driftId, mantaController.IsDrifting);
+        mantaAnimator.SetFloat(driftDirId, mantaController.DriftDirection);
     }
     Quaternion targetRotation;
     private void UpdateModelRoll()
