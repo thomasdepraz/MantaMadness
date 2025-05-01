@@ -28,6 +28,7 @@ public class SimpleController : MonoBehaviour
     public float MaxDepth => currentWaterBlock is null ? 0 : maxDivingDepth;
     public bool IsDrifting => drifting;
     public int DriftDirection => driftDir;
+    public Vector2 AirControlDirection => airControl;
 
     public ControllerState State {
         get

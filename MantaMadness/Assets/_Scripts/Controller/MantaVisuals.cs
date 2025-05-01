@@ -9,6 +9,12 @@ public class MantaVisuals : MonoBehaviour
 
     [Header("Rotation parameters")]
     public Transform modelTransform;
+    public float driftTurnAngle;
+    public float surfTurnAngle;
+    public float airControlAngle;
+    public float maxVerticalSpeed;
+    public float divingAngle;
+    public float airRideAngle;
     public float rotationSpeed;
 
     [Header("Parameters")]
@@ -54,30 +60,29 @@ public class MantaVisuals : MonoBehaviour
         if(mantaController.State == ControllerState.SURFING || mantaController.State == ControllerState.SWIMMING)
         {
             float angular = mantaController.AngularVelocity.y;
-            targetRotation = Quaternion.Euler(0, 0, -angular * 10);
+            targetRotation = Quaternion.Euler(0, 0, -angular * (mantaController.IsDrifting ? driftTurnAngle : surfTurnAngle));
         }
 
         //Falling
         if(mantaController.State == ControllerState.FALLING)
         {
-            float magnitude = mantaController.HorizontalVelocity.magnitude;
-            float pitch = Vector3.Dot(mantaController.HorizontalVelocity.normalized, transform.forward);
-            float roll = Vector3.Dot(mantaController.HorizontalVelocity.normalized, transform.right);
-            targetRotation = Quaternion.Euler(pitch * magnitude * 2, 0, -roll * magnitude * 2);
+            Vector3 dir = new Vector3(mantaController.AirControlDirection.x, 0, mantaController.AirControlDirection.y);
+            float magnitude = Mathf.Max(Mathf.Abs(dir.x), Mathf.Abs(dir.z));
+            targetRotation = Quaternion.Euler(dir.z * magnitude * airControlAngle, 0, -dir.x * magnitude * airControlAngle);
         }
 
         //Diving
         if(mantaController.State == ControllerState.DIVING)
         {
-            float ratio = mantaController.Velocity.y / -10;
-            float maxPitch = Mathf.Lerp(0, 80f, ratio);
+            float ratio = mantaController.Velocity.y / -maxVerticalSpeed;
+            float maxPitch = Mathf.Lerp(0, divingAngle, Mathf.Clamp01(ratio));
             targetRotation = Quaternion.Euler(maxPitch, 0, 0);
         }
 
-        if (mantaController.State == ControllerState.JUMPING || mantaController.State == ControllerState.SWIMMING)
+        if (mantaController.State == ControllerState.JUMPING || mantaController.State == ControllerState.SWIMMING || mantaController.State == ControllerState.AIRRIDE)
         {
-            float ratio = mantaController.Velocity.y / 10;
-            float maxPitch = Mathf.Lerp(0, -80f, Mathf.Clamp01(ratio));
+            float ratio = mantaController.Velocity.y / maxVerticalSpeed;
+            float maxPitch = Mathf.Lerp(0, -airRideAngle, Mathf.Clamp01(ratio));
             targetRotation = Quaternion.Euler(maxPitch, 0, 0);
         }
 
