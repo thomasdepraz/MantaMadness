@@ -32,6 +32,7 @@ public class SimpleController : MonoBehaviour
     public int DriftDirection => driftDir;
     public Vector2 AirControlDirection => airControl;
     public bool InAirRail => currentAirRail != null;
+    public bool OnRail => currentRail != null;
 
     public ControllerState State {
         get
@@ -53,6 +54,7 @@ public class SimpleController : MonoBehaviour
     private ControllerState state;
     private WaterBlock currentWaterBlock;
     private AirRail currentAirRail;
+    private Rail currentRail;
     private float maxDivingDepth;
     private float maxDepth;
     private int jumpCount;
@@ -214,7 +216,20 @@ public class SimpleController : MonoBehaviour
         hasHit = Physics.Raycast(transform.position, -transform.up, out RaycastHit info, controllerData.hoverRaycastLength, raycastLayer.value);
 
 
-        if(currentAirRail != null)
+        if(OnRail)
+        {
+            if(false == currentRail.Progress(Time.fixedDeltaTime, out Vector3 nextPos, out Vector3 normal, out Vector3 direction))
+            {
+                currentRail = null;
+                rb.isKinematic = false;
+                //rb.AddForce(direction * 50, ForceMode.VelocityChange);
+            }
+
+            transform.position = nextPos;
+            return;
+        }
+
+        if(InAirRail)
         {
             rb.linearVelocity = currentAirRail.direction.forward * currentAirRail.rideForce;
             
@@ -454,6 +469,16 @@ public class SimpleController : MonoBehaviour
 
         enterAirRail.Invoke(rail);
         currentAirRail = rail;
+    }
+
+    public void EnterRail(Rail rail)
+    {
+        if (OnRail)
+            return;
+
+        currentRail = rail;
+        rail.EnterRail(transform.position, Velocity);
+        rb.isKinematic = true;
     }
 
     private void OnTriggerEnter(Collider collision)
