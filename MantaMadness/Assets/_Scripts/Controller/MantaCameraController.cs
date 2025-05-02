@@ -16,6 +16,21 @@ public class MantaCameraController : MonoBehaviour
     {
         mantaController = GetComponent<SimpleController>();
         mantaController.stateChanged += UpdateState;
+        mantaController.enterAirRail += EnterRail;
+        mantaController.exitAirRail += ExitRail;
+    }
+
+
+    private void EnterRail(AirRail rail)
+    {
+        rail.rideCamera.Target.TrackingTarget = transform;
+        rail.rideCamera.Target.LookAtTarget = transform;
+        rail.rideCamera.gameObject.SetActive(true);
+    }
+
+    private void ExitRail(AirRail rail)
+    {
+        rail.rideCamera.gameObject.SetActive(false);
     }
 
     private void UpdateState(ControllerState previousState, ControllerState newState)
@@ -49,4 +64,5 @@ public class MantaCameraController : MonoBehaviour
             airRideCamera.gameObject.SetActive(false);
         }
     }
+
 }

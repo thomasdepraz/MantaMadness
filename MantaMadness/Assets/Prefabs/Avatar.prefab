@@ -200,7 +200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TrackerSettings:
     BindingMode: 3
-    PositionDamping: {x: 0, y: 0, z: 0}
+    PositionDamping: {x: 0, y: 0.3, z: 0}
     AngularDampingMode: 0
     RotationDamping: {x: 0, y: 0, z: 0}
     QuaternionDamping: 1
@@ -644,6 +644,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 3085066077877558464}
   controllerData: {fileID: 11400000, guid: d12db5353a1221b428c27a5f8d132371, type: 2}
+  raycastLayer:
+    serializedVersion: 2
+    m_Bits: 16
 --- !u!114 &1630504113041504160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -696,7 +699,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mantaAnimator: {fileID: 8398529148881409238}
   modelTransform: {fileID: 5234565680348436066}
+  driftTurnAngle: 0
   surfTurnAngle: 10
+  airControlAngle: 0
+  maxVerticalSpeed: 0
+  divingAngle: 0
+  airRideAngle: 0
   rotationSpeed: 20
   surfParticles: {fileID: 395685362320773701}
   splashParticles: {fileID: 8392784736143705765}

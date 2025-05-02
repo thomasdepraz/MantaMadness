@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UIElements;
 
 public enum ControllerState
 {
@@ -20,6 +21,7 @@ public class SimpleController : MonoBehaviour
 
     [Header("Parameters")]
     [SerializeField] private ControllerData controllerData;
+    [SerializeField] private LayerMask raycastLayer;
 
     public Vector3 Velocity => this.rb.linearVelocity;
     public Vector3 HorizontalVelocity => new Vector3(this.rb.linearVelocity.x, 0f, this.rb.linearVelocity.z);
@@ -29,6 +31,7 @@ public class SimpleController : MonoBehaviour
     public bool IsDrifting => drifting;
     public int DriftDirection => driftDir;
     public Vector2 AirControlDirection => airControl;
+    public bool InAirRail => currentAirRail != null;
 
     public ControllerState State {
         get
@@ -49,6 +52,7 @@ public class SimpleController : MonoBehaviour
 
     private ControllerState state;
     private WaterBlock currentWaterBlock;
+    private AirRail currentAirRail;
     private float maxDivingDepth;
     private float maxDepth;
     private int jumpCount;
@@ -60,6 +64,8 @@ public class SimpleController : MonoBehaviour
     private bool hasPerfectJump;
 
     public Action<ControllerState, ControllerState> stateChanged;
+    public Action<AirRail> enterAirRail;
+    public Action<AirRail> exitAirRail;
 
     private void Awake()
     {
@@ -205,7 +211,21 @@ public class SimpleController : MonoBehaviour
     bool hasHit = false;
     private void FixedUpdate()
     {
-        hasHit = Physics.Raycast(transform.position, -transform.up, out RaycastHit info, controllerData.hoverRaycastLength);
+        hasHit = Physics.Raycast(transform.position, -transform.up, out RaycastHit info, controllerData.hoverRaycastLength, raycastLayer.value);
+
+
+        if(currentAirRail != null)
+        {
+            rb.linearVelocity = currentAirRail.direction.forward * currentAirRail.rideForce;
+            
+            if (currentAirRail.InAirRail(transform.position) == false)
+            {
+                exitAirRail.Invoke(currentAirRail);
+                currentAirRail = null;
+            }
+            return;
+        }
+
 
         if(IsDrifting)
         {
@@ -425,6 +445,15 @@ public class SimpleController : MonoBehaviour
         {
             rb.AddForce(transform.forward * controllerData.driftBoostForce, ForceMode.VelocityChange);
         }
+    }
+
+    public void EnterAirRail(AirRail rail)
+    {
+        if (State != ControllerState.SURFING || currentAirRail != null)
+            return;
+
+        enterAirRail.Invoke(rail);
+        currentAirRail = rail;
     }
 
     private void OnTriggerEnter(Collider collision)
