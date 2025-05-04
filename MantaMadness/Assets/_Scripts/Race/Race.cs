@@ -1,20 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RaceUtility
-{
-    public static void StartRace(Race race)
-    {
-        if(race.CheckpointCount < 2)
-        {
-            Debug.LogError("A race should have more than two checkpoints");
-            return;
-        }
-
-        race.Initialize();
-    }
-}
-
 public class Race : MonoBehaviour
 {
     [Header("Race parameters")]
@@ -43,18 +29,14 @@ public class Race : MonoBehaviour
         checkpoints[1].Reset();
         currentLapCount = 1;
         checkpointCountThisLap = 0;
-
-        UIManager.Instance.raceInterface.Init(this);
     }
 
     private void CheckpointPassed(Checkpoint checkpoint)
     {
         lastCheckpointPassed = checkpoint;
-        Debug.Log($"Checkpoint {checkpoint.RaceIndex} passed");
 
         if(checkpoint == startCheckpoint)
         {
-            Debug.Log($"LapCount = {currentLapCount + 1} / {lapCount}");
             checkpointCountThisLap = 0;
             if(++currentLapCount > lapCount)
             {
@@ -72,19 +54,22 @@ public class Race : MonoBehaviour
 
     private void EndRace()
     {
-        //Victory animation
-        Debug.Log($"RaceEnded");
         for (int i = 0; i < CheckpointCount; i++)
         {
             checkpoints[i].checkpointPassed -= CheckpointPassed;
             checkpoints[i].Deactivate();
         }
 
-        UIManager.Instance.raceInterface.Hide();
+        Game.Instance.raceManager.EndRace();
     }
 
     public Transform GetRespawnTransform()
     {
         return lastCheckpointPassed.respawnTransform;
+    }
+
+    public Transform GetStartTransform()
+    {
+        return startCheckpoint.respawnTransform;
     }
 }

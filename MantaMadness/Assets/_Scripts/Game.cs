@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Game : MonoBehaviour
@@ -16,21 +17,20 @@ public class Game : MonoBehaviour
     }
 
 
-    public Race startRace;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [HideInInspector] public SimpleController player;
+    public RaceManager raceManager = new RaceManager();
+
+    public void Start()
     {
-        if(startRace != null)
-            RaceUtility.StartRace(startRace);
+        player = GameObject.FindWithTag("Player").GetComponent<SimpleController>();
     }
 
     public bool Respawn(out Transform respawn)
     {
         respawn = null;
-        if (startRace == null)
-            return false;
+        if (raceManager.TryGetRespawn(out respawn))
+            return true;
 
-        respawn = startRace.GetRespawnTransform();
-        return true;
+        return false;
     }
 }

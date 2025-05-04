@@ -197,11 +197,19 @@ public class SimpleController : MonoBehaviour
     {
         if(Input.GetKeyUp(KeyCode.R))
         {
-            transform.position = new Vector3(0, 1, 0);
-            transform.rotation = Quaternion.identity;
-            State = ControllerState.FALLING;
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
+            if(Game.Instance.Respawn(out Transform respawnTransform))
+            {
+                ForcePosition(respawnTransform);
+            }
+            else
+            {
+                transform.position = new Vector3(0, 1, 0);
+                transform.rotation = Quaternion.identity;
+                State = ControllerState.FALLING;
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+
         }
 
         thrust = inputs.thrust.action.ReadValue<float>();
@@ -548,5 +556,18 @@ public class SimpleController : MonoBehaviour
         Vector3 clamped = Vector3.ClampMagnitude(toClamp, maxLength);
 
         return new Vector3(clamped.x, velocity.y, clamped.z);
+    }
+
+    public void ForcePosition(Transform forceTransform, bool resetVelocity = true, ControllerState forcedState = ControllerState.FALLING)
+    {
+        State = forcedState;
+        if(resetVelocity)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+
+        transform.position = forceTransform.position;
+        transform.rotation = forceTransform.rotation;
     }
 }
