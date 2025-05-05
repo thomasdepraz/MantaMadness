@@ -2,10 +2,12 @@ using DG.Tweening;
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class TimerInterface : MonoBehaviour
 {
     public GameObject container;
+    public GameObject timerPanel;
     public TextMeshProUGUI timerText;
     public ITimer currentTimer;
 
@@ -33,7 +35,10 @@ public class TimerInterface : MonoBehaviour
 
     public void Show()
     {
+        timerPanel.transform.localScale = Vector3.zero;
         container.SetActive(true);
+        timerPanel.transform.DOScale(1f, 0.5f).SetEase(Ease.OutBounce);
+
         enabled = true;
     }
 

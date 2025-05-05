@@ -20,15 +20,42 @@ public class MantaVisuals : MonoBehaviour
     [Header("Parameters")]
     public ParticleSystem surfParticles;
     public ParticleSystem splashParticles;
+    public ParticleSystem[] driftParticles = new ParticleSystem[4];
 
-    public int driftId = Animator.StringToHash("Drifting");
-    public int driftDirId = Animator.StringToHash("DriftDirection");
+    private int driftId = Animator.StringToHash("Drifting");
+    private int driftDirId = Animator.StringToHash("DriftDirection");
   
 
     private void Awake()
     {
         mantaController = GetComponent<SimpleController>();
         mantaController.stateChanged += UpdateState;
+        mantaController.updateDrift += UpdateDrift;
+    }
+
+    private void UpdateDrift(int driftDir, bool drifting)
+    {
+        if(false == drifting)
+        {
+            for (int i = 0; i < driftParticles.Length; i++)
+            {
+                driftParticles[i].Stop();
+                driftParticles[i].gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            if(driftDir > 0)
+            {
+                driftParticles[2].gameObject.SetActive(true);
+                driftParticles[2].Play();
+            }
+            else
+            {
+                driftParticles[0].gameObject.SetActive(true);
+                driftParticles[0].Play();
+            }
+        }
     }
 
     private void UpdateState(ControllerState previous, ControllerState newState)

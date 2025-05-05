@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
@@ -70,6 +71,7 @@ public class SimpleController : MonoBehaviour
     public Action<ControllerState, ControllerState> stateChanged;
     public Action<AirRail> enterAirRail;
     public Action<AirRail> exitAirRail;
+    public Action<int, bool> updateDrift;
 
     private void Awake()
     {
@@ -90,6 +92,16 @@ public class SimpleController : MonoBehaviour
         inputs.drift.action.canceled += DriftReleased;
     }
 
+    private void SetDrift(int dir, bool drifting)
+    {
+        this.drifting = drifting;
+        driftDir = dir;
+
+        if (drifting == false)
+            currentDriftTime = 0;
+
+        updateDrift.Invoke(dir, drifting);
+    }
 
     private void Drift(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
@@ -100,9 +112,8 @@ public class SimpleController : MonoBehaviour
         {
             if (turn == 0)
                 return;
-
-            driftDir = turn > 0 ? 1 : -1;
-            drifting = true;
+            
+            SetDrift(turn > 0 ? 1 : -1, true);
         }
         
         //Backflip
@@ -121,8 +132,8 @@ public class SimpleController : MonoBehaviour
         {
             DriftBoost();
         }
-        drifting = false;
-        currentDriftTime = 0;
+
+        SetDrift(0, false);
     }
 
     private void Jump(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -427,7 +438,7 @@ public class SimpleController : MonoBehaviour
         rb.AddForce(transform.forward * forward, ForceMode.Acceleration);
         Steer(steer);
 
-        if (drifting)
+        if (IsDrifting)
         {
             Steer(stats.GetSteering(turn, true, driftDir));
         }
