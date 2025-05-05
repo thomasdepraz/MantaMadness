@@ -15,7 +15,7 @@ MonoBehaviour:
   acceleration: 60
   maxSpeed: 30
   baseTurnSpeed: 3
-  brakeForce: 2.25
+  brakeForce: 2.75
   grip: 0.3
   gravity: 9.8
   hoverRaycastLength: 1
@@ -23,7 +23,7 @@ MonoBehaviour:
   hoverStrength: 5
   hoverDamper: 1
   baseDivingDepth: 5
-  maxDivingDepth: 20
+  maxDivingDepth: 30
   VelocityToDivingDepthRatio:
     serializedVersion: 2
     m_Curve:
@@ -60,16 +60,16 @@ MonoBehaviour:
   baseDivingForce: 8
   underwaterDrag: 2
   jumpMultiplier: 1
-  maxDivingFallingSpeed: 30
+  maxDivingFallingSpeed: 50
   coyoteTime: 0.2
   forwardImpulseForce: 1
   upwardImpulseForce: 5
-  maxFallingSpeed: 16
+  maxFallingSpeed: 150
   perfectLandingForce: 50
   minimumFloatingForce: 2
   maximumFloatingForce: 50
   floatingForceMultiplier: 5
-  maxAirControl: 1000
+  maxAirControl: 200
   fallingAirControl: 10
   divingAirControl: 5
   steeringMult: 1.25
