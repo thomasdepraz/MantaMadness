@@ -6,6 +6,13 @@ using UnityEngine.Splines;
 [RequireComponent(typeof(SplineContainer))]
 public class Rail : MonoBehaviour
 {
+    public enum RailDirection
+    {
+        None,
+        Forward,
+        Backward
+    }
+
     private SplineContainer splineContainer;
     private Spline railSpline;
     private float invRailLength;
@@ -13,6 +20,7 @@ public class Rail : MonoBehaviour
     [Header("Rail parameters")]
     public CinemachineCamera railCamera;
     public float railSpeed;
+    public RailDirection railDirection = RailDirection.None;
 
     public Vector3 Position => currentPosition;
 
@@ -31,15 +39,27 @@ public class Rail : MonoBehaviour
     public void EnterRail(Vector3 contactPosition, Vector3 velocity)
     {
         Vector3 nextPos = contactPosition + (velocity * Time.fixedDeltaTime);
+        nextPos = transform.InverseTransformPoint(nextPos);
+        contactPosition = transform.InverseTransformPoint(contactPosition);
 
         SplineUtility.GetNearestPoint(railSpline, contactPosition, out float3 nearest, out currentProgress);
         SplineUtility.GetNearestPoint(railSpline, nextPos, out _, out float nextT);
 
-        //    dir = nextT > currentProgress ? 1 : -1;
-        //    currentPosition =  new Vector3(nearest.x, nearest.y, nearest.z);
-        dir = 1;
-        currentProgress = 0;
-        Debug.Log($"EnterRail {currentProgress} : {dir}");
+        switch (railDirection)
+        {
+            case RailDirection.None:
+                dir = nextT > currentProgress ? 1 : -1;
+                break;
+            case RailDirection.Forward:
+                dir = 1;
+                break;
+            case RailDirection.Backward:
+                dir = -1;
+                break;
+        }
+
+        currentPosition = transform.position + new Vector3(nearest.x, nearest.y, nearest.z);
+        currentProgress = Mathf.Clamp01(currentProgress);
     }
 
     //return false when out
@@ -61,11 +81,10 @@ public class Rail : MonoBehaviour
         railSpline.Evaluate(currentProgress, out float3 pos, out float3 tan, out float3 up);
         
         position = transform.position + new Vector3(pos.x, pos.y, pos.z);
-        direction = new Vector3(tan.x, tan.y, tan.z);
-        normal = new Vector3(up.x, up.y, up.z);
+        direction = position - currentPosition;
         currentPosition = position;
+        normal = new Vector3(up.x, up.y, up.z);
 
         return isIn;
     }
-
 }

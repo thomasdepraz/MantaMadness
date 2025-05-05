@@ -18,6 +18,7 @@ public class SimpleController : MonoBehaviour
     [SerializeField]
     private Rigidbody rb;
     private ControllerStats stats;
+    private RailDetector railDetector;
 
     [Header("Parameters")]
     [SerializeField] private ControllerData controllerData;
@@ -33,6 +34,7 @@ public class SimpleController : MonoBehaviour
     public Vector2 AirControlDirection => airControl;
     public bool InAirRail => currentAirRail != null;
     public bool OnRail => currentRail != null;
+    public bool IsLocked => OnRail is true || InAirRail is true;
 
     public ControllerState State {
         get
@@ -72,6 +74,7 @@ public class SimpleController : MonoBehaviour
     private void Awake()
     {
         stats = new ControllerStats(this, this.controllerData);
+        railDetector = GetComponentInChildren<RailDetector>();
     }
 
     private void Start()
@@ -90,6 +93,9 @@ public class SimpleController : MonoBehaviour
 
     private void Drift(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
+        if (IsLocked)
+            return;
+
         if (State == ControllerState.SURFING)
         {
             if (turn == 0)
@@ -108,6 +114,9 @@ public class SimpleController : MonoBehaviour
 
     private void DriftReleased(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
+        if (IsLocked)
+            return;
+
         if(IsDrifting && State == ControllerState.SURFING)
         {
             DriftBoost();
@@ -118,6 +127,9 @@ public class SimpleController : MonoBehaviour
 
     private void Jump(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
+        if (IsLocked)
+            return;
+
         if (State == ControllerState.DIVING || State == ControllerState.SWIMMING)
             return;
 
@@ -152,6 +164,9 @@ public class SimpleController : MonoBehaviour
 
     private void Dive(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
+        if (IsLocked)
+            return;
+
         if(State == ControllerState.FALLING || State == ControllerState.JUMPING)
         {
             if (rb.linearVelocity.y > 0)
@@ -175,6 +190,9 @@ public class SimpleController : MonoBehaviour
 
     private void DiveReleased(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
+        if (IsLocked)
+            return;
+
         if(State == ControllerState.DIVING)
         {
             if(currentWaterBlock != null)
@@ -223,14 +241,14 @@ public class SimpleController : MonoBehaviour
     {
         hasHit = Physics.Raycast(transform.position, -transform.up, out RaycastHit info, controllerData.hoverRaycastLength, raycastLayer.value);
 
-
         if(OnRail)
         {
             if(false == currentRail.Progress(Time.fixedDeltaTime, out Vector3 nextPos, out Vector3 normal, out Vector3 direction))
             {
                 currentRail = null;
                 rb.isKinematic = false;
-                //rb.AddForce(direction * 50, ForceMode.VelocityChange);
+                rb.AddForce(direction * 50, ForceMode.VelocityChange);
+                railDetector.ExitRail();
             }
 
             transform.position = nextPos;
@@ -479,14 +497,15 @@ public class SimpleController : MonoBehaviour
         currentAirRail = rail;
     }
 
-    public void EnterRail(Rail rail)
+    public bool EnterRail(Rail rail)
     {
         if (OnRail)
-            return;
+            return false;
 
         currentRail = rail;
         rail.EnterRail(transform.position, Velocity);
         rb.isKinematic = true;
+        return true;
     }
 
     private void OnTriggerEnter(Collider collision)
