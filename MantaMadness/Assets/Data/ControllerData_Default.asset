@@ -14,7 +14,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceleration: 60
   maxSpeed: 30
-  baseTurnSpeed: 3
+  baseTurnSpeed: 5
+  speedToSteeringRatio:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0.0073947944
+      outSlope: 0.0073947944
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.9993946
+      value: 0.3970906
+      inSlope: -1.7779843
+      outSlope: 0
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   brakeForce: 2.75
   grip: 0.3
   gravity: 9.8
@@ -72,6 +96,7 @@ MonoBehaviour:
   maxAirControl: 200
   fallingAirControl: 10
   divingAirControl: 5
+  minSpeedToDrift: 15
   steeringMult: 1.25
   driftingGrip: 0
   driftBoostForce: 50

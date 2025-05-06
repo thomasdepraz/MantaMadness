@@ -17,11 +17,13 @@ public class ControllerStats
     }
 
     //turn in -1/1 range
-    public float GetSteering(float turn, bool drifting = false, int driftDir = 0)
+    public float GetSteering(float speedRatio, float turn, bool drifting = false, int driftDir = 0)
     {
+        float coeff = data.speedToSteeringRatio.Evaluate(speedRatio);
+
         if (drifting == false)
         {
-            return turn * data.baseTurnSpeed;
+            return turn * data.baseTurnSpeed * coeff;
         }
 
         //remap
@@ -29,7 +31,7 @@ public class ControllerStats
         float maxSteer = driftDir == 1 ? data.steeringMult : 1;
         float remappedTurn = math.remap(-1, 1, minSteer, maxSteer, turn);
 
-        return driftDir * remappedTurn * data.baseTurnSpeed;
+        return driftDir * remappedTurn * data.baseTurnSpeed * coeff;
     }
 
 }

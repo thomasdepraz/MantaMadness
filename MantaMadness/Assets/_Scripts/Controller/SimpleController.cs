@@ -36,6 +36,7 @@ public class SimpleController : MonoBehaviour
     public bool InAirRail => currentAirRail != null;
     public bool OnRail => currentRail != null;
     public bool IsLocked => OnRail is true || InAirRail is true;
+    private bool CanDrift => HorizontalVelocity.sqrMagnitude > controllerData.minSpeedToDrift * controllerData.minSpeedToDrift;
 
     public ControllerState State {
         get
@@ -110,7 +111,7 @@ public class SimpleController : MonoBehaviour
 
         if (State == ControllerState.SURFING)
         {
-            if (turn == 0)
+            if (turn == 0 || CanDrift == false)
                 return;
             
             SetDrift(turn > 0 ? 1 : -1, true);
@@ -251,6 +252,12 @@ public class SimpleController : MonoBehaviour
     private void FixedUpdate()
     {
         hasHit = Physics.Raycast(transform.position, -transform.up, out RaycastHit info, controllerData.hoverRaycastLength, raycastLayer.value);
+
+        if(IsDrifting)
+        {
+            if (CanDrift == false)
+                SetDrift(0, false);
+        }
 
         if(OnRail)
         {
@@ -429,7 +436,8 @@ public class SimpleController : MonoBehaviour
             forward = thrust * speed;
         }
 
-        float steer = stats.GetSteering(turn, false);
+        float speedRatio = GetSpeedRatio();
+        float steer = stats.GetSteering(speedRatio, turn, false);
         float steeringVelocity = Vector3.Dot(transform.right, Velocity);
         float desiredVelocityChange = -steeringVelocity * stats.GetGrip() * Time.fixedDeltaTime;
 
@@ -440,7 +448,7 @@ public class SimpleController : MonoBehaviour
 
         if (IsDrifting)
         {
-            Steer(stats.GetSteering(turn, true, driftDir));
+            Steer(stats.GetSteering(speedRatio, turn, true, driftDir));
         }
 
         //Apply drag if braking
@@ -599,5 +607,11 @@ public class SimpleController : MonoBehaviour
 
         transform.position = forceTransform.position;
         transform.rotation = forceTransform.rotation;
+    }
+
+    private float GetSpeedRatio()
+    {
+        var ratio = HorizontalVelocity.sqrMagnitude / controllerData.maxSpeed * controllerData.maxSpeed;
+        return Mathf.Clamp01(ratio);
     }
 }

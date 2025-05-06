@@ -9,6 +9,7 @@ public class ControllerData : ScriptableObject
     public float acceleration;
     public float maxSpeed;
     public float baseTurnSpeed;
+    public AnimationCurve speedToSteeringRatio;
     public float brakeForce;
     [Range(0f,1f)]
     public float grip;
@@ -47,6 +48,7 @@ public class ControllerData : ScriptableObject
     public float divingAirControl;
 
     [Header("Drift")]
+    public float minSpeedToDrift;
     [Min(1)]public float steeringMult;
     public float driftingGrip;
     public float driftBoostForce;
