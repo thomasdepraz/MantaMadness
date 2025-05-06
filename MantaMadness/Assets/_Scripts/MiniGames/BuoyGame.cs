@@ -25,7 +25,7 @@ public class BuoyGame : MonoBehaviour, ITimer
         enabled = true;
         timer = timeToFinish;
         hasStarted = true;
-        UIManager.Instance.miniGameTimerInterface.Show();
+        (UIManager.Instance.miniGameTimerInterface as IScreen).Show();
         UIManager.Instance.miniGameTimerInterface.SetTimer(this);
     }
 
@@ -57,7 +57,7 @@ public class BuoyGame : MonoBehaviour, ITimer
     public void EndGame()
     {
         enabled = false;
-        UIManager.Instance.miniGameTimerInterface.Hide();
+        (UIManager.Instance.miniGameTimerInterface as IScreen).Show();
     }
 
     public void Reset()
@@ -65,7 +65,7 @@ public class BuoyGame : MonoBehaviour, ITimer
         hasStarted = false;
         hasFinished = false;
         count = 0;
-        UIManager.Instance.miniGameTimerInterface.Hide();
+        (UIManager.Instance.miniGameTimerInterface as IScreen).Hide();
         for (int i = 0; i < buoys.Count; i++)
         {
             buoys[i].Reset();

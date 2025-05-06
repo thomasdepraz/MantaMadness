@@ -1,12 +1,10 @@
 using DG.Tweening;
-using System;
-using UnityEditor;
 using UnityEngine;
 
 public class BuoyVisuals : MonoBehaviour
 {
     public GameObject model;
-    public MeshRenderer renderer;
+    public new MeshRenderer renderer;
     private Material defaultMaterial;
     public Material completedMaterial;
 

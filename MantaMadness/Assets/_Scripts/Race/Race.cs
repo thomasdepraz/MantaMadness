@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Race : MonoBehaviour
+public class Race : MonoBehaviour, ITimer
 {
     [Header("Race parameters")]
     [SerializeField] private int lapCount;
@@ -14,6 +14,7 @@ public class Race : MonoBehaviour
     private int checkpointCountThisLap;
     private Checkpoint startCheckpoint;
     private Checkpoint lastCheckpointPassed;
+    private float currentTimer;
 
     public void Initialize()
     {
@@ -29,6 +30,8 @@ public class Race : MonoBehaviour
         checkpoints[1].Reset();
         currentLapCount = 1;
         checkpointCountThisLap = 0;
+        currentTimer = 0;
+        enabled = true;
     }
 
     private void CheckpointPassed(Checkpoint checkpoint)
@@ -60,7 +63,13 @@ public class Race : MonoBehaviour
             checkpoints[i].Deactivate();
         }
 
+        enabled = false;
         Game.Instance.raceManager.EndRace();
+    }
+
+    private void Update()
+    {
+        currentTimer += Time.deltaTime;
     }
 
     public Transform GetRespawnTransform()
@@ -71,5 +80,10 @@ public class Race : MonoBehaviour
     public Transform GetStartTransform()
     {
         return startCheckpoint.respawnTransform;
+    }
+
+    float ITimer.GetTime()
+    {
+        return currentTimer;
     }
 }

@@ -2,14 +2,15 @@ using DG.Tweening;
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Analytics;
 
-public class TimerInterface : MonoBehaviour
+public class TimerInterface : MonoBehaviour, IScreen
 {
+    public GameObject Container { get => container; }
     public GameObject container;
     public GameObject timerPanel;
     public TextMeshProUGUI timerText;
     public ITimer currentTimer;
+
 
     public void SetTimer(ITimer timer)
     {
@@ -33,7 +34,7 @@ public class TimerInterface : MonoBehaviour
         }
     }
 
-    public void Show()
+    void IScreen.Show()
     {
         timerPanel.transform.localScale = Vector3.zero;
         container.SetActive(true);
@@ -42,7 +43,7 @@ public class TimerInterface : MonoBehaviour
         enabled = true;
     }
 
-    public void Hide()
+    void IScreen.Hide()
     {
         container.SetActive(false);
         enabled = false;

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Buoy : MonoBehaviour
 {
-    public Collider collider;
+    public new Collider collider;
     private BuoyGame game;
     public Action onCollect;
     public Action onReset;

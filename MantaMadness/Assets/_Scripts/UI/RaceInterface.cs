@@ -5,50 +5,46 @@ public class RaceInterface : MonoBehaviour
 {
     public GameObject container;
     public TextMeshProUGUI lapsText;
+    public TextMeshProUGUI timerText;
 
     private Race currentRace;
-    private bool isActive = false;
-
-    private void Awake()
-    {
-        Hide();
-    }
 
     public void Start()
     {
         UIManager.Instance.raceInterface = this;
+        Hide();
     }
 
     public void Show()
     {
         container.SetActive(true);
-        isActive = true;
+        enabled = true;
     }
 
     public void Hide()
     {
         container.SetActive(false);
-        isActive = false;
+        enabled = false;
     }
 
     public void Init(Race race)
     {
         currentRace = race;
         Show();
-        
     }
 
     public void Updateœnterface()
     {
         if (currentRace == null)
             return;
+
         lapsText.text = $"{currentRace.CurrentLap} / {currentRace.MaxLaps}";
+        timerText.text = TextUtility.GetPrettyTime(((ITimer)currentRace).GetTime());
     }
 
     public void Update()
-    {
-        if (isActive)
-            Updateœnterface();
+    { 
+        Updateœnterface();
     }
 
 }
