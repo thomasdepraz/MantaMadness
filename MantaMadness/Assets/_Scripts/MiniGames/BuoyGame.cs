@@ -9,7 +9,6 @@ public class BuoyGame : MonoBehaviour, ITimer
     private float timer;
     private int count = 0;
     private bool hasStarted;
-    private bool hasFinished;
 
     void Start()
     {
@@ -49,7 +48,6 @@ public class BuoyGame : MonoBehaviour, ITimer
         count++;
         if (count >= buoys.Count)
         {
-            hasFinished = true;
             EndGame();
         }
     }
@@ -63,7 +61,6 @@ public class BuoyGame : MonoBehaviour, ITimer
     public void Reset()
     {
         hasStarted = false;
-        hasFinished = false;
         count = 0;
         (UIManager.Instance.miniGameTimerInterface as IScreen).Hide();
         for (int i = 0; i < buoys.Count; i++)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class RaceManager
@@ -36,9 +37,13 @@ public class RaceManager
 
     public void EndRace()
     {
+        UIManager.Instance.victoryScreen.Initialize(currentRace);
+        ((IScreen)UIManager.Instance.victoryScreen).Show();
         currentRace = null;
         UIManager.Instance.raceInterface.Hide();
         raceEnded.Invoke();
+
+        UIManager.Instance.StartCoroutine(HideVictory());
     }
 
     public bool TryGetRespawn(out Transform respawn)
@@ -49,5 +54,12 @@ public class RaceManager
 
         respawn = currentRace.GetRespawnTransform(); ;
         return true;
+    }
+
+    private IEnumerator HideVictory()
+    {
+        yield return new WaitForSeconds(3f);
+
+        ((IScreen)UIManager.Instance.victoryScreen).Hide();
     }
 }
