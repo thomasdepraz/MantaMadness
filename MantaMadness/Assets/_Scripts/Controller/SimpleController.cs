@@ -503,6 +503,7 @@ public class SimpleController : MonoBehaviour
     private void ExitWaterBlock(Vector3 normal)
     {
         rb.AddForce(normal * controllerData.upwardImpulseForce * controllerData.jumpMultiplier, ForceMode.VelocityChange);
+        rb.linearDamping = controllerData.jumpDamping;
     }
     
     private void DriftBoost()
