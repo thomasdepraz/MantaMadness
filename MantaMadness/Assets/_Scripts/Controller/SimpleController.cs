@@ -186,12 +186,16 @@ public class SimpleController : MonoBehaviour
             if (rb.linearVelocity.y > 0)
                 rb.linearVelocity = HorizontalVelocity;
 
+            rb.linearVelocity = Vector3.zero;
+            rb.AddForce(Vector3.down * controllerData.baseDivingForce, ForceMode.VelocityChange);
+
             State = ControllerState.DIVING;
         }
 
         if(State == ControllerState.AIRRIDE)
         {
-            rb.linearVelocity = HorizontalVelocity;
+            rb.linearVelocity = Vector3.zero;
+            rb.AddForce(Vector3.down * controllerData.baseDivingForce, ForceMode.VelocityChange);
             State = ControllerState.DIVING;
         }
 
@@ -328,6 +332,7 @@ public class SimpleController : MonoBehaviour
             if(Velocity.y > controllerData.airRideVelocityThreshold)
             {
                 State = ControllerState.AIRRIDE;
+                rb.linearDamping = defaultDrag;
             }
         }
 
