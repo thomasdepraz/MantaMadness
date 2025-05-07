@@ -269,12 +269,6 @@ public class SimpleController : MonoBehaviour
     {
         hasHit = Physics.Raycast(transform.position, -transform.up, out RaycastHit info, controllerData.hoverRaycastLength, raycastLayer.value);
 
-        if(IsDrifting)
-        {
-            if (CanDrift == false)
-                SetDrift(0, false);
-        }
-
         if(OnRail)
         {
             if(false == currentRail.Progress(Time.fixedDeltaTime, out Vector3 nextPos, out Vector3 normal, out Vector3 direction))
@@ -304,11 +298,10 @@ public class SimpleController : MonoBehaviour
 
         if(IsDrifting)
         {
-            if(State != ControllerState.SURFING)
+            if(State != ControllerState.SURFING || CanDrift ==false)
             {
                 //Stop drifting
-                drifting = false;
-                currentDriftTime = 0;
+                SetDrift(0, false);
             }
 
             currentDriftTime += Time.fixedDeltaTime;
