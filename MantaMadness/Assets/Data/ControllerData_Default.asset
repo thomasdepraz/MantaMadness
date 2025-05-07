@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: ControllerData_Default
   m_EditorClassIdentifier: 
   acceleration: 60
-  maxSpeed: 30
+  maxSpeed: 40
   overSpeedCoeff: 0.5
-  baseTurnSpeed: 5
+  baseTurnSpeed: 10
   speedToSteeringRatio:
     serializedVersion: 2
     m_Curve:
@@ -29,8 +29,17 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.9993946
-      value: 0.3970906
+      time: 0.275
+      value: 1
+      inSlope: 0.0037972433
+      outSlope: -0.08093011
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.29317376
+      outWeight: 0.35550818
+    - serializedVersion: 3
+      time: 1
+      value: 0.45
       inSlope: -1.7779843
       outSlope: 0
       tangentMode: 1
@@ -44,7 +53,7 @@ MonoBehaviour:
   grip: 0.3
   gravity: 9.8
   hoverRaycastLength: 1
-  hoverHeight: 0.7
+  hoverHeight: 0.15
   hoverStrength: 5
   hoverDamper: 1
   baseDivingDepth: 5
@@ -85,11 +94,11 @@ MonoBehaviour:
   baseDivingForce: 8
   underwaterDrag: 2
   jumpMultiplier: 1
-  maxDivingFallingSpeed: 50
+  maxDivingFallingSpeed: 100
   jumpDamping: 0
   coyoteTime: 0.2
   forwardImpulseForce: 1
-  upwardImpulseForce: 5
+  upwardImpulseForce: 8
   maxFallingSpeed: 150
   perfectLandingForce: 50
   minimumFloatingForce: 2
@@ -98,10 +107,10 @@ MonoBehaviour:
   maxAirControl: 200
   fallingAirControl: 10
   divingAirControl: 5
-  minSpeedToDrift: 15
+  minSpeedToDrift: 20
   steeringMult: 1.25
   driftingGrip: 0
   driftBoostForce: 50
   driftBoostTimer: 2
-  airRideVelocityThreshold: 10
-  airRideGravityScale: 0.2
+  airRideVelocityThreshold: 40
+  airRideGravityScale: 0.4
