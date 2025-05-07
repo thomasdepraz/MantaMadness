@@ -93,6 +93,15 @@ public class SimpleController : MonoBehaviour
         inputs.drift.action.canceled += DriftReleased;
     }
 
+    private void OnDisable()
+    {
+        inputs.dive.action.performed -= Dive;
+        inputs.dive.action.canceled -= DiveReleased;
+        inputs.jump.action.performed -= Jump;
+        inputs.drift.action.performed -= Drift;
+        inputs.drift.action.canceled -= DriftReleased;
+    }
+
     private void SetDrift(int dir, bool drifting)
     {
         this.drifting = drifting;
