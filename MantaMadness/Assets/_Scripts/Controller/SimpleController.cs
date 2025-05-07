@@ -611,7 +611,7 @@ public class SimpleController : MonoBehaviour
 
     private float GetSpeedRatio()
     {
-        var ratio = HorizontalVelocity.sqrMagnitude / controllerData.maxSpeed * controllerData.maxSpeed;
+        var ratio = HorizontalVelocity.sqrMagnitude / (controllerData.maxSpeed * controllerData.maxSpeed);
         return Mathf.Clamp01(ratio);
     }
 }
