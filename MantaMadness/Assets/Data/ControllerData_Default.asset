@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceleration: 60
   maxSpeed: 30
+  overSpeedCoeff: 0.5
   baseTurnSpeed: 5
   speedToSteeringRatio:
     serializedVersion: 2
@@ -85,6 +86,7 @@ MonoBehaviour:
   underwaterDrag: 2
   jumpMultiplier: 1
   maxDivingFallingSpeed: 50
+  jumpDamping: 0
   coyoteTime: 0.2
   forwardImpulseForce: 1
   upwardImpulseForce: 5

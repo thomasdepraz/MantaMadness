@@ -8,6 +8,8 @@ public class ControllerData : ScriptableObject
     [Header("Global parameters")]
     public float acceleration;
     public float maxSpeed;
+    [Range(0f,1f)]
+    public float overSpeedCoeff;
     public float baseTurnSpeed;
     public AnimationCurve speedToSteeringRatio;
     public float brakeForce;
@@ -31,6 +33,7 @@ public class ControllerData : ScriptableObject
     public float maxDivingFallingSpeed = 5;
 
     [Header("Jump parameters")]
+    public float jumpDamping;
     public float coyoteTime;
     public float forwardImpulseForce;
     public float upwardImpulseForce;

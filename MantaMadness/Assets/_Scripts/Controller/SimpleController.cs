@@ -162,6 +162,7 @@ public class SimpleController : MonoBehaviour
             jumpCount++;
             rb.linearVelocity = HorizontalVelocity;
             rb.AddForce(Vector3.forward * controllerData.forwardImpulseForce + Vector3.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
+            rb.linearDamping = controllerData.jumpDamping;
         }
 
         if(State == ControllerState.SURFING)
@@ -171,6 +172,7 @@ public class SimpleController : MonoBehaviour
             jumpCount++;
             rb.linearVelocity = HorizontalVelocity;
             rb.AddForce(Vector3.forward * controllerData.forwardImpulseForce + Vector3.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
+            rb.linearDamping = controllerData.jumpDamping;
         }
     }
 
@@ -431,9 +433,13 @@ public class SimpleController : MonoBehaviour
         float speed = controllerData.acceleration;
 
         float forward = 0.0f;
-        if (thrust > 0.0 && HorizontalVelocity.sqrMagnitude < controllerData.maxSpeed * controllerData.maxSpeed)
+        if (thrust > 0.0 && HorizontalVelocity.sqrMagnitude < (controllerData.maxSpeed * controllerData.maxSpeed))
         {
             forward = thrust * speed;
+        }
+        else
+        {
+            forward = thrust * speed * controllerData.overSpeedCoeff;
         }
 
         float speedRatio = GetSpeedRatio();
