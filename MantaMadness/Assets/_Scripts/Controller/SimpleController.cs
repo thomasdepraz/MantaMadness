@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -169,7 +170,7 @@ public class SimpleController : MonoBehaviour
             // spin when falling
             State = ControllerState.JUMPING;
             jumpCount++;
-            rb.linearVelocity = HorizontalVelocity;
+            rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude;
             rb.AddForce(Vector3.forward * controllerData.forwardImpulseForce + Vector3.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
             rb.linearDamping = controllerData.jumpDamping;
         }
@@ -179,16 +180,19 @@ public class SimpleController : MonoBehaviour
             // spin when surfing
             State = ControllerState.JUMPING;
             jumpCount++;
-            rb.linearVelocity = HorizontalVelocity;
             rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude;
             rb.AddForce(Vector3.forward * controllerData.forwardImpulseForce + Vector3.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
             rb.linearDamping = controllerData.jumpDamping;
         }
     }
 
+    Coroutine airDiveRoutine;
     private void Dive(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         if (IsLocked)
+            return;
+
+        if (airDiveRoutine != null)
             return;
 
         if(State == ControllerState.FALLING || State == ControllerState.JUMPING)
@@ -197,16 +201,13 @@ public class SimpleController : MonoBehaviour
                 rb.linearVelocity = HorizontalVelocity;
 
             rb.linearVelocity = Vector3.zero;
-            rb.AddForce(Vector3.down * controllerData.baseDivingForce, ForceMode.VelocityChange);
-
-            State = ControllerState.DIVING;
+            airDiveRoutine = StartCoroutine(AirdiveRoutine());
         }
 
         if(State == ControllerState.AIRRIDE)
         {
             rb.linearVelocity = Vector3.zero;
-            rb.AddForce(Vector3.down * controllerData.baseDivingForce, ForceMode.VelocityChange);
-            State = ControllerState.DIVING;
+            StartCoroutine(AirdiveRoutine());
         }
 
         if(State == ControllerState.SURFING)
@@ -237,6 +238,14 @@ public class SimpleController : MonoBehaviour
                 State = ControllerState.FALLING;
             }
         }
+    }
+
+    private IEnumerator AirdiveRoutine()
+    {
+        yield return new WaitForSeconds(0.5f);
+        rb.AddForce(Vector3.down * controllerData.baseDivingForce, ForceMode.VelocityChange);
+        State = ControllerState.DIVING;
+        airDiveRoutine = null;
     }
 
     private void Update()
