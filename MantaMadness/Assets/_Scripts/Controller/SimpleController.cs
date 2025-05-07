@@ -171,6 +171,7 @@ public class SimpleController : MonoBehaviour
             State = ControllerState.JUMPING;
             jumpCount++;
             rb.linearVelocity = HorizontalVelocity;
+            rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude;
             rb.AddForce(Vector3.forward * controllerData.forwardImpulseForce + Vector3.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
             rb.linearDamping = controllerData.jumpDamping;
         }
