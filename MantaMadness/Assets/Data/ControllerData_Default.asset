@@ -15,7 +15,7 @@ MonoBehaviour:
   acceleration: 60
   maxSpeed: 40
   overSpeedCoeff: 0.5
-  baseTurnSpeed: 10
+  baseTurnSpeed: 8
   speedToSteeringRatio:
     serializedVersion: 2
     m_Curve:
@@ -29,22 +29,22 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.275
+      time: 0.07082978
       value: 1
       inSlope: 0.0037972433
-      outSlope: -0.08093011
+      outSlope: -0.60973436
       tangentMode: 1
       weightedMode: 0
       inWeight: 0.29317376
-      outWeight: 0.35550818
+      outWeight: 0.12556387
     - serializedVersion: 3
       time: 1
       value: 0.45
-      inSlope: -1.7779843
+      inSlope: -0.16835363
       outSlope: 0
       tangentMode: 1
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.16591862
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -95,7 +95,7 @@ MonoBehaviour:
   underwaterDrag: 2
   jumpMultiplier: 1
   maxDivingFallingSpeed: 100
-  jumpDamping: 0
+  jumpDamping: 0.3
   coyoteTime: 0.2
   forwardImpulseForce: 1
   upwardImpulseForce: 8
@@ -107,7 +107,7 @@ MonoBehaviour:
   maxAirControl: 200
   fallingAirControl: 10
   divingAirControl: 5
-  minSpeedToDrift: 20
+  minSpeedToDrift: 25
   steeringMult: 1.25
   driftingGrip: 0
   driftBoostForce: 50
