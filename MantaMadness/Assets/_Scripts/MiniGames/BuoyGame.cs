@@ -55,7 +55,7 @@ public class BuoyGame : MonoBehaviour, ITimer
     public void EndGame()
     {
         enabled = false;
-        (UIManager.Instance.miniGameTimerInterface as IScreen).Show();
+        (UIManager.Instance.miniGameTimerInterface as IScreen).Hide();
     }
 
     public void Reset()

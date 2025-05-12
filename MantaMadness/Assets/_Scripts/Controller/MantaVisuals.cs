@@ -33,27 +33,27 @@ public class MantaVisuals : MonoBehaviour
         mantaController.updateDrift += UpdateDrift;
     }
 
-    private void UpdateDrift(int driftDir, bool drifting)
+    private void UpdateDrift(int driftDir, bool drifting, bool boost)
     {
-        if(false == drifting)
+        for (int i = 0; i < driftParticles.Length; i++)
         {
-            for (int i = 0; i < driftParticles.Length; i++)
-            {
-                driftParticles[i].Stop();
-                driftParticles[i].gameObject.SetActive(false);
-            }
+            driftParticles[i].Stop();
+            driftParticles[i].gameObject.SetActive(false);
         }
-        else
+
+        if(drifting)
         {
             if(driftDir > 0)
             {
-                driftParticles[2].gameObject.SetActive(true);
-                driftParticles[2].Play();
+                int index = boost ? 3 : 2;
+                driftParticles[index].gameObject.SetActive(true);
+                driftParticles[index].Play();
             }
             else
             {
-                driftParticles[0].gameObject.SetActive(true);
-                driftParticles[0].Play();
+                int index = boost ? 1 : 0;
+                driftParticles[index].gameObject.SetActive(true);
+                driftParticles[index].Play();
             }
         }
     }

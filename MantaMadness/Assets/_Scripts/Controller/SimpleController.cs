@@ -68,12 +68,13 @@ public class SimpleController : MonoBehaviour
     private bool isCoyote => currentCoyoteTime > 0;
     private float currentCoyoteTime;
     private float currentDriftTime;
+    private bool hasDriftBoost;
     private bool hasPerfectJump;
 
     public Action<ControllerState, ControllerState> stateChanged;
     public Action<AirRail> enterAirRail;
     public Action<AirRail> exitAirRail;
-    public Action<int, bool> updateDrift;
+    public Action<int, bool, bool> updateDrift;
 
     private void Awake()
     {
@@ -103,15 +104,18 @@ public class SimpleController : MonoBehaviour
         inputs.drift.action.canceled -= DriftReleased;
     }
 
-    private void SetDrift(int dir, bool drifting)
+    private void SetDrift(int dir, bool drifting, bool boost = false)
     {
         this.drifting = drifting;
         driftDir = dir;
 
         if (drifting == false)
+        {
             currentDriftTime = 0;
+            hasDriftBoost = false;
+        }
 
-        updateDrift.Invoke(dir, drifting);
+        updateDrift.Invoke(dir, drifting, boost);
     }
 
     private void Drift(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -314,6 +318,11 @@ public class SimpleController : MonoBehaviour
             }
 
             currentDriftTime += Time.fixedDeltaTime;
+            if(currentDriftTime > controllerData.driftBoostTimer && hasDriftBoost == false)
+            {
+                hasDriftBoost = true;
+                SetDrift(driftDir, true, true);
+            }
         }
 
         //Falling to Surfing
