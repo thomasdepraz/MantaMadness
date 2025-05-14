@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-6341803996276761659
+--- !u!114 &-8643908155592524007
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Water
-  m_Shader: {fileID: -6465566751694194690, guid: 83c9b8c84d5358f4d84a9899f75d58d1, type: 3}
+  m_Name: M_TotemEye_Toon
+  m_Shader: {fileID: -6465566751694194690, guid: 8c757fcdd44f4444fb50aa84d87ce519, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -29,7 +29,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses:
   - MOTIONVECTORS
@@ -37,6 +37,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Texture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -51,21 +55,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Depth: 9.82
-    - _FoamAmount: 5.01
-    - _FoamCutoff: 1.4
-    - _FoamScale: 48.42
-    - _FoamSpeed: 0.01
-    - _QueueControl: 1
+    - _Max: 1
+    - _Min: 0.3
+    - _QueueControl: 0
     - _QueueOffset: 0
-    - _RippleDensisty: 0.27
-    - _RippleSlimness: 12.9
-    - _RippleSpeed: 2.3
-    - _WaveSize: 0
-    - _WaveSpeed: 0.45
+    - _Shades: 1
     m_Colors:
-    - _BaseColor: {r: 0.2004717, g: 0.5686275, b: 0.80784315, a: 0}
-    - _Color: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 0}
-    - _FoamColor: {r: 1.792453, g: 1.792453, b: 1.792453, a: 1}
+    - _Color: {r: 0.7443203, g: 3.0940375, b: 2.9004593, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
