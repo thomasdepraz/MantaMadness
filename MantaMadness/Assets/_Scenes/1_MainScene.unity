@@ -438,7 +438,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 500
+  far clip plane: 10000
   field of view: 62.8976
   orthographic: 0
   orthographic size: 5
@@ -863,7 +863,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 454.695, y: 4.985}
+  m_AnchoredPosition: {x: 454.695, y: 4.9849854}
   m_SizeDelta: {x: 100, y: -9.97}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &488246282
@@ -1971,6 +1971,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   raceInterface: {fileID: 0}
   miniGameTimerInterface: {fileID: 0}
+  victoryScreen: {fileID: 0}
 --- !u!1 &1063071658
 GameObject:
   m_ObjectHideFlags: 0
@@ -4756,30 +4757,6 @@ PrefabInstance:
     - target: {fileID: 8437780890063214837, guid: dca7f13816397624b95432a30aded4ae, type: 3}
       propertyPath: m_Layer
       value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8470598168765840976, guid: dca7f13816397624b95432a30aded4ae, type: 3}
-      propertyPath: divingAngle
-      value: 70
-      objectReference: {fileID: 0}
-    - target: {fileID: 8470598168765840976, guid: dca7f13816397624b95432a30aded4ae, type: 3}
-      propertyPath: airRideAngle
-      value: 70
-      objectReference: {fileID: 0}
-    - target: {fileID: 8470598168765840976, guid: dca7f13816397624b95432a30aded4ae, type: 3}
-      propertyPath: surfTurnAngle
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 8470598168765840976, guid: dca7f13816397624b95432a30aded4ae, type: 3}
-      propertyPath: driftTurnAngle
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 8470598168765840976, guid: dca7f13816397624b95432a30aded4ae, type: 3}
-      propertyPath: airControlAngle
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 8470598168765840976, guid: dca7f13816397624b95432a30aded4ae, type: 3}
-      propertyPath: maxVerticalSpeed
-      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 8547754918487876563, guid: dca7f13816397624b95432a30aded4ae, type: 3}
       propertyPath: m_Layer
