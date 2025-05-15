@@ -52,6 +52,8 @@ public class ControllerData : ScriptableObject
 
     [Header("Drift")]
     public float minSpeedToDrift;
+    public float minSpeedToDriftBreak;
+    public float driftTurnSpeed;
     [Min(1)]public float steeringMult;
     public float driftingGrip;
     public float driftBoostForce;

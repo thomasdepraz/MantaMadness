@@ -1,4 +1,7 @@
-﻿using Unity.Mathematics;
+using DG.Tweening;
+using Unity.Mathematics;
+using UnityEditor.Rendering;
+using UnityEngine;
 
 public class ControllerStats
 {
@@ -19,19 +22,19 @@ public class ControllerStats
     //turn in -1/1 range
     public float GetSteering(float speedRatio, float turn, bool drifting = false, int driftDir = 0)
     {
-        float coeff = data.speedToSteeringRatio.Evaluate(speedRatio);
 
         if (drifting == false)
         {
+            float coeff = data.speedToSteeringRatio.Evaluate(speedRatio);
             return turn * data.baseTurnSpeed * coeff;
         }
 
         //remap
-        float minSteer = driftDir == 1 ? 1 : data.steeringMult;
-        float maxSteer = driftDir == 1 ? data.steeringMult : 1;
+        float minSteer = driftDir == 1 ? 0 : data.steeringMult;
+        float maxSteer = driftDir == 1 ? data.steeringMult : 0;
         float remappedTurn = math.remap(-1, 1, minSteer, maxSteer, turn);
 
-        return driftDir * remappedTurn * data.baseTurnSpeed * coeff;
+        return driftDir * remappedTurn * data.driftTurnSpeed;
     }
 
 }

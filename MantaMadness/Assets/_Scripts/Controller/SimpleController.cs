@@ -36,8 +36,10 @@ public class SimpleController : MonoBehaviour
     public Vector2 AirControlDirection => airControl;
     public bool InAirRail => currentAirRail != null;
     public bool OnRail => currentRail != null;
-    public bool IsLocked => OnRail is true || InAirRail is true;
+    public bool IsLocked => OnRail || InAirRail || forceLocked;
     private bool CanDrift => HorizontalVelocity.sqrMagnitude > controllerData.minSpeedToDrift * controllerData.minSpeedToDrift;
+    private bool CanDriftBreak => HorizontalVelocity.sqrMagnitude < (controllerData.minSpeedToDriftBreak * controllerData.minSpeedToDriftBreak);
+
 
     public ControllerState State {
         get
@@ -70,6 +72,7 @@ public class SimpleController : MonoBehaviour
     private float currentDriftTime;
     private bool hasDriftBoost;
     private bool hasPerfectJump;
+    private bool forceLocked;
 
     public Action<ControllerState, ControllerState> stateChanged;
     public Action<AirRail> enterAirRail;
@@ -311,7 +314,7 @@ public class SimpleController : MonoBehaviour
 
         if(IsDrifting)
         {
-            if(State != ControllerState.SURFING || CanDrift ==false)
+            if(State != ControllerState.SURFING || CanDriftBreak)
             {
                 //Stop drifting
                 SetDrift(0, false);
@@ -476,11 +479,14 @@ public class SimpleController : MonoBehaviour
         //Apply forces (grip - thrust - steer)
         rb.AddForce(transform.right * desiredVelocityChange, ForceMode.VelocityChange);
         rb.AddForce(transform.forward * forward, ForceMode.Acceleration);
-        Steer(steer);
 
         if (IsDrifting)
         {
             Steer(stats.GetSteering(speedRatio, turn, true, driftDir));
+        }
+        else
+        {
+            Steer(steer);
         }
 
         //Apply drag if braking
@@ -647,4 +653,6 @@ public class SimpleController : MonoBehaviour
         var ratio = HorizontalVelocity.sqrMagnitude / (controllerData.maxSpeed * controllerData.maxSpeed);
         return Mathf.Clamp01(ratio);
     }
+
+    public void ForceLock(bool lockController) => forceLocked = lockController;
 }
