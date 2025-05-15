@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class Game : MonoBehaviour
@@ -19,6 +18,8 @@ public class Game : MonoBehaviour
 
     [HideInInspector] public SimpleController player;
     public RaceManager raceManager = new RaceManager();
+    
+    CameraManager cameraManager = CameraManager.Instance;
 
     public void Start()
     {
