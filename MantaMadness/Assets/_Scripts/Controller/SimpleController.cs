@@ -196,7 +196,7 @@ public class SimpleController : MonoBehaviour
     Coroutine airDiveRoutine;
     private void Dive(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if (IsLocked)
+        if (IsLocked || State == ControllerState.DIVING)
             return;
 
         if (airDiveRoutine != null)
@@ -214,7 +214,7 @@ public class SimpleController : MonoBehaviour
         if(State == ControllerState.AIRRIDE)
         {
             rb.linearVelocity = Vector3.zero;
-            StartCoroutine(AirdiveRoutine());
+            airDiveRoutine = StartCoroutine(AirdiveRoutine());
         }
 
         if(State == ControllerState.SURFING)
@@ -239,10 +239,6 @@ public class SimpleController : MonoBehaviour
                 rb.linearVelocity = HorizontalVelocity;
 
                 State = ControllerState.SWIMMING;
-            }
-            else
-            {
-                State = ControllerState.FALLING;
             }
         }
     }
