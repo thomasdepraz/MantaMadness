@@ -162,7 +162,7 @@ public class SimpleController : MonoBehaviour
         if (State == ControllerState.DIVING || State == ControllerState.SWIMMING)
             return;
 
-        if (jumpCount > 0)
+        if (jumpCount > 1)
             return;
 
         if (isCoyote)
@@ -172,24 +172,35 @@ public class SimpleController : MonoBehaviour
             hasPerfectJump = true;
         }
 
-        if(State == ControllerState.FALLING)
-        {
-            // spin when falling
-            State = ControllerState.JUMPING;
-            jumpCount++;
-            rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude;
-            rb.AddForce(Vector3.forward * controllerData.forwardImpulseForce + Vector3.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
-            rb.linearDamping = controllerData.jumpDamping;
-        }
-
         if(State == ControllerState.SURFING)
         {
             // spin when surfing
             State = ControllerState.JUMPING;
             jumpCount++;
             rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude;
-            rb.AddForce(Vector3.forward * controllerData.forwardImpulseForce + Vector3.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
+            rb.AddForce(Vector3.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
             rb.linearDamping = controllerData.jumpDamping;
+            return;
+        }
+
+        if(State == ControllerState.JUMPING || State == ControllerState.FALLING)
+        {
+            State = ControllerState.JUMPING;
+            jumpCount++;
+
+            Vector3 direction = airControl.normalized;
+            direction = transform.TransformDirection(new Vector3(direction.x, 0, direction.y));
+
+            if(direction.x != 0 || direction.y != 0)
+            {
+                transform.forward = direction;
+                rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude;
+            }
+
+            rb.AddForce(Vector3.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
+            rb.linearDamping = controllerData.jumpDamping;
+
+            return;
         }
     }
 

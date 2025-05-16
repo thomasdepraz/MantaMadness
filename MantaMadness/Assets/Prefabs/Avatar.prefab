@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 6092508706850755039}
   - component: {fileID: 1819065601580436475}
   - component: {fileID: 7992050793049722225}
-  - component: {fileID: 3403842853032934725}
+  - component: {fileID: 6897971650209339448}
   m_Layer: 0
   m_Name: Follow
   m_TagString: VirtualCamera
@@ -136,7 +136,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2289239835516645747}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 2, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -167,7 +167,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 62.8976
+    FieldOfView: 60
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 10000
@@ -201,11 +201,11 @@ MonoBehaviour:
   TrackerSettings:
     BindingMode: 3
     PositionDamping: {x: 0, y: 0.3, z: 0}
-    AngularDampingMode: 0
+    AngularDampingMode: 1
     RotationDamping: {x: 0, y: 0, z: 0}
-    QuaternionDamping: 1
+    QuaternionDamping: 0.5
   FollowOffset: {x: 0, y: 2, z: -8}
---- !u!114 &3403842853032934725
+--- !u!114 &6897971650209339448
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
