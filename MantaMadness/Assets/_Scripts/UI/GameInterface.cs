@@ -21,6 +21,6 @@ public class GameInterface : MonoBehaviour, IScreen
     private void UpdateCoinCount(int coinCount)
     {
         coinText.text = coinCount.ToString();
-        sunImage.transform.DOPunchScale(Vector3.one, 1, 5);
+        sunImage?.transform.DOPunchScale(Vector3.one, 1, 5);
     }
 }

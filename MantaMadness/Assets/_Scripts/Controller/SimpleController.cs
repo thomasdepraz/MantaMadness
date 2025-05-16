@@ -654,5 +654,12 @@ public class SimpleController : MonoBehaviour
         return Mathf.Clamp01(ratio);
     }
 
-    public void ForceLock(bool lockController) => forceLocked = lockController;
+    public void ForceLock(bool lockController)
+    {
+        forceLocked = lockController;
+
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.isKinematic = lockController;
+    }
 }

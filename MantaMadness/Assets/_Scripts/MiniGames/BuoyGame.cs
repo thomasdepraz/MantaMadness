@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuoyGame : MonoBehaviour, ITimer
+public class BuoyGame : MonoBehaviour, ITimer, ICoinObjective
 {
     public List<Buoy> buoys = new List<Buoy>();
     public float timeToFinish;
@@ -10,6 +10,9 @@ public class BuoyGame : MonoBehaviour, ITimer
     private int count = 0;
     private bool hasStarted;
 
+    public Coin coin;
+    public Coin coinToUnlock => coin;
+
     void Start()
     {
         enabled = false;
@@ -17,6 +20,8 @@ public class BuoyGame : MonoBehaviour, ITimer
         {
             buoys[i].Initialize(this);
         }
+
+        coin?.gameObject.SetActive(false);
     }
 
     public void StartGame()
@@ -56,6 +61,7 @@ public class BuoyGame : MonoBehaviour, ITimer
     {
         enabled = false;
         (UIManager.Instance.miniGameTimerInterface as IScreen).Hide();
+        UnlockCoin();
     }
 
     public void Reset()
@@ -72,5 +78,12 @@ public class BuoyGame : MonoBehaviour, ITimer
     float ITimer.GetTime()
     {
         return timer;
+    }
+
+    public void UnlockCoin()
+    {
+        coin?.gameObject.SetActive(true);
+
+        //do camera event ?
     }
 }
