@@ -186,7 +186,7 @@ public class SimpleController : MonoBehaviour
         if(State == ControllerState.JUMPING || State == ControllerState.FALLING)
         {
             State = ControllerState.JUMPING;
-            jumpCount++;
+            jumpCount += 2;
 
             Vector3 direction = airControl.normalized;
             direction = transform.TransformDirection(new Vector3(direction.x, 0, direction.y));
@@ -318,7 +318,6 @@ public class SimpleController : MonoBehaviour
             return;
         }
 
-
         if(IsDrifting)
         {
             if(State != ControllerState.SURFING || CanDriftBreak)
@@ -341,7 +340,7 @@ public class SimpleController : MonoBehaviour
             if (hasHit)
             {
                 State = ControllerState.SURFING;
-                jumpCount = 0;
+                ResetJump();
 
                 if(hasPerfectJump)
                 {
@@ -543,6 +542,7 @@ public class SimpleController : MonoBehaviour
     {
         rb.AddForce(normal * controllerData.upwardImpulseForce * controllerData.jumpMultiplier, ForceMode.VelocityChange);
         rb.linearDamping = controllerData.jumpDamping;
+        jumpCount++;
     }
     
     private void DriftBoost()
@@ -583,6 +583,8 @@ public class SimpleController : MonoBehaviour
         currentWaterBlock = waterBlock;
         maxDepth = 0;
 
+        ResetJump();
+
         if(State == ControllerState.DIVING && Velocity.y < 0)
         {
             float speedRatio = Mathf.Clamp01((Mathf.Abs(Velocity.y) - controllerData.baseDivingForce) / (controllerData.maxDivingFallingSpeed - controllerData.baseDivingForce));
@@ -614,6 +616,8 @@ public class SimpleController : MonoBehaviour
 
         if (State == ControllerState.SURFING)
             return;
+
+        ResetJump();
 
         Vector3 normal = (transform.position - collision.ClosestPoint(transform.position)).normalized;
 
@@ -669,4 +673,6 @@ public class SimpleController : MonoBehaviour
         rb.angularVelocity = Vector3.zero;
         rb.isKinematic = lockController;
     }
+
+    private void ResetJump() => jumpCount = 0;
 }
