@@ -29,7 +29,7 @@ public class RaceManager
         UIManager.Instance.raceInterface.Init(race);
 
         //set player position
-        Game.Instance.player.ForcePosition(race.GetStartTransform());
+        //Game.Instance.player.ForcePosition(race.GetStartTransform());
 
         raceStarted.Invoke();
         return true;

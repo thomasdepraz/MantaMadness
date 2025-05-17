@@ -8,7 +8,7 @@ public class Checkpoint : MonoBehaviour
     private int raceIndex;
     public int RaceIndex { get => raceIndex; }
     public Transform respawnTransform;
-
+    public GameObject[] outlines;
     public void Activate(int raceIndex)
     {
         this.raceIndex = raceIndex;
@@ -22,7 +22,16 @@ public class Checkpoint : MonoBehaviour
 
     public void Reset()
     {
+        print("JE TE BAISE");
         canBePassed = true;
+    }
+
+    public void ToggleOutline(bool toggle)
+    {
+        foreach (GameObject objects in outlines)
+        {
+            objects.SetActive(toggle);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

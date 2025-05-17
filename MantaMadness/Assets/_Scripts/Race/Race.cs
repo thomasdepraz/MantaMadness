@@ -14,7 +14,7 @@ public class Race : MonoBehaviour, ITimer
     private int checkpointCountThisLap;
     private Checkpoint startCheckpoint;
     private Checkpoint lastCheckpointPassed;
-    private float currentTimer;
+    public float currentTimer;
 
     public void Initialize()
     {
@@ -28,6 +28,7 @@ public class Race : MonoBehaviour, ITimer
         }
 
         checkpoints[1].Reset();
+        checkpoints[1].ToggleOutline(true);
         currentLapCount = 1;
         checkpointCountThisLap = 0;
         currentTimer = 0;
@@ -51,8 +52,10 @@ public class Race : MonoBehaviour, ITimer
             checkpointCountThisLap++;
         }
 
+        checkpoint.ToggleOutline(false);
         int nextIndex = checkpoint.RaceIndex + 1 >= CheckpointCount ? 0 : checkpoint.RaceIndex + 1;
         checkpoints[nextIndex].Reset();
+        checkpoints[nextIndex].ToggleOutline(true);
     }
 
     private void EndRace()
