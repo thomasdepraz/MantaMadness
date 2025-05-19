@@ -22,7 +22,6 @@ public class Checkpoint : MonoBehaviour
 
     public void Reset()
     {
-        print("JE TE BAISE");
         canBePassed = true;
     }
 

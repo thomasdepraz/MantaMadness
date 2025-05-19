@@ -272,7 +272,7 @@ public class SimpleController : MonoBehaviour
             }
             else
             {
-                transform.position = new Vector3(0, 1, 0);
+                transform.position = new Vector3(0, 150, 30);
                 transform.rotation = Quaternion.identity;
                 State = ControllerState.FALLING;
                 rb.linearVelocity = Vector3.zero;
