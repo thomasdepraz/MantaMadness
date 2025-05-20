@@ -21,6 +21,7 @@ public class MantaVisuals : MonoBehaviour
     public ParticleSystem surfParticles;
     public ParticleSystem splashParticles;
     public ParticleSystem[] driftParticles = new ParticleSystem[4];
+    public ParticleSystem[] boostParticles = new ParticleSystem[3];
 
     private int driftId = Animator.StringToHash("Drifting");
     private int driftDirId = Animator.StringToHash("DriftDirection");
@@ -31,6 +32,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController = GetComponent<SimpleController>();
         mantaController.stateChanged += UpdateState;
         mantaController.updateDrift += UpdateDrift;
+        mantaController.boost += BoostParticles;
     }
 
     private void UpdateDrift(int driftDir, bool drifting, bool boost)
@@ -132,5 +134,13 @@ public class MantaVisuals : MonoBehaviour
     private void SplashParticles()
     {
         splashParticles.Play();
+    }
+
+    private void BoostParticles()
+    {
+        for (int i = 0; i <  boostParticles.Length; i++)
+        {
+            boostParticles[i].Play();
+        }
     }
 }

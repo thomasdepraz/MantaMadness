@@ -79,6 +79,7 @@ public class SimpleController : MonoBehaviour
     public Action<AirRail> enterAirRail;
     public Action<AirRail> exitAirRail;
     public Action<int, bool, bool> updateDrift;
+    public Action boost;
 
     private void Awake()
     {
@@ -556,6 +557,7 @@ public class SimpleController : MonoBehaviour
         if (currentDriftTime > controllerData.driftBoostTimer)
         {
             rb.AddForce(transform.forward * controllerData.driftBoostForce, ForceMode.VelocityChange);
+            boost.Invoke();
         }
     }
 
@@ -565,6 +567,7 @@ public class SimpleController : MonoBehaviour
             return;
 
         enterAirRail.Invoke(rail);
+        boost.Invoke();
         currentAirRail = rail;
     }
 
@@ -576,6 +579,7 @@ public class SimpleController : MonoBehaviour
         currentRail = rail;
         rail.EnterRail(transform.position, Velocity);
         rb.isKinematic = true;
+        boost.Invoke();
         return true;
     }
 
