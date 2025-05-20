@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -6,11 +6,17 @@ public class MantaCameraController : MonoBehaviour
 {
     public float fallingSpeedThreshold;
     public float airRideSpeedThreshold;
-    public CinemachineCamera followCamera;
+
+    public CinemachineCamera surfingCamera;
     public CinemachineCamera divingCamera;
     public CinemachineCamera airRideCamera;
+    public CinemachineCamera swimmingCamera;
+    public CinemachineCamera fallingCamera;
+    public CinemachineCamera jumpingCamera;
 
     private SimpleController mantaController;
+
+    List<CinemachineCamera> cameras = new List<CinemachineCamera>();
 
     private void Awake()
     {
@@ -18,11 +24,19 @@ public class MantaCameraController : MonoBehaviour
         mantaController.stateChanged += UpdateState;
         mantaController.enterAirRail += EnterRail;
         mantaController.exitAirRail += ExitRail;
+
+        cameras.Add(surfingCamera);
+        cameras.Add(divingCamera);
+        cameras.Add(airRideCamera);
+        cameras.Add(swimmingCamera);
+        cameras.Add(fallingCamera);
+        cameras.Add(jumpingCamera);
     }
 
     private void Start()
     {
-        CameraManager.Instance.SetDefaultCamera(followCamera);
+        CameraManager.Instance.SetDefaultCamera(surfingCamera);
+        SetActiveCamera(fallingCamera);
     }
 
     private void EnterRail(AirRail rail)
@@ -39,34 +53,40 @@ public class MantaCameraController : MonoBehaviour
 
     private void UpdateState(ControllerState previousState, ControllerState newState)
     {
-        if(newState == ControllerState.SURFING)
+        switch (newState)
         {
-            followCamera.gameObject.SetActive(true);
-            airRideCamera.gameObject.SetActive(false);
-            divingCamera.gameObject.SetActive(false);
-        }
-
-        if (newState == ControllerState.AIRRIDE)
-        {
-            followCamera.gameObject.SetActive(false);
-            divingCamera.gameObject.SetActive(false);
-            airRideCamera.gameObject.SetActive(true);
-            return;
-        }
-
-        if (newState == ControllerState.DIVING && previousState != ControllerState.SURFING)
-        {
-            followCamera.gameObject.SetActive(false);
-            divingCamera.gameObject.SetActive(true);
-            airRideCamera.gameObject.SetActive(false);
-            return;
-        }
-
-        if (previousState == ControllerState.AIRRIDE)
-        {
-            followCamera.gameObject.SetActive(true);
-            airRideCamera.gameObject.SetActive(false);
+            case ControllerState.FALLING:
+                SetActiveCamera(fallingCamera);
+                break;
+            case ControllerState.JUMPING:
+                SetActiveCamera(jumpingCamera);
+                break;
+            case ControllerState.SURFING:
+                SetActiveCamera(surfingCamera);
+                break;
+            case ControllerState.DIVING:
+                SetActiveCamera(divingCamera);
+                break;
+            case ControllerState.SWIMMING:
+                SetActiveCamera(swimmingCamera);
+                break;
+            default:
+                break;
         }
     }
 
+    private void SetActiveCamera(CinemachineCamera camera)
+    {
+        for (int i = 0; i < cameras.Count; i++)
+        {
+            if (cameras[i].name == camera.name)
+            {
+                cameras[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                cameras[i].gameObject.SetActive(false);
+            }
+        }
+    }
 }
