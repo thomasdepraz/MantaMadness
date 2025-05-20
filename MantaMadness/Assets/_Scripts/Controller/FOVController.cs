@@ -39,6 +39,6 @@ public class FOVController : MonoBehaviour
 
         currentFOV = Mathf.Lerp(currentFOV, targetFOV, Time.deltaTime);
 
-        current.Lens.FieldOfView = currentFOV;
+        (brain.ActiveVirtualCamera as CinemachineCamera).Lens.FieldOfView = currentFOV;
     }
 }
