@@ -23,9 +23,9 @@ public class TweenAnimation : MonoBehaviour
 
     [Header("Scale Tween")]
     public bool animateScale;
-    public float xScale;
-    public float yScale;
-    public float zScale;
+    public float xScale = 1;
+    public float yScale = 1;
+    public float zScale = 1;
     public float scaleDuration;
 
     void Start()
@@ -37,12 +37,12 @@ public class TweenAnimation : MonoBehaviour
     public void Tween()
     {
         if(animateRotation == true)
-            transform.DORotate(new Vector3(xRotation,yRotation, zRotation), rotationDuration).SetEase(Ease.Linear).SetLoops(-1, LoopType.Incremental);
+            transform.DOLocalRotate(new Vector3(xRotation,yRotation, zRotation), rotationDuration).SetEase(Ease.Linear).SetLoops(-1, LoopType.Incremental);
 
         if (animatePosition == true)
             transform.DOLocalMove(new Vector3(xPos, yPos, zPos), moveDuration).SetEase(Ease.InOutQuad).SetLoops(-1, LoopType.Yoyo);
 
         if (animateScale == true)
-            transform.DOScale(new Vector3(xScale, yScale, zScale), scaleDuration).SetEase(Ease.InOutQuad).SetLoops(-1);
+            transform.DOScale(new Vector3(transform.localScale.x * xScale, transform.localScale.y * yScale, transform.localScale.z * zScale), scaleDuration).SetEase(Ease.InOutQuad).SetLoops(-1, LoopType.Yoyo);
     }
 }
