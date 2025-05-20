@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
 
@@ -297,12 +298,17 @@ public class SimpleController : MonoBehaviour
             if(false == currentRail.Progress(Time.fixedDeltaTime, out Vector3 nextPos, out Vector3 normal, out Vector3 direction))
             {
                 currentRail = null;
+                transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
                 rb.isKinematic = false;
                 rb.AddForce(direction * 50, ForceMode.VelocityChange);
                 railDetector.ExitRail();
             }
+            else
+            {
+                transform.position = nextPos;
+                transform.forward = direction;
+            }
 
-            transform.position = nextPos;
             return;
         }
 
