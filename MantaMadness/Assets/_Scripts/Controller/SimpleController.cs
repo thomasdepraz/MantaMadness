@@ -614,11 +614,13 @@ public class SimpleController : MonoBehaviour
 
     private void OnTriggerExit(Collider collision)
     {
-        if (collision.gameObject.TryGetComponent<WaterBlock>(out _))
+        if (collision.gameObject.TryGetComponent<WaterBlock>(out WaterBlock block) && block == currentWaterBlock)
         {
             currentWaterBlock = null;
             maxDepth = 0;
         }
+        else
+            return;
 
         if (State == ControllerState.SURFING)
             return;
