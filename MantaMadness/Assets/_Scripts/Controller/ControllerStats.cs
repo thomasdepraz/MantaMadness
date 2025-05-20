@@ -1,7 +1,4 @@
-using DG.Tweening;
 using Unity.Mathematics;
-using UnityEditor.Rendering;
-using UnityEngine;
 
 public class ControllerStats
 {

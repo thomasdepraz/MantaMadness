@@ -20,6 +20,10 @@ public class MantaCameraController : MonoBehaviour
         mantaController.exitAirRail += ExitRail;
     }
 
+    private void Start()
+    {
+        CameraManager.Instance.SetDefaultCamera(followCamera);
+    }
 
     private void EnterRail(AirRail rail)
     {

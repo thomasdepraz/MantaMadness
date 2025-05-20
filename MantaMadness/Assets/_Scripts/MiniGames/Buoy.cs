@@ -5,13 +5,17 @@ public class Buoy : MonoBehaviour
 {
     public new Collider collider;
     private BuoyGame game;
+    public BuoyVisuals visuals;
     public Action onCollect;
     public Action onReset;
 
     public void Initialize(BuoyGame game)
     {
         this.game = game;
-        collider.enabled = true;
+        collider.enabled = !game.Completed;
+
+        if(game.Completed)
+            visuals.SetCompleted();
     }
 
     private void OnTriggerEnter(Collider other)

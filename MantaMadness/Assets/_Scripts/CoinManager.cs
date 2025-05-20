@@ -1,31 +1,40 @@
 ﻿using System;
+using UnityEngine;
 
-public class CoinManager
+public class CoinManager : MonoBehaviour
 {
-    private static CoinManager _instance;
-    public static CoinManager Instance
+    public static CoinManager Instance;
+    private void Awake()
     {
-        get
+        if(Instance != null && Instance != this)
         {
-            if (_instance == null)
-            {
-                _instance = new CoinManager();
-            }
-
-            return _instance;
+            Destroy(this);
         }
-
-        set => _instance = value;
+        else
+        {
+            Instance = this;
+        }
     }
 
     private CoinManager() { }
 
-    private int pickupCoinCount;
     public Action<int> coinPickedUp;
-    
+    public int PickupCoinCount 
+    { 
+        get => PlayerPrefs.GetInt(Constants.c_CoinAmountSave, 0);
+        set => PlayerPrefs.SetInt(Constants.c_CoinAmountSave, value); 
+    }
+
+#if UNITY_EDITOR
+    public void Start()
+    {
+        PickupCoinCount = 0;
+    }
+#endif
+
     public void PickupCoin()
     {
-        pickupCoinCount++;
-        coinPickedUp?.Invoke(pickupCoinCount);
+        PickupCoinCount++;
+        coinPickedUp?.Invoke(PickupCoinCount);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Unity.Cinemachine;
-using Unity.Rendering.Universal;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -50,5 +49,9 @@ public class CameraManager: MonoBehaviour
     public void AddCameraToStack(Camera camera)
     {
         mainCamera.GetUniversalAdditionalCameraData().cameraStack.Add(camera);
+    }
+    public void SetDefaultCamera(CinemachineCamera camera)
+    {
+        defaultCamera = camera;
     }
 }

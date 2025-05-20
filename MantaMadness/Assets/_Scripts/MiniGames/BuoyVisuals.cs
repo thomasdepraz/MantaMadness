@@ -16,6 +16,11 @@ public class BuoyVisuals : MonoBehaviour
         defaultMaterial = renderer.materials[0];
     }
 
+    public void SetCompleted()
+    {
+        renderer.material = completedMaterial;
+    }
+
     private void OnReset()
     {
         renderer.material = defaultMaterial;

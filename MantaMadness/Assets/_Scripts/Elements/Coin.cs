@@ -2,7 +2,7 @@ using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 
-public class Coin : MonoBehaviour
+public class Coin : MonoBehaviour, ISaveable
 {
     const float c_LockDuration = 3f;
 
@@ -10,7 +10,28 @@ public class Coin : MonoBehaviour
     public CinemachineCamera vcamera;
     public CinemachineBlendDefinition blend;
 
+    [Header("Saving")]
+    public string saveName;
+    public bool isMiniGameCoin;
+    bool ISaveable.CanSave => !isMiniGameCoin;
+
+    private bool pickedUp = false;
     private WaitForSeconds wait;
+    private Coroutine routine;
+
+    private void Start()
+    {
+        if (isMiniGameCoin)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+        else
+        {
+            gameObject.SetActive(!pickedUp);
+        }
+    }
+
     private IEnumerator PickupCoroutine(SimpleController controller)
     {
         wait = new WaitForSeconds(c_LockDuration);
@@ -36,16 +57,27 @@ public class Coin : MonoBehaviour
 
         //Deactivate game object
         routine = null;
-        Destroy(gameObject);
 
+        gameObject.SetActive(false);
+        pickedUp = true;
     }
 
-    Coroutine routine;
     private void OnTriggerEnter(Collider other)
     {
         if(other.TryGetComponent(out SimpleController controller) && routine == null)
         {
             routine = StartCoroutine(PickupCoroutine(controller));
         }
+    }
+
+    void ISaveable.Save()
+    {
+        PlayerPrefs.SetInt(Constants.c_CoinPrefixSave + saveName, pickedUp ? 1 : 0);
+    }
+
+    void ISaveable.Load()
+    {
+        int save = PlayerPrefs.GetInt(Constants.c_CoinPrefixSave + this.GetHashCode().ToString(), 0);
+        pickedUp = save == 0 ? false : true;
     }
 }

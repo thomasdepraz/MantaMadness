@@ -14,8 +14,14 @@ public class GameInterface : MonoBehaviour, IScreen
 
     public void Start()
     {
-        CoinManager.Instance.coinPickedUp += UpdateCoinCount;
         CameraManager.Instance.AddCameraToStack(uiCamera);
+        CoinManager.Instance.coinPickedUp += UpdateCoinCount;
+        coinText.text = CoinManager.Instance.PickupCoinCount.ToString();
+    }
+
+    private void OnDestroy()
+    {
+        CoinManager.Instance.coinPickedUp -= UpdateCoinCount;
     }
 
     private void UpdateCoinCount(int coinCount)

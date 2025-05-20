@@ -1071,13 +1071,26 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6332716648914833732, guid: 07e6244d34ac07843946995f8d596328, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6332716648914833732, guid: 07e6244d34ac07843946995f8d596328, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -935.4052
+      objectReference: {fileID: 0}
+    - target: {fileID: 6332716648914833732, guid: 07e6244d34ac07843946995f8d596328, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 2796.862
+      objectReference: {fileID: 0}
+    - target: {fileID: 7102245951832043851, guid: 07e6244d34ac07843946995f8d596328, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -53.024994
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8891975113576828678, guid: 07e6244d34ac07843946995f8d596328, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1753936066}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 07e6244d34ac07843946995f8d596328, type: 3}
 --- !u!1 &96352214
 GameObject:
@@ -1194,7 +1207,7 @@ Transform:
   m_GameObject: {fileID: 96352214}
   serializedVersion: 2
   m_LocalRotation: {x: 0.454588, y: -0.03080208, z: -0.06424648, w: 0.88784766}
-  m_LocalPosition: {x: 110.66302, y: 148.31686, z: -4.042818}
+  m_LocalPosition: {x: 110.663, y: 148.3169, z: -4.042818}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1491,17 +1504,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 134446368}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &144281391 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8064471988567054088, guid: 07e6244d34ac07843946995f8d596328, type: 3}
-  m_PrefabInstance: {fileID: 69864889}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &154655571
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2198,6 +2200,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1584203292}
     m_Modifications:
+    - target: {fileID: 1831185759981682047, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
+      propertyPath: saveName
+      value: SmallBuoyGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 1831185759981682047, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
+      propertyPath: isMiniGameCoin
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4972539868658882653, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
       propertyPath: m_Name
       value: P_Coin
@@ -2247,17 +2257,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
---- !u!114 &220825474 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1281275744428938198, guid: 07e6244d34ac07843946995f8d596328, type: 3}
-  m_PrefabInstance: {fileID: 69864889}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &252980621
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7816,7 +7815,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4883692192382632154, guid: 29e56b3b9e60ad947b260425d8c2e187, type: 3}
       propertyPath: m_Name
-      value: BuoyGame
+      value: BuoyGame_Module004
       objectReference: {fileID: 0}
     - target: {fileID: 8745182641671976115, guid: 29e56b3b9e60ad947b260425d8c2e187, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10738,6 +10737,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 888982677}
     m_Modifications:
+    - target: {fileID: 1831185759981682047, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
+      propertyPath: saveName
+      value: StartRace
+      objectReference: {fileID: 0}
+    - target: {fileID: 1831185759981682047, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
+      propertyPath: isMiniGameCoin
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4972539868658882653, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
       propertyPath: m_Name
       value: P_Coin
@@ -11002,7 +11009,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4136535575455171257, guid: 304591220e955544391a3c78ab3fe2c1, type: 3}
       propertyPath: m_Name
-      value: Race
+      value: Race_Module003
       objectReference: {fileID: 0}
     - target: {fileID: 4137252792841714370, guid: 304591220e955544391a3c78ab3fe2c1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11634,17 +11641,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2727491096219642031, guid: 29e56b3b9e60ad947b260425d8c2e187, type: 3}
   m_PrefabInstance: {fileID: 1742307517}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1284439953 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7539395478673009817, guid: 07e6244d34ac07843946995f8d596328, type: 3}
-  m_PrefabInstance: {fileID: 69864889}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1287674747
 GameObject:
   m_ObjectHideFlags: 0
@@ -11853,6 +11849,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 938984414}
     m_Modifications:
+    - target: {fileID: 1831185759981682047, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
+      propertyPath: saveName
+      value: BarrelJump
+      objectReference: {fileID: 0}
     - target: {fileID: 4972539868658882653, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
       propertyPath: m_Name
       value: P_Coin
@@ -12323,6 +12323,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1040480773}
     m_Modifications:
+    - target: {fileID: 1831185759981682047, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
+      propertyPath: saveName
+      value: SkyBuoyGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 1831185759981682047, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
+      propertyPath: isMiniGameCoin
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4972539868658882653, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
       propertyPath: m_Name
       value: P_Coin
@@ -14303,33 +14311,6 @@ PrefabInstance:
       addedObject: {fileID: 2125274644}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 29e56b3b9e60ad947b260425d8c2e187, type: 3}
---- !u!1 &1745476453 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7549308358858107093, guid: 07e6244d34ac07843946995f8d596328, type: 3}
-  m_PrefabInstance: {fileID: 69864889}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1753936059 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8891975113576828678, guid: 07e6244d34ac07843946995f8d596328, type: 3}
-  m_PrefabInstance: {fileID: 69864889}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1753936066
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1753936059}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae58b61cb4029c64ebd8f209a4aeaec9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  container: {fileID: 1745476453}
-  timer: {fileID: 144281391}
-  deathCount: {fileID: 1284439953}
-  coolScore: {fileID: 220825474}
-  finalRank: {fileID: 0}
 --- !u!4 &1754414539 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8860770917047063654, guid: 95d3dacbe58b6b24a94d37343db3d76b, type: 3}
@@ -14424,7 +14405,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4883692192382632154, guid: 29e56b3b9e60ad947b260425d8c2e187, type: 3}
       propertyPath: m_Name
-      value: BuoyGame
+      value: BuoyGame_Module1
       objectReference: {fileID: 0}
     - target: {fileID: 8745182641671976115, guid: 29e56b3b9e60ad947b260425d8c2e187, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15135,7 +15116,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1864325497
 Transform:
   m_ObjectHideFlags: 0

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuoyGame : MonoBehaviour, ITimer, ICoinObjective
+public class BuoyGame : MonoBehaviour, ITimer, ICoinObjective, ISaveable
 {
     public List<Buoy> buoys = new List<Buoy>();
     public float timeToFinish;
@@ -10,8 +10,14 @@ public class BuoyGame : MonoBehaviour, ITimer, ICoinObjective
     private int count = 0;
     private bool hasStarted;
 
+    public bool Completed { get => completed;}
+    private bool completed = false;
+
     public Coin coin;
     public Coin coinToUnlock => coin;
+
+    bool ISaveable.CanSave => true;
+
 
     void Start()
     {
@@ -20,8 +26,6 @@ public class BuoyGame : MonoBehaviour, ITimer, ICoinObjective
         {
             buoys[i].Initialize(this);
         }
-
-        coin?.gameObject.SetActive(false);
     }
 
     public void StartGame()
@@ -60,6 +64,7 @@ public class BuoyGame : MonoBehaviour, ITimer, ICoinObjective
     public void EndGame()
     {
         enabled = false;
+        completed = true;
         (UIManager.Instance.miniGameTimerInterface as IScreen).Hide();
         UnlockCoin();
     }
@@ -85,5 +90,20 @@ public class BuoyGame : MonoBehaviour, ITimer, ICoinObjective
         coin?.gameObject.SetActive(true);
 
         //do camera event ?
+    }
+
+    void ISaveable.Save()
+    {
+        PlayerPrefs.SetInt(Constants.c_MiniGamePrefixSave + GetHashCode().ToString(), completed ? 1 : 0);
+    }
+
+    void ISaveable.Load()
+    {
+        completed = PlayerPrefs.GetInt(Constants.c_MiniGamePrefixSave + GetHashCode().ToString(), 0) == 0 ? false : true;
+    }
+
+    public override int GetHashCode()
+    {
+        return gameObject.name.GetHashCode();
     }
 }
