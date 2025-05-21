@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CustomBlends:
   - From: AirRide
-    To: Follow
+    To: Surfing
     Blend:
       Style: 2
       Time: 0.5
@@ -24,7 +24,7 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 4
-  - From: Follow
+  - From: Surfing
     To: AirRide
     Blend:
       Style: 1
@@ -46,7 +46,7 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 4
-  - From: Follow
+  - From: Surfing
     To: Diving
     Blend:
       Style: 1
@@ -58,10 +58,72 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 4
   - From: Diving
-    To: Follow
+    To: Surfing
     Blend:
       Style: 2
       Time: 0.5
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: Surfing
+    To: Jumping
+    Blend:
+      Style: 1
+      Time: 0.5
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+  - From: Jumping
+    To: Falling
+    Blend:
+      Style: 1
+      Time: 0.75
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: Falling
+    To: Surfing
+    Blend:
+      Style: 3
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: Falling
+    To: Jumping
+    Blend:
+      Style: 3
+      Time: 1
       CustomCurve:
         serializedVersion: 2
         m_Curve: []

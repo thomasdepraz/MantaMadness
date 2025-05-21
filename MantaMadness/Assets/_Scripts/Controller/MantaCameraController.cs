@@ -44,6 +44,7 @@ public class MantaCameraController : MonoBehaviour
         rail.rideCamera.Target.TrackingTarget = transform;
         rail.rideCamera.Target.LookAtTarget = transform;
         rail.rideCamera.gameObject.SetActive(true);
+        rail.rideCamera.enabled = true;
     }
 
     private void ExitRail(AirRail rail)
