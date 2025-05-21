@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor.Build.Content;
 using UnityEngine;
 
-public class Race : MonoBehaviour, ITimer
+public class Race : MonoBehaviour, ITimer, ICoinObjective
 {
     [Header("Race parameters")]
     [SerializeField] private int lapCount;
@@ -11,6 +11,10 @@ public class Race : MonoBehaviour, ITimer
     public int CheckpointCount { get => checkpoints.Count;}
     public int CurrentLap => currentLapCount;
     public int MaxLaps => lapCount;
+
+    public Coin unlockedCoin;
+    public Coin coinToUnlock => unlockedCoin;
+
     private int currentLapCount;
     private int checkpointCountThisLap;
     private Checkpoint startCheckpoint;
@@ -71,6 +75,7 @@ public class Race : MonoBehaviour, ITimer
         }
 
         enabled = false;
+        UnlockCoin();
         Game.Instance.raceManager.EndRace();
     }
 
@@ -97,5 +102,11 @@ public class Race : MonoBehaviour, ITimer
     float ITimer.GetTime()
     {
         return currentTimer;
+    }
+
+    public void UnlockCoin()
+    {
+        unlockedCoin?.gameObject.SetActive(true);
+        //do camera event ?
     }
 }
