@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor.Build.Content;
 using UnityEngine;
 
 public class Race : MonoBehaviour, ITimer, ICoinObjective

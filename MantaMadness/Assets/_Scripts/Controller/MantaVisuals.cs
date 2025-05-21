@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEditor.Build.Content;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MantaVisuals : MonoBehaviour
 {
