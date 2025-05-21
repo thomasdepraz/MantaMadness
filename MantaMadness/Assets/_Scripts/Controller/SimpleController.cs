@@ -81,6 +81,8 @@ public class SimpleController : MonoBehaviour
     public Action<int, bool, bool> updateDrift;
     public Action boost;
     public Action<Transform> updateRaceTarget;
+    public Action enterRail;
+    public Action exitRail;
 
     private void Awake()
     {
@@ -303,6 +305,7 @@ public class SimpleController : MonoBehaviour
                 transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
                 rb.isKinematic = false;
                 rb.AddForce(direction * 50, ForceMode.VelocityChange);
+                exitRail.Invoke();
                 railDetector.ExitRail();
             }
             else
@@ -581,6 +584,7 @@ public class SimpleController : MonoBehaviour
         rail.EnterRail(transform.position, Velocity);
         rb.isKinematic = true;
         boost.Invoke();
+        enterRail.Invoke();
         return true;
     }
 

@@ -13,6 +13,7 @@ public class MantaCameraController : MonoBehaviour
     public CinemachineCamera swimmingCamera;
     public CinemachineCamera fallingCamera;
     public CinemachineCamera jumpingCamera;
+    public CinemachineCamera railCamera;
 
     private SimpleController mantaController;
 
@@ -22,8 +23,10 @@ public class MantaCameraController : MonoBehaviour
     {
         mantaController = GetComponent<SimpleController>();
         mantaController.stateChanged += UpdateState;
-        mantaController.enterAirRail += EnterRail;
-        mantaController.exitAirRail += ExitRail;
+        mantaController.enterAirRail += EnterAirRail;
+        mantaController.exitAirRail += ExitAirRail;
+        mantaController.enterRail += EnterRail;
+        mantaController.exitRail += ExitRail;
 
         cameras.Add(surfingCamera);
         cameras.Add(divingCamera);
@@ -31,6 +34,7 @@ public class MantaCameraController : MonoBehaviour
         cameras.Add(swimmingCamera);
         cameras.Add(fallingCamera);
         cameras.Add(jumpingCamera);
+        cameras.Add(railCamera);
     }
 
     private void Start()
@@ -39,7 +43,7 @@ public class MantaCameraController : MonoBehaviour
         SetActiveCamera(fallingCamera);
     }
 
-    private void EnterRail(AirRail rail)
+    private void EnterAirRail(AirRail rail)
     {
         rail.rideCamera.Target.TrackingTarget = transform;
         rail.rideCamera.Target.LookAtTarget = transform;
@@ -47,9 +51,19 @@ public class MantaCameraController : MonoBehaviour
         rail.rideCamera.enabled = true;
     }
 
-    private void ExitRail(AirRail rail)
+    private void ExitAirRail(AirRail rail)
     {
         rail.rideCamera.gameObject.SetActive(false);
+    }
+
+    private void EnterRail()
+    {
+        SetActiveCamera(railCamera);
+    }
+
+    private void ExitRail()
+    {
+        UpdateState(mantaController.State, mantaController.State);
     }
 
     private void UpdateState(ControllerState previousState, ControllerState newState)
