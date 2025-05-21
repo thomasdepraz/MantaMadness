@@ -193,14 +193,19 @@ public class SimpleController : MonoBehaviour
             State = ControllerState.JUMPING;
             jumpCount += 2;
 
-            Vector3 direction = airControl.normalized;
-            direction = transform.TransformDirection(new Vector3(direction.x, 0, direction.y));
-
-            if(direction.x != 0 || direction.y != 0)
+            Vector3 direction;
+            if (airControl.x != 0 || airControl.y != 0)
             {
-                transform.forward = direction;
-                rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude;
+                direction = airControl.normalized;
+                direction = transform.TransformDirection(new Vector3(direction.x, 0, direction.y));
             }
+            else
+            {
+                direction = transform.forward;
+            }
+
+            transform.forward = direction;
+            rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude;
 
             rb.AddForce(Vector3.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
             rb.linearDamping = controllerData.jumpDamping;
