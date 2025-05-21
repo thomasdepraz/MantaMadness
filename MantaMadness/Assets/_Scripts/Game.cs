@@ -36,6 +36,9 @@ public class Game : MonoBehaviour
             ScriptableRendererFeature scriptableRendererFeature = RenderFeatureUtility.GetFeature(scriptableRendererFeatures, effect.featureName);
             scriptableRendererFeature.SetActive(effect.isActive);
         }
+
+        // PLay level Music
+        SoundManager.PlayMusic(Music.THEME_001);
     }
 
     public bool Respawn(out Transform respawn)
