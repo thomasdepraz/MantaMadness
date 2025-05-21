@@ -669,6 +669,7 @@ public class SimpleController : MonoBehaviour
 
         transform.position = forceTransform.position;
         transform.rotation = forceTransform.rotation;
+        transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
     }
 
     private float GetSpeedRatio()
