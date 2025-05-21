@@ -80,6 +80,7 @@ public class SimpleController : MonoBehaviour
     public Action<AirRail> exitAirRail;
     public Action<int, bool, bool> updateDrift;
     public Action boost;
+    public Action<Transform> updateRaceTarget;
 
     private void Awake()
     {
@@ -688,4 +689,6 @@ public class SimpleController : MonoBehaviour
     }
 
     private void ResetJump() => jumpCount = 0;
+
+    public void UpdateRaceTarget(Transform target) => updateRaceTarget.Invoke(target);
 }

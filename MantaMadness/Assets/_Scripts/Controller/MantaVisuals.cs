@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor.Build.Content;
 using UnityEngine;
 
 public class MantaVisuals : MonoBehaviour
@@ -6,6 +7,10 @@ public class MantaVisuals : MonoBehaviour
     SimpleController mantaController;
 
     public Animator mantaAnimator;
+
+    [Header("Direction Arrow")]
+    public Transform arrow;
+    private Transform arrowTarget;
 
     [Header("Rotation parameters")]
     public Transform modelTransform;
@@ -33,6 +38,12 @@ public class MantaVisuals : MonoBehaviour
         mantaController.stateChanged += UpdateState;
         mantaController.updateDrift += UpdateDrift;
         mantaController.boost += BoostParticles;
+        mantaController.updateRaceTarget += SetArrowTarget;
+    }
+
+    private void Start()
+    {
+        arrow.gameObject.SetActive(false);
     }
 
     private void UpdateDrift(int driftDir, bool drifting, bool boost)
@@ -80,7 +91,14 @@ public class MantaVisuals : MonoBehaviour
 
         mantaAnimator.SetBool(driftId, mantaController.IsDrifting);
         mantaAnimator.SetFloat(driftDirId, mantaController.DriftDirection);
+
+        if(arrowTarget != null && arrow.gameObject.activeSelf)
+        {
+            Vector3 direction = (arrowTarget.position - arrow.position).normalized;
+            arrow.forward = Vector3.Lerp(arrow.forward, new Vector3(direction.x, 0, direction.z), Time.deltaTime * 3);
+        }
     }
+
     Quaternion targetRotation;
     private void UpdateModelRoll()
     {
@@ -142,5 +160,14 @@ public class MantaVisuals : MonoBehaviour
         {
             boostParticles[i].Play();
         }
+    }
+
+    private void SetArrowTarget(Transform target)
+    {
+        arrowTarget = target;
+        if (target == null)
+            arrow.gameObject.SetActive(false);
+        else
+            arrow.gameObject.SetActive(true);
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.Build.Content;
 using UnityEngine;
 
 public class Race : MonoBehaviour, ITimer
@@ -45,6 +46,7 @@ public class Race : MonoBehaviour, ITimer
             if(++currentLapCount > lapCount)
             {
                 EndRace();
+                return;
             }
         }
         else
@@ -56,6 +58,8 @@ public class Race : MonoBehaviour, ITimer
         int nextIndex = checkpoint.RaceIndex + 1 >= CheckpointCount ? 0 : checkpoint.RaceIndex + 1;
         checkpoints[nextIndex].Reset();
         checkpoints[nextIndex].ToggleOutline(true);
+
+        Game.Instance.player.UpdateRaceTarget(checkpoints[nextIndex].transform);
     }
 
     private void EndRace()
@@ -78,6 +82,11 @@ public class Race : MonoBehaviour, ITimer
     public Transform GetRespawnTransform()
     {
         return lastCheckpointPassed.respawnTransform;
+    }
+
+    public Transform GetFirstCheckpointTransform()
+    {
+        return checkpoints[1].transform;
     }
 
     public Transform GetStartTransform()

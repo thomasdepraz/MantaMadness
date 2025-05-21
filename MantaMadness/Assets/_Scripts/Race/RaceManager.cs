@@ -30,6 +30,7 @@ public class RaceManager
 
         //set player position
         Game.Instance.player.ForcePosition(race.GetStartTransform());
+        Game.Instance.player.UpdateRaceTarget(race.GetFirstCheckpointTransform());
 
         raceStarted.Invoke();
         return true;
@@ -42,6 +43,7 @@ public class RaceManager
         currentRace = null;
         UIManager.Instance.raceInterface.Hide();
         raceEnded.Invoke();
+        Game.Instance.player.UpdateRaceTarget(null);
 
         UIManager.Instance.StartCoroutine(HideVictory());
     }
