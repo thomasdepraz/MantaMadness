@@ -23,7 +23,6 @@ public struct SoundList
 public class SoundManager : MonoBehaviour
 {
     [SerializeField] private SoundList[] soundList;
-    private static SoundManager instance;
     private AudioSource audioSource;
 
     public static SoundManager Instance;

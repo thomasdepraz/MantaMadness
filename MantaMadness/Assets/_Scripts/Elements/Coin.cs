@@ -43,7 +43,7 @@ public class Coin : MonoBehaviour, ISaveable
         CameraManager.Instance.BlendToCamera(vcamera, blend);
 
         // Sound
-        SoundManager.PlayOneShotSound(SoundType.COINPICKUP);
+        SoundManager.Instance.PlayOneShotSound(SoundType.COINPICKUP);
 
         //animation
         
