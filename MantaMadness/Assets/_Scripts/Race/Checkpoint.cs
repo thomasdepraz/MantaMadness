@@ -41,6 +41,7 @@ public class Checkpoint : MonoBehaviour
             {
                 checkpointPassed.Invoke(this);
                 canBePassed = false;
+                SoundManager.PlayOneShotSound(SoundType.BUOYPASS);
             }
         }
     }

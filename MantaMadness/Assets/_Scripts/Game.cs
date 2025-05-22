@@ -39,7 +39,7 @@ public class Game : MonoBehaviour
         }
 
         // PLay level Music
-        SoundManager.Instance.PlayMusic(Music.THEME_001);
+        //SoundManager.PlayMusic(Music.THEME_001);
     }
 
     public bool Respawn(out Transform respawn)

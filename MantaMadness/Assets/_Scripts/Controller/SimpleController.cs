@@ -181,6 +181,7 @@ public class SimpleController : MonoBehaviour
             rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude;
             rb.AddForce(Vector3.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
             rb.linearDamping = controllerData.jumpDamping;
+            SoundManager.PlayOneShotSound(SoundType.JUMP);
             return;
         }
 
@@ -206,6 +207,7 @@ public class SimpleController : MonoBehaviour
             rb.AddForce(Vector3.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
             rb.linearDamping = controllerData.jumpDamping;
 
+            SoundManager.PlayOneShotSound(SoundType.JUMP);
             return;
         }
     }
