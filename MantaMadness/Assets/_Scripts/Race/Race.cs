@@ -111,7 +111,7 @@ public class Race : MonoBehaviour, ITimer, ICoinObjective, ISaveable
 
     public void UnlockCoin()
     {
-        unlockedCoin?.gameObject.SetActive(true);
+        unlockedCoin.gameObject.SetActive(true);
         //do camera event ?
     }
 

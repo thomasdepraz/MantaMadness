@@ -13,7 +13,6 @@ public class RaceStart : MonoBehaviour
 
 
     public GameObject[] toActivateArray;
-    public GameObject victoryCoin;
 
     private void Awake()
     {
@@ -25,12 +24,6 @@ public class RaceStart : MonoBehaviour
         {
             print("Array List is empty");
         }
-
-        if (victoryCoin != null)
-        {
-            victoryCoin.SetActive(false);
-        }
-
         enabled = false;
     }
 
@@ -97,10 +90,6 @@ public class RaceStart : MonoBehaviour
         else
         {
             print("Array List is empty");
-        }
-        if(victoryCoin != null)
-        {
-            victoryCoin.SetActive(true);
         }
     }
 
