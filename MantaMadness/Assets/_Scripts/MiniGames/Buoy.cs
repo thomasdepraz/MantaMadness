@@ -24,6 +24,7 @@ public class Buoy : MonoBehaviour
             collider.enabled = false;
             game.Collect(this);
             onCollect.Invoke();
+            SoundManager.Instance.PlayOneShotSound(SoundType.BUOYPASS);
         }
     }
 

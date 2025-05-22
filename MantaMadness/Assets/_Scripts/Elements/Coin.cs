@@ -40,8 +40,11 @@ public class Coin : MonoBehaviour, ISaveable
         controller.ForceLock(true);
 
         //activate camera
-        CameraManager.Instance.BlendToCamera(vcamera, blend);   
-        
+        CameraManager.Instance.BlendToCamera(vcamera, blend);
+
+        // Sound
+        SoundManager.Instance.PlayOneShotSound(SoundType.COINPICKUP);
+
         //animation
         
         yield return wait;

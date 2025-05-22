@@ -72,11 +72,12 @@ public class MantaVisuals : MonoBehaviour
     private void UpdateState(ControllerState previous, ControllerState newState)
     {
         if(previous == ControllerState.FALLING && newState == ControllerState.SURFING)
-        {
             SplashParticles();
-        }
 
-        if(newState == ControllerState.JUMPING)
+        else if (previous == ControllerState.SURFING && newState == ControllerState.JUMPING)
+            SplashParticles();
+
+        if (newState == ControllerState.JUMPING)
         {
             mantaAnimator.SetTrigger("Spin");
         }
@@ -150,6 +151,7 @@ public class MantaVisuals : MonoBehaviour
     private void SplashParticles()
     {
         splashParticles.Play();
+        SoundManager.Instance.PlayOneShotSound(SoundType.SPLASH);
     }
 
     private void BoostParticles()
