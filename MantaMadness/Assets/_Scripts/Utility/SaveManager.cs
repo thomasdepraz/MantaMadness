@@ -23,6 +23,9 @@ public class SaveManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+#if UNITY_EDITOR
+        return;
+#endif
         Save();    
     }
 

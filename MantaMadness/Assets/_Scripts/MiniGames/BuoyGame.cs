@@ -27,7 +27,6 @@ public class BuoyGame : MonoBehaviour, ITimer, ICoinObjective, ISaveable
             timer = 0;
             count = 0;
             hasStarted = false;
-            coinToUnlock.gameObject.SetActive(false);
         }
         for (int i = 0; i < buoys.Count; i++)
         {
@@ -94,8 +93,7 @@ public class BuoyGame : MonoBehaviour, ITimer, ICoinObjective, ISaveable
 
     public void UnlockCoin()
     {
-        coin?.gameObject.SetActive(true);
-
+        coin.gameObject.SetActive(true);
         //do camera event ?
     }
 
