@@ -41,4 +41,11 @@ public class SaveManager : MonoBehaviour
             item.Load();
         }
     }
+
+    public void DeleteAndLoad()
+    {
+        PlayerPrefs.DeleteAll();
+        CoinManager.Instance.PickupCoinCount = 0;
+        Load();
+    }
 }

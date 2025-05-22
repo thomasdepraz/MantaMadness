@@ -39,12 +39,12 @@ public class RaceStart : MonoBehaviour
         raceManager = Game.Instance.raceManager;
         raceManager.raceStarted += RaceStarted;
         raceManager.raceEnded += RaceEnded;
-
-       
     }
 
     public void Update()
     {
+        gameObject.SetActive(!raceToStart.FinishedOnce);
+
         if(currentWaitTime < waitTime)
         {
             currentWaitTime += Time.deltaTime;

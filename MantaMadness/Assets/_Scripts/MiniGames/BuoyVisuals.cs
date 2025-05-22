@@ -5,7 +5,7 @@ public class BuoyVisuals : MonoBehaviour
 {
     public GameObject model;
     public new MeshRenderer renderer;
-    private Material defaultMaterial;
+    public Material defaultMaterial;
     public Material completedMaterial;
 
     private void Start()
@@ -13,12 +13,11 @@ public class BuoyVisuals : MonoBehaviour
         Buoy buoy = GetComponentInParent<Buoy>();
         buoy.onCollect += OnCollect;
         buoy.onReset += OnReset;
-        defaultMaterial = renderer.materials[0];
     }
 
-    public void SetCompleted()
+    public void SetCompleted(bool completed)
     {
-        renderer.material = completedMaterial;
+        renderer.material = completed ? completedMaterial : defaultMaterial;
     }
 
     private void OnReset()

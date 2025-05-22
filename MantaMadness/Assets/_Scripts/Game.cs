@@ -24,6 +24,7 @@ public class Game : MonoBehaviour
     [HideInInspector] public SimpleController player;
     public RaceManager raceManager = new RaceManager();
     CameraManager cameraManager = CameraManager.Instance;
+    public SaveManager saveManager;
 
     public void Start()
     {
@@ -38,7 +39,7 @@ public class Game : MonoBehaviour
         }
 
         // PLay level Music
-        SoundManager.PlayMusic(Music.THEME_001);
+        SoundManager.Instance.PlayMusic(Music.THEME_001);
     }
 
     public bool Respawn(out Transform respawn)

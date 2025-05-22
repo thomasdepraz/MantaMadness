@@ -41,6 +41,10 @@ public class DebugGUI : MonoBehaviour
             if (feature != null)
                 feature.SetActive(!feature.isActive);
         }
+        if (GUILayout.Button($"Reset Save"))
+        {
+            Game.Instance.saveManager.DeleteAndLoad();
+        }
         GUILayout.EndArea();
     }
 #endif

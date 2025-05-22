@@ -22,6 +22,13 @@ public class BuoyGame : MonoBehaviour, ITimer, ICoinObjective, ISaveable
     void Start()
     {
         enabled = false;
+        if(completed == false)
+        {
+            timer = 0;
+            count = 0;
+            hasStarted = false;
+            coinToUnlock.gameObject.SetActive(false);
+        }
         for (int i = 0; i < buoys.Count; i++)
         {
             buoys[i].Initialize(this);
@@ -100,6 +107,7 @@ public class BuoyGame : MonoBehaviour, ITimer, ICoinObjective, ISaveable
     void ISaveable.Load()
     {
         completed = PlayerPrefs.GetInt(Constants.c_MiniGamePrefixSave + GetHashCode().ToString(), 0) == 0 ? false : true;
+        Start();
     }
 
     public override int GetHashCode()

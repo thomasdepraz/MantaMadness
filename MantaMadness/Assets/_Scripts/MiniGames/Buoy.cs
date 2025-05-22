@@ -14,8 +14,7 @@ public class Buoy : MonoBehaviour
         this.game = game;
         collider.enabled = !game.Completed;
 
-        if(game.Completed)
-            visuals.SetCompleted();
+        visuals.SetCompleted(game.Completed);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -31,6 +30,6 @@ public class Buoy : MonoBehaviour
     public void Reset()
     {
         collider.enabled = true;
-        onReset.Invoke();
+        onReset?.Invoke();
     }
 }

@@ -22,7 +22,11 @@ public class CoinManager : MonoBehaviour
     public int PickupCoinCount 
     { 
         get => PlayerPrefs.GetInt(Constants.c_CoinAmountSave, 0);
-        set => PlayerPrefs.SetInt(Constants.c_CoinAmountSave, value); 
+        set 
+        {
+            PlayerPrefs.SetInt(Constants.c_CoinAmountSave, value);
+            coinPickedUp?.Invoke(value);
+        } 
     }
 
 #if UNITY_EDITOR
@@ -35,6 +39,5 @@ public class CoinManager : MonoBehaviour
     public void PickupCoin()
     {
         PickupCoinCount++;
-        coinPickedUp?.Invoke(PickupCoinCount);
     }
 }

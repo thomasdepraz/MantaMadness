@@ -154,7 +154,7 @@ public class MantaVisuals : MonoBehaviour
 
     private void BoostParticles()
     {
-        SoundManager.PlayOneShotSound(SoundType.BOOST);
+        SoundManager.Instance.PlayOneShotSound(SoundType.BOOST);
         for (int i = 0; i <  boostParticles.Length; i++)
         {
             boostParticles[i].Play();

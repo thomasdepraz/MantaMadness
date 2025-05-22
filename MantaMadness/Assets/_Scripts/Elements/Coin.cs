@@ -79,5 +79,6 @@ public class Coin : MonoBehaviour, ISaveable
     {
         int save = PlayerPrefs.GetInt(Constants.c_CoinPrefixSave + this.GetHashCode().ToString(), 0);
         pickedUp = save == 0 ? false : true;
+        Start();
     }
 }

@@ -13,17 +13,24 @@ public enum Music
     THEME_002
 }
 
-[RequireComponent(typeof(AudioSource)), ExecuteInEditMode]
+[RequireComponent(typeof(AudioSource))]
 public class SoundManager : MonoBehaviour
 {
     [SerializeField] private SoundList[] soundList;
     [SerializeField] private MusicList[] musicList;
-    private static SoundManager instance;
     private AudioSource audioSource;
 
+    public static SoundManager Instance;
     private void Awake()
     {
-        instance = this;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
     }
 
     private void Start()
@@ -31,24 +38,25 @@ public class SoundManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
-    public static void PlayOneShotSound(SoundType sound, float volume = 1)
+    public void PlayOneShotSound(SoundType sound, float volume = 1)
     {
-        AudioClip[] clips = instance.soundList[(int)sound].Sounds;
+        AudioClip[] clips = Instance.soundList[(int)sound].Sounds;
         AudioClip randomClip = clips[UnityEngine.Random.Range(0, clips.Length)];
-        instance.audioSource.PlayOneShot(randomClip, volume);
+        Instance.audioSource.PlayOneShot(randomClip, volume);
     }
 
-    public static void PlayMusic(Music music, float volume = 0.3f)
+    public void PlayMusic(Music music, float volume = 0.3f)
     {
-        AudioClip clip = instance.musicList[(int)music].music;
-        instance.audioSource.resource = clip;
-        instance.audioSource.volume = volume;
-        instance.audioSource.loop = true;
-        instance.audioSource.Play();
+        AudioClip clip = Instance.musicList[(int)music].music;
+        Instance.audioSource.resource = clip;
+        Instance.audioSource.volume = volume;
+        Instance.audioSource.loop = true;
+        Instance.audioSource.Play();
     }
 
 #if UNITY_EDITOR
-    private void OnEnable()
+    [ContextMenu("Resize")]
+    public void Resize()
     {
         string[] names = Enum.GetNames(typeof(SoundType));
         Array.Resize(ref soundList, names.Length);
@@ -66,8 +74,6 @@ public class SoundManager : MonoBehaviour
     }
 #endif
 }
-
-
 
 [Serializable]
 public struct SoundList
