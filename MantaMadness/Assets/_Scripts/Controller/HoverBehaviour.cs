@@ -17,21 +17,22 @@ public class HoverBehaviour : MonoBehaviour
         Vector3 velocity = m_rigidbody.linearVelocity;
         Vector3 rayDir = -transform.up;
 
-        //Rigidbody otherRb = hitInfo.rigidbody;
-        //if (otherRb != null)
-        //{
-        //    otherVelocity = otherRb.linearVelocity;
-        //}
+        Vector3 otherVelocity = Vector3.zero;
+        Rigidbody otherRb = hitInfo.rigidbody;
+        if (otherRb != null)
+        {
+            otherVelocity = otherRb.linearVelocity;
+        }
 
-        //float rayDirVel = Vector3.Dot(rayDir, velocity);
-        //float otherDirVel = Vector3.Dot(rayDir, otherVelocity);
+        float rayDirVel = Vector3.Dot(rayDir, velocity);
+        float otherDirVel = Vector3.Dot(rayDir, otherVelocity);
 
-        //float relativeVelocity = rayDirVel - otherDirVel;
-        //float x = hitInfo.distance - m_data.hoverHeight;
-        //float springForce = (x * m_data.hoverStrength) - (relativeVelocity * m_data.hoverDamper);
-        //m_rigidbody.AddForce(rayDir * springForce, ForceMode.VelocityChange);
+        float relativeVelocity = rayDirVel - otherDirVel;
+        float x = hitInfo.distance - m_data.hoverHeight;
+        float springForce = (x * m_data.hoverStrength) - (relativeVelocity * m_data.hoverDamper);
+        m_rigidbody.AddForce(rayDir * springForce, ForceMode.VelocityChange);
 
-        transform.position = hitInfo.point + hitInfo.normal * m_data.hoverHeight; //new Vector3(transform.position.x, hitInfo.point.y + m_data.hoverHeight, transform.position.z);
+        //transform.position = hitInfo.point + hitInfo.normal * m_data.hoverHeight; //new Vector3(transform.position.x, hitInfo.point.y + m_data.hoverHeight, transform.position.z);
 
         if (hitInfo.normal != Vector3.zero)
         {
