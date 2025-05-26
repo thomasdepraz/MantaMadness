@@ -184,7 +184,7 @@ public class SimpleController : MonoBehaviour
             // spin when surfing
             State = ControllerState.JUMPING;
             jumpCount++;
-            rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude;
+            rb.linearVelocity = hoverBehaviour.normalContainer.forward * HorizontalVelocity.magnitude;
             rb.AddForce(Vector3.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
             rb.linearDamping = controllerData.jumpDamping;
             SoundManager.Instance.PlayOneShotSound(SoundType.JUMP);
@@ -304,7 +304,8 @@ public class SimpleController : MonoBehaviour
     bool hasHit = false;
     private void FixedUpdate()
     {
-        hasHit = Physics.Raycast(transform.position, -transform.up, out RaycastHit info, controllerData.hoverRaycastLength, raycastLayer.value);
+        hasHit = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit info, controllerData.hoverRaycastLength, raycastLayer.value);
+        Debug.DrawRay(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up * controllerData.hoverRaycastLength, hasHit ? Color.green : Color.red);
 
         if(OnRail)
         {
@@ -364,7 +365,7 @@ public class SimpleController : MonoBehaviour
 
                 if(hasPerfectJump)
                 {
-                    rb.AddForce(transform.forward * controllerData.perfectLandingForce, ForceMode.VelocityChange);
+                    rb.AddForce(hoverBehaviour.normalContainer.forward * controllerData.perfectLandingForce, ForceMode.VelocityChange);
                     hasPerfectJump = false;
                 }
             }
@@ -397,6 +398,7 @@ public class SimpleController : MonoBehaviour
 
             rb.AddForce(Vector3.down * force, ForceMode.Acceleration);
             rb.linearVelocity = ClampYVelocity(Velocity, -controllerData.maxFallingSpeed, float.MaxValue);
+            Debug.Log("Apply Gravity");
         }
 
         //Hover on water
@@ -506,8 +508,8 @@ public class SimpleController : MonoBehaviour
         float desiredVelocityChange = -steeringVelocity * stats.GetGrip() * Time.fixedDeltaTime;
 
         //Apply forces (grip - thrust - steer)
-        rb.AddForce(transform.right * desiredVelocityChange, ForceMode.VelocityChange);
-        rb.AddForce(transform.forward * forward, ForceMode.Acceleration);
+        rb.AddForce(hoverBehaviour.normalContainer.right * desiredVelocityChange, ForceMode.VelocityChange);
+        rb.AddForce(hoverBehaviour.normalContainer.forward * forward, ForceMode.Acceleration);
 
         if (IsDrifting)
         {
@@ -545,7 +547,7 @@ public class SimpleController : MonoBehaviour
     {
         if (currentDriftTime > controllerData.driftBoostTimer)
         {
-            rb.AddForce(transform.forward * controllerData.driftBoostForce, ForceMode.VelocityChange);
+            rb.AddForce(hoverBehaviour.normalContainer.forward * controllerData.driftBoostForce, ForceMode.VelocityChange);
             boost.Invoke();
         }
     }

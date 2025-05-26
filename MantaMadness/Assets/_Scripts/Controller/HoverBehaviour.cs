@@ -15,7 +15,7 @@ public class HoverBehaviour : MonoBehaviour
     public void Hover(RaycastHit hitInfo, float deltaTime)
     {
         Vector3 velocity = m_rigidbody.linearVelocity;
-        Vector3 rayDir = -transform.up;
+        Vector3 rayDir = -normalContainer.up;
 
         Vector3 otherVelocity = Vector3.zero;
         Rigidbody otherRb = hitInfo.rigidbody;
