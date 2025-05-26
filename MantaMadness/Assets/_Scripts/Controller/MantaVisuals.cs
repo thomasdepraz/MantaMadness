@@ -85,7 +85,7 @@ public class MantaVisuals : MonoBehaviour
 
     private void Update()
     {
-        UpdateModelRoll();
+        //UpdateModelRoll();
         UpdateParticles();
 
         mantaAnimator.SetBool(driftId, mantaController.IsDrifting);
@@ -132,7 +132,7 @@ public class MantaVisuals : MonoBehaviour
             targetRotation = Quaternion.Euler(maxPitch, 0, 0);
         }
 
-        modelTransform.localRotation = Quaternion.Lerp(modelTransform.localRotation, targetRotation, Time.deltaTime * rotationSpeed);
+        //modelTransform.localRotation = Quaternion.Lerp(modelTransform.localRotation, targetRotation, Time.deltaTime * rotationSpeed);
     }
 
     private void UpdateParticles()
