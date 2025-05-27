@@ -38,7 +38,7 @@ public class Race : MonoBehaviour, ITimer, ICoinObjective, ISaveable
         }
 
         checkpoints[1].Reset();
-        checkpoints[1].ToggleOutline(true);
+        checkpoints[1].ToggleIndicator(true);
         currentLapCount = 1;
         checkpointCountThisLap = 0;
         currentTimer = 0;
@@ -63,10 +63,10 @@ public class Race : MonoBehaviour, ITimer, ICoinObjective, ISaveable
             checkpointCountThisLap++;
         }
 
-        checkpoint.ToggleOutline(false);
+        checkpoint.ToggleIndicator(false);
         int nextIndex = checkpoint.RaceIndex + 1 >= CheckpointCount ? 0 : checkpoint.RaceIndex + 1;
         checkpoints[nextIndex].Reset();
-        checkpoints[nextIndex].ToggleOutline(true);
+        checkpoints[nextIndex].ToggleIndicator(true);
 
         Game.Instance.player.UpdateRaceTarget(checkpoints[nextIndex].transform);
     }

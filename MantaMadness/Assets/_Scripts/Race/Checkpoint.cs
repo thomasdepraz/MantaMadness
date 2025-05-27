@@ -25,7 +25,7 @@ public class Checkpoint : MonoBehaviour
         canBePassed = true;
     }
 
-    public void ToggleOutline(bool toggle)
+    public void ToggleIndicator(bool toggle)
     {
         foreach (GameObject objects in outlines)
         {
@@ -40,6 +40,7 @@ public class Checkpoint : MonoBehaviour
             if(Vector3.Dot(transform.forward, controller.Velocity) > 0 && canBePassed)
             {
                 checkpointPassed.Invoke(this);
+                Game.Instance.SetRespawnTransform(respawnTransform);
                 canBePassed = false;
                 SoundManager.Instance.PlayOneShotSound(SoundType.BUOYPASS);
             }

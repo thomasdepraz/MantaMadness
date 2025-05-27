@@ -26,8 +26,8 @@ public class Game : MonoBehaviour
     CameraManager cameraManager = CameraManager.Instance;
     public SaveManager saveManager;
 
-    private Vector3 m_SpawnPosition;
-    private Quaternion m_SpawnRotation;
+    [HideInInspector] public Vector3 m_SpawnPosition;
+    [HideInInspector] public Quaternion m_SpawnRotation;
 
     public void Start()
     {
@@ -62,6 +62,7 @@ public class Game : MonoBehaviour
         position = m_SpawnPosition;
         rotation = m_SpawnRotation;
 
+        SoundManager.Instance.PlayOneShotSound(SoundType.SPLASH);
         player.ForcePosition(position, rotation);
     }
 

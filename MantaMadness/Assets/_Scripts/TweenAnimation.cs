@@ -6,6 +6,7 @@ public class TweenAnimation : MonoBehaviour
 {
 
     public bool playOnStart;
+    public bool playOnEnable;
 
     [Header("Rotation Tween")]
     public bool animateRotation;
@@ -28,10 +29,32 @@ public class TweenAnimation : MonoBehaviour
     public float zScale = 1;
     public float scaleDuration;
 
+    private Vector3 originalScale;
+    private Vector3 originalPosition;
+    private Quaternion originalRotation;
+
+    private void Awake()
+    {
+        originalScale = transform.localScale;
+        originalPosition = transform.position;
+        originalRotation = transform.rotation;
+    }
+
     void Start()
     {
         if (playOnStart == true)
             Tween();
+    }
+
+    public void OnEnable()
+    {
+        if (playOnEnable == true)
+            Tween();
+    }
+
+    public void OnDisable()
+    {
+        StopTween();
     }
 
     public void Tween()
@@ -44,5 +67,13 @@ public class TweenAnimation : MonoBehaviour
 
         if (animateScale == true)
             transform.DOScale(new Vector3(transform.localScale.x * xScale, transform.localScale.y * yScale, transform.localScale.z * zScale), scaleDuration).SetEase(Ease.InOutQuad).SetLoops(-1, LoopType.Yoyo);
+    }
+
+    public void StopTween()
+    {
+        transform.DOKill(true);
+        transform.position = originalPosition;
+        transform.rotation = originalRotation;
+        transform.localScale = originalScale;
     }
 }
