@@ -11,10 +11,12 @@ public class TimerInterface : MonoBehaviour, IScreen
     public TextMeshProUGUI timerText;
     public ITimer currentTimer;
 
+    private bool withMinutes = false;
 
     public void SetTimer(ITimer timer)
     {
         currentTimer = timer;
+        withMinutes = TimeSpan.FromSeconds(timer.GetTime()).Minutes >= 1;
     }
 
     public void Start()
@@ -27,10 +29,7 @@ public class TimerInterface : MonoBehaviour, IScreen
     {
         if(currentTimer != null)
         {
-            var timeSpan = TimeSpan.FromSeconds(currentTimer.GetTime());
-            string s = timeSpan.Seconds < 10 ? "0"+ timeSpan.Seconds.ToString() : timeSpan.Seconds.ToString();
-            string ms = timeSpan.Milliseconds < 10 ? "0" + timeSpan.Milliseconds.ToString() : timeSpan.Milliseconds.ToString();
-            timerText.text = s + " : " + ms;
+            timerText.text = TextUtility.GetPrettyTime(currentTimer.GetTime(), withMinutes);
         }
     }
 
