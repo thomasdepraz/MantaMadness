@@ -54,9 +54,11 @@ public class Game : MonoBehaviour
         {
             position = respawn.position;
             rotation = respawn.rotation;
+
+            player.ForcePosition(position, rotation);
             return;
         }
-
+        
         position = m_SpawnPosition;
         rotation = m_SpawnRotation;
 
