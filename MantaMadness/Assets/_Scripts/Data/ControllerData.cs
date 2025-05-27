@@ -48,6 +48,7 @@ public class ControllerData : ScriptableObject
 
     [Header("Air Control")]
     public float maxAirControl;
+    public float airControlRotationSpeed;
     public float fallingAirControl;
     public float divingAirControl;
 

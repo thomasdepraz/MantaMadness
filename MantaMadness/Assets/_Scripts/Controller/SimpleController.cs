@@ -468,12 +468,19 @@ public class SimpleController : MonoBehaviour
     private void AirControl()
     {
         rb.linearDamping = 0;
-        float inputMagnitude = Mathf.Max(Mathf.Abs(airControl.x), Mathf.Abs(airControl.y));
-        Vector2 direction = airControl.normalized * inputMagnitude;
+        float inputMagnitude = Mathf.Max(Mathf.Abs(this.airControl.x), Mathf.Abs(this.airControl.y));
+        Vector2 direction = this.airControl.normalized * inputMagnitude;
         float coeff = State == ControllerState.FALLING ? controllerData.fallingAirControl : controllerData.divingAirControl;
 
-        rb.AddForce(transform.TransformDirection(new Vector3(direction.x, 0, direction.y)) * coeff * Time.fixedDeltaTime, ForceMode.VelocityChange);
-        rb.linearVelocity = ClampHorizontalVelocity(Velocity, controllerData.maxAirControl);
+        if(State == ControllerState.FALLING && turn != 0)
+            rb.AddTorque(new Vector3(0,Mathf.Sign(turn) * controllerData.airControlRotationSpeed ,0), ForceMode.Acceleration);
+
+        Vector3 airControl = transform.TransformDirection(new Vector3(direction.x, 0, direction.y));
+        var dot = Vector3.Dot(airControl, HorizontalVelocity);
+        if (dot > 0 && dot > controllerData.maxAirControl)
+            return;
+
+        rb.AddForce(airControl * coeff * Time.fixedDeltaTime, ForceMode.VelocityChange);
     }
 
     private void Movement()
