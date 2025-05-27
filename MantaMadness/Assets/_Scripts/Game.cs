@@ -26,6 +26,9 @@ public class Game : MonoBehaviour
     CameraManager cameraManager = CameraManager.Instance;
     public SaveManager saveManager;
 
+    private Vector3 m_SpawnPosition;
+    private Quaternion m_SpawnRotation;
+
     public void Start()
     {
         player = GameObject.FindWithTag("Player").GetComponent<SimpleController>();
@@ -40,14 +43,27 @@ public class Game : MonoBehaviour
 
         // PLay level Music
         //SoundManager.PlayMusic(Music.THEME_001);
+
+        m_SpawnPosition = player.transform.position;
+        m_SpawnRotation = player.transform.rotation;
     }
 
-    public bool Respawn(out Transform respawn)
+    public void Respawn(out Vector3 position, out Quaternion rotation)
     {
-        respawn = null;
-        if (raceManager.TryGetRespawn(out respawn))
-            return true;
+        if (raceManager.TryGetRespawn(out Transform respawn))
+        {
+            position = respawn.position;
+            rotation = respawn.rotation;
+            return;
+        }
 
-        return false;
+        position = m_SpawnPosition;
+        rotation = m_SpawnRotation;
+    }
+
+    public void SetRespawnTransform(Transform respawnTransform)
+    {
+        m_SpawnPosition = respawnTransform.position;
+        m_SpawnRotation = respawnTransform.rotation;
     }
 }

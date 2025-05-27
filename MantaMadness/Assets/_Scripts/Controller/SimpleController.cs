@@ -280,19 +280,8 @@ public class SimpleController : MonoBehaviour
     {
         if(Input.GetKeyUp(KeyCode.R))
         {
-            if(Game.Instance.Respawn(out Transform respawnTransform))
-            {
-                ForcePosition(respawnTransform);
-            }
-            else
-            {
-                transform.position = new Vector3(0, 150, 30);
-                transform.rotation = Quaternion.identity;
-                State = ControllerState.FALLING;
-                rb.linearVelocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
-            }
-
+            Game.Instance.Respawn(out Vector3 position, out Quaternion rotation);
+            ForcePosition(position, rotation);
         }
 
         thrust = inputs.thrust.action.ReadValue<float>();
@@ -650,7 +639,9 @@ public class SimpleController : MonoBehaviour
         return new Vector3(clamped.x, velocity.y, clamped.z);
     }
 
-    public void ForcePosition(Transform forceTransform, bool resetVelocity = true, ControllerState forcedState = ControllerState.FALLING)
+    public void ForcePosition(Transform transform) => ForcePosition(transform.position, transform.rotation);
+
+    public void ForcePosition(Vector3 position, Quaternion rotation, bool resetVelocity = true, ControllerState forcedState = ControllerState.FALLING)
     {
         State = forcedState;
         if(resetVelocity)
@@ -659,8 +650,8 @@ public class SimpleController : MonoBehaviour
             rb.angularVelocity = Vector3.zero;
         }
 
-        transform.position = forceTransform.position;
-        transform.rotation = forceTransform.rotation;
+        transform.position = position;
+        transform.rotation = rotation;
         transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
     }
 
@@ -682,14 +673,4 @@ public class SimpleController : MonoBehaviour
     private void ResetJump() => jumpCount = 0;
 
     public void UpdateRaceTarget(Transform target) => updateRaceTarget.Invoke(target);
-
-    //public void OnCollisionEnter(Collision collision)
-    //{
-    //    rb.angularVelocity = Vector3.zero;
-
-    //    Vector3 currentVelocity = rb.linearVelocity;
-    //    Vector3 newDir = Vector3.Reflect(currentVelocity.normalized, collision.contacts[0].normal);
-
-    //    rb.linearVelocity = newDir * currentVelocity.magnitude;
-    //}
 }
