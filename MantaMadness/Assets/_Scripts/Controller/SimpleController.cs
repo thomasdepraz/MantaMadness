@@ -281,7 +281,6 @@ public class SimpleController : MonoBehaviour
         if(Input.GetKeyUp(KeyCode.R))
         {
             Game.Instance.Respawn(out Vector3 position, out Quaternion rotation);
-            ForcePosition(position, rotation);
         }
 
         thrust = inputs.thrust.action.ReadValue<float>();

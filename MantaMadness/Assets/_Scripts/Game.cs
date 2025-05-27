@@ -59,6 +59,8 @@ public class Game : MonoBehaviour
 
         position = m_SpawnPosition;
         rotation = m_SpawnRotation;
+
+        player.ForcePosition(position, rotation);
     }
 
     public void SetRespawnTransform(Transform respawnTransform)
