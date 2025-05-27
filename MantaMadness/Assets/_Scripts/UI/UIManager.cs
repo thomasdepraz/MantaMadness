@@ -21,4 +21,6 @@ public class UIManager : MonoBehaviour
     public TimerInterface miniGameTimerInterface;
     [HideInInspector]
     public VictoryScreen victoryScreen;
+    [HideInInspector]
+    public TransitionInterface transitionScreen;
 }

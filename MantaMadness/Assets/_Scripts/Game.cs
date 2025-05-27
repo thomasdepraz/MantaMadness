@@ -50,6 +50,8 @@ public class Game : MonoBehaviour
 
     public void Respawn(out Vector3 position, out Quaternion rotation)
     {
+        UIManager.Instance.transitionScreen.TransitionIn();
+
         if (raceManager.TryGetRespawn(out Transform respawn))
         {
             position = respawn.position;
