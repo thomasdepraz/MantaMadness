@@ -96,8 +96,8 @@ public class SimpleController : MonoBehaviour
         defaultDrag = rb.linearDamping;
         State = ControllerState.FALLING;
 
-        inputs.dive.action.performed += Dive;
-        inputs.dive.action.canceled += DiveReleased;
+        //inputs.dive.action.performed += Dive;
+        //inputs.dive.action.canceled += DiveReleased;
         inputs.jump.action.performed += Jump;
         inputs.drift.action.performed += Drift;
         inputs.drift.action.canceled += DriftReleased;
@@ -108,8 +108,8 @@ public class SimpleController : MonoBehaviour
 
     private void OnDisable()
     {
-        inputs.dive.action.performed -= Dive;
-        inputs.dive.action.canceled -= DiveReleased;
+        //inputs.dive.action.performed -= Dive;
+        //inputs.dive.action.canceled -= DiveReleased;
         inputs.jump.action.performed -= Jump;
         inputs.drift.action.performed -= Drift;
         inputs.drift.action.canceled -= DriftReleased;

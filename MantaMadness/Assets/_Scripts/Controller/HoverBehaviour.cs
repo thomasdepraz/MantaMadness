@@ -5,6 +5,7 @@ public class HoverBehaviour : MonoBehaviour
     public Transform normalContainer;
     private ControllerData m_data;
     private Rigidbody m_rigidbody;
+    public LayerMask layerMask;
 
     public void Initialize(ControllerData data, Rigidbody rigidbody)
     {
@@ -32,24 +33,25 @@ public class HoverBehaviour : MonoBehaviour
         float springForce = (x * m_data.hoverStrength) - (relativeVelocity * m_data.hoverDamper);
         m_rigidbody.AddForce(rayDir * springForce, ForceMode.VelocityChange);
 
-        //transform.position = hitInfo.point + hitInfo.normal * m_data.hoverHeight; //new Vector3(transform.position.x, hitInfo.point.y + m_data.hoverHeight, transform.position.z);
+        Vector3 front = normalContainer.position + normalContainer.forward * 1f;
+        Vector3 back = normalContainer.position - normalContainer.forward * 0.5f;
 
-        if (hitInfo.normal != Vector3.zero)
+        bool frontHit = Physics.Raycast(front, rayDir, out RaycastHit frontInfo, m_data.hoverRaycastLength, layerMask, QueryTriggerInteraction.UseGlobal);
+        bool backHit = Physics.Raycast(back, rayDir, out RaycastHit backInfo, m_data.hoverRaycastLength, layerMask, QueryTriggerInteraction.UseGlobal);
+
+        Debug.DrawRay(frontInfo.point, frontInfo.normal * 3, Color.red);
+        Debug.DrawRay(backInfo.point, backInfo.normal * 3, Color.red);
+
+        if (frontHit && backHit)
         {
-            //Debug.Log(hitInfo.normal);
-            //Quaternion target = Quaternion.LookRotation(normalContainer.transform.forward, hitInfo.normal);
-            //normalContainer.transform.rotation = Quaternion.Lerp(normalContainer.transform.rotation, target, deltaTime * m_data.hoverAlignementSpeed);
-
-            normalContainer.up = Vector3.Lerp(normalContainer.up, hitInfo.normal, Time.deltaTime * m_data.hoverAlignementSpeed);
+            Vector3 averageNormal = (frontInfo.normal + backInfo.normal) * 0.5f;
+            normalContainer.up = Vector3.Lerp(normalContainer.up, averageNormal, Time.deltaTime * m_data.hoverAlignementSpeed);
             normalContainer.Rotate(0, transform.eulerAngles.y, 0);
-
         }
     }
 
     public void ResetRotation(float deltaTime)
     {
-        //normalContainer.transform.rotation = Quaternion.RotateTowards(normalContainer.transform.rotation, Quaternion.FromToRotation(normalContainer.transform.up, Vector3.up), deltaTime * m_data.hoverAlignementSpeed);
-
         normalContainer.up = Vector3.up;
         normalContainer.Rotate(0, transform.eulerAngles.y, 0);
     }
