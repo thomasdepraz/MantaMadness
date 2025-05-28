@@ -27,7 +27,8 @@ public class SimpleController : MonoBehaviour
     [SerializeField] private LayerMask raycastLayer;
 
     public Vector3 Velocity => this.rb.linearVelocity;
-    public Vector3 HorizontalVelocity => new Vector3(this.rb.linearVelocity.x, 0f, this.rb.linearVelocity.z);
+    private Vector3 TransformedVelocity => hoverBehaviour.normalContainer.InverseTransformVector(rb.linearVelocity);
+    public Vector3 HorizontalVelocity => hoverBehaviour.normalContainer.rotation * new Vector3(TransformedVelocity.x, 0f, TransformedVelocity.z);
     public Vector3 AngularVelocity => this.rb.angularVelocity;
     public float CurrentDepth => currentWaterBlock is null ? 0 : currentWaterBlock.GetDepthAtPosition(transform.position, out _);
     public float MaxDepth => currentWaterBlock is null ? 0 : maxDivingDepth;
@@ -386,7 +387,6 @@ public class SimpleController : MonoBehaviour
 
             rb.AddForce(Vector3.down * force, ForceMode.Acceleration);
             rb.linearVelocity = ClampYVelocity(Velocity, -controllerData.maxFallingSpeed, float.MaxValue);
-            Debug.Log("Apply Gravity");
         }
 
         //Hover on water
@@ -496,6 +496,7 @@ public class SimpleController : MonoBehaviour
         {
             forward = thrust * speed * controllerData.overSpeedCoeff;
         }
+
 
         float speedRatio = GetSpeedRatio();
         float steer = stats.GetSteering(speedRatio, turn, false);
@@ -635,14 +636,6 @@ public class SimpleController : MonoBehaviour
     private Vector3 ClampYVelocity(Vector3 velocity, float minY, float maxY)
     {
         return new Vector3(velocity.x, Mathf.Clamp(velocity.y, minY, maxY), velocity.z);
-    }
-
-    private Vector3 ClampHorizontalVelocity(Vector3 velocity, float maxLength)
-    {
-        Vector3 toClamp = new Vector3(velocity.x, 0, velocity.z);
-        Vector3 clamped = Vector3.ClampMagnitude(toClamp, maxLength);
-
-        return new Vector3(clamped.x, velocity.y, clamped.z);
     }
 
     public void ForcePosition(Transform transform) => ForcePosition(transform.position, transform.rotation);
