@@ -36,8 +36,8 @@ public class TweenAnimation : MonoBehaviour
     private void Awake()
     {
         originalScale = transform.localScale;
-        originalPosition = transform.position;
-        originalRotation = transform.rotation;
+        originalPosition = transform.localPosition;
+        originalRotation = transform.localRotation;
     }
 
     void Start()
@@ -63,7 +63,7 @@ public class TweenAnimation : MonoBehaviour
             transform.DOLocalRotate(new Vector3(xRotation,yRotation, zRotation), rotationDuration).SetEase(Ease.Linear).SetLoops(-1, LoopType.Incremental);
 
         if (animatePosition == true)
-            transform.DOLocalMove(new Vector3(xPos, yPos, zPos), moveDuration).SetEase(Ease.InOutQuad).SetLoops(-1, LoopType.Yoyo);
+            transform.DOLocalMove(new Vector3(originalPosition.x + xPos, originalPosition.y + yPos, originalPosition.z + zPos), moveDuration).SetEase(Ease.InOutQuad).SetLoops(-1, LoopType.Yoyo);
 
         if (animateScale == true)
             transform.DOScale(new Vector3(transform.localScale.x * xScale, transform.localScale.y * yScale, transform.localScale.z * zScale), scaleDuration).SetEase(Ease.InOutQuad).SetLoops(-1, LoopType.Yoyo);
@@ -72,8 +72,8 @@ public class TweenAnimation : MonoBehaviour
     public void StopTween()
     {
         transform.DOKill(true);
-        transform.position = originalPosition;
-        transform.rotation = originalRotation;
+        transform.localPosition = originalPosition;
+        transform.localRotation = originalRotation;
         transform.localScale = originalScale;
     }
 }

@@ -98,7 +98,6 @@ GameObject:
   - component: {fileID: 2476664175111181685}
   - component: {fileID: 8410259642564101574}
   - component: {fileID: 782069143422631981}
-  - component: {fileID: 997365174700530401}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -178,34 +177,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &997365174700530401
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3798822943781384058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playOnStart: 1
-  animateRotation: 1
-  xRotation: 0
-  yRotation: 180
-  zRotation: 0
-  rotationDuration: 1
-  animatePosition: 1
-  xPos: 0
-  yPos: 2
-  zPos: 0
-  moveDuration: 1
-  animateScale: 1
-  xScale: 1.2
-  yScale: 1.5
-  zScale: 1.2
-  scaleDuration: 0.5
 --- !u!1 &4972539868658882653
 GameObject:
   m_ObjectHideFlags: 0
@@ -217,6 +188,7 @@ GameObject:
   - component: {fileID: 6300573025002320338}
   - component: {fileID: 1831185759981682047}
   - component: {fileID: 8313124262783773856}
+  - component: {fileID: 4993768529931131289}
   m_Layer: 0
   m_Name: P_Coin
   m_TagString: Untagged
@@ -286,6 +258,35 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 2.7
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4993768529931131289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4972539868658882653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playOnStart: 0
+  playOnEnable: 1
+  animateRotation: 1
+  xRotation: 0
+  yRotation: 180
+  zRotation: 0
+  rotationDuration: 1
+  animatePosition: 1
+  xPos: 0
+  yPos: 2
+  zPos: 0
+  moveDuration: 1
+  animateScale: 1
+  xScale: 1.2
+  yScale: 1.5
+  zScale: 1.2
+  scaleDuration: 0.5
 --- !u!1 &5048205735399997740
 GameObject:
   m_ObjectHideFlags: 0
