@@ -177,7 +177,7 @@ public class SimpleController : MonoBehaviour
         {
             //reset coyote
             currentCoyoteTime = 0;
-            hasPerfectJump = true;
+            //hasPerfectJump = true;
         }
 
         if(State == ControllerState.SURFING)
