@@ -13,6 +13,7 @@ public class RaceStart : MonoBehaviour
 
 
     public GameObject[] toActivateArray;
+    public Transform endTeleportTransform; 
 
     private void Awake()
     {
@@ -83,6 +84,8 @@ public class RaceStart : MonoBehaviour
     private void RaceEnded()
     {
         gameObject.SetActive(true);
+        Game.Instance.SetRespawnTransform(endTeleportTransform);
+        Game.Instance.Respawn(out Game.Instance.m_SpawnPosition, out Game.Instance.m_SpawnRotation);
         if (toActivateArray.Length > 0)
         {
             EnableRaceObjects(false);
