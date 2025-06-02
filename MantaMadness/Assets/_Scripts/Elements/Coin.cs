@@ -45,8 +45,11 @@ public class Coin : MonoBehaviour, ISaveable
         // Sound
         SoundManager.Instance.PlayOneShotSound(SoundType.COINPICKUP);
 
+        //increase boost gauge
+        Game.Instance.player.boostBehaviour.IncrementGauge(BoostAction.CoolSun);
+
         //animation
-        
+
         yield return wait;
 
         //unlock player

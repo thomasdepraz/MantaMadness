@@ -19,25 +19,44 @@ public class CoinManager : MonoBehaviour
     private CoinManager() { }
 
     public Action<int> coinPickedUp;
+    private int pickupCointCount;
     public int PickupCoinCount 
     { 
-        get => PlayerPrefs.GetInt(Constants.c_CoinAmountSave, 0);
+        get => pickupCointCount;
         set 
         {
-            PlayerPrefs.SetInt(Constants.c_CoinAmountSave, value);
+            pickupCointCount = value;
             coinPickedUp?.Invoke(value);
         } 
+    }
+
+    public Action<int> collectiblePickedUp;
+    private int pickupCollectibleCount;
+    public int PickupCollectibleCount
+    {
+        get => pickupCollectibleCount;
+        set
+        {
+            pickupCollectibleCount = value;
+            collectiblePickedUp?.Invoke(value);
+        }
     }
 
 #if UNITY_EDITOR
     public void Start()
     {
         PickupCoinCount = 0;
+        PickupCollectibleCount = 0;
     }
 #endif
 
     public void PickupCoin()
     {
         PickupCoinCount++;
+    }
+
+    public void PickupCollectible()
+    {
+        PickupCollectibleCount++;
     }
 }

@@ -20,7 +20,7 @@ public class SimpleController : MonoBehaviour
     [SerializeField]
     private HoverBehaviour hoverBehaviour;
     [SerializeField]
-    private BoostBehaviour boostBehaviour;
+    public BoostBehaviour boostBehaviour;
 
     private ControllerStats stats;
     private RailDetector railDetector;
@@ -372,7 +372,6 @@ public class SimpleController : MonoBehaviour
         //Jumping/AirRide to Falling
         if((State == ControllerState.JUMPING || State == ControllerState.AIRRIDE) && TransformedVelocity.y < 0 && currentWaterBlock == null)
         {
-            Debug.Log(rb.linearVelocity.y);
             State = ControllerState.FALLING;
         }
 
