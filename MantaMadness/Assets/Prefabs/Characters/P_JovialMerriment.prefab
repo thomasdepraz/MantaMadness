@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2198152210836487324}
-  - component: {fileID: 8794638990854107305}
   m_Layer: 0
   m_Name: P_JovialMerriment
   m_TagString: Untagged
@@ -39,28 +38,6 @@ Transform:
   - {fileID: 5837956593629159868}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -178.77, z: 0}
---- !u!95 &8794638990854107305
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 489943240838135213}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: eb2628c2a0cbaab4bb795c7f41a3fbaa, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1724787609459004078
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,8 +647,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5677078679311668338}
-  - component: {fileID: 1122755816603513867}
-  - component: {fileID: 8408128613611738574}
   m_Layer: 0
   m_Name: Armature
   m_TagString: Untagged
@@ -695,41 +670,3 @@ Transform:
   - {fileID: 7327749561449419387}
   m_Father: {fileID: 2198152210836487324}
   m_LocalEulerAnglesHint: {x: -89.98021, y: 0, z: 0}
---- !u!111 &1122755816603513867
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7206364555339229025}
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Animation: {fileID: -3016723481212719934, guid: 4ba71b42ca1a8a240b74bdbebd081936, type: 3}
-  m_Animations: []
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_UpdateMode: 0
-  m_CullingType: 0
---- !u!95 &8408128613611738574
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7206364555339229025}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
