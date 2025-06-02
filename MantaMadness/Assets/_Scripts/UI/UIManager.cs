@@ -23,4 +23,6 @@ public class UIManager : MonoBehaviour
     public VictoryScreen victoryScreen;
     [HideInInspector]
     public TransitionInterface transitionScreen;
+    [HideInInspector]
+    public BoostGaugeInterface boostGaugeInterface;
 }

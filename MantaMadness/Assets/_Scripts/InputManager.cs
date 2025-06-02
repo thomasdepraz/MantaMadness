@@ -19,7 +19,7 @@ public class InputManager : MonoBehaviour
     public InputActionReference thrust;
     public InputActionReference turn;
     public InputActionReference brake;
-    public InputActionReference dive;
+    public InputActionReference boost;
     public InputActionReference jump;
     public InputActionReference airControl;
     public InputActionReference drift;

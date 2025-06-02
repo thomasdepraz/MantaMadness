@@ -1115,6 +1115,7 @@ GameObject:
   - component: {fileID: 8470598168765840976}
   - component: {fileID: 1860818694954644299}
   - component: {fileID: 2285651547325755083}
+  - component: {fileID: 6198342475002881786}
   - component: {fileID: 3961356260046509805}
   m_Layer: 7
   m_Name: Avatar
@@ -1189,6 +1190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 3085066077877558464}
   hoverBehaviour: {fileID: 2285651547325755083}
+  boostBehaviour: {fileID: 6198342475002881786}
   controllerData: {fileID: 11400000, guid: d12db5353a1221b428c27a5f8d132371, type: 2}
   raycastLayer:
     serializedVersion: 2
@@ -1301,6 +1303,25 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 16
+--- !u!114 &6198342475002881786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5536948242547424017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512ba3ff759c4f04cadbe165d55aa5b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxBoost: 100
+  boostStep: 25
+  actionValues:
+  - action: 1
+    value: 10
+  - action: 2
+    value: 10
 --- !u!135 &3961356260046509805
 SphereCollider:
   m_ObjectHideFlags: 0

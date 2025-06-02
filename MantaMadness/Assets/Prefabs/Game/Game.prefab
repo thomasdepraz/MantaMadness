@@ -51,6 +51,8 @@ MonoBehaviour:
   screenEffectData: {fileID: 11400000, guid: 4b5cffd7e40f85b459610b08b3081e96, type: 2}
   player: {fileID: 0}
   saveManager: {fileID: 1094879689731097373}
+  m_SpawnPosition: {x: 0, y: 0, z: 0}
+  m_SpawnRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &8709524996052936406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,7 +68,7 @@ MonoBehaviour:
   thrust: {fileID: -593101127290015902, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   turn: {fileID: 9211691509310632545, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   brake: {fileID: 5445423009074504303, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  dive: {fileID: 7040659881675835329, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  boost: {fileID: 7040659881675835329, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   jump: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   airControl: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   drift: {fileID: -7471211009204490832, guid: 052faaac586de48259a63d0c4782560b, type: 3}
@@ -85,6 +87,8 @@ MonoBehaviour:
   raceInterface: {fileID: 0}
   miniGameTimerInterface: {fileID: 0}
   victoryScreen: {fileID: 0}
+  transitionScreen: {fileID: 0}
+  boostGaugeInterface: {fileID: 0}
 --- !u!114 &6940516031190403126
 MonoBehaviour:
   m_ObjectHideFlags: 0
