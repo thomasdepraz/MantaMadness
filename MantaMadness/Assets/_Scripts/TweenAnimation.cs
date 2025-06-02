@@ -10,6 +10,7 @@ public class TweenAnimation : MonoBehaviour
 
     [Header("Rotation Tween")]
     public bool animateRotation;
+    public bool yoyo = false;
     public float xRotation;
     public float yRotation;
     public float zRotation;
@@ -38,6 +39,7 @@ public class TweenAnimation : MonoBehaviour
         originalScale = transform.localScale;
         originalPosition = transform.localPosition;
         originalRotation = transform.localRotation;
+        
     }
 
     void Start()
@@ -60,7 +62,15 @@ public class TweenAnimation : MonoBehaviour
     public void Tween()
     {
         if(animateRotation == true)
-            transform.DOLocalRotate(new Vector3(xRotation,yRotation, zRotation), rotationDuration).SetEase(Ease.Linear).SetLoops(-1, LoopType.Incremental);
+        {
+            if(yoyo == false)
+            transform.DOLocalRotate(new Vector3(originalRotation.eulerAngles.x + xRotation,originalRotation.eulerAngles.y + yRotation, originalRotation.eulerAngles.z + zRotation), rotationDuration).SetEase(Ease.Linear).SetLoops(-1, LoopType.Incremental);
+            else
+            {
+                transform.DOLocalRotate(new Vector3(originalRotation.eulerAngles.x + xRotation, originalRotation.eulerAngles.y + yRotation, originalRotation.eulerAngles.z + zRotation), rotationDuration).SetEase(Ease.InOutQuad).SetLoops(-1, LoopType.Yoyo);
+            }
+        }
+            
 
         if (animatePosition == true)
             transform.DOLocalMove(new Vector3(originalPosition.x + xPos, originalPosition.y + yPos, originalPosition.z + zPos), moveDuration).SetEase(Ease.InOutQuad).SetLoops(-1, LoopType.Yoyo);
