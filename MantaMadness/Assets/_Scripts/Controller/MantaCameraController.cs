@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Unity.Cinemachine;
+using Unity.Mathematics;
+using Unity.Mathematics.Geometry;
 using UnityEngine;
 
 public class MantaCameraController : MonoBehaviour
@@ -16,6 +19,12 @@ public class MantaCameraController : MonoBehaviour
     public CinemachineCamera railCamera;
 
     private SimpleController mantaController;
+
+    [Header("Surfing rotation offset")]
+    public Vector2 minMaxPosition;
+    public float rotationSpeed = 5;
+    private CinemachineRotationComposer surfingCameraRotationComposer;
+
 
     List<CinemachineCamera> cameras = new List<CinemachineCamera>();
 
@@ -35,12 +44,24 @@ public class MantaCameraController : MonoBehaviour
         cameras.Add(fallingCamera);
         cameras.Add(jumpingCamera);
         cameras.Add(railCamera);
+
+        surfingCameraRotationComposer = surfingCamera.gameObject.GetComponent<CinemachineRotationComposer>();
     }
 
     private void Start()
     {
         CameraManager.Instance.SetDefaultCamera(surfingCamera);
         SetActiveCamera(fallingCamera);
+    }
+
+    private void Update()
+    {
+        if(mantaController.State == ControllerState.SURFING)
+        {
+            float t =  math.remap(5, -5, 0, 1, mantaController.AngularVelocity.y);
+            float target = Mathf.Lerp(minMaxPosition.x, minMaxPosition.y, t);
+            surfingCameraRotationComposer.Composition.ScreenPosition.x = Mathf.Lerp(surfingCameraRotationComposer.Composition.ScreenPosition.x, target, Time.deltaTime * rotationSpeed);
+        }
     }
 
     private void EnterAirRail(AirRail rail)

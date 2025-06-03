@@ -41,11 +41,12 @@ public class HoverBehaviour : MonoBehaviour
 
         Debug.DrawRay(frontInfo.point, frontInfo.normal * 3, Color.red);
         Debug.DrawRay(backInfo.point, backInfo.normal * 3, Color.red);
+        Debug.DrawRay(hitInfo.point, hitInfo.normal * hitInfo.distance, Color.cyan);
 
         if (frontHit && backHit)
         {
             Vector3 averageNormal = (frontInfo.normal + backInfo.normal) * 0.5f;
-            normalContainer.up = Vector3.Lerp(normalContainer.up, averageNormal, Time.deltaTime * m_data.hoverAlignementSpeed);
+            normalContainer.up = Vector3.Lerp(normalContainer.up, hitInfo.normal, Time.deltaTime * m_data.hoverAlignementSpeed);
             normalContainer.Rotate(0, transform.eulerAngles.y, 0);
         }
     }
