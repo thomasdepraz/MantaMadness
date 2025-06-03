@@ -19,6 +19,7 @@ public class Coin : MonoBehaviour, ISaveable
     private WaitForSeconds wait;
     private Coroutine routine;
 
+
     private void Start()
     {
         if (isMiniGameCoin)

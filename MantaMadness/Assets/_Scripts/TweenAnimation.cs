@@ -10,7 +10,8 @@ public class TweenAnimation : MonoBehaviour
 
     [Header("Rotation Tween")]
     public bool animateRotation;
-    public bool yoyo = false;
+    public int loopRotationAmount = -1;
+    public bool yoyoRotation = false;
     public float xRotation;
     public float yRotation;
     public float zRotation;
@@ -18,6 +19,8 @@ public class TweenAnimation : MonoBehaviour
 
     [Header("Position Tween")]
     public bool animatePosition;
+    public int loopPositionAmount = -1;
+    public bool yoyoPosition = false;
     public float xPos;
     public float yPos;
     public float zPos ;
@@ -25,6 +28,8 @@ public class TweenAnimation : MonoBehaviour
 
     [Header("Scale Tween")]
     public bool animateScale;
+    public int loopScaleAmount = -1;
+    public bool yoyoScale = false;
     public float xScale = 1;
     public float yScale = 1;
     public float zScale = 1;
@@ -63,20 +68,32 @@ public class TweenAnimation : MonoBehaviour
     {
         if(animateRotation == true)
         {
-            if(yoyo == false)
-            transform.DOLocalRotate(new Vector3(originalRotation.eulerAngles.x + xRotation,originalRotation.eulerAngles.y + yRotation, originalRotation.eulerAngles.z + zRotation), rotationDuration).SetEase(Ease.Linear).SetLoops(-1, LoopType.Incremental);
-            else
-            {
-                transform.DOLocalRotate(new Vector3(originalRotation.eulerAngles.x + xRotation, originalRotation.eulerAngles.y + yRotation, originalRotation.eulerAngles.z + zRotation), rotationDuration).SetEase(Ease.InOutQuad).SetLoops(-1, LoopType.Yoyo);
-            }
+                if (yoyoRotation == false)
+                    transform.DOLocalRotate(new Vector3(originalRotation.eulerAngles.x + xRotation, originalRotation.eulerAngles.y + yRotation, originalRotation.eulerAngles.z + zRotation), rotationDuration).SetEase(Ease.Linear).SetLoops(loopRotationAmount, LoopType.Incremental);
+                else if (yoyoRotation == true)
+                    transform.DOLocalRotate(new Vector3(originalRotation.eulerAngles.x + xRotation, originalRotation.eulerAngles.y + yRotation, originalRotation.eulerAngles.z + zRotation), rotationDuration).SetEase(Ease.InOutQuad).SetLoops(loopRotationAmount, LoopType.Yoyo);
         }
             
 
         if (animatePosition == true)
-            transform.DOLocalMove(new Vector3(originalPosition.x + xPos, originalPosition.y + yPos, originalPosition.z + zPos), moveDuration).SetEase(Ease.InOutQuad).SetLoops(-1, LoopType.Yoyo);
+        {
+            if (yoyoPosition == false)
+                transform.DOLocalMove(new Vector3(originalPosition.x + xPos, originalPosition.y + yPos, originalPosition.z + zPos), moveDuration).SetEase(Ease.InOutQuad).SetLoops(loopPositionAmount, LoopType.Incremental);
+            else if (yoyoPosition == true)
+                transform.DOLocalMove(new Vector3(originalPosition.x + xPos, originalPosition.y + yPos, originalPosition.z + zPos), moveDuration).SetEase(Ease.InOutQuad).SetLoops(loopPositionAmount, LoopType.Yoyo);
+
+
+        }
 
         if (animateScale == true)
-            transform.DOScale(new Vector3(transform.localScale.x * xScale, transform.localScale.y * yScale, transform.localScale.z * zScale), scaleDuration).SetEase(Ease.InOutQuad).SetLoops(-1, LoopType.Yoyo);
+        {
+            if (yoyoScale == false)
+               transform.DOScale(new Vector3(transform.localScale.x * xScale, transform.localScale.y * yScale, transform.localScale.z * zScale), scaleDuration).SetEase(Ease.InOutQuad).SetLoops(-1, LoopType.Incremental);
+            else if (yoyoScale == true)
+                transform.DOScale(new Vector3(transform.localScale.x * xScale, transform.localScale.y * yScale, transform.localScale.z * zScale), scaleDuration).SetEase(Ease.InOutQuad).SetLoops(-1, LoopType.Yoyo);
+        }
+            
+
     }
 
     public void StopTween()
