@@ -12,6 +12,7 @@ public class Button : MonoBehaviour
     private Coroutine routine;
 
     public GameObject[] objectsToActivate;
+    public GameObject[] objectsToDeactivate;
 
     private const float c_lockDuration = 4f;
     private bool isActivated = false;
@@ -28,6 +29,11 @@ public class Button : MonoBehaviour
             foreach (GameObject objects in objectsToActivate)
             {
                 objects.SetActive(false);
+            }
+
+            foreach (GameObject objects in objectsToDeactivate)
+            {
+                objects.SetActive(true);
             }
         }
     }
@@ -72,6 +78,11 @@ public class Button : MonoBehaviour
         foreach (GameObject objects in objectsToActivate)
         {
             objects.SetActive(true);
+        }
+
+        foreach (GameObject objects in objectsToDeactivate)
+        {
+            objects.SetActive(false);
         }
 
         yield return new WaitForSeconds(c_lockDuration / 2);
