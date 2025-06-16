@@ -186,6 +186,9 @@ public class SimpleController : MonoBehaviour
             rb.AddForce(NormalContainer.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
             rb.linearDamping = controllerData.jumpDamping;
             SoundManager.Instance.PlayOneShotSound(SoundType.JUMP);
+            if (jumpRoutine != null)
+                StopCoroutine(jumpRoutine);
+            jumpRoutine = StartCoroutine(JumpRoutine());
             return;
         }
 
@@ -201,6 +204,13 @@ public class SimpleController : MonoBehaviour
                 boostBehaviour.UseBoost(AirDash);
             }
         }
+    }
+
+    private Coroutine jumpRoutine = null;
+    private IEnumerator JumpRoutine()
+    {
+        yield return new WaitForSeconds(0.5f);
+        jumpRoutine = null;
     }
 
     private void AirDash()
@@ -225,6 +235,11 @@ public class SimpleController : MonoBehaviour
         rb.linearDamping = controllerData.jumpDamping;
 
         SoundManager.Instance.PlayOneShotSound(SoundType.JUMP);
+        
+        if (jumpRoutine != null)
+            StopCoroutine(jumpRoutine);
+        jumpRoutine = StartCoroutine(JumpRoutine());
+
     }
 
     private void Boost(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -369,11 +384,16 @@ public class SimpleController : MonoBehaviour
             }
         }
 
-        //Jumping/AirRide to Falling
-        if((State == ControllerState.JUMPING || State == ControllerState.AIRRIDE) && TransformedVelocity.y < 0 && currentWaterBlock == null)
+        //Jumping / AirRide to Falling
+        if ((State == ControllerState.JUMPING || State == ControllerState.AIRRIDE) && 
+            (Vector3.Dot(NormalContainer.up, rb.linearVelocity.normalized) < 0 || hasHit) && 
+            currentWaterBlock == null && 
+            jumpRoutine == null)
         {
             State = ControllerState.FALLING;
         }
+
+        Debug.Log(Vector3.Dot(NormalContainer.up, rb.linearVelocity.normalized));
 
         //Jumping to AirRide
         if(State == ControllerState.JUMPING)
