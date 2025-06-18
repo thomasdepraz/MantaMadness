@@ -393,8 +393,6 @@ public class SimpleController : MonoBehaviour
             State = ControllerState.FALLING;
         }
 
-        Debug.Log(Vector3.Dot(NormalContainer.up, rb.linearVelocity.normalized));
-
         //Jumping to AirRide
         if(State == ControllerState.JUMPING)
         {
