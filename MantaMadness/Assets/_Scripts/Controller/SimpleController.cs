@@ -26,7 +26,7 @@ public class SimpleController : MonoBehaviour
     private RailDetector railDetector;
 
     [Header("Parameters")]
-    [SerializeField] private ControllerData controllerData;
+    [SerializeField] public ControllerData controllerData;
     [SerializeField] private LayerMask raycastLayer;
 
     public Vector3 Velocity => this.rb.linearVelocity;
