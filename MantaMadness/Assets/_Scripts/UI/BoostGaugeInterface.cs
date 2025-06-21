@@ -11,6 +11,7 @@ public class BoostGaugeInterface : MonoBehaviour
     public GameObject speedStatesTween;
     public GameObject[] boostBubblesVisuals;
     public Material[] bubbleMaterials;
+    public ParticleSystem[] boostBubblesParticles;
 
     private SimpleController player;
 
@@ -125,10 +126,15 @@ public class BoostGaugeInterface : MonoBehaviour
         if (boostBubblesVisuals[index].transform.localScale == Vector3.one * scaleFactor)
         {
             boostBubblesVisuals[index].GetComponent<MeshRenderer>().material = bubbleMaterials[1];
+            boostBubblesParticles[index].Play();
         }
         else
         {
             boostBubblesVisuals[index].GetComponent<MeshRenderer>().material = bubbleMaterials[0];
+            if (boostBubblesParticles[index].isPlaying == true)
+            {
+                boostBubblesParticles[index].Stop();
+            }
         }
     }
 }
