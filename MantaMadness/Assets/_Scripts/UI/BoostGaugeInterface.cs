@@ -5,15 +5,17 @@ using DG.Tweening;
 
 public class BoostGaugeInterface : MonoBehaviour
 {
-    public Image boostGauge;
     public GameObject speedGauge;
     public GameObject speedNeedle;
     public GameObject[] speedStatesVisuals;
     public GameObject speedStatesTween;
+    public GameObject[] boostBubblesVisuals;
+    public Material[] bubbleMaterials;
 
     private SimpleController player;
 
     private int m_Count = 0;
+    private float scaleFactor = 0.5f;
     private float needleStartRotationZ = 180;
     private bool overdrive = false;
     private void Awake()
@@ -24,7 +26,6 @@ public class BoostGaugeInterface : MonoBehaviour
     private void Start()
     {
         UIManager.Instance.boostGaugeInterface = this;
-        boostGauge.fillAmount = 0;
 
         foreach(GameObject state in speedStatesVisuals)
         {
@@ -38,6 +39,11 @@ public class BoostGaugeInterface : MonoBehaviour
             }
         }
         speedNeedle.transform.Rotate(new Vector3(0, 0, needleStartRotationZ));
+
+        foreach(GameObject bubble in boostBubblesVisuals)
+        {
+            ResetBubble(bubble);
+        }
     }
 
     private void FixedUpdate()
@@ -99,6 +105,30 @@ public class BoostGaugeInterface : MonoBehaviour
         m_Count = current;
         float targetCount = (float)m_Count / (float)MaxValue;
 
-        boostGauge.fillAmount = targetCount;
+        for (int i = 0; i < boostBubblesVisuals.Length; i++)
+        {
+            SetBubbleScale(i, i * MaxValue / boostBubblesVisuals.Length, (i + 1) *MaxValue / boostBubblesVisuals.Length, current);
+        }
+    }
+
+    public void ResetBubble(GameObject bubble)
+    {
+        bubble.transform.localScale = Vector3.zero;
+        bubble.GetComponent<MeshRenderer>().material = bubbleMaterials[0];
+    }
+
+    public void SetBubbleScale(int index, float minInterval, float maxInterval, int current)
+    {
+        float scale = Mathf.InverseLerp(minInterval, maxInterval, current);
+        boostBubblesVisuals[index].transform.localScale = Vector3.one * scale * scaleFactor;
+
+        if (boostBubblesVisuals[index].transform.localScale == Vector3.one * scaleFactor)
+        {
+            boostBubblesVisuals[index].GetComponent<MeshRenderer>().material = bubbleMaterials[1];
+        }
+        else
+        {
+            boostBubblesVisuals[index].GetComponent<MeshRenderer>().material = bubbleMaterials[0];
+        }
     }
 }
