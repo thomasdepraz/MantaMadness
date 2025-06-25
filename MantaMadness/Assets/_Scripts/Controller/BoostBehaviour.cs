@@ -10,7 +10,9 @@ public enum BoostAction
     RailQTE, 
     Buoy, 
     CoolSun, 
-    Collectible
+    Collectible,
+    SuperCollectible,
+    MegaCollectible,
 }
 
 [System.Serializable]

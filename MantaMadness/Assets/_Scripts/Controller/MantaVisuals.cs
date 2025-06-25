@@ -156,11 +156,15 @@ public class MantaVisuals : MonoBehaviour
 
     private void BoostParticles()
     {
+        // PLay sound
         SoundManager.Instance.PlayOneShotSound(SoundType.BOOST);
         for (int i = 0; i <  boostParticles.Length; i++)
         {
             boostParticles[i].Play();
         }
+
+        //play UI Sun Animation
+        UIManager.Instance.sunInterface.playGoodAnimation();
     }
 
     private void SetArrowTarget(Transform target)
