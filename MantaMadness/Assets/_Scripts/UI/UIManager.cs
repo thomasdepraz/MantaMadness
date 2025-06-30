@@ -16,6 +16,8 @@ public class UIManager : MonoBehaviour
     }
 
     [HideInInspector]
+    public GameInterface gameInterface;
+    [HideInInspector]
     public RaceInterface raceInterface;
     [HideInInspector]
     public TimerInterface miniGameTimerInterface;

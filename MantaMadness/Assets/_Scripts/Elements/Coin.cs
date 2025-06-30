@@ -51,6 +51,9 @@ public class Coin : MonoBehaviour, ISaveable
 
         //animation
 
+        //
+        UIManager.Instance.gameInterface.playPickupParticle(1);
+
         yield return wait;
 
         //unlock player

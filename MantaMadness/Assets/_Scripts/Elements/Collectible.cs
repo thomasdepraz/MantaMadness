@@ -35,6 +35,7 @@ public class Collectible : MonoBehaviour
                 break;
             case CollectibleType.mega:
                 controller.boostBehaviour.IncrementGauge(BoostAction.MegaCollectible);
+                UIManager.Instance.gameInterface.StartCoroutine("pickupMegaClam");
                 break;
             default:
                 controller.boostBehaviour.IncrementGauge(BoostAction.Collectible);
