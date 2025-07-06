@@ -19,7 +19,7 @@ public class Collectible : MonoBehaviour
     private IEnumerator PickupRoutine(SimpleController controller)
     {
         //sound
-        SoundManager.Instance.PlayOneShotSound(SoundType.COINPICKUP);
+        //SoundManager.Instance.PlayOneShotSound(SoundType.COINPICKUP);
 
         //increase coin count
         CoinManager.Instance.PickupCollectible();
