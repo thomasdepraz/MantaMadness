@@ -17,6 +17,7 @@ public class Game : MonoBehaviour
         }
 
         Application.targetFrameRate = 60;
+        player = GameObject.FindWithTag("Player").GetComponent<SimpleController>();
     }
 
     public ScreenEffectData screenEffectData;
@@ -31,7 +32,7 @@ public class Game : MonoBehaviour
 
     public void Start()
     {
-        player = GameObject.FindWithTag("Player").GetComponent<SimpleController>();
+        //player = GameObject.FindWithTag("Player").GetComponent<SimpleController>();
 
         //Toggle screen effects
         List<ScriptableRendererFeature> scriptableRendererFeatures = RenderFeatureUtility.GetRenderFeatures();
