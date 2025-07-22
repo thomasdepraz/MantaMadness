@@ -1,8 +1,10 @@
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 
 public class HoverBehaviour : MonoBehaviour
 {
     public Transform normalContainer;
+    public Transform origin;
     private ControllerData m_data;
     private Rigidbody m_rigidbody;
     public LayerMask layerMask;
@@ -49,6 +51,30 @@ public class HoverBehaviour : MonoBehaviour
             normalContainer.up = Vector3.Lerp(normalContainer.up, averageNormal, Time.deltaTime * m_data.hoverAlignementSpeed);
             normalContainer.Rotate(0, transform.eulerAngles.y, 0);
         }
+    }
+
+    public bool CanLockToSurface(Vector3 inputDirection, out Vector3 surfaceNormal, out Vector3 hitPoint)
+    {
+        surfaceNormal = Vector3.zero;
+        hitPoint = Vector3.zero;
+        if (inputDirection.x == 0 && inputDirection.y ==0)
+            return false;
+
+        float inputDirAngle = 0;
+        if (Physics.Raycast(normalContainer.position, inputDirection, out RaycastHit inputDirectionHit, m_data.hoverRaycastLength, layerMask, QueryTriggerInteraction.UseGlobal))
+            inputDirAngle = Vector3.Angle(Vector3.up, inputDirectionHit.normal);
+        else
+            return false;
+        
+        Debug.DrawRay(normalContainer.position, inputDirection * m_data.hoverRaycastLength);
+
+        if (inputDirAngle > m_data.maxAngleToHover)
+            return false;
+
+        surfaceNormal = inputDirectionHit.normal;
+        hitPoint = inputDirectionHit.point;
+
+        return true;
     }
 
     public void ResetRotation(float deltaTime)

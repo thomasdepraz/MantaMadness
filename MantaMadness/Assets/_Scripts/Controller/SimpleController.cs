@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System;
 using System.Collections;
+using System.Diagnostics.Contracts;
 using UnityEngine;
 
 public enum ControllerState
@@ -488,6 +489,23 @@ public class SimpleController : MonoBehaviour
         if(State == ControllerState.FALLING || State == ControllerState.DIVING)
         {
             AirControl();
+        }
+
+        if(State == ControllerState.FALLING || State == ControllerState.JUMPING)
+        {
+            if (hasHit)
+                return;
+
+            Vector2 direction = this.airControl.normalized;
+            Vector3 airControl = transform.TransformDirection(new Vector3(direction.x, 0, direction.y));
+
+            if(hoverBehaviour.CanLockToSurface(airControl, out Vector3 surfaceNormal, out Vector3 hitPoint))
+            {
+                NormalContainer.up = surfaceNormal;
+                NormalContainer.Rotate(0, transform.eulerAngles.y, 0);
+                State = ControllerState.SURFING;
+                ResetJump();
+            }
         }
 
     }

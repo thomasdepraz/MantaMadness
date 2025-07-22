@@ -23,6 +23,7 @@ public class ControllerData : ScriptableObject
     public float hoverStrength = 100f;
     public float hoverDamper = 5f;
     public float hoverAlignementSpeed = 2f;
+    public float maxAngleToHover = 100f;
 
     [Header("Diving parameters")]
     public float baseDivingDepth = 5f;
