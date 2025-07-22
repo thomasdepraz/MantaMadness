@@ -711,6 +711,25 @@ public class SimpleController : MonoBehaviour
         return Mathf.Clamp01(ratio);
     }
 
+    private Coroutine m_LockCoroutine;
+    private IEnumerator LockRoutine(float duration)
+    {
+        ForceLock(true);
+        yield return new WaitForSeconds(duration);
+        ForceLock(false);
+        m_LockCoroutine = null;
+    }
+    public void LockPlayerForDuration(float duration)
+    {
+        if (m_LockCoroutine != null)
+        {
+            Debug.LogError("Player already locked");
+            return;
+        }
+
+        m_LockCoroutine = StartCoroutine(LockRoutine(duration));
+    }
+
     public void ForceLock(bool lockController)
     {
         forceLocked = lockController;

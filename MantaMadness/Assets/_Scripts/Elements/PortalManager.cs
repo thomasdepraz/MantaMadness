@@ -24,6 +24,8 @@ public class PortalManager : MonoBehaviour
     public IEnumerator Teleport(string targetIndex)
     {
         // Set Velocity to 0
+        Game.Instance.player?.LockPlayerForDuration(teleportTransitionDuration);
+
         UIManager.Instance.transitionScreen.TransitionIn();
         yield return new WaitForSeconds(teleportTransitionDuration/2);
         for(int i = 0; i < portals.Length; i++)
@@ -31,6 +33,7 @@ public class PortalManager : MonoBehaviour
             if (portals[i].index == targetIndex)
             {
                 portals[i].Teleport();
+                break;
             }
         }
         yield return new WaitForSeconds(teleportTransitionDuration / 2);

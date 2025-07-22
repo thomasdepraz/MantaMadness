@@ -1,6 +1,4 @@
 using UnityEngine;
-using Unity.Cinemachine;
-using System.Collections;
 
 [RequireComponent(typeof(BoxCollider))]
 public class Portal : MonoBehaviour
@@ -22,6 +20,7 @@ public class Portal : MonoBehaviour
     public void Teleport()
     {
         player.transform.position = teleportPoint.position;
+        player.transform.forward = teleportPoint.forward;
     }
 
     private void OnTriggerEnter(Collider other)
