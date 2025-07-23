@@ -43,12 +43,12 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
-  m_PlayOnAwake: 0
-  m_Volume: 1
+  m_audioClip: {fileID: 8300000, guid: 4920e38a32f411d4ba0fd465f24980f9, type: 3}
+  m_Resource: {fileID: 8300000, guid: 4920e38a32f411d4ba0fd465f24980f9, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.2
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -149,10 +149,21 @@ MonoBehaviour:
     - {fileID: 8300000, guid: f0f18c076ab761442b8adc55811bf192, type: 3}
   - name: JUMP
     sounds:
-    - {fileID: 8300000, guid: f978ef529d32bcd4994a46e6934cf77f, type: 3}
-    - {fileID: 8300000, guid: f0f18c076ab761442b8adc55811bf192, type: 3}
-  musicList:
-  - name: THEME_001
-    music: {fileID: 8300000, guid: da400ea68e8a4e64d9b4a46130663082, type: 3}
-  - name: THEME_002
-    music: {fileID: 8300000, guid: da400ea68e8a4e64d9b4a46130663082, type: 3}
+    - {fileID: 8300000, guid: 68c609783e918dc43b2bafaa3fb8b3b3, type: 3}
+  - name: BUOYPASS
+    sounds:
+    - {fileID: 8300000, guid: 859489371385a0e4993e3d2b714cfa79, type: 3}
+  - name: CHECKPASS
+    sounds:
+    - {fileID: 8300000, guid: fae8101042d97d74bbe7b8986807d185, type: 3}
+  - name: SPLASH
+    sounds:
+    - {fileID: 8300000, guid: f405f9ccc9d77d046b503ad3fc814171, type: 3}
+    - {fileID: 8300000, guid: 9de0ea6922e06354f8f96712b54ed851, type: 3}
+    - {fileID: 8300000, guid: 303e7f4825f6c87458faf6f2746fa5f9, type: 3}
+  - name: COINPICKUP
+    sounds:
+    - {fileID: 8300000, guid: 60fafc447ea62374997cdc14df25278b, type: 3}
+  - name: COINPICKUP
+    sounds:
+    - {fileID: 8300000, guid: c603da2eb0943b94fa178683c299317f, type: 3}

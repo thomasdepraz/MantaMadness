@@ -8,7 +8,8 @@ public enum SoundType
     BUOYPASS,
     CHECKPASS,
     SPLASH,
-    COINPICKUP
+    COINPICKUP,
+    HORN
 }
 
 [Serializable]

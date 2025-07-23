@@ -202,6 +202,9 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: -2577598077401747021}
     m_Position: {x: 540, y: 140, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 6618167945220765837}
+    m_Position: {x: 190, y: 230, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -323,7 +326,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -1400097082494790226, guid: 3686c91cfe1ffac4496a5010c31f3434, type: 3}
+  m_Motion: {fileID: -7665170836659541654, guid: 3686c91cfe1ffac4496a5010c31f3434, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -393,7 +396,7 @@ BlendTree:
   m_Name: Blend Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: -6068352706110528463, guid: 3686c91cfe1ffac4496a5010c31f3434, type: 3}
+    m_Motion: {fileID: 8916590009513048788, guid: 3686c91cfe1ffac4496a5010c31f3434, type: 3}
     m_Threshold: -1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -401,7 +404,7 @@ BlendTree:
     m_DirectBlendParameter: DriftDirection
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7103174673719657923, guid: 3686c91cfe1ffac4496a5010c31f3434, type: 3}
+    m_Motion: {fileID: -7792381662647823475, guid: 3686c91cfe1ffac4496a5010c31f3434, type: 3}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -436,7 +439,33 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 75243689495129215, guid: 3686c91cfe1ffac4496a5010c31f3434, type: 3}
+  m_Motion: {fileID: -7959260314432474576, guid: 3686c91cfe1ffac4496a5010c31f3434, type: 3}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
+--- !u!1102 &6618167945220765837
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Flatten
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 1688986709205612752, guid: 3686c91cfe1ffac4496a5010c31f3434, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

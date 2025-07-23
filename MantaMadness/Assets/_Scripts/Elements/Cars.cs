@@ -4,7 +4,12 @@ using UnityEngine.Splines;
 public class Cars : MonoBehaviour
 {
     public SplineAnimate spline;
+    private AudioSource HornAudio;
 
+    private void Awake()
+    {
+        HornAudio = gameObject.GetComponent<AudioSource>();
+    }
     void Start()
     {
         spline.Play();
@@ -13,6 +18,13 @@ public class Cars : MonoBehaviour
     private void Update()
     {
         print(spline.IsPlaying);
-        spline.Play();
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent(out SimpleController controller))
+        {
+            HornAudio.Play();
+        }
     }
 }
