@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System;
 using System.Collections;
+using System.Diagnostics.Contracts;
 using UnityEngine;
 
 public enum ControllerState
@@ -490,6 +491,23 @@ public class SimpleController : MonoBehaviour
             AirControl();
         }
 
+        if(State == ControllerState.FALLING || State == ControllerState.JUMPING)
+        {
+            if (hasHit)
+                return;
+
+            Vector2 direction = this.airControl.normalized;
+            Vector3 airControl = transform.TransformDirection(new Vector3(direction.x, 0, direction.y));
+
+            if(hoverBehaviour.CanLockToSurface(airControl, out Vector3 surfaceNormal, out Vector3 hitPoint))
+            {
+                NormalContainer.up = surfaceNormal;
+                NormalContainer.Rotate(0, transform.eulerAngles.y, 0);
+                State = ControllerState.SURFING;
+                ResetJump();
+            }
+        }
+
     }
 
     private void AirControl()
@@ -691,6 +709,25 @@ public class SimpleController : MonoBehaviour
     {
         var ratio = HorizontalVelocity.sqrMagnitude / (controllerData.maxSpeed * controllerData.maxSpeed);
         return Mathf.Clamp01(ratio);
+    }
+
+    private Coroutine m_LockCoroutine;
+    private IEnumerator LockRoutine(float duration)
+    {
+        ForceLock(true);
+        yield return new WaitForSeconds(duration);
+        ForceLock(false);
+        m_LockCoroutine = null;
+    }
+    public void LockPlayerForDuration(float duration)
+    {
+        if (m_LockCoroutine != null)
+        {
+            Debug.LogError("Player already locked");
+            return;
+        }
+
+        m_LockCoroutine = StartCoroutine(LockRoutine(duration));
     }
 
     public void ForceLock(bool lockController)
