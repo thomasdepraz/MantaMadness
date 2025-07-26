@@ -164,7 +164,7 @@ public class MantaVisuals : MonoBehaviour
         }
 
         //play UI Sun Animation
-        UIManager.Instance.sunInterface.playGoodAnimation();
+        //UIManager.Instance.sunInterface.playGoodAnimation();
     }
 
     private void SetArrowTarget(Transform target)

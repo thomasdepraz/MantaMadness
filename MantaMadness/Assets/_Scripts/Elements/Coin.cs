@@ -52,7 +52,7 @@ public class Coin : MonoBehaviour, ISaveable
         //animation
 
         //
-        UIManager.Instance.gameInterface.playPickupParticle(1);
+        UIManager.Instance.gameInterface.pickupJohnnyParticle();
 
         yield return wait;
 

@@ -1,13 +1,18 @@
 using UnityEngine;
+using TMPro;
 
 [RequireComponent(typeof(BoxCollider))]
 public class Portal : MonoBehaviour
 {
-    public string index;
-    public string targetIndex;
+    [SerializeField] public string index;
+    [SerializeField] private string targetIndex;
 
     public Transform teleportPoint;
     private SimpleController player;
+
+    public GameObject objectTest;
+
+    [SerializeField] public TextMeshProUGUI signText;
 
     private void Start()
     {
@@ -15,6 +20,21 @@ public class Portal : MonoBehaviour
         {
             player = Game.Instance.player;
         }
+
+        if (objectTest == null)
+        {
+            Debug.LogError("signText is not assigned in the inspector!", this);
+            return;
+        }
+
+        if (signText == null)
+        {
+            Debug.LogError("signText is not assigned in the inspector!", this);
+            return;
+        }
+
+        signText.text = index;
+
     }
 
     public void Teleport()

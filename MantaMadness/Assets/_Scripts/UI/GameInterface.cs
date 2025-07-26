@@ -14,8 +14,6 @@ public class GameInterface : MonoBehaviour, IScreen
     public Image sunImage;
     public Image sunOverlay;
 
-    public ParticleSystem[] pickupParticles;
-
     public void Start()
     {
         UIManager.Instance.gameInterface = this;
@@ -53,14 +51,13 @@ public class GameInterface : MonoBehaviour, IScreen
     public IEnumerator pickupMegaClam()
     {
         toggleSunOverlay(true);
-        pickupParticles[0].Play();
-        UIManager.Instance.sunInterface.playSunAnimation("Armature_megaClam");
+        UIEffectManager.Instance.SpecificAction?.Invoke("MEGACLAM", "Armature_megaClam");
         yield return new WaitForSeconds(2f);
         toggleSunOverlay(false);
     }
 
-    public void playPickupParticle(int index)
+    public void pickupJohnnyParticle()
     {
-        pickupParticles[index].Play();
+        UIEffectManager.Instance.SpecificAction?.Invoke("JOHNNY", "");
     }
 }

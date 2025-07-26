@@ -27,6 +27,4 @@ public class UIManager : MonoBehaviour
     public TransitionInterface transitionScreen;
     [HideInInspector]
     public BoostGaugeInterface boostGaugeInterface;
-    [HideInInspector]
-    public SunHandler sunInterface;
 }

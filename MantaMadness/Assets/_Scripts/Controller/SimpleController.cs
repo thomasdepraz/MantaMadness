@@ -715,8 +715,10 @@ public class SimpleController : MonoBehaviour
     private IEnumerator LockRoutine(float duration)
     {
         ForceLock(true);
+        gameObject.GetComponent<Collider>().enabled = false;
         yield return new WaitForSeconds(duration);
         ForceLock(false);
+        gameObject.GetComponent<Collider>().enabled = true;
         m_LockCoroutine = null;
     }
     public void LockPlayerForDuration(float duration)
@@ -726,7 +728,6 @@ public class SimpleController : MonoBehaviour
             Debug.LogError("Player already locked");
             return;
         }
-
         m_LockCoroutine = StartCoroutine(LockRoutine(duration));
     }
 

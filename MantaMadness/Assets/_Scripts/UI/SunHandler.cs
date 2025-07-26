@@ -1,8 +1,10 @@
 using UnityEngine;
+using System;
+using System.Collections;
 
 public class SunHandler : MonoBehaviour
 {
-
+    
     public string[] goodAnimations;
     public string[] wackAnimations;
 
@@ -10,21 +12,25 @@ public class SunHandler : MonoBehaviour
 
     public void Start()
     {
-        UIManager.Instance.sunInterface = this;
+        UIEffectManager.Instance.GoodAction += playGoodAnimation;
+        UIEffectManager.Instance.BadAction += playWhackAnimation;
+        UIEffectManager.Instance.SpecificAction += playSunAnimation;
+
     }
 
-    public void playSunAnimation(string animName)
+    public void playSunAnimation(string overload, string animName)
     {
+        if(animName != null)
         sunAnimator.Play(animName);
     }
 
     public void playGoodAnimation()
     {
-        sunAnimator.Play(goodAnimations[Random.Range(0, goodAnimations.Length)]);
+        sunAnimator.Play(goodAnimations[UnityEngine.Random.Range(0, goodAnimations.Length)]);
     }
 
     public void playWhackAnimation()
     {
-        sunAnimator.Play(wackAnimations[Random.Range(0, wackAnimations.Length)]);
+        sunAnimator.Play(wackAnimations[UnityEngine.Random.Range(0, wackAnimations.Length)]);
     }
 }
