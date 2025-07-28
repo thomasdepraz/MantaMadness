@@ -13,6 +13,8 @@ public enum BoostAction
     Collectible,
     SuperCollectible,
     MegaCollectible,
+    CarCrash,
+    GoldenCarCrash
 }
 
 [System.Serializable]
@@ -73,7 +75,6 @@ public class BoostBehaviour : MonoBehaviour
         boostCount -= boostStep;
         useBoost?.Invoke(true);
         UIManager.Instance.boostGaugeInterface?.SetGauge(boostCount, maxBoost);
-
         toPerform?.Invoke();
         return true;
     }

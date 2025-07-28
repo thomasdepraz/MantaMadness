@@ -15,6 +15,7 @@ public class SunHandler : MonoBehaviour
         UIEffectManager.Instance.GoodAction += playGoodAnimation;
         UIEffectManager.Instance.BadAction += playWhackAnimation;
         UIEffectManager.Instance.SpecificAction += playSunAnimation;
+        UIEffectManager.Instance.ExplosionAction += playExplosionAnimation;
 
     }
 
@@ -32,5 +33,10 @@ public class SunHandler : MonoBehaviour
     public void playWhackAnimation()
     {
         sunAnimator.Play(wackAnimations[UnityEngine.Random.Range(0, wackAnimations.Length)]);
+    }
+
+    public void playExplosionAnimation(string name)
+    {
+        sunAnimator.Play(name);
     }
 }

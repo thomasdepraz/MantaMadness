@@ -5,12 +5,27 @@ using System.Collections;
 public class CarCollisionRelay : MonoBehaviour
 {
 
-    public Action HitCollision;
+    public Action<string> HitCollision;
     public Action AudioCollision;
 
     private void OnTriggerEnter(Collider other)
     {
-        HitCollision?.Invoke();
-        AudioCollision?.Invoke();
+        if (other.TryGetComponent(out SimpleController controller))
+        {
+            HitCollision?.Invoke("player");
+        }
+        else if (other.TryGetComponent(out GoldenCar car))
+        {
+            if(car.isAlive == true)
+            HitCollision?.Invoke("goldenCar");
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.TryGetComponent(out SimpleController controller))
+        {
+            AudioCollision?.Invoke();
+        }
     }
 }

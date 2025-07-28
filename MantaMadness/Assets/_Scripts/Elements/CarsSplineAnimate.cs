@@ -3,10 +3,10 @@ using UnityEngine.Splines;
 using System;
 using System.Collections;
 
-[RequireComponent(typeof(SplineAnimate))]
 public class CarsSplineAnimate : MonoBehaviour
 {
-    private AudioSource HornAudio;
+    [SerializeField] private AudioSource hornAudio;
+    [SerializeField] private AudioSource explosionAudio;
     private SimpleController player;
 
     private SplineAnimate splineAnimate;
@@ -23,8 +23,10 @@ public class CarsSplineAnimate : MonoBehaviour
 
     private void Awake()
     {
-        splineAnimate = GetComponent<SplineAnimate>();
-        HornAudio = GetComponent<AudioSource>();
+        if(GetComponent<SplineAnimate>() != null)
+        {
+            splineAnimate = GetComponent<SplineAnimate>();
+        }
         hitBox.HitCollision += CollisionCheck;
         audioHitBox.AudioCollision += PlayHorn;
     }
@@ -32,31 +34,53 @@ public class CarsSplineAnimate : MonoBehaviour
     void Start()
     {
         player = Game.Instance.player;
-        splineAnimate.StartOffset = startPoint;
-        splineAnimate.Play();
+        isAlive = true;
+        if(splineAnimate != null)
+        {
+            splineAnimate.StartOffset = startPoint;
+            splineAnimate.Play();
+        }
     }
 
     private void PlayHorn()
     {
-        isAlive = true;
-        HornAudio.Play();
+        if (splineAnimate != null)
+        {
+            hornAudio.Play();
+        }
     }
 
-    private void CollisionCheck()
+    private void CollisionCheck(string type)
     {
-        if(player.HorizontalVelocity.magnitude > player.controllerData.maxSpeed / 2)
+        if(isAlive == true)
         {
-            StartCoroutine(KillSequence());
-        }
-        else
-        {
-            Game.Instance.Respawn(out Game.Instance.m_SpawnPosition, out Game.Instance.m_SpawnRotation);
+            if(type == "player")
+            {
+                if (player.HorizontalVelocity.magnitude > player.controllerData.maxSpeed / 2 || splineAnimate == null)
+                {
+                    StartCoroutine(KillSequence());
+                }
+                else
+                {
+                    if(splineAnimate != null)
+                    {
+                        Game.Instance.Respawn(out Game.Instance.m_SpawnPosition, out Game.Instance.m_SpawnRotation);
+                    }
+                }
+            }
+            else if (type == "goldenCar")
+            {
+                StartCoroutine(FriendlyFire());
+            }
         }
     }
 
     private void OnEnable()
     {
-        splineAnimate.Play();
+        if (splineAnimate != null)
+        {
+            splineAnimate.Play();
+        }
     }
 
     public IEnumerator KillSequence()
@@ -64,7 +88,21 @@ public class CarsSplineAnimate : MonoBehaviour
         explosion.Play();
         visual.SetActive(false);
         isAlive = false;
+        explosionAudio.Play();
+        UIEffectManager.Instance.ExplosionAction?.Invoke("Armature_TheRock"); 
+        Game.Instance.player.boostBehaviour.IncrementGauge(BoostAction.CarCrash);
         yield return new WaitForSeconds(10f);
+        visual.SetActive(true);
+        isAlive = true;
+        yield return null;
+    }
+
+    public IEnumerator FriendlyFire()
+    {
+        explosion.Play();
+        visual.SetActive(false);
+        isAlive = false;
+        yield return new WaitForSeconds(5f);
         visual.SetActive(true);
         isAlive = true;
         yield return null;
