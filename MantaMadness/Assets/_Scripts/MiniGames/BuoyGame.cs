@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuoyGame : MonoBehaviour, ITimer, ICoinObjective, ISaveable
+public class BuoyGame : MonoBehaviour, ITimer, ICoinObjective
 {
     public List<Buoy> buoys = new List<Buoy>();
     public float timeToFinish;
@@ -15,8 +15,6 @@ public class BuoyGame : MonoBehaviour, ITimer, ICoinObjective, ISaveable
 
     public Coin coin;
     public Coin coinToUnlock => coin;
-
-    bool ISaveable.CanSave => true;
 
 
     void Start()
@@ -95,17 +93,6 @@ public class BuoyGame : MonoBehaviour, ITimer, ICoinObjective, ISaveable
     {
         coin.gameObject.SetActive(true);
         //do camera event ?
-    }
-
-    void ISaveable.Save()
-    {
-        PlayerPrefs.SetInt(Constants.c_MiniGamePrefixSave + GetHashCode().ToString(), completed ? 1 : 0);
-    }
-
-    void ISaveable.Load()
-    {
-        completed = PlayerPrefs.GetInt(Constants.c_MiniGamePrefixSave + GetHashCode().ToString(), 0) == 0 ? false : true;
-        Start();
     }
 
     public override int GetHashCode()

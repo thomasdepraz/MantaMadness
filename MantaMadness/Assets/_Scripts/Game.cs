@@ -25,7 +25,6 @@ public class Game : MonoBehaviour
     [HideInInspector] public SimpleController player;
     public RaceManager raceManager = new RaceManager();
     CameraManager cameraManager = CameraManager.Instance;
-    public SaveManager saveManager;
 
     [HideInInspector] public Vector3 m_SpawnPosition;
     [HideInInspector] public Quaternion m_SpawnRotation;

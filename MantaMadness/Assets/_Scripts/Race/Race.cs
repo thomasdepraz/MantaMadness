@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Race : MonoBehaviour, ITimer, ICoinObjective, ISaveable
+public class Race : MonoBehaviour, ITimer, ICoinObjective
 {
     [Header("Race parameters")]
     [SerializeField] private int lapCount;
@@ -14,8 +14,6 @@ public class Race : MonoBehaviour, ITimer, ICoinObjective, ISaveable
 
     public Coin unlockedCoin;
     public Coin coinToUnlock => unlockedCoin;
-
-    bool ISaveable.CanSave => true;
 
     public bool FinishedOnce { get => finishedOnce; }
 
@@ -113,15 +111,5 @@ public class Race : MonoBehaviour, ITimer, ICoinObjective, ISaveable
     {
         unlockedCoin.gameObject.SetActive(true);
         //do camera event ?
-    }
-
-    void ISaveable.Save()
-    {
-        PlayerPrefs.SetInt(Constants.c_RacePrefixSave + gameObject.name + gameObject.transform.parent.name, finishedOnce ? 1 : 0);
-    }
-
-    void ISaveable.Load()
-    {
-        finishedOnce = PlayerPrefs.GetInt(Constants.c_RacePrefixSave + gameObject.name + gameObject.transform.parent.name, 0) == 0 ? false : true;
     }
 }

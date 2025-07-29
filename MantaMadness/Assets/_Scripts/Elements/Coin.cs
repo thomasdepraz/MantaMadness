@@ -2,7 +2,7 @@ using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 
-public class Coin : MonoBehaviour, ISaveable
+public class Coin : MonoBehaviour
 {
     const float c_LockDuration = 3f;
 
@@ -13,7 +13,6 @@ public class Coin : MonoBehaviour, ISaveable
     [Header("Saving")]
     public string saveName;
     public bool isMiniGameCoin;
-    bool ISaveable.CanSave => !isMiniGameCoin;
 
     private bool pickedUp = false;
     private WaitForSeconds wait;
@@ -78,17 +77,5 @@ public class Coin : MonoBehaviour, ISaveable
         {
             routine = StartCoroutine(PickupCoroutine(controller));
         }
-    }
-
-    void ISaveable.Save()
-    {
-        PlayerPrefs.SetInt(Constants.c_CoinPrefixSave + saveName, pickedUp ? 1 : 0);
-    }
-
-    void ISaveable.Load()
-    {
-        int save = PlayerPrefs.GetInt(Constants.c_CoinPrefixSave + this.GetHashCode().ToString(), 0);
-        pickedUp = save == 0 ? false : true;
-        Start();
     }
 }
