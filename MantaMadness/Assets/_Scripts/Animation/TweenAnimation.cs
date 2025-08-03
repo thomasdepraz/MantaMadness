@@ -88,9 +88,28 @@ public class TweenAnimation : MonoBehaviour
         if (animateScale == true)
         {
             if (yoyoScale == false)
-               transform.DOScale(new Vector3(transform.localScale.x * xScale, transform.localScale.y * yScale, transform.localScale.z * zScale), scaleDuration).SetEase(Ease.InOutQuad).SetLoops(loopScaleAmount, LoopType.Incremental);
+            {
+                if(originalScale == Vector3.zero)
+                {
+                    transform.DOScale(new Vector3(1 * xScale, 1 * yScale, 1 * zScale), scaleDuration).SetEase(Ease.InOutQuad).SetLoops(loopScaleAmount, LoopType.Incremental);
+                }
+                else
+                {
+                    transform.DOScale(new Vector3(originalScale.x * xScale, originalScale.y * yScale, originalScale.z * zScale), scaleDuration).SetEase(Ease.InOutQuad).SetLoops(loopScaleAmount, LoopType.Incremental);
+                }
+            }
+ 
             else if (yoyoScale == true)
-                transform.DOScale(new Vector3(transform.localScale.x * xScale, transform.localScale.y * yScale, transform.localScale.z * zScale), scaleDuration).SetEase(Ease.InOutQuad).SetLoops(loopScaleAmount, LoopType.Yoyo);
+
+                if (originalScale == Vector3.zero)
+                {
+                    transform.DOScale(new Vector3(1 * xScale, 1 * yScale, 1 * zScale), scaleDuration).SetEase(Ease.InOutQuad).SetLoops(loopScaleAmount, LoopType.Yoyo);
+                }
+                else
+                {
+                    transform.DOScale(new Vector3(originalScale.x * xScale, originalScale.y * yScale, originalScale.z * zScale), scaleDuration).SetEase(Ease.InOutQuad).SetLoops(loopScaleAmount, LoopType.Yoyo);
+                }
+            
         }
             
 

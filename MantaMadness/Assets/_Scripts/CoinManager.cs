@@ -4,6 +4,8 @@ using UnityEngine;
 public class CoinManager : MonoBehaviour
 {
     public static CoinManager Instance;
+
+    public CoinHolder[] coinHolders;
     private void Awake()
     {
         if(Instance != null && Instance != this)
@@ -58,5 +60,16 @@ public class CoinManager : MonoBehaviour
     public void PickupCollectible()
     {
         PickupCollectibleCount++;
+    }
+
+    public void ActivateCoinHolder(string coinName)
+    {
+        for(int i = 0; i < coinHolders.Length; i++)
+        {
+            if (coinHolders[i].coinName == coinName)
+            {
+                coinHolders[i].startProcess();
+            }
+        }
     }
 }

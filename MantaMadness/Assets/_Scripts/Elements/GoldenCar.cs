@@ -22,6 +22,7 @@ public class GoldenCar : MonoBehaviour
     public bool isAlive = false;
 
     [SerializeField] private Rigidbody rb;
+    [SerializeField] private string coinName;
 
     private void Awake()
     {
@@ -52,6 +53,7 @@ public class GoldenCar : MonoBehaviour
                 if (player.HorizontalVelocity.magnitude > player.controllerData.maxSpeed / 2)
                 {
                     StartCoroutine(KillSequence());
+                    CoinManager.Instance.ActivateCoinHolder(coinName);
                 }
                 else
                 {

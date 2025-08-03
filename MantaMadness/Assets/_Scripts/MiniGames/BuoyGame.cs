@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuoyGame : MonoBehaviour, ITimer, ICoinObjective
+public class BuoyGame : MonoBehaviour, ITimer
 {
     public List<Buoy> buoys = new List<Buoy>();
     public float timeToFinish;
+    public string coinName;
     
     private float timer;
     private int count = 0;
@@ -12,10 +13,6 @@ public class BuoyGame : MonoBehaviour, ITimer, ICoinObjective
 
     public bool Completed { get => completed;}
     private bool completed = false;
-
-    public Coin coin;
-    public Coin coinToUnlock => coin;
-
 
     void Start()
     {
@@ -91,8 +88,7 @@ public class BuoyGame : MonoBehaviour, ITimer, ICoinObjective
 
     public void UnlockCoin()
     {
-        coin.gameObject.SetActive(true);
-        //do camera event ?
+        CoinManager.Instance.ActivateCoinHolder(coinName);
     }
 
     public override int GetHashCode()

@@ -14,23 +14,8 @@ public class Coin : MonoBehaviour
     public string saveName;
     public bool isMiniGameCoin;
 
-    private bool pickedUp = false;
     private WaitForSeconds wait;
     private Coroutine routine;
-
-
-    private void Start()
-    {
-        if (isMiniGameCoin)
-        {
-            gameObject.SetActive(false);
-            return;
-        }
-        else
-        {
-            gameObject.SetActive(!pickedUp);
-        }
-    }
 
     private IEnumerator PickupCoroutine(SimpleController controller)
     {
@@ -68,7 +53,6 @@ public class Coin : MonoBehaviour
         routine = null;
 
         gameObject.SetActive(false);
-        pickedUp = true;
     }
 
     private void OnTriggerEnter(Collider other)

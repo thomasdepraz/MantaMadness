@@ -5,7 +5,7 @@ public class TextureMover : MonoBehaviour
     public GameObject model;
     private Material texture;
 
-    private void Start()
+    private void Awake()
     {
         SkinnedMeshRenderer mesh = model.GetComponent<SkinnedMeshRenderer>();
         texture = mesh.material;
