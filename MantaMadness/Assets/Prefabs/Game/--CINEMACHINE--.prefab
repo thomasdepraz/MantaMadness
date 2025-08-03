@@ -60,8 +60,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1515958017171557547}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.06433463, y: -0.7041741, z: 0.06433464, w: 0.70417404}
-  m_LocalPosition: {x: 65.8, y: 172.15001, z: -91.8}
+  m_LocalRotation: {x: -0.004789257, y: 0.90834695, z: -0.010405923, w: -0.41806063}
+  m_LocalPosition: {x: 1136.7766, y: 695.91003, z: -263.29675}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -204,10 +204,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5998616479063900474}
   - component: {fileID: 4429240380763557315}
-  - component: {fileID: 7621181587693817109}
   - component: {fileID: 8421084551549009093}
   - component: {fileID: 1201512771752657637}
   - component: {fileID: 1549746208929260246}
+  - component: {fileID: 7088287331691130410}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -223,8 +223,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2107483345854353533}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.06433463, y: -0.7041741, z: 0.06433464, w: 0.70417404}
-  m_LocalPosition: {x: 65.8, y: 172.15001, z: -91.8}
+  m_LocalRotation: {x: -0.004789257, y: 0.90834695, z: -0.010405923, w: -0.41806063}
+  m_LocalPosition: {x: 1136.7766, y: 695.91003, z: -263.29675}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -281,14 +281,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &7621181587693817109
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2107483345854353533}
-  m_Enabled: 1
 --- !u!114 &8421084551549009093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -377,3 +369,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6360e888c630247942ee158a539752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7088287331691130410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2107483345854353533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nonRigidbodyVelocity: 0
+  attenuationObject: {fileID: 0}
