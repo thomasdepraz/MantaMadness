@@ -1,10 +1,14 @@
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
+using FMODUnity;
 
 public class Coin : MonoBehaviour
 {
     const float c_LockDuration = 3f;
+
+    [Header("FMOD Sound")]
+    public EventReference pickupSound;
 
     [Header("Cinemachine")]
     public CinemachineCamera vcamera;
@@ -28,7 +32,7 @@ public class Coin : MonoBehaviour
         CameraManager.Instance.BlendToCamera(vcamera, blend);
 
         // Sound
-        SoundManager.Instance.PlayOneShotSound(SoundType.COINPICKUP);
+        RuntimeManager.PlayOneShot(pickupSound, transform.position);
 
         //increase boost gauge
         Game.Instance.player.boostBehaviour.IncrementGauge(BoostAction.CoolSun);

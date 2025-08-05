@@ -14865,6 +14865,13 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   standaloneCoin: 0
+  ClearSound:
+    Guid:
+      Data1: -189784392
+      Data2: 1220734408
+      Data3: -677745268
+      Data4: -866217296
+    Path: event:/ChallengeClear
 --- !u!1001 &6190324187563799558
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14880,6 +14887,26 @@ PrefabInstance:
     - target: {fileID: 1831185759981682047, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
       propertyPath: isMiniGameCoin
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1831185759981682047, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
+      propertyPath: pickupSound.Path
+      value: event:/CoinPickup
+      objectReference: {fileID: 0}
+    - target: {fileID: 1831185759981682047, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
+      propertyPath: pickupSound.Guid.Data1
+      value: -772282022
+      objectReference: {fileID: 0}
+    - target: {fileID: 1831185759981682047, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
+      propertyPath: pickupSound.Guid.Data2
+      value: 1207214441
+      objectReference: {fileID: 0}
+    - target: {fileID: 1831185759981682047, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
+      propertyPath: pickupSound.Guid.Data3
+      value: 1598834323
+      objectReference: {fileID: 0}
+    - target: {fileID: 1831185759981682047, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
+      propertyPath: pickupSound.Guid.Data4
+      value: -370713697
       objectReference: {fileID: 0}
     - target: {fileID: 4972539868658882653, guid: 745ad53f5de6d314c853c207788adb0f, type: 3}
       propertyPath: m_Name

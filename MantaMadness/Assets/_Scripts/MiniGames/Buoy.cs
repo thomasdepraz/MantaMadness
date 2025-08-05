@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using FMODUnity;
 
 public class Buoy : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class Buoy : MonoBehaviour
     public BuoyVisuals visuals;
     public Action onCollect;
     public Action onReset;
+
+    [SerializeField] private EventReference buoyPass;
 
     public void Initialize(BuoyGame game)
     {
@@ -24,7 +27,7 @@ public class Buoy : MonoBehaviour
             collider.enabled = false;
             game.Collect(this);
             onCollect.Invoke();
-            SoundManager.Instance.PlayOneShotSound(SoundType.BUOYPASS);
+            RuntimeManager.PlayOneShot(buoyPass, transform.position);
         }
     }
 

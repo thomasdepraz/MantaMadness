@@ -19,7 +19,7 @@ MonoBehaviour:
     Data3: -677745268
     Data4: -866217296
   Banks:
-  - {fileID: 9160334651268214476}
+  - {fileID: 8150457467548620983}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -27,42 +27,6 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &-9179583633801543844
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/FishVille.bank
-  m_EditorClassIdentifier: 
-  Path: Assets/FMOD/Desktop/FishVille.bank
-  Name: FishVille
-  StudioPath: bank:/FishVille
-  lastModified: 638898398666218133
-  FileSizes: []
-  Exists: 1
---- !u!114 &-9148333011088028968
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/Master.bank
-  m_EditorClassIdentifier: 
-  Path: Assets/FMOD/Desktop/Master.bank
-  Name: Master
-  StudioPath: bank:/Master
-  lastModified: 638898399567726463
-  FileSizes: []
-  Exists: 1
 --- !u!114 &-9124764261490852253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,26 +154,6 @@ MonoBehaviour:
   lastModified: 638898399568206050
   FileSizes: []
   Exists: 1
---- !u!114 &-6712136081511609940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/Master.strings.bank
-  m_EditorClassIdentifier: 
-  Path: Assets/FMOD/Desktop/Master.strings.bank
-  Name: Master.strings
-  StudioPath: bank:/Master.strings
-  lastModified: 638898399567731535
-  FileSizes:
-  - Name: 
-    Value: 1478
-  Exists: 1
 --- !u!114 &-5774002904992151014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,6 +177,26 @@ MonoBehaviour:
   Type: 0
   IsGlobal: 0
   Labels: []
+  Exists: 1
+--- !u!114 &-5041081585314229527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/FishVille.bank
+  m_EditorClassIdentifier: 
+  Path: D:/Documents_D/MANTA_PROJECT/MantaMadness/MantaMadness/Assets/FMOD/Desktop/FishVille.bank
+  Name: FishVille
+  StudioPath: bank:/FishVille
+  lastModified: 638899269419917030
+  FileSizes:
+  - Name: 
+    Value: 43808
   Exists: 1
 --- !u!114 &-4128870031870618845
 MonoBehaviour:
@@ -324,24 +288,6 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &-2774974789135143414
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/PlayerAction.bank
-  m_EditorClassIdentifier: 
-  Path: Assets/FMOD/Desktop/PlayerAction.bank
-  Name: PlayerAction
-  StudioPath: bank:/PlayerAction
-  lastModified: 638898398665699839
-  FileSizes: []
-  Exists: 1
 --- !u!114 &-2751379522680310433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,7 +307,7 @@ MonoBehaviour:
     Data3: -1731159110
     Data4: 1587735600
   Banks:
-  - {fileID: -2774974789135143414}
+  - {fileID: 2626798390813018572}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -388,9 +334,9 @@ MonoBehaviour:
     Data3: 287674815
     Data4: -1976505440
   Banks:
-  - {fileID: -9179583633801543844}
+  - {fileID: -5041081585314229527}
   IsStream: 0
-  Is3D: 0
+  Is3D: 1
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
@@ -413,6 +359,26 @@ MonoBehaviour:
   StudioPath: bank:/Master
   lastModified: 638898399567726463
   FileSizes: []
+  Exists: 1
+--- !u!114 &-350995120813060853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: D:/Documents_D/MANTA_PROJECT/MantaMadness/MantaMadness/Assets/FMOD/Desktop/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 638898486300519736
+  FileSizes:
+  - Name: 
+    Value: 1530
   Exists: 1
 --- !u!114 &-130285278616486226
 MonoBehaviour:
@@ -460,7 +426,7 @@ MonoBehaviour:
     Data3: -63378010
     Data4: -2082635072
   Banks:
-  - {fileID: -2774974789135143414}
+  - {fileID: 2626798390813018572}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -481,12 +447,12 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: 
   EditorBanks:
-  - {fileID: -6712136081511609940}
-  - {fileID: -9179583633801543844}
-  - {fileID: 9160334651268214476}
-  - {fileID: -9148333011088028968}
-  - {fileID: 2796687677633519343}
-  - {fileID: -2774974789135143414}
+  - {fileID: -350995120813060853}
+  - {fileID: -5041081585314229527}
+  - {fileID: 8150457467548620983}
+  - {fileID: 4094014168458598789}
+  - {fileID: 8956428920647552568}
+  - {fileID: 2626798390813018572}
   EditorEvents:
   - {fileID: -2596248904544390635}
   - {fileID: 9198543365217752714}
@@ -502,11 +468,11 @@ MonoBehaviour:
   - {fileID: 1113749252851412660}
   EditorParameters: []
   MasterBanks:
-  - {fileID: -9148333011088028968}
+  - {fileID: 4094014168458598789}
   StringsBanks:
-  - {fileID: -6712136081511609940}
+  - {fileID: -350995120813060853}
   cacheVersion: 131848
-  cacheTime: 638898399568206050
+  cacheTime: 638899269419917030
   SerializableEventsDict:
   - key: event:/CarExplosion
     index: 0
@@ -578,7 +544,7 @@ MonoBehaviour:
     Data3: 1598834323
     Data4: -370713697
   Banks:
-  - {fileID: 9160334651268214476}
+  - {fileID: 8150457467548620983}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -613,6 +579,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &477804429589251648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/ClamPickup/ClamType
+  m_EditorClassIdentifier: 
+  Name: ClamType
+  StudioPath: 
+  Min: 0
+  Max: 2
+  Default: 0
+  ID:
+    data1: 2413190714
+    data2: 1346085127
+  Type: 2
+  IsGlobal: 0
+  Labels:
+  - Clam
+  - BigClam
+  - MegaClam
+  Exists: 1
 --- !u!114 &1113749252851412660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -632,7 +625,7 @@ MonoBehaviour:
     Data3: -2110580602
     Data4: 82862349
   Banks:
-  - {fileID: -2774974789135143414}
+  - {fileID: 2626798390813018572}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -677,7 +670,7 @@ MonoBehaviour:
     Data3: -1697989194
     Data4: 1105541898
   Banks:
-  - {fileID: -2774974789135143414}
+  - {fileID: 2626798390813018572}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -685,7 +678,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &2796687677633519343
+--- !u!114 &2626798390813018572
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -695,13 +688,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/Music.bank
+  m_Name: bank:/PlayerAction.bank
   m_EditorClassIdentifier: 
-  Path: Assets/FMOD/Desktop/Music.bank
-  Name: Music
-  StudioPath: bank:/Music
-  lastModified: 638898398665196925
-  FileSizes: []
+  Path: D:/Documents_D/MANTA_PROJECT/MantaMadness/MantaMadness/Assets/FMOD/Desktop/PlayerAction.bank
+  Name: PlayerAction
+  StudioPath: bank:/PlayerAction
+  lastModified: 638898398665699839
+  FileSizes:
+  - Name: 
+    Value: 94400
   Exists: 1
 --- !u!114 &2828111593414834821
 MonoBehaviour:
@@ -722,7 +717,7 @@ MonoBehaviour:
     Data3: 89660293
     Data4: -167272687
   Banks:
-  - {fileID: 9160334651268214476}
+  - {fileID: 8150457467548620983}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -730,6 +725,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &4094014168458598789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: D:/Documents_D/MANTA_PROJECT/MantaMadness/MantaMadness/Assets/FMOD/Desktop/Master.bank
+  Name: Master
+  StudioPath: bank:/Master
+  lastModified: 638898486300509604
+  FileSizes:
+  - Name: 
+    Value: 1036
+  Exists: 1
 --- !u!114 &4426511795543798995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -749,7 +764,7 @@ MonoBehaviour:
     Data3: -251683393
     Data4: 1234261541
   Banks:
-  - {fileID: 2796687677633519343}
+  - {fileID: 8956428920647552568}
   IsStream: 1
   Is3D: 0
   IsOneShot: 1
@@ -856,6 +871,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &8150457467548620983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/General.bank
+  m_EditorClassIdentifier: 
+  Path: D:/Documents_D/MANTA_PROJECT/MantaMadness/MantaMadness/Assets/FMOD/Desktop/General.bank
+  Name: General
+  StudioPath: bank:/General
+  lastModified: 638899266359141556
+  FileSizes:
+  - Name: 
+    Value: 83424
+  Exists: 1
 --- !u!114 &8153567648719387639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -875,11 +910,12 @@ MonoBehaviour:
     Data3: -1686773837
     Data4: 803062590
   Banks:
-  - {fileID: 9160334651268214476}
+  - {fileID: 8150457467548620983}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
-  Parameters: []
+  Parameters:
+  - {fileID: 477804429589251648}
   MinDistance: 1
   MaxDistance: 20
   Length: 0
@@ -902,9 +938,9 @@ MonoBehaviour:
     Data3: -1285750653
     Data4: -335281642
   Banks:
-  - {fileID: 9160334651268214476}
+  - {fileID: 8150457467548620983}
   IsStream: 0
-  Is3D: 0
+  Is3D: 1
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
@@ -937,7 +973,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &9160334651268214476
+--- !u!114 &8956428920647552568
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -947,13 +983,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/General.bank
+  m_Name: bank:/Music.bank
   m_EditorClassIdentifier: 
-  Path: Assets/FMOD/Desktop/General.bank
-  Name: General
-  StudioPath: bank:/General
-  lastModified: 638898399568206050
-  FileSizes: []
+  Path: D:/Documents_D/MANTA_PROJECT/MantaMadness/MantaMadness/Assets/FMOD/Desktop/Music.bank
+  Name: Music
+  StudioPath: bank:/Music
+  lastModified: 638898398665196925
+  FileSizes:
+  - Name: 
+    Value: 4779808
   Exists: 1
 --- !u!114 &9198543365217752714
 MonoBehaviour:
@@ -974,9 +1012,9 @@ MonoBehaviour:
     Data3: -296282207
     Data4: 1563414015
   Banks:
-  - {fileID: -9179583633801543844}
+  - {fileID: -5041081585314229527}
   IsStream: 0
-  Is3D: 0
+  Is3D: 1
   IsOneShot: 1
   Parameters: []
   MinDistance: 1

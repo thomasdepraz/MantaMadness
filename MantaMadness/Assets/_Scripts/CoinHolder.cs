@@ -1,8 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using Unity.Cinemachine;
-using Unity;
-using System;
+using FMODUnity;
 
 public class CoinHolder : MonoBehaviour
 {
@@ -13,6 +12,7 @@ public class CoinHolder : MonoBehaviour
     [SerializeField] private CinemachineCamera vcam;
     [SerializeField] private CinemachineBlendDefinition blend;
     [SerializeField] private bool standaloneCoin;
+    [SerializeField] private EventReference ClearSound;
 
     private bool hasBeenObtained = false;
 
@@ -42,12 +42,14 @@ public class CoinHolder : MonoBehaviour
         //lock player
         controller.ForceLock(true);
 
-        //activate camera
+        //activate camera + play sound
         vcam.enabled = true;
         CameraManager.Instance.BlendToCamera(vcam, blend);
+
         yield return new WaitForSeconds(2f);
 
         //PART 2 SPAWN IN SUN
+        RuntimeManager.PlayOneShot(ClearSound, vcam.transform.position);
         spawnParticle.Play();
         UIEffectManager.Instance.SpecificAction?.Invoke("CHALLENGE", "Armature_Chad");
         coin.transform.localScale = Vector3.zero;

@@ -335,6 +335,7 @@ GameObject:
   - component: {fileID: 4269571291486835132}
   - component: {fileID: 2229390829483246010}
   - component: {fileID: 8619946855515309575}
+  - component: {fileID: 7516686463256395394}
   m_Layer: 0
   m_Name: HitBox
   m_TagString: Untagged
@@ -390,6 +391,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c98d77628cac63740861ae41e5016263, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7516686463256395394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5176521066325117722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -964929836
+      Data2: 1151534971
+      Data3: 287674815
+      Data4: -1976505440
+    Path: event:/CarExplosion
+  Event: 
+  EventPlayTrigger: 3
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &6173447592781620326
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,13 +494,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36b5853217a53f9459a5d9e6903885bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hornAudio: {fileID: 8560849343605690291}
-  explosionAudio: {fileID: 492215718921760480}
   startPoint: 0
   hitBox: {fileID: 8619946855515309575}
   audioHitBox: {fileID: 7278925790004366606}
   visual: {fileID: 1662399379212245044}
   explosion: {fileID: 4069319999897601556}
+  hornAudio:
+    Guid:
+      Data1: -668674562
+      Data2: 1126608076
+      Data3: -296282207
+      Data4: 1563414015
+    Path: event:/CarHorn
 --- !u!1001 &2005068015473501541
 PrefabInstance:
   m_ObjectHideFlags: 0

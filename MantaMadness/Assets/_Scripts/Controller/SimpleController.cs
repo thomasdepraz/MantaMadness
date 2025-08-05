@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Diagnostics.Contracts;
 using UnityEngine;
+using FMODUnity;
 
 public enum ControllerState
 {
@@ -186,7 +187,10 @@ public class SimpleController : MonoBehaviour
             rb.linearVelocity = hoverBehaviour.normalContainer.forward * HorizontalVelocity.magnitude;
             rb.AddForce(NormalContainer.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
             rb.linearDamping = controllerData.jumpDamping;
-            SoundManager.Instance.PlayOneShotSound(SoundType.JUMP);
+
+            // PLAY FMOD PLAYER ACTION JUMP SOUND
+            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.JUMP);
+
             if (jumpRoutine != null)
                 StopCoroutine(jumpRoutine);
             jumpRoutine = StartCoroutine(JumpRoutine());
@@ -235,7 +239,8 @@ public class SimpleController : MonoBehaviour
         rb.AddForce(NormalContainer.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
         rb.linearDamping = controllerData.jumpDamping;
 
-        SoundManager.Instance.PlayOneShotSound(SoundType.JUMP);
+        // PLAY FMOD PLAYER ACTION JUMP SOUND
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.JUMP);
         
         if (jumpRoutine != null)
             StopCoroutine(jumpRoutine);

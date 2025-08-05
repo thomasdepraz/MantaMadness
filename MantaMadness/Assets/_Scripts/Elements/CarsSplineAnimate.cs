@@ -2,11 +2,11 @@ using UnityEngine;
 using UnityEngine.Splines;
 using System;
 using System.Collections;
+using FMODUnity;
 
 public class CarsSplineAnimate : MonoBehaviour
 {
-    [SerializeField] private AudioSource hornAudio;
-    [SerializeField] private AudioSource explosionAudio;
+
     private SimpleController player;
 
     private SplineAnimate splineAnimate;
@@ -19,7 +19,9 @@ public class CarsSplineAnimate : MonoBehaviour
 
     [SerializeField] private ParticleSystem explosion;
 
-    private bool isAlive = false;
+    [SerializeField] private EventReference hornAudio;
+
+    private bool isAlive = true;
 
     private void Awake()
     {
@@ -44,9 +46,10 @@ public class CarsSplineAnimate : MonoBehaviour
 
     private void PlayHorn()
     {
+        //Check if car is a moving car
         if (splineAnimate != null)
         {
-            hornAudio.Play();
+           RuntimeManager.PlayOneShot(hornAudio, transform.position);
         }
     }
 
@@ -88,7 +91,6 @@ public class CarsSplineAnimate : MonoBehaviour
         explosion.Play();
         visual.SetActive(false);
         isAlive = false;
-        explosionAudio.Play();
         UIEffectManager.Instance.ExplosionAction?.Invoke("Armature_TheRock"); 
         Game.Instance.player.boostBehaviour.IncrementGauge(BoostAction.CarCrash);
         yield return new WaitForSeconds(10f);

@@ -41,6 +41,10 @@ public class DebugGUI : MonoBehaviour
             if (feature != null)
                 feature.SetActive(!feature.isActive);
         }
+        if (GUILayout.Button($"Set UnderwaterMusic"))
+        {
+            MusicManager.Instance.ToggleUnderwater();
+        }
         GUILayout.EndArea();
     }
 #endif
