@@ -36,6 +36,8 @@ public class Button : MonoBehaviour
                 objects.SetActive(true);
             }
         }
+
+        vcam.enabled = false;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -59,6 +61,8 @@ public class Button : MonoBehaviour
         controller.ForceLock(true);
 
         //activate camera
+
+        vcam.enabled = true;
         CameraManager.Instance.BlendToCamera(vcam, blend);
 
         // Sound
