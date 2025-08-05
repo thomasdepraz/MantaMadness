@@ -3,11 +3,21 @@ using System.Collections;
 
 public class UIParticleManager : MonoBehaviour
 {
+    public static UIParticleManager Instance;
+
     [SerializeField]private VFXData[] uiParticleList;
     [SerializeField] private VFXData[] uiParticleGood;
     [SerializeField] private VFXData[] uiParticleExplosion;
 
     private bool explosionInCooldown = false;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
 
     private void Start()
     {
@@ -23,6 +33,18 @@ public class UIParticleManager : MonoBehaviour
             if (uiParticleList[i].VfxName == name)
             {
                 uiParticleList[i].PlayParticle();
+                break;
+            }
+        }
+    }
+
+    public void stopSpecificParticle(string name, string overload)
+    {
+        for (int i = 0; i < uiParticleList.Length; i++)
+        {
+            if (uiParticleList[i].VfxName == name)
+            {
+                uiParticleList[i].StopParticle();
                 break;
             }
         }
