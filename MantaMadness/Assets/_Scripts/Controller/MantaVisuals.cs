@@ -81,6 +81,18 @@ public class MantaVisuals : MonoBehaviour
         {
             mantaAnimator.SetTrigger("Spin");
         }
+
+        if(newState == ControllerState.SWIMMING)
+        {
+            VolumeManager.Instance.toggleUnderwater(true);
+            MusicManager.Instance.ToggleUnderwater();        
+        }
+
+        if(previous == ControllerState.SWIMMING)
+        {
+            VolumeManager.Instance.toggleUnderwater(false);
+            MusicManager.Instance.ToggleUnderwater();
+        }
     }
 
     private void Update()

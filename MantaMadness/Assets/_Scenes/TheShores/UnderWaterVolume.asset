@@ -28,6 +28,34 @@ MonoBehaviour:
   saturation:
     m_OverrideState: 0
     m_Value: 6.8
+--- !u!114 &-2282661494799288881
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 899c54efeace73346a0a16faa3afe726, type: 3}
+  m_Name: Vignette
+  m_EditorClassIdentifier: 
+  active: 1
+  color:
+    m_OverrideState: 1
+    m_Value: {r: 0, g: 0.090614244, b: 0.41509432, a: 1}
+  center:
+    m_OverrideState: 0
+    m_Value: {x: 0.5, y: 0.5}
+  intensity:
+    m_OverrideState: 1
+    m_Value: 0.598
+  smoothness:
+    m_OverrideState: 0
+    m_Value: 0.294
+  rounded:
+    m_OverrideState: 0
+    m_Value: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42,3 +70,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   components:
   - {fileID: -2544372309372054673}
+  - {fileID: 5131108029657067498}
+  - {fileID: -2282661494799288881}
+--- !u!114 &5131108029657067498
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29fa0085f50d5e54f8144f766051a691, type: 3}
+  m_Name: FilmGrain
+  m_EditorClassIdentifier: 
+  active: 1
+  type:
+    m_OverrideState: 1
+    m_Value: 9
+  intensity:
+    m_OverrideState: 1
+    m_Value: 0.646
+  response:
+    m_OverrideState: 1
+    m_Value: 0.485
+  texture:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}

@@ -11,6 +11,6 @@ public class VFXData : MonoBehaviour
 
     public void StopParticle()
     {
-
+        GetComponent<ParticleSystem>().Stop();
     }
 }
