@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System;
 using System.Collections;
+using UnityEditor.TerrainTools;
 using UnityEngine;
 
 public class Collectible : MonoBehaviour
@@ -15,6 +16,14 @@ public class Collectible : MonoBehaviour
     private bool movingTowardtarget = false;
     private GameObject player;
 
+    [Header("Raycast Settings")]
+    public bool useRaycast = false;
+    public float raycastDistance = 10f;
+    public LayerMask detectionMask;
+    public Vector3 rayOffset = Vector3.zero;
+    private Vector3 origin;
+
+
 
     private void Start()
     {
@@ -25,6 +34,13 @@ public class Collectible : MonoBehaviour
         else
         {
             print("Careful! this clam doesn't have a CollectibleRelay!");
+        }
+
+        origin = transform.position;
+
+        if(Physics.Raycast(origin, Vector3.down,out RaycastHit hit, raycastDistance, detectionMask))
+        {
+            transform.position = hit.point + rayOffset;
         }
 
     }
@@ -86,5 +102,14 @@ public class Collectible : MonoBehaviour
         tween.onComplete += ()=>gameObject.SetActive(false);
 
         yield return null;
+    }
+
+    void OnDrawGizmos()
+    {
+        if(useRaycast == true)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(origin, origin + Vector3.down * raycastDistance);
+        }
     }
 }
