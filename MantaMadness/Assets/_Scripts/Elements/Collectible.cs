@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEditor.TerrainTools;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class Collectible : MonoBehaviour
 {
     private Coroutine routine;
@@ -35,14 +36,7 @@ public class Collectible : MonoBehaviour
         {
             print("Careful! this clam doesn't have a CollectibleRelay!");
         }
-
         origin = transform.position;
-
-        if(Physics.Raycast(origin, Vector3.down,out RaycastHit hit, raycastDistance, detectionMask))
-        {
-            transform.position = hit.point + rayOffset;
-        }
-
     }
 
     private void MoveToTarget(GameObject target)
@@ -50,7 +44,22 @@ public class Collectible : MonoBehaviour
         player = target;
         movingTowardtarget = true;
     }
+    //Activate only in editor mode
+#if UNITY_EDITOR
+    private void Update()
+    {
+        if (useRaycast && Application.isPlaying == false)
+        {
+            origin = transform.position;
+            //transform.InverseTransformDirection(Vector3.down);
 
+            if (Physics.Raycast(origin, -transform.up, out RaycastHit hit, raycastDistance, detectionMask))
+            {
+                transform.position = hit.point + rayOffset;
+            }
+        }
+    }
+#endif
 
     private void FixedUpdate()
     {
@@ -103,13 +112,14 @@ public class Collectible : MonoBehaviour
 
         yield return null;
     }
-
+#if UNITY_EDITOR
     void OnDrawGizmos()
     {
         if(useRaycast == true)
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(origin, origin + Vector3.down * raycastDistance);
+            Gizmos.DrawLine(origin, origin + (-transform.up * raycastDistance));
         }
     }
+#endif
 }
