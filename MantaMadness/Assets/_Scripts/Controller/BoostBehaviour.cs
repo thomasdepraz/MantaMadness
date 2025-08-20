@@ -14,7 +14,8 @@ public enum BoostAction
     SuperCollectible,
     MegaCollectible,
     CarCrash,
-    GoldenCarCrash
+    GoldenCarCrash,
+    Dash
 }
 
 [System.Serializable]

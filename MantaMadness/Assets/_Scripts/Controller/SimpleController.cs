@@ -45,6 +45,7 @@ public class SimpleController : MonoBehaviour
     public bool IsLocked => OnRail || InAirRail || forceLocked;
     private bool CanDrift => HorizontalVelocity.sqrMagnitude > controllerData.minSpeedToDrift * controllerData.minSpeedToDrift;
     private bool CanDriftBreak => HorizontalVelocity.sqrMagnitude < (controllerData.minSpeedToDriftBreak * controllerData.minSpeedToDriftBreak);
+    private bool CanDash => currentDashTime > controllerData.dashTimer && (Time.time - lastDashTimestamp) > controllerData.dashCooldown;
     private Transform NormalContainer => hoverBehaviour.normalContainer;
 
     public ControllerState State {
@@ -76,6 +77,8 @@ public class SimpleController : MonoBehaviour
     private bool isCoyote => currentCoyoteTime > 0;
     private float currentCoyoteTime;
     private float currentDriftTime;
+    private float currentDashTime;
+    private float lastDashTimestamp = 0f;
     private bool hasDriftBoost;
     private bool forceLocked;
 
@@ -104,6 +107,7 @@ public class SimpleController : MonoBehaviour
         inputs.jump.action.performed += Jump;
         inputs.drift.action.performed += Drift;
         inputs.drift.action.canceled += DriftReleased;
+        inputs.dash.action.performed += Dash;
 
         //Components Setup
         hoverBehaviour.Initialize(controllerData, rb);
@@ -129,6 +133,19 @@ public class SimpleController : MonoBehaviour
         }
 
         updateDrift.Invoke(dir, drifting, boost);
+    }
+
+    private void Dash(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if (IsLocked)
+            return;
+
+        if(State == ControllerState.SURFING && CanDash)
+        {
+            lastDashTimestamp = Time.time;
+            Boost(controllerData.dashForce);
+            boostBehaviour.IncrementGauge(BoostAction.Dash);
+        }
     }
 
     private void Drift(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -428,6 +445,11 @@ public class SimpleController : MonoBehaviour
             if(hasHit)
             {
                 hoverBehaviour.Hover(info, Time.fixedDeltaTime);
+
+                if (HorizontalVelocity.sqrMagnitude > controllerData.minSpeedToDash)
+                    currentDashTime += Time.deltaTime;
+                else
+                    currentDashTime = 0f;
             }
             else
             {
