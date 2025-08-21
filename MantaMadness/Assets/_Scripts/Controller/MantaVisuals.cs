@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Runtime.CompilerServices;
+using UnityEngine;
 
 public class MantaVisuals : MonoBehaviour
 {
@@ -28,6 +30,8 @@ public class MantaVisuals : MonoBehaviour
 
     private int driftId = Animator.StringToHash("Drifting");
     private int driftDirId = Animator.StringToHash("DriftDirection");
+    private int styleTriggerId = Animator.StringToHash("StyleTrigger");
+    private int styleIndexId = Animator.StringToHash("Style");
   
 
     private void Awake()
@@ -37,6 +41,13 @@ public class MantaVisuals : MonoBehaviour
         mantaController.updateDrift += UpdateDrift;
         mantaController.boost += BoostParticles;
         mantaController.updateRaceTarget += SetArrowTarget;
+        mantaController.dash += Dash;
+    }
+
+    private void Dash()
+    {
+        mantaAnimator.SetFloat(styleIndexId, UnityEngine.Random.Range(0, 5));
+        mantaAnimator.SetTrigger(styleTriggerId);
     }
 
     private void Start()
@@ -68,6 +79,8 @@ public class MantaVisuals : MonoBehaviour
             }
         }
     }
+
+        
 
     private void UpdateState(ControllerState previous, ControllerState newState)
     {

@@ -90,6 +90,7 @@ public class SimpleController : MonoBehaviour
     public Action<Transform> updateRaceTarget;
     public Action enterRail;
     public Action exitRail;
+    public Action dash;
 
     private void Awake()
     {
@@ -145,6 +146,7 @@ public class SimpleController : MonoBehaviour
             lastDashTimestamp = Time.time;
             Boost(controllerData.dashForce);
             boostBehaviour.IncrementGauge(BoostAction.Dash);
+            dash.Invoke();
         }
     }
 
