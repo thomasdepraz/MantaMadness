@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4437405886916680519}
   - component: {fileID: 7072665854400672897}
   - component: {fileID: 4036675475773864574}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: SM_Clam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 1068764207020680704}
   - component: {fileID: 2398022805645247011}
   - component: {fileID: 8335483318565471033}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: RelayCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 7454007491347411737}
   - component: {fileID: 5147220631744146053}
   - component: {fileID: 1843412275019264352}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: P_Clam_Mega
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,6 +260,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 2
   relay: {fileID: 8335483318565471033}
+  useRaycast: 1
+  raycastDistance: 10
+  detectionMask:
+    serializedVersion: 2
+    m_Bits: 8209
+  rayOffset: {x: 0, y: 2.5, z: 0}
 --- !u!114 &1843412275019264352
 MonoBehaviour:
   m_ObjectHideFlags: 0

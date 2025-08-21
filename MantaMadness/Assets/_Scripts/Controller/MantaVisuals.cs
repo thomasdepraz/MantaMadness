@@ -187,6 +187,7 @@ public class MantaVisuals : MonoBehaviour
         {
             boostParticles[i].Play();
         }
+        UIParticleManager.Instance.playtSpecificParticle("SPEEDLINE", "");
 
         //play UI Sun Animation
         //UIManager.Instance.sunInterface.playGoodAnimation();
