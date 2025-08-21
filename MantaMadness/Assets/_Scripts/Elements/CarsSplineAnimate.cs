@@ -30,7 +30,10 @@ public class CarsSplineAnimate : MonoBehaviour
             splineAnimate = GetComponent<SplineAnimate>();
         }
         hitBox.HitCollision += CollisionCheck;
-        audioHitBox.AudioCollision += PlayHorn;
+        if(audioHitBox != null)
+        {
+            audioHitBox.AudioCollision += PlayHorn;
+        }
     }
 
     void Start()

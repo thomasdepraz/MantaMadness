@@ -1,7 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 
 public class BoostGaugeInterface : MonoBehaviour
 {
@@ -49,20 +48,29 @@ public class BoostGaugeInterface : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(player.HorizontalVelocity. magnitude <= 10f && speedStatesVisuals[0].activeSelf == false)
+        if(player.State == ControllerState.SURFING)
         {
-            StateChange(0);
+            if (player.HorizontalVelocity.magnitude <= 10f && speedStatesVisuals[0].activeSelf == false)
+            {
+                StateChange(0);
+            }
+
+            else if (player.HorizontalVelocity.magnitude > 10f && player.HorizontalVelocity.magnitude < player.controllerData.maxSpeed && speedStatesVisuals[1].activeSelf == false)
+            {
+                StateChange(1);
+            }
+
+            else if (player.HorizontalVelocity.magnitude >= player.controllerData.maxSpeed + 1 && speedStatesVisuals[2].activeSelf == false)
+            {
+                StateChange(2);
+            }
         }
 
-        else if (player.HorizontalVelocity.magnitude > 10f && player.HorizontalVelocity.magnitude < player.controllerData.maxSpeed && speedStatesVisuals[1].activeSelf == false)
+        else if (player.State == ControllerState.JUMPING && speedStatesVisuals[3].activeSelf == false || player.State == ControllerState.FALLING && speedStatesVisuals[3].activeSelf == false)
         {
-            StateChange(1);
+            StateChange(3);
         }
 
-        else if (player.HorizontalVelocity.magnitude >= player.controllerData.maxSpeed + 1 && speedStatesVisuals[2].activeSelf == false)
-        {
-            StateChange(2);
-        }
 
         if (player.HorizontalVelocity.magnitude <= player.controllerData.maxSpeed)
         {
