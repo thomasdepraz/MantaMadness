@@ -1,12 +1,15 @@
-using UnityEngine;
+using FMOD.Studio;
 using FMODUnity;
 using System;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 public enum PlayerActionFMOD
 {
     BOOST,
     JUMP,
-    SPLASH
+    SPLASH,
+    STYLE
 }
 
 public class PlayerActionFMODManager : MonoBehaviour
@@ -27,6 +30,15 @@ public class PlayerActionFMODManager : MonoBehaviour
     public void PlayPlayerAction(PlayerActionFMOD actionName)
     {
         RuntimeManager.PlayOneShot(playerFmodActions[(int)actionName], Game.Instance.player.transform.position);
+    }
+
+    public void PlayStyleAction(PlayerActionFMOD actionName, int State)
+    {
+        EventInstance instance = RuntimeManager.CreateInstance(playerFmodActions[(int)actionName]);
+        instance.setParameterByName("StyleState", State);
+
+        instance.start();
+        instance.release();
     }
 
 

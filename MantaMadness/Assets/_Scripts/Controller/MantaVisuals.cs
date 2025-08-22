@@ -46,8 +46,11 @@ public class MantaVisuals : MonoBehaviour
 
     private void Dash()
     {
-        mantaAnimator.SetFloat(styleIndexId, UnityEngine.Random.Range(0, 5));
+        mantaAnimator.SetFloat(styleIndexId, UnityEngine.Random.Range(0, 6));
         mantaAnimator.SetTrigger(styleTriggerId);
+
+        PlayerActionFMODManager.Instance.PlayStyleAction(PlayerActionFMOD.STYLE, UnityEngine.Random.Range(0, 6));
+
     }
 
     private void Start()
