@@ -30,6 +30,9 @@ public class ControllerData : ScriptableObject
     public float dashTimer;
     public float dashForce;
     public float dashCooldown;
+    public float dashTimeThreshold;
+    public int maxConsecutiveDashCount;
+    public bool canDriftandDash;
 
     [Header("Diving parameters")]
     public float baseDivingDepth = 5f;

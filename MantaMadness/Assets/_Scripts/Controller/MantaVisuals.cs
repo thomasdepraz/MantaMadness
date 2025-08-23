@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class MantaVisuals : MonoBehaviour
@@ -7,6 +8,8 @@ public class MantaVisuals : MonoBehaviour
     SimpleController mantaController;
 
     public Animator mantaAnimator;
+    [Header("Animation parameters")]
+    public int dashBlendTreeAnimationCount;
 
     [Header("Direction Arrow")]
     public Transform arrow;
@@ -44,13 +47,14 @@ public class MantaVisuals : MonoBehaviour
         mantaController.dash += Dash;
     }
 
-    private void Dash()
+    private void Dash(int dashCount)
     {
-        mantaAnimator.SetFloat(styleIndexId, UnityEngine.Random.Range(0, 6));
+        mantaAnimator.SetFloat(styleIndexId, UnityEngine.Random.Range(0, dashBlendTreeAnimationCount));
         mantaAnimator.SetTrigger(styleTriggerId);
 
-        PlayerActionFMODManager.Instance.PlayStyleAction(PlayerActionFMOD.STYLE, UnityEngine.Random.Range(0, 6));
-
+        var index = Mathf.Max(0, dashCount);
+        Debug.Log(index);
+        PlayerActionFMODManager.Instance.PlayStyleAction(PlayerActionFMOD.STYLE, index);
     }
 
     private void Start()

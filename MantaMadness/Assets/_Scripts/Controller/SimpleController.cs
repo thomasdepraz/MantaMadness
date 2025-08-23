@@ -4,6 +4,7 @@ using System.Collections;
 using System.Diagnostics.Contracts;
 using UnityEngine;
 using FMODUnity;
+using System.Runtime.CompilerServices;
 
 public enum ControllerState
 {
@@ -79,6 +80,7 @@ public class SimpleController : MonoBehaviour
     private float currentDriftTime;
     private float currentDashTime;
     private float lastDashTimestamp = 0f;
+    private int consecutiveDashCount;
     private bool hasDriftBoost;
     private bool forceLocked;
 
@@ -90,7 +92,7 @@ public class SimpleController : MonoBehaviour
     public Action<Transform> updateRaceTarget;
     public Action enterRail;
     public Action exitRail;
-    public Action dash;
+    public Action<int> dash;
 
     private void Awake()
     {
@@ -141,12 +143,17 @@ public class SimpleController : MonoBehaviour
         if (IsLocked)
             return;
 
+        if (IsDrifting && !controllerData.canDriftandDash)
+            return;
+
         if(State == ControllerState.SURFING && CanDash)
         {
             lastDashTimestamp = Time.time;
-            Boost(controllerData.dashForce);
+            consecutiveDashCount = Mathf.Clamp(consecutiveDashCount + 1, 0, controllerData.maxConsecutiveDashCount);
+
+            rb.AddForce(hoverBehaviour.normalContainer.forward * controllerData.dashForce, ForceMode.VelocityChange);
             boostBehaviour.IncrementGauge(BoostAction.Dash);
-            dash.Invoke();
+            dash.Invoke(consecutiveDashCount);
         }
     }
 
@@ -448,10 +455,15 @@ public class SimpleController : MonoBehaviour
             {
                 hoverBehaviour.Hover(info, Time.fixedDeltaTime);
 
-                if (HorizontalVelocity.sqrMagnitude > controllerData.minSpeedToDash)
+                if (HorizontalVelocity.sqrMagnitude > controllerData.minSpeedToDash)   
                     currentDashTime += Time.deltaTime;
                 else
                     currentDashTime = 0f;
+
+                //reset dash counter if over threshold
+                if ((Time.time - lastDashTimestamp) > controllerData.dashCooldown + controllerData.dashTimeThreshold)
+                    consecutiveDashCount = 0;
+
             }
             else
             {
