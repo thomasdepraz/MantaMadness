@@ -65,9 +65,6 @@ public class Button : MonoBehaviour
         vcam.enabled = true;
         CameraManager.Instance.BlendToCamera(vcam, blend);
 
-        // Sound
-        SoundManager.Instance.PlayOneShotSound(SoundType.COINPICKUP);
-
         //increase boost gauge
         Game.Instance.player.boostBehaviour.IncrementGauge(BoostAction.CoolSun);
 

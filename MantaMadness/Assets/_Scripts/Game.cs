@@ -64,7 +64,6 @@ public class Game : MonoBehaviour
         position = m_SpawnPosition;
         rotation = m_SpawnRotation;
 
-        SoundManager.Instance.PlayOneShotSound(SoundType.SPLASH);
         player.ForcePosition(position, rotation);
     }
 

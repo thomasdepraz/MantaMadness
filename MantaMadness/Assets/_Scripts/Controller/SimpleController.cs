@@ -46,7 +46,7 @@ public class SimpleController : MonoBehaviour
     public bool IsLocked => OnRail || InAirRail || forceLocked;
     private bool CanDrift => HorizontalVelocity.sqrMagnitude > controllerData.minSpeedToDrift * controllerData.minSpeedToDrift;
     private bool CanDriftBreak => HorizontalVelocity.sqrMagnitude < (controllerData.minSpeedToDriftBreak * controllerData.minSpeedToDriftBreak);
-    private bool CanDash => currentDashTime > controllerData.dashTimer && (Time.time - lastDashTimestamp) > controllerData.dashCooldown;
+    private bool CanDash => State == ControllerState.SURFING && currentDashTime > controllerData.dashTimer && (Time.time - lastDashTimestamp) > controllerData.dashCooldown;
     private Transform NormalContainer => hoverBehaviour.normalContainer;
 
     public ControllerState State {
@@ -146,7 +146,7 @@ public class SimpleController : MonoBehaviour
         if (IsDrifting && !controllerData.canDriftandDash)
             return;
 
-        if(State == ControllerState.SURFING && CanDash)
+        if(CanDash)
         {
             lastDashTimestamp = Time.time;
             consecutiveDashCount = Mathf.Clamp(consecutiveDashCount + 1, 0, controllerData.maxConsecutiveDashCount);

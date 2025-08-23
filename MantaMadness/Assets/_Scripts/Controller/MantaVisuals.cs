@@ -53,7 +53,6 @@ public class MantaVisuals : MonoBehaviour
         mantaAnimator.SetTrigger(styleTriggerId);
 
         var index = Mathf.Max(0, dashCount);
-        Debug.Log(index);
         PlayerActionFMODManager.Instance.PlayStyleAction(PlayerActionFMOD.STYLE, index);
     }
 

@@ -42,7 +42,6 @@ public class Checkpoint : MonoBehaviour
                 checkpointPassed.Invoke(this);
                 Game.Instance.SetRespawnTransform(respawnTransform);
                 canBePassed = false;
-                SoundManager.Instance.PlayOneShotSound(SoundType.BUOYPASS);
             }
         }
     }
