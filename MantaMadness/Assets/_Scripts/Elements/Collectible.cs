@@ -17,15 +17,6 @@ public class Collectible : MonoBehaviour
     private bool movingTowardtarget = false;
     private GameObject player;
 
-    [Header("Raycast Settings")]
-    public bool useRaycast = false;
-    public float raycastDistance = 10f;
-    public LayerMask detectionMask;
-    public Vector3 rayOffset = Vector3.zero;
-    private Vector3 origin;
-
-
-
     private void Start()
     {
         if(relay != null)
@@ -36,30 +27,16 @@ public class Collectible : MonoBehaviour
         {
             print("Careful! this clam doesn't have a CollectibleRelay!");
         }
-        origin = transform.position;
     }
 
-    private void MoveToTarget(GameObject target)
+    public void MoveToTarget(GameObject target)
     {
-        player = target;
-        movingTowardtarget = true;
-    }
-    //Activate only in editor mode
-#if UNITY_EDITOR
-    private void Update()
-    {
-        if (useRaycast && Application.isPlaying == false)
+        if(movingTowardtarget == false)
         {
-            origin = transform.position;
-            //transform.InverseTransformDirection(Vector3.down);
-
-            if (Physics.Raycast(origin, -transform.up, out RaycastHit hit, raycastDistance, detectionMask))
-            {
-                transform.position = hit.point + rayOffset;
-            }
+            player = target;
+            movingTowardtarget = true;
         }
     }
-#endif
 
     private void FixedUpdate()
     {
@@ -112,14 +89,5 @@ public class Collectible : MonoBehaviour
 
         yield return null;
     }
-#if UNITY_EDITOR
-    void OnDrawGizmos()
-    {
-        if(useRaycast == true)
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(origin, origin + (-transform.up * raycastDistance));
-        }
-    }
-#endif
+
 }

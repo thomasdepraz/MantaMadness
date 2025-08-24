@@ -42,16 +42,17 @@ public class MoaiStatue : MonoBehaviour
         //START SPAWNING CLAMS
         for (int i = 0; i < clamNumber; i++) 
         {
-            var radians = 2 * MathF.PI / clamNumber * (i + 1);
-            var vertical = Mathf.Sin(radians);
-            var horizontal = Mathf.Cos(radians);
+            //var radians = 2 * MathF.PI / clamNumber * (i + 1);
+            //var vertical = Mathf.Sin(radians);
+            //var horizontal = Mathf.Cos(radians);
 
-            var spawnDir = new Vector3(horizontal, 0.25f, vertical);
+            //var spawnDir = new Vector3(horizontal, 0.25f, vertical);
             
 
             GameObject newClam = Instantiate(clam, transform.position + new Vector3(0,1,0), Quaternion.identity);
-            var spawnPos = newClam.transform.position + spawnDir * 10f;
-            newClam.transform.DOLocalMove(spawnPos, 1f);
+            //var spawnPos = newClam.transform.position + spawnDir * 10f;
+            //newClam.transform.DOLocalMove(spawnPos, 1f);
+            newClam.gameObject.GetComponent<Collectible>().MoveToTarget(Game.Instance.player.gameObject);
             yield return new WaitForSeconds(0.1f);
         }
 
