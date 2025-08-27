@@ -56,6 +56,7 @@ public class SimpleController : MonoBehaviour
         }
         set
         {
+            //Debug.Log(value);
             stateChanged.Invoke(state, value);
             state = value;
         }
@@ -122,6 +123,7 @@ public class SimpleController : MonoBehaviour
         inputs.jump.action.performed -= Jump;
         inputs.drift.action.performed -= Drift;
         inputs.drift.action.canceled -= DriftReleased;
+        inputs.dash.action.performed -= Dash;
     }
 
     private void SetDrift(int dir, bool drifting, bool boost = false)
