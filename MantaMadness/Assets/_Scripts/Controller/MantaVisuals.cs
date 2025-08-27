@@ -28,6 +28,7 @@ public class MantaVisuals : MonoBehaviour
     [Header("Parameters")]
     public ParticleSystem surfParticles;
     public ParticleSystem splashParticles;
+    public ParticleSystem styleParticles;
     public ParticleSystem[] driftParticles = new ParticleSystem[4];
     public ParticleSystem[] boostParticles = new ParticleSystem[3];
 
@@ -51,6 +52,14 @@ public class MantaVisuals : MonoBehaviour
     {
         mantaAnimator.SetFloat(styleIndexId, UnityEngine.Random.Range(0, dashBlendTreeAnimationCount));
         mantaAnimator.SetTrigger(styleTriggerId);
+
+        //PARTICLE EFFECT + SUN EFFECT DEPENDING ON DASHCOUNT
+        if(dashCount > 4)
+        {
+            styleParticles.Play();
+            UIEffectManager.Instance.GoodAction.Invoke();
+             
+        }
 
         var index = Mathf.Max(0, dashCount);
         PlayerActionFMODManager.Instance.PlayStyleAction(PlayerActionFMOD.STYLE, index);

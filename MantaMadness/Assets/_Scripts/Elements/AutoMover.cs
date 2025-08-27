@@ -23,7 +23,6 @@ public class AutoMover : MonoBehaviour
             if (Physics.Raycast(origin, -transform.up, out RaycastHit hit, raycastDistance, detectionMask))
             {
                 gameObject.transform.position = hit.point + rayOffset;
-                print("ALLO FILS DE PUTE");
             }
         }
     }

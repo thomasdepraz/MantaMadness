@@ -3,15 +3,12 @@ using UnityEngine;
 
 public class MoaiStatueCollisionRelay : MonoBehaviour
 {
-    public Action HitCollision; 
+    public Action<float> HitCollision; 
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out SimpleController controller))
         {
-            if(controller.Velocity.magnitude > controller.controllerData.maxSpeed)
-            {
-                HitCollision?.Invoke();
-            }
+                HitCollision?.Invoke(controller.Velocity.magnitude);
         }
     }
 }
