@@ -1,7 +1,8 @@
+using DG.Tweening;
+using FMODUnity;
 using System;
 using System.Collections;
 using UnityEngine;
-using DG.Tweening;
 
 [RequireComponent (typeof(SphereCollider))]
 public class Lilypad : MonoBehaviour
@@ -11,7 +12,7 @@ public class Lilypad : MonoBehaviour
     private bool hasBloomed = false;
     [SerializeField] private float scaleModifier = 1;
     private LilyPadManager manager;
-
+    [SerializeField]private EventReference audioEvent;
     private void Start()
     {
         if(visual.activeSelf == true)
@@ -37,6 +38,9 @@ public class Lilypad : MonoBehaviour
     {
         //PARTICLE ACTIVATION
         bloomParticle.Play();
+        FMOD.Studio.EventInstance audio = RuntimeManager.CreateInstance(audioEvent);
+        RuntimeManager.AttachInstanceToGameObject(audio,gameObject);
+        audio.start();
         //ENABLE SUB VISUAL
         visual.SetActive(true);
         //TWEEN SSCALE OF MAIN VISUAL

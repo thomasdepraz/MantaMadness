@@ -58,6 +58,8 @@ public class LilyPadManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
+        UIEffectManager.Instance.GoodAction.Invoke();
+
         if (toDeactivate.Length > 0)
         {
             for (int i = 0; i < toDeactivate.Length; i++)
