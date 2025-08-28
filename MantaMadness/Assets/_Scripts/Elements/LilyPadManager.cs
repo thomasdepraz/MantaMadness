@@ -11,6 +11,7 @@ public class LilyPadManager : MonoBehaviour
     [SerializeField] private GameObject[] toActivate;
     [SerializeField] private CinemachineCamera vcam;
     [SerializeField] private CinemachineBlendDefinition blend;
+    [SerializeField, Range(1, 100)] private int lilypadsPercentage = 90;
 
     private int count = 0;
 
@@ -42,7 +43,7 @@ public class LilyPadManager : MonoBehaviour
     {
         count++;
 
-        if (count >= lilypads.Length)
+        if (count >= (lilypadsPercentage * lilypads.Length) / 100)
         {
             StartCoroutine(EndGame());
         }
@@ -59,6 +60,11 @@ public class LilyPadManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         UIEffectManager.Instance.GoodAction.Invoke();
+
+        for(int i = 0; i < lilypads.Length - 1; i++)
+        {
+            lilypads[i].AlternateBlooming();
+        }
 
         if (toDeactivate.Length > 0)
         {

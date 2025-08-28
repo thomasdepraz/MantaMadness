@@ -47,6 +47,17 @@ public class Lilypad : MonoBehaviour
         transform.DOScale(transform.localScale * scaleModifier,0.15f).SetEase(Ease.OutQuad).SetLoops(2,LoopType.Yoyo);
     }
 
+    public void AlternateBlooming()
+    {
+        if(hasBloomed == false)
+        {
+            hasBloomed = true;
+            bloomParticle.Play();
+            visual.SetActive(true);
+            transform.DOScale(transform.localScale * scaleModifier, 0.15f).SetEase(Ease.OutQuad).SetLoops(2, LoopType.Yoyo);
+        }
+    }
+
     public void SetManager(LilyPadManager parentManager)
     {
         manager= parentManager;

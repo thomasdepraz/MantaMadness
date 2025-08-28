@@ -21,19 +21,12 @@ public class Portal : MonoBehaviour
             player = Game.Instance.player;
         }
 
-        if (objectTest == null)
+        if (signText != null)
         {
-            Debug.LogError("signText is not assigned in the inspector!", this);
-            return;
+            signText.text = index;
         }
 
-        if (signText == null)
-        {
-            Debug.LogError("signText is not assigned in the inspector!", this);
-            return;
-        }
 
-        signText.text = index;
 
     }
 
