@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8165c5f1327d46249aa039486e9e5915, type: 3}
-  m_Name: ControllerData_Default
+  m_Name: ControllerData_NewVer
   m_EditorClassIdentifier: 
   acceleration: 60
   maxSpeed: 40
@@ -51,7 +51,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   brakeForce: 2.75
   grip: 1
-  gravity: 9.8
+  gravity: 20
   hoverRaycastLength: 2
   hoverHeight: 0.4
   hoverStrength: 20
@@ -107,8 +107,8 @@ MonoBehaviour:
   jumpDamping: 0.3
   coyoteTime: 0.2
   forwardImpulseForce: 1
-  upwardImpulseForce: 8
-  maxFallingSpeed: 150
+  upwardImpulseForce: 20
+  maxFallingSpeed: 200
   perfectLandingForce: 50
   minimumFloatingForce: 2
   maximumFloatingForce: 50
