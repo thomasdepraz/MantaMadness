@@ -12,6 +12,7 @@ public class LilyPadManager : MonoBehaviour
     [SerializeField] private CinemachineCamera vcam;
     [SerializeField] private CinemachineBlendDefinition blend;
     [SerializeField, Range(1, 100)] private int lilypadsPercentage = 90;
+    [SerializeField] private float spawnTime = 2f;
 
     private int count = 0;
 
@@ -61,7 +62,7 @@ public class LilyPadManager : MonoBehaviour
 
         UIEffectManager.Instance.GoodAction.Invoke();
 
-        for(int i = 0; i < lilypads.Length - 1; i++)
+        for(int i = 0; i < lilypads.Length; i++)
         {
             lilypads[i].AlternateBlooming();
         }
@@ -82,7 +83,7 @@ public class LilyPadManager : MonoBehaviour
                 //ACTIVATE OBJECT
                 toActivate[i].SetActive(true);
                 toActivate[i].transform.DOMoveY(toActivate[i].transform.position.y + 5f, 0.2f).SetEase(Ease.OutQuad).SetLoops(2,LoopType.Yoyo);
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(spawnTime / toActivate.Length);
             }
         }
         //unlock player

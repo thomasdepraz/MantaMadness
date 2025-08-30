@@ -11,6 +11,6 @@ public class SpriteRotation : MonoBehaviour
 
     void Update()
     {
-        gameObject.transform.LookAt(m_Camera.transform);
+        gameObject.transform.LookAt(m_Camera.transform.position);
     }
 }

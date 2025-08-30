@@ -41,7 +41,6 @@ public class MoaiStatue : MonoBehaviour
                 if(velocity > Game.Instance.player.controllerData.maxSpeed)
                 {
                     StartCoroutine(MoaiDestructionRoutine());
-                    print("wesh");
                 }
             }
 
