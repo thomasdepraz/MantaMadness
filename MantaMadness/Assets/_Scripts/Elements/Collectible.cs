@@ -1,7 +1,6 @@
 using DG.Tweening;
 using System;
 using System.Collections;
-using UnityEditor.TerrainTools;
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -58,21 +57,25 @@ public class Collectible : MonoBehaviour
         //sound
         //SoundManager.Instance.PlayOneShotSound(SoundType.COINPICKUP);
 
-        //increase coin count
-        CoinManager.Instance.PickupCollectible();
 
         //increase boost gauge
         switch (type)
         {
             case CollectibleType.normal:
                 controller.boostBehaviour.IncrementGauge(BoostAction.Collectible);
+                //Increase coincount
+                CoinManager.Instance.PickupCollectible(1);
                 break;
             case CollectibleType.super:
                 controller.boostBehaviour.IncrementGauge(BoostAction.SuperCollectible);
+                //Increase coincount
+                CoinManager.Instance.PickupCollectible(20);
                 break;
             case CollectibleType.mega:
                 controller.boostBehaviour.IncrementGauge(BoostAction.MegaCollectible);
                 UIManager.Instance.gameInterface.StartCoroutine("pickupMegaClam");
+                //Increase coincount
+                CoinManager.Instance.PickupCollectible(100);
                 break;
             default:
                 controller.boostBehaviour.IncrementGauge(BoostAction.Collectible);

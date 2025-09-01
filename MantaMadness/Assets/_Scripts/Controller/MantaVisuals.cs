@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public class MantaVisuals : MonoBehaviour

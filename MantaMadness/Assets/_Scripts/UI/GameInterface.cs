@@ -11,6 +11,7 @@ public class GameInterface : MonoBehaviour, IScreen
 
     public Camera uiCamera;
     public TextMeshProUGUI coinText;
+    public TextMeshProUGUI clamText;
     public Image sunImage;
     public Image sunOverlay;
 
@@ -19,6 +20,7 @@ public class GameInterface : MonoBehaviour, IScreen
         UIManager.Instance.gameInterface = this;
         CameraManager.Instance.AddCameraToStack(uiCamera);
         CoinManager.Instance.coinPickedUp += UpdateCoinCount;
+        CoinManager.Instance.collectiblePickedUp += UpdateCollectibleCount;
         coinText.text = CoinManager.Instance.PickupCoinCount.ToString();
         if(sunOverlay.IsActive() == true)
         {
@@ -29,6 +31,7 @@ public class GameInterface : MonoBehaviour, IScreen
     private void OnDestroy()
     {
         CoinManager.Instance.coinPickedUp -= UpdateCoinCount;
+        CoinManager.Instance.collectiblePickedUp -= UpdateCollectibleCount;
     }
 
     public void UpdateCoinCount(int coinCount)
@@ -36,6 +39,12 @@ public class GameInterface : MonoBehaviour, IScreen
         coinText.text = coinCount.ToString();
         sunImage?.transform.DOPunchScale(Vector3.one, 1, 5);
     }
+
+    public void UpdateCollectibleCount(int collectibleCount)
+    {
+        clamText.text = collectibleCount.ToString();
+    }
+
     public void toggleSunOverlay(bool toggleValue)
     {
         if (toggleValue == false)

@@ -44,10 +44,9 @@ public class FairyTrail : MonoBehaviour
         {
             if(i == 0)
             {
-                yield return new WaitForSeconds(splinePlayer.Duration / (toActivate.Length + 1));
                 toActivate[i].gameObject.SetActive(true);
                 toActivate[i].gameObject.transform.position = body.transform.position;
-                yield return new WaitForSeconds(splinePlayer.Duration / (toActivate.Length + 1));
+                yield return new WaitForSeconds(splinePlayer.Duration / (toActivate.Length + 3));
             }        
             //else if (i == toActivate.Length - 2)
             //{
@@ -59,7 +58,7 @@ public class FairyTrail : MonoBehaviour
             {
                 toActivate[i].gameObject.SetActive(true);
                 toActivate[i].gameObject.transform.position = body.transform.position;
-                yield return new WaitForSeconds(splinePlayer.Duration / (toActivate.Length + 1));
+                yield return new WaitForSeconds(splinePlayer.Duration / (toActivate.Length + 3));
             }
         }
         yield return null;

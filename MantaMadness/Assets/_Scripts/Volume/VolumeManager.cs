@@ -1,5 +1,4 @@
 using UnityEngine;
-using Unity.Rendering.Universal;
 
 public class VolumeManager : MonoBehaviour
 {

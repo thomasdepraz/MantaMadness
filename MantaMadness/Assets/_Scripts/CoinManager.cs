@@ -22,7 +22,7 @@ public class CoinManager : MonoBehaviour
 
     public Action<int> coinPickedUp;
     private int pickupCointCount;
-    public int PickupCoinCount 
+    public int PickupCoinCount
     { 
         get => pickupCointCount;
         set 
@@ -57,9 +57,9 @@ public class CoinManager : MonoBehaviour
         PickupCoinCount++;
     }
 
-    public void PickupCollectible()
+    public void PickupCollectible(int addValue)
     {
-        PickupCollectibleCount++;
+        PickupCollectibleCount += addValue;
     }
 
     public void ActivateCoinHolder(string coinName)
