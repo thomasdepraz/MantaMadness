@@ -38,4 +38,20 @@ public class MusicManager : MonoBehaviour
             parameter = 0;
         }
     }
+
+    private bool isPaused = false;
+
+    public void ToggleMusic()
+    {
+        if (isPaused == false)
+        {
+            isPaused = true;
+            audioEvent.setPaused(true);
+        }
+        else
+        {
+            isPaused =false;
+            audioEvent.setPaused(false);
+        }
+    }
 }

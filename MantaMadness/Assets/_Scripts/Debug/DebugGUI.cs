@@ -45,6 +45,11 @@ public class DebugGUI : MonoBehaviour
         {
             MusicManager.Instance.ToggleUnderwater();
         }
+
+        if (GUILayout.Button($"Toggle Music"))
+        {
+            MusicManager.Instance.ToggleMusic();
+        }
         GUILayout.EndArea();
     }
 #endif
