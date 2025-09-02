@@ -41,4 +41,20 @@ public class PortalManager : MonoBehaviour
         yield return null;
     }
 
+    public void SetCheckpoint(string index, bool areaName, string nameToDisplay)
+    {
+        Transform respawnPos = transform;
+
+        for (int i = 0; i < portals.Length; i++)
+        {
+            if (portals[i].index == index)
+            {
+                respawnPos = portals[i].teleportPoint;
+                break;
+            }
+        }
+
+        WorldCheckpointManager.Instance.SetCheckpoint(respawnPos, index, areaName, nameToDisplay);
+    }
+
 }

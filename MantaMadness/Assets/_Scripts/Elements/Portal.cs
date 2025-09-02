@@ -12,7 +12,13 @@ public class Portal : MonoBehaviour
 
     public GameObject objectTest;
 
+
     [SerializeField] public TextMeshProUGUI signText;
+    [Header("Checkpoint Parameters")]
+    [SerializeField] public bool displayAreaName = false;
+    [SerializeField] public string nameToDisplay;
+
+
 
     private void Start()
     {
@@ -41,6 +47,7 @@ public class Portal : MonoBehaviour
         if (other.TryGetComponent(out SimpleController controller))
         {
             PortalManager.Instance.StartCoroutine("Teleport", targetIndex);
+            PortalManager.Instance.SetCheckpoint(targetIndex, displayAreaName, nameToDisplay);
         }
     }
 

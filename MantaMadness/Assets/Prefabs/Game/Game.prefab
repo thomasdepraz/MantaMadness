@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 8709524996052936406}
   - component: {fileID: 7913848029518680306}
   - component: {fileID: 6940516031190403126}
+  - component: {fileID: 7925588284556986215}
+  - component: {fileID: 5055552378613368542}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -31,7 +33,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -101,4 +103,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10bfb9158f567384ca882539ae95ad4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coinHolders: []
+  coinHolders:
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &7925588284556986215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 711859319428096486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83e8cf9c5f77d0448a470c0e54f38652, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  portals:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &5055552378613368542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 711859319428096486}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f18c30e6f8f6fc44965133398ae76a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EventName: event:/Music

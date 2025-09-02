@@ -1,8 +1,9 @@
 using DG.Tweening;
+using EasyTextEffects;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class GameInterface : MonoBehaviour, IScreen
 {
@@ -15,6 +16,13 @@ public class GameInterface : MonoBehaviour, IScreen
     public Image sunImage;
     public Image sunOverlay;
 
+    [Header("Area Name Parameters")]
+    [SerializeField] private RectTransform startPosition;
+    [SerializeField] private RectTransform endPosition;
+    [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private TextEffect textEffects;
+
+
     public void Start()
     {
         UIManager.Instance.gameInterface = this;
@@ -22,6 +30,8 @@ public class GameInterface : MonoBehaviour, IScreen
         CoinManager.Instance.coinPickedUp += UpdateCoinCount;
         CoinManager.Instance.collectiblePickedUp += UpdateCollectibleCount;
         coinText.text = CoinManager.Instance.PickupCoinCount.ToString();
+        textEffects.StartManualEffects();
+        text.enabled = false;
         if(sunOverlay.IsActive() == true)
         {
             sunOverlay.enabled = false;
@@ -68,5 +78,25 @@ public class GameInterface : MonoBehaviour, IScreen
     public void pickupJohnnyParticle()
     {
         UIEffectManager.Instance.SpecificAction?.Invoke("JOHNNY", "");
+    }
+    public void StartDisplayCoroutine(string name)
+    {
+        StartCoroutine(DisplayCoroutine(name));
+    }
+    private IEnumerator DisplayCoroutine(string name)
+    {
+        if(text.enabled == false)
+        {
+            text.enabled = true;
+        }
+        text.DOKill();
+        text.text = name;
+        textEffects.StartManualEffects();
+        text.transform.localScale = Vector3.one;
+        text.transform.position = startPosition.position;
+        text.transform.DOMove(endPosition.position, 1.5f).SetEase(Ease.OutQuad);
+
+        yield return new WaitForSeconds(4f);
+        text.transform.DOMove(startPosition.position, 1.5f).SetEase(Ease.InQuad);
     }
 }
