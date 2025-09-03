@@ -14,6 +14,7 @@ public enum ControllerState
     DIVING, 
     SWIMMING,
     AIRRIDE,
+    CANON,
 }
 
 public class SimpleController : MonoBehaviour
@@ -84,6 +85,7 @@ public class SimpleController : MonoBehaviour
     private int consecutiveDashCount;
     private bool hasDriftBoost;
     private bool forceLocked;
+    public bool inBubbleCanon = false;
 
     public Action<ControllerState, ControllerState> stateChanged;
     public Action<AirRail> enterAirRail;
@@ -356,6 +358,7 @@ public class SimpleController : MonoBehaviour
     }
 
     bool hasHit = false;
+    float xRotation = 0f;
     private void FixedUpdate()
     {
         hasHit = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit info, controllerData.hoverRaycastLength, raycastLayer.value);
@@ -407,6 +410,27 @@ public class SimpleController : MonoBehaviour
                 SetDrift(driftDir, true, true);
             }
         }
+
+        if(inBubbleCanon == true && State != ControllerState.CANON)
+        {
+            State = ControllerState.CANON;
+        }
+
+        if (State == ControllerState.CANON)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+
+            float mouseX = Input.GetAxis("Mouse X") * 10f * Time.deltaTime;
+            float mouseY = Input.GetAxis("Mouse Y") * 10f* Time.deltaTime;
+
+            xRotation -= mouseY;
+            xRotation = Mathf.Clamp(xRotation, -90f, 90f); // prevent flipping
+
+            transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+            rb.rotation = Quaternion.Euler(Vector3.up * mouseX);
+        }
+
 
         //Falling to Surfing
         if (State == ControllerState.FALLING)

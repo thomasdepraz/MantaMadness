@@ -26,6 +26,9 @@ public class MantaVisuals : MonoBehaviour
 
     [Header("Parameters")]
     public ParticleSystem surfParticles;
+    public ParticleSystem surfBladeParticles;
+    public ParticleSystem boostSurfBladeParticles;
+    public ParticleSystem rippleParticles;
     public ParticleSystem splashParticles;
     public ParticleSystem styleParticles;
     public ParticleSystem[] driftParticles = new ParticleSystem[4];
@@ -35,6 +38,7 @@ public class MantaVisuals : MonoBehaviour
     private int driftDirId = Animator.StringToHash("DriftDirection");
     private int styleTriggerId = Animator.StringToHash("StyleTrigger");
     private int styleIndexId = Animator.StringToHash("Style");
+    private int boostId = Animator.StringToHash("Boosting");
   
 
     private void Awake()
@@ -130,6 +134,8 @@ public class MantaVisuals : MonoBehaviour
         mantaAnimator.SetBool(driftId, mantaController.IsDrifting);
         mantaAnimator.SetFloat(driftDirId, mantaController.DriftDirection);
 
+
+
         if(arrowTarget != null && arrow.gameObject.activeSelf)
         {
             Vector3 direction = (arrowTarget.position - arrow.position).normalized;
@@ -176,14 +182,24 @@ public class MantaVisuals : MonoBehaviour
 
     private void UpdateParticles()
     {
-        if(mantaController.State == ControllerState.SURFING && mantaController.HorizontalVelocity.magnitude > 0.5f)
+
+        if (mantaController.State == ControllerState.SURFING && mantaController.HorizontalVelocity.magnitude > mantaController.controllerData.maxSpeed / 4f)
         {
-            if (!surfParticles.isPlaying)
+            if ((!surfParticles.isPlaying))
                 surfParticles.Play();
+
+            if (!surfBladeParticles.isPlaying)
+                surfBladeParticles.Play();
+
+            if(!rippleParticles.isPlaying)
+                rippleParticles.Play();
         }
-        else
+        else if (mantaController.State == ControllerState.SURFING && mantaController.HorizontalVelocity.magnitude <= mantaController.controllerData.maxSpeed / 4f || mantaController.State != ControllerState.SURFING)
         {
+            rippleParticles.Stop();
             surfParticles.Stop();
+            surfBladeParticles.Stop();
+            boostSurfBladeParticles.Stop();
         }
     }
 
@@ -201,6 +217,7 @@ public class MantaVisuals : MonoBehaviour
         {
             boostParticles[i].Play();
         }
+        boostSurfBladeParticles.Play();
         UIParticleManager.Instance.playtSpecificParticle("SPEEDLINE", "");
 
         //play UI Sun Animation

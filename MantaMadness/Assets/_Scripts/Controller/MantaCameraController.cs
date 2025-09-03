@@ -17,6 +17,7 @@ public class MantaCameraController : MonoBehaviour
     public CinemachineCamera fallingCamera;
     public CinemachineCamera jumpingCamera;
     public CinemachineCamera railCamera;
+    public CinemachineCamera bubbleCanonCamera;
 
     private SimpleController mantaController;
 
@@ -44,6 +45,7 @@ public class MantaCameraController : MonoBehaviour
         cameras.Add(fallingCamera);
         cameras.Add(jumpingCamera);
         cameras.Add(railCamera);
+        cameras.Add(bubbleCanonCamera);
 
         surfingCameraRotationComposer = surfingCamera.gameObject.GetComponent<CinemachineRotationComposer>();
     }
@@ -105,6 +107,9 @@ public class MantaCameraController : MonoBehaviour
                 break;
             case ControllerState.SWIMMING:
                 SetActiveCamera(swimmingCamera);
+                break;
+            case ControllerState.CANON:
+                SetActiveCamera(bubbleCanonCamera);
                 break;
             default:
                 break;
