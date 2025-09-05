@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Toon
-  m_Shader: {fileID: -6465566751694194690, guid: cd31d82390b149442bf4221bb18a0103, type: 3}
-  m_Parent: {fileID: 2100000, guid: 0d6137891e7d1f442992581d1dfb6102, type: 2}
+  m_Name: M_Tribouli_Face
+  m_Shader: {fileID: -6465566751694194690, guid: a5c1875e72da5a24494e4fd0466cddeb, type: 3}
+  m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -23,15 +23,33 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _Texture:
+        m_Texture: {fileID: 2800000, guid: fee8fdc660ac70b4eb87b8e9ee0f8a02, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Fade_Distance: 150
-    - _Thickness: 1
-    m_Colors: []
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    m_Colors:
+    - _Color: {r: 2, g: 2, b: 2, a: 0}
+    - _Texture_Offset: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &6180332407556216193
+--- !u!114 &1605499836867174900
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

@@ -28,7 +28,6 @@ public class MantaVisuals : MonoBehaviour
     public ParticleSystem surfParticles;
     public ParticleSystem surfBladeParticles;
     public ParticleSystem boostSurfBladeParticles;
-    public ParticleSystem rippleParticles;
     public ParticleSystem splashParticles;
     public ParticleSystem styleParticles;
     public ParticleSystem[] driftParticles = new ParticleSystem[4];
@@ -190,13 +189,9 @@ public class MantaVisuals : MonoBehaviour
 
             if (!surfBladeParticles.isPlaying)
                 surfBladeParticles.Play();
-
-            if(!rippleParticles.isPlaying)
-                rippleParticles.Play();
         }
         else if (mantaController.State == ControllerState.SURFING && mantaController.HorizontalVelocity.magnitude <= mantaController.controllerData.maxSpeed / 4f || mantaController.State != ControllerState.SURFING)
         {
-            rippleParticles.Stop();
             surfParticles.Stop();
             surfBladeParticles.Stop();
             boostSurfBladeParticles.Stop();
