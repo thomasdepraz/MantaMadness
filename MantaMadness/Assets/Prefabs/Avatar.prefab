@@ -9545,6 +9545,7 @@ GameObject:
   - component: {fileID: 1860818694954644299}
   - component: {fileID: 2285651547325755083}
   - component: {fileID: 6198342475002881786}
+  - component: {fileID: 8910374353824600262}
   - component: {fileID: 3961356260046509805}
   m_Layer: 7
   m_Name: Avatar
@@ -9621,6 +9622,7 @@ MonoBehaviour:
   rb: {fileID: 3085066077877558464}
   hoverBehaviour: {fileID: 2285651547325755083}
   boostBehaviour: {fileID: 6198342475002881786}
+  styleBehaviour: {fileID: 8910374353824600262}
   controllerData: {fileID: 11400000, guid: c24c9a53ef978d84191bbfbb8a6ff700, type: 2}
   raycastLayer:
     serializedVersion: 2
@@ -9690,6 +9692,7 @@ MonoBehaviour:
   surfParticles: {fileID: 395685362320773701}
   surfBladeParticles: {fileID: 5507742516642513163}
   boostSurfBladeParticles: {fileID: 5691609505672225492}
+  rippleParticles: {fileID: 0}
   splashParticles: {fileID: 8392784736143705765}
   styleParticles: {fileID: 8437275511964417940}
   driftParticles:
@@ -9773,6 +9776,21 @@ MonoBehaviour:
     value: 100
   - action: 11
     value: 2
+--- !u!114 &8910374353824600262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5536948242547424017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a467fafbeadaabd42bc4204e2db23443, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!135 &3961356260046509805
 SphereCollider:
   m_ObjectHideFlags: 0

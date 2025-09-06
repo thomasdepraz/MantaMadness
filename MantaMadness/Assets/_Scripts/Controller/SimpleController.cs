@@ -1,10 +1,7 @@
 using DG.Tweening;
 using System;
 using System.Collections;
-using System.Diagnostics.Contracts;
 using UnityEngine;
-using FMODUnity;
-using System.Runtime.CompilerServices;
 
 public enum ControllerState
 {
@@ -25,6 +22,8 @@ public class SimpleController : MonoBehaviour
     private HoverBehaviour hoverBehaviour;
     [SerializeField]
     public BoostBehaviour boostBehaviour;
+    [SerializeField]
+    public StyleBehaviour styleBehaviour;
 
     private ControllerStats stats;
     private RailDetector railDetector;
@@ -47,7 +46,9 @@ public class SimpleController : MonoBehaviour
     public bool IsLocked => OnRail || InAirRail || forceLocked;
     private bool CanDrift => HorizontalVelocity.sqrMagnitude > controllerData.minSpeedToDrift * controllerData.minSpeedToDrift;
     private bool CanDriftBreak => HorizontalVelocity.sqrMagnitude < (controllerData.minSpeedToDriftBreak * controllerData.minSpeedToDriftBreak);
-    private bool CanDash => State == ControllerState.SURFING && currentDashTime > controllerData.dashTimer && (Time.time - lastDashTimestamp) > controllerData.dashCooldown;
+    private bool CanDash => (State == ControllerState.SURFING || State == ControllerState.FALLING) && 
+                            currentDashTime > controllerData.dashTimer && 
+                            (Time.time - lastDashTimestamp) > controllerData.dashCooldown;
     private Transform NormalContainer => hoverBehaviour.normalContainer;
 
     public ControllerState State {
@@ -113,10 +114,11 @@ public class SimpleController : MonoBehaviour
         inputs.jump.action.performed += Jump;
         inputs.drift.action.performed += Drift;
         inputs.drift.action.canceled += DriftReleased;
-        inputs.dash.action.performed += Dash;
+        inputs.dash.action.performed += StyleDash;
 
         //Components Setup
         hoverBehaviour.Initialize(controllerData, rb);
+        styleBehaviour.Initialize(controllerData);
     }
 
     private void OnDisable()
@@ -125,7 +127,7 @@ public class SimpleController : MonoBehaviour
         inputs.jump.action.performed -= Jump;
         inputs.drift.action.performed -= Drift;
         inputs.drift.action.canceled -= DriftReleased;
-        inputs.dash.action.performed -= Dash;
+        inputs.dash.action.performed -= StyleDash;
     }
 
     private void SetDrift(int dir, bool drifting, bool boost = false)
@@ -142,7 +144,7 @@ public class SimpleController : MonoBehaviour
         updateDrift.Invoke(dir, drifting, boost);
     }
 
-    private void Dash(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    private void StyleDash(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         if (IsLocked)
             return;
@@ -155,7 +157,10 @@ public class SimpleController : MonoBehaviour
             lastDashTimestamp = Time.time;
             consecutiveDashCount = Mathf.Clamp(consecutiveDashCount + 1, 0, controllerData.maxConsecutiveDashCount);
 
-            rb.AddForce(hoverBehaviour.normalContainer.forward * controllerData.dashForce, ForceMode.VelocityChange);
+            if(State == ControllerState.SURFING)
+                rb.AddForce(hoverBehaviour.normalContainer.forward * controllerData.dashForce, ForceMode.VelocityChange);
+
+            styleBehaviour.StyleTrigger(hoverBehaviour.normalContainer.position, consecutiveDashCount);
             boostBehaviour.IncrementGauge(BoostAction.Dash);
             dash.Invoke(consecutiveDashCount);
         }
@@ -285,64 +290,6 @@ public class SimpleController : MonoBehaviour
             boostBehaviour.UseBoost(() => Boost(controllerData.driftBoostForce));
         }
     }
-
-    //Coroutine airDiveRoutine;
-    //private void Dive(UnityEngine.InputSystem.InputAction.CallbackContext context)
-    //{
-    //    if (IsLocked || State == ControllerState.DIVING)
-    //        return;
-
-    //    if (airDiveRoutine != null)
-    //        return;
-
-    //    if(State == ControllerState.FALLING || State == ControllerState.JUMPING)
-    //    {
-    //        if (rb.linearVelocity.y > 0)
-    //            rb.linearVelocity = HorizontalVelocity;
-
-    //        rb.linearVelocity = Vector3.zero;
-    //        airDiveRoutine = StartCoroutine(AirdiveRoutine());
-    //    }
-
-    //    if(State == ControllerState.AIRRIDE)
-    //    {
-    //        rb.linearVelocity = Vector3.zero;
-    //        airDiveRoutine = StartCoroutine(AirdiveRoutine());
-    //    }
-
-    //    if(State == ControllerState.SURFING)
-    //    {
-    //        State = ControllerState.DIVING;
-    //        rb.AddForce(Vector3.down * controllerData.baseDivingForce, ForceMode.VelocityChange);
-    //    }
-    //}
-
-    //private void DiveReleased(UnityEngine.InputSystem.InputAction.CallbackContext context)
-    //{
-    //    if (IsLocked)
-    //        return;
-
-    //    if(State == ControllerState.DIVING)
-    //    {
-    //        if(currentWaterBlock != null)
-    //        {
-    //            float currentDepth = currentWaterBlock.GetDepthAtPosition(transform.position, out _);
-
-    //            //Kill vertical velocity before jumping
-    //            rb.linearVelocity = HorizontalVelocity;
-
-    //            State = ControllerState.SWIMMING;
-    //        }
-    //    }
-    //}
-
-    //private IEnumerator AirdiveRoutine()
-    //{
-    //    yield return new WaitForSeconds(0.5f);
-    //    rb.AddForce(Vector3.down * controllerData.baseDivingForce, ForceMode.VelocityChange);
-    //    State = ControllerState.DIVING;
-    //    airDiveRoutine = null;
-    //}
 
     private void Update()
     {

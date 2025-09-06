@@ -25,7 +25,7 @@ public class ControllerData : ScriptableObject
     public float hoverAlignementSpeed = 2f;
     public float maxAngleToHover = 100f;
 
-    [Header("Dash parameters")]
+    [Header("Style parameters")]
     public float minSpeedToDash;
     public float dashTimer;
     public float dashForce;
@@ -33,6 +33,7 @@ public class ControllerData : ScriptableObject
     public float dashTimeThreshold;
     public int maxConsecutiveDashCount;
     public bool canDriftandDash;
+    public float styleTriggerRadius;
 
     [Header("Diving parameters")]
     public float baseDivingDepth = 5f;
