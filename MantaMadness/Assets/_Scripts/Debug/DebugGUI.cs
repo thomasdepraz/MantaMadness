@@ -15,7 +15,7 @@ public class DebugGUI : MonoBehaviour
         features = RenderFeatureUtility.GetRenderFeatures();
     }
 
-#if UNITY_EDITOR
+
     private void OnGUI()
     {
         if (controller is null)
@@ -52,5 +52,4 @@ public class DebugGUI : MonoBehaviour
         }
         GUILayout.EndArea();
     }
-#endif
 }

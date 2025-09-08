@@ -70,6 +70,7 @@ public class MantaVisuals : MonoBehaviour
     private void Start()
     {
         arrow.gameObject.SetActive(false);
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.SURF);
     }
 
     private void UpdateDrift(int driftDir, bool drifting, bool boost)

@@ -4,7 +4,7 @@ using FMODUnity;
 public class MusicManager : MonoBehaviour
 {
     public static MusicManager Instance;
-    public string EventName = "";
+    public EventReference eventRef;
     public FMOD.Studio.EventInstance audioEvent;
     private float parameter = 0;
 
@@ -18,7 +18,7 @@ public class MusicManager : MonoBehaviour
 
     private void Start()
     {
-        audioEvent = RuntimeManager.CreateInstance(EventName);
+        audioEvent = RuntimeManager.CreateInstance(eventRef);
         audioEvent.start();
     }
 
@@ -29,14 +29,7 @@ public class MusicManager : MonoBehaviour
 
     public void ToggleUnderwater()
     {
-        if(parameter == 0)
-        {
-            parameter = 1;
-        }
-        else
-        {
-            parameter = 0;
-        }
+        FmodGlobalParameters.instance.ToggleGlobalParameter(FmodGlobalParamName.G_Player_Underwater);
     }
 
     private bool isPaused = false;

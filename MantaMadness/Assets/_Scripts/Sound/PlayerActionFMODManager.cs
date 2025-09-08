@@ -9,7 +9,8 @@ public enum PlayerActionFMOD
     BOOST,
     JUMP,
     SPLASH,
-    STYLE
+    STYLE,
+    SURF
 }
 
 public class PlayerActionFMODManager : MonoBehaviour
@@ -40,6 +41,4 @@ public class PlayerActionFMODManager : MonoBehaviour
         instance.start();
         instance.release();
     }
-
-
 }

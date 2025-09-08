@@ -1,12 +1,11 @@
-using UnityEngine;
-using UnityEngine.Splines;
+using FMODUnity;
 using System;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.Splines;
 
 public class GoldenCar : MonoBehaviour
 {
-    [SerializeField] private AudioSource hornAudio;
-    [SerializeField] private AudioSource explosionAudio;
     private SimpleController player;
 
     private SplineAnimate splineAnimate;
@@ -23,6 +22,8 @@ public class GoldenCar : MonoBehaviour
 
     [SerializeField] private Rigidbody rb;
     [SerializeField] private string coinName;
+
+    [SerializeField] private EventReference hornAudio;
 
     private void Awake()
     {
@@ -41,7 +42,11 @@ public class GoldenCar : MonoBehaviour
 
     private void PlayHorn()
     {
-        hornAudio.Play();
+        //Check if car is a moving car
+        if (splineAnimate != null)
+        {
+            RuntimeManager.PlayOneShot(hornAudio, transform.position);
+        }
     }
 
     private void CollisionCheck(string type)
@@ -73,7 +78,6 @@ public class GoldenCar : MonoBehaviour
         explosion.Play();
         visual.SetActive(false);
         isAlive = false;
-        explosionAudio.Play();
         UIEffectManager.Instance.ExplosionAction?.Invoke("Armature_TheRock");
         Game.Instance.player.boostBehaviour.IncrementGauge(BoostAction.GoldenCarCrash);
         yield return new WaitForSeconds(10f);

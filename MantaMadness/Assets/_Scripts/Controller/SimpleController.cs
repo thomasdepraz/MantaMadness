@@ -302,6 +302,15 @@ public class SimpleController : MonoBehaviour
         turn = inputs.turn.action.ReadValue<float>();
         brake = inputs.brake.action.ReadValue<float>();
         airControl = inputs.airControl.action.ReadValue<Vector2>();
+
+        if(Velocity.magnitude <= controllerData.maxSpeed)
+        {
+            FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Speed, ValueMapping.Map(Velocity.magnitude, 0, 40, 0, 0.7f));
+        }
+        else
+        {
+            FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Speed, 1f);
+        }
     }
 
     bool hasHit = false;
