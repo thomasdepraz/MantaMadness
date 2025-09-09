@@ -311,6 +311,24 @@ public class SimpleController : MonoBehaviour
         {
             FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Speed, 1f);
         }
+
+        if(State == ControllerState.FALLING)
+        {
+            FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Flying, 1);
+        }
+        else
+        {
+            FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Flying, 0);
+        }
+
+        if (State == ControllerState.SWIMMING)
+        {
+            FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Underwater, 1);
+        }
+        else
+        {
+            FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Underwater, 0);
+        }
     }
 
     bool hasHit = false;

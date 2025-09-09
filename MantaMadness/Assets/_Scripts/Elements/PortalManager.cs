@@ -21,12 +21,13 @@ public class PortalManager : MonoBehaviour
             }
     }
 
-    public IEnumerator Teleport(string targetIndex)
+    public IEnumerator Teleport(string targetIndex, bool secretRoomMusic)
     {
         // Set Velocity to 0
         Game.Instance.player?.LockPlayerForDuration(teleportTransitionDuration);
 
         UIManager.Instance.transitionScreen.TransitionIn();
+        FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Warping, 1);
         yield return new WaitForSeconds(teleportTransitionDuration/2);
         for(int i = 0; i < portals.Length; i++)
         {
@@ -36,9 +37,19 @@ public class PortalManager : MonoBehaviour
                 break;
             }
         }
+        if (secretRoomMusic)
+        {
+            FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_SecretRoom, 1f);
+        }
+        else if (!secretRoomMusic)
+        {
+            FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_SecretRoom, 0f);
+        }
         yield return new WaitForSeconds(teleportTransitionDuration / 2);
+        FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Warping, 0);
         UIManager.Instance.transitionScreen.TransitionOut();
-        yield return null;
+
+            yield return null;
     }
 
     public void SetCheckpoint(string index, bool areaName, string nameToDisplay)
