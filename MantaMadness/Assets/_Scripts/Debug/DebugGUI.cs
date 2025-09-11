@@ -50,6 +50,11 @@ public class DebugGUI : MonoBehaviour
         {
             MusicManager.Instance.ToggleMusic();
         }
+
+        if(GUILayout.Button($"Toggle Fly Mode"))
+        {
+            FlyMode.instance.SwitchCamMode();
+        }
         GUILayout.EndArea();
     }
 }
