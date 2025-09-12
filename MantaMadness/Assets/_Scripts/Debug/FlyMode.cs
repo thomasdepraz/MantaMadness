@@ -54,7 +54,7 @@ public class FlyMode : MonoBehaviour
             transform.position += move;
 
             // Monter/Descendre avec espace/ctrl
-            if (Input.GetKey(KeyCode.Space))
+            if (Input.GetKey(KeyCode.E))
                 transform.position += Vector3.up * speed * Time.deltaTime;
             if (Input.GetKey(KeyCode.LeftControl))
                 transform.position += Vector3.down * speed * Time.deltaTime;
@@ -66,12 +66,17 @@ public class FlyMode : MonoBehaviour
                 UnityEngine.Cursor.visible = true;
             }
         }
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            SwitchCamMode();
+        }
     }
 
     public void SwitchCamMode()
     {
         if (isEnabled == true)
         {
+            Game.Instance.player.transform.position = flyCam.transform.position;
             Game.Instance.player.ForceLock(false);
             isEnabled = false;
             UnityEngine.Cursor.lockState = CursorLockMode.None;
@@ -81,6 +86,7 @@ public class FlyMode : MonoBehaviour
         }
         else if (isEnabled == false)
         {
+            flyCam.transform.position = Game.Instance.player.transform.position;
             Game.Instance.player.ForceLock(true);
             isEnabled = true;
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
