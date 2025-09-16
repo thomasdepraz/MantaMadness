@@ -13,9 +13,14 @@ public class TransitionInterface : MonoBehaviour, IScreen
         UIManager.Instance.transitionScreen = this;
     }
 
-    public void TransitionIn()
+    public void TransitionInOut()
     {
         fadeTransform.DOScale(new Vector3(30, 30, 1), 0.6f).SetEase(Ease.OutQuad).OnComplete(() => TransitionOut());
+    }
+
+    public void TransitionIn()
+    {
+        fadeTransform.DOScale(new Vector3(30, 30, 1), 0.6f).SetEase(Ease.OutQuad);
     }
 
     public void TransitionOut()

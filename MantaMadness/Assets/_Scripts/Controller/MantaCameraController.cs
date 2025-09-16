@@ -108,9 +108,6 @@ public class MantaCameraController : MonoBehaviour
             case ControllerState.SWIMMING:
                 SetActiveCamera(swimmingCamera);
                 break;
-            case ControllerState.CANON:
-                SetActiveCamera(bubbleCanonCamera);
-                break;
             default:
                 break;
         }

@@ -99,13 +99,13 @@ public class FmodGlobalParameters : MonoBehaviour
                 {
                     globalParameters[i].value = 1;
                     SetParameter(globalParameters[i]);
-                    print("Toggle value is" + globalParameters[i].value);
+                    //print("Toggle value is" + globalParameters[i].value);
                 }
                 else if (globalParameters[i].value == 1)
                 {
                     globalParameters[i].value = 0;
                     SetParameter(globalParameters[i]);
-                    print("Toggle value is" + globalParameters[i].value);
+                    //print("Toggle value is" + globalParameters[i].value);
                 }
             }
         }

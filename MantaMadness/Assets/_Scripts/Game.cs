@@ -1,10 +1,16 @@
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class Game : MonoBehaviour
 {
     public static Game Instance;
+
+    private float respawnTimer = -1f;
+    private System.Action onTimerFinished;
+    private bool isRespawning = false;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -48,23 +54,53 @@ public class Game : MonoBehaviour
         m_SpawnRotation = player.transform.rotation;
     }
 
+    public void Update()
+    {
+        if(respawnTimer > 0f)
+        {
+            respawnTimer -= Time.deltaTime;
+
+            if (respawnTimer <= 0f)
+            {
+                onTimerFinished?.Invoke();
+                onTimerFinished = null;
+            }
+        }
+    }
+
     public void Respawn(out Vector3 position, out Quaternion rotation)
     {
-        UIManager.Instance.transitionScreen.TransitionIn();
-
         if (raceManager.TryGetRespawn(out Transform respawn))
         {
             position = respawn.position;
             rotation = respawn.rotation;
-
-            player.ForcePosition(position, rotation);
+            if(isRespawning == false)
+            {
+                RespawnBehavior(position, rotation);
+            }
             return;
         }
-        
+
         position = m_SpawnPosition;
         rotation = m_SpawnRotation;
+        if(isRespawning == false)
+        {
+            StartCoroutine(RespawnBehavior(position, rotation));
+        }
+    }
 
+    private IEnumerator RespawnBehavior(Vector3 position, Quaternion rotation)
+    {
+        isRespawning = true;
+        //Action before timer
+        UIManager.Instance.transitionScreen.TransitionIn();
+        FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Life, 1f);
+        yield return new WaitForSeconds(1f);
+        //Action After timer
+        UIManager.Instance.transitionScreen.TransitionOut();
+        FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Life, 0f);
         player.ForcePosition(position, rotation);
+        isRespawning = false;
     }
 
     public void SetRespawnTransform(Transform respawnTransform)

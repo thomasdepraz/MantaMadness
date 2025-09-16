@@ -56,7 +56,8 @@ public class FlyMode : MonoBehaviour
             // Monter/Descendre avec espace/ctrl
             if (Input.GetKey(KeyCode.E))
                 transform.position += Vector3.up * speed * Time.deltaTime;
-            if (Input.GetKey(KeyCode.LeftControl))
+            if (Input.GetKey(KeyCode.LeftControl
+                ))
                 transform.position += Vector3.down * speed * Time.deltaTime;
 
             // Quitter le mode "fly" en débloquant la souris avec ESC

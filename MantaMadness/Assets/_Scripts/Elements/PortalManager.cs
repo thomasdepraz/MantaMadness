@@ -26,7 +26,7 @@ public class PortalManager : MonoBehaviour
         // Set Velocity to 0
         Game.Instance.player?.LockPlayerForDuration(teleportTransitionDuration);
 
-        UIManager.Instance.transitionScreen.TransitionIn();
+        UIManager.Instance.transitionScreen.TransitionInOut();
         FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Warping, 1);
         yield return new WaitForSeconds(teleportTransitionDuration/2);
         for(int i = 0; i < portals.Length; i++)

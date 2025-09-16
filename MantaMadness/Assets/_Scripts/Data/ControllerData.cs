@@ -75,4 +75,11 @@ public class ControllerData : ScriptableObject
     [Header("Air ride")]
     public float airRideVelocityThreshold;
     public float airRideGravityScale;
+
+    [Header("Target Jump")]
+    public float targetJumpSpeed;
+    public LayerMask targetObjectsMask;
+    public float targetDetectionRadius;
+    public float targetBoostFactor;
+    public float targetBounceForce;
 }

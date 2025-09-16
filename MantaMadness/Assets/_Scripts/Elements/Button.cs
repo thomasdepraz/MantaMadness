@@ -71,7 +71,7 @@ public class Button : MonoBehaviour
         //animation
 
         yield return new WaitForSeconds(c_lockDuration / 2);
-        UIManager.Instance.transitionScreen.TransitionIn();
+        UIManager.Instance.transitionScreen.TransitionInOut();
         yield return new WaitForSeconds(0.5f);
 
         // PART 2 SPAWN IN OBJECTS

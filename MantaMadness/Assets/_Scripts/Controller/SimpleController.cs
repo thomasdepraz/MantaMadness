@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum ControllerState
@@ -11,7 +12,6 @@ public enum ControllerState
     DIVING, 
     SWIMMING,
     AIRRIDE,
-    CANON,
 }
 
 public class SimpleController : MonoBehaviour
@@ -31,12 +31,17 @@ public class SimpleController : MonoBehaviour
     [Header("Parameters")]
     [SerializeField] public ControllerData controllerData;
     [SerializeField] private LayerMask raycastLayer;
+    [SerializeField] private LayerMask targetRaycastLayer;
 
+    //PLayer velocity
     public Vector3 Velocity => this.rb.linearVelocity;
+    // Vector world space en local space par rapport a l'objet: permet de recup la vélocité horizontal peut importe la rotation
     private Vector3 TransformedVelocity => NormalContainer.InverseTransformVector(rb.linearVelocity);
+    // Velocité horizontal
     public Vector3 HorizontalVelocity => NormalContainer.rotation * new Vector3(TransformedVelocity.x, 0f, TransformedVelocity.z);
     public Vector3 AngularVelocity => this.rb.angularVelocity;
     public float CurrentDepth => currentWaterBlock is null ? 0 : currentWaterBlock.GetDepthAtPosition(transform.position, out _);
+    // Legacy water block behavior
     public float MaxDepth => currentWaterBlock is null ? 0 : maxDivingDepth;
     public bool IsDrifting => drifting;
     public int DriftDirection => driftDir;
@@ -253,34 +258,94 @@ public class SimpleController : MonoBehaviour
         jumpRoutine = null;
     }
 
+
     private void AirDash()
     {
         jumpCount = 2;
         State = ControllerState.JUMPING;
-        Vector3 direction;
-        if (airControl.x != 0 || airControl.y != 0)
+
+        //if (conditions pour target dash true)
+        Collider[] colliders = Physics.OverlapSphere(hoverBehaviour.normalContainer.position, controllerData.targetDetectionRadius, controllerData.targetObjectsMask);
+        // Checl Valid target and choose valid Target
+
+        List<Collider> validColliders = new List<Collider>();
+
+        foreach (Collider target in colliders)
         {
-            direction = airControl.normalized;
-            direction = transform.TransformDirection(new Vector3(direction.x, 0, direction.y));
+            if (CameraTargetDetection.Instance.validTargets.Contains(target))
+            {
+                validColliders.Add(target);
+            }
         }
+
+        if (validColliders.Count > 0)
+        {
+            int index = 0;
+            float distance = 0;
+            Transform target = null;
+            if (validColliders.Count == 1)
+            {
+                    target = validColliders[0].transform;
+            }
+            else if (validColliders.Count > 1)
+            {
+                distance = Vector3.Distance(validColliders[0].transform.position, hoverBehaviour.normalContainer.position);
+                for (int i = 1; i < validColliders.Count; i++)
+                {
+                    if (CameraTargetDetection.Instance.validTargets.Contains(validColliders[i]))
+                    {
+                        var dist = Vector3.Distance(validColliders[i].transform.position, hoverBehaviour.normalContainer.transform.position);
+                        if (dist < distance)
+                        {
+                            index = i;
+                            distance = dist;
+                        }
+                    }
+                }
+                target = validColliders[index].transform;
+            }
+            Vector3 dir = new Vector3(target.position.x - hoverBehaviour.normalContainer.transform.position.x,
+                          target.position.y - hoverBehaviour.normalContainer.transform.position.y,
+                          target.position.z - hoverBehaviour.normalContainer.transform.position.z);
+            dir = dir.normalized;
+
+            transform.forward = new Vector3(dir.x, 0, dir.z);
+            rb.linearVelocity = dir * HorizontalVelocity.magnitude;
+
+            rb.AddForce(dir * controllerData.targetBoostFactor, ForceMode.VelocityChange);
+
+            if (jumpRoutine != null)
+                StopCoroutine(jumpRoutine);
+            jumpRoutine = StartCoroutine(JumpRoutine());
+
+        }
+
         else
         {
-            direction = transform.forward;
+            Vector3 direction;
+            if (airControl.x != 0 || airControl.y != 0)
+            {
+                direction = airControl.normalized;
+                direction = transform.TransformDirection(new Vector3(direction.x, 0, direction.y));
+            }
+            else
+            {
+                direction = transform.forward;
+            }
+
+            transform.forward = direction;
+            rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude;
+
+            rb.AddForce(NormalContainer.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
+            rb.linearDamping = controllerData.jumpDamping;
+
+            // PLAY FMOD PLAYER ACTION JUMP SOUND
+            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.JUMP);
+
+            if (jumpRoutine != null)
+                StopCoroutine(jumpRoutine);
+            jumpRoutine = StartCoroutine(JumpRoutine());
         }
-
-        transform.forward = direction;
-        rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude;
-
-        rb.AddForce(NormalContainer.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
-        rb.linearDamping = controllerData.jumpDamping;
-
-        // PLAY FMOD PLAYER ACTION JUMP SOUND
-        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.JUMP);
-        
-        if (jumpRoutine != null)
-            StopCoroutine(jumpRoutine);
-        jumpRoutine = StartCoroutine(JumpRoutine());
-
     }
 
     private void Boost(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -291,9 +356,10 @@ public class SimpleController : MonoBehaviour
         }
     }
 
+    int lastDashCount = 0;
     private void Update()
     {
-        if(Input.GetKeyUp(KeyCode.R))
+        if (Input.GetKeyUp(KeyCode.R))
         {
             Game.Instance.Respawn(out Vector3 position, out Quaternion rotation);
         }
@@ -303,7 +369,14 @@ public class SimpleController : MonoBehaviour
         brake = inputs.brake.action.ReadValue<float>();
         airControl = inputs.airControl.action.ReadValue<Vector2>();
 
-        if(Velocity.magnitude <= controllerData.maxSpeed)
+        if (consecutiveDashCount != lastDashCount)
+        {
+            lastDashCount = consecutiveDashCount;
+            FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_StyleState, consecutiveDashCount);
+        }
+
+
+        if (Velocity.magnitude <= controllerData.maxSpeed)
         {
             FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Speed, ValueMapping.Map(Velocity.magnitude, 0, 40, 0, 0.7f));
         }
@@ -329,13 +402,30 @@ public class SimpleController : MonoBehaviour
         {
             FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Underwater, 0);
         }
-    }
 
+        if (State == ControllerState.SURFING)
+        {
+            if(IsDrifting == true && hasDriftBoost == true)
+            {
+                FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Drift, 2);
+            }
+            else if (IsDrifting == true)
+            {
+                FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Drift, 1);
+            }
+            else
+            {
+                FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Drift, 0);
+            }
+        }
+    }
+    public bool hasHitTarget = false;
     bool hasHit = false;
     float xRotation = 0f;
     private void FixedUpdate()
     {
         hasHit = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit info, controllerData.hoverRaycastLength, raycastLayer.value);
+        hasHitTarget = Physics.Raycast(hoverBehaviour.normalContainer.position, hoverBehaviour.normalContainer.forward, out RaycastHit targetInfo, controllerData.hoverRaycastLength, targetRaycastLayer.value);
 
         if (OnRail)
         {
@@ -384,28 +474,6 @@ public class SimpleController : MonoBehaviour
                 SetDrift(driftDir, true, true);
             }
         }
-
-        if(inBubbleCanon == true && State != ControllerState.CANON)
-        {
-            State = ControllerState.CANON;
-        }
-
-        if (State == ControllerState.CANON)
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-
-            float mouseX = Input.GetAxis("Mouse X") * 10f * Time.deltaTime;
-            float mouseY = Input.GetAxis("Mouse Y") * 10f* Time.deltaTime;
-
-            xRotation -= mouseY;
-            xRotation = Mathf.Clamp(xRotation, -90f, 90f); // prevent flipping
-
-            transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-            rb.rotation = Quaternion.Euler(Vector3.up * mouseX);
-        }
-
-
         //Falling to Surfing
         if (State == ControllerState.FALLING)
         {
@@ -413,6 +481,18 @@ public class SimpleController : MonoBehaviour
             {
                 State = ControllerState.SURFING;
                 ResetJump();
+            }
+        }
+
+        // Fall / Jump on target
+        if (State == ControllerState.FALLING || State == ControllerState.JUMPING)
+        {
+            if (hasHitTarget)
+            {
+                print("TARGET HIT");
+                State = ControllerState.JUMPING;
+                targetInfo.collider.gameObject.GetComponent<JumpTarget>().DeactivateTarget();
+                BounceOnTarget();
             }
         }
 
@@ -638,6 +718,14 @@ public class SimpleController : MonoBehaviour
             Boost(controllerData.driftBoostForce);
             boostBehaviour.IncrementGauge(BoostAction.BoostedDrift);
         }
+    }
+
+    public void BounceOnTarget()
+    {
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.AddForce(hoverBehaviour.normalContainer.up * controllerData.targetBounceForce, ForceMode.VelocityChange);
+        ResetJump();
     }
 
     public void EnterAirRail(AirRail rail)
