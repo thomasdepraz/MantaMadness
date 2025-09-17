@@ -55,7 +55,7 @@ MonoBehaviour:
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 6464041566998953032}
+    TrackingTarget: {fileID: 3794257468401720533}
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
@@ -1489,7 +1489,7 @@ MonoBehaviour:
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 6464041566998953032}
+    TrackingTarget: {fileID: 3794257468401720533}
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
@@ -1882,7 +1882,7 @@ MonoBehaviour:
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 6464041566998953032}
+    TrackingTarget: {fileID: 3794257468401720533}
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
@@ -2124,7 +2124,7 @@ MonoBehaviour:
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 6464041566998953032}
+    TrackingTarget: {fileID: 3794257468401720533}
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
@@ -3628,7 +3628,7 @@ MonoBehaviour:
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 6464041566998953032}
+    TrackingTarget: {fileID: 3794257468401720533}
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
@@ -3816,6 +3816,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3794257468401720533}
   - {fileID: 1546678150893992807}
   - {fileID: 7799737293694267748}
   - {fileID: 5234565680348436066}
@@ -9540,6 +9541,7 @@ GameObject:
   - component: {fileID: 5872685551124635629}
   - component: {fileID: 3085066077877558464}
   - component: {fileID: 699599342051909160}
+  - component: {fileID: 2814310667035003850}
   - component: {fileID: 1630504113041504160}
   - component: {fileID: 8470598168765840976}
   - component: {fileID: 1860818694954644299}
@@ -9627,7 +9629,39 @@ MonoBehaviour:
   raycastLayer:
     serializedVersion: 2
     m_Bits: 8208
+  targetRaycastLayer:
+    serializedVersion: 2
+    m_Bits: 0
   inBubbleCanon: 0
+  hasHitTarget: 0
+--- !u!114 &2814310667035003850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5536948242547424017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a02c49dd2c3ac7f44aa79da5e4ec36cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensitivity: 30
+  minPitch: -10
+  maxPitch: 60
+  lookAction:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Look
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: a21a4819-b198-492b-ac82-d87d71f963bb
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 7956475328526755022, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  target: {fileID: 3794257468401720533}
 --- !u!114 &1630504113041504160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9692,7 +9726,6 @@ MonoBehaviour:
   surfParticles: {fileID: 395685362320773701}
   surfBladeParticles: {fileID: 5507742516642513163}
   boostSurfBladeParticles: {fileID: 5691609505672225492}
-  rippleParticles: {fileID: 0}
   splashParticles: {fileID: 8392784736143705765}
   styleParticles: {fileID: 8437275511964417940}
   driftParticles:
@@ -10184,7 +10217,7 @@ MonoBehaviour:
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 6464041566998953032}
+    TrackingTarget: {fileID: 3794257468401720533}
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
@@ -16048,6 +16081,37 @@ Transform:
   m_Children:
   - {fileID: 6839419433686676314}
   m_Father: {fileID: 6094208854901891114}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7342341633166819051
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3794257468401720533}
+  m_Layer: 7
+  m_Name: CameraTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3794257468401720533
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7342341633166819051}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6464041566998953032}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7372083314194321300
 GameObject:
@@ -36828,7 +36892,7 @@ MonoBehaviour:
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 6464041566998953032}
+    TrackingTarget: {fileID: 3794257468401720533}
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
