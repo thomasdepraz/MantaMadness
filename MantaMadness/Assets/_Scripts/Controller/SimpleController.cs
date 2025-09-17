@@ -54,6 +54,7 @@ public class SimpleController : MonoBehaviour
     private bool CanDash => (State == ControllerState.SURFING || State == ControllerState.FALLING) && 
                             currentDashTime > controllerData.dashTimer && 
                             (Time.time - lastDashTimestamp) > controllerData.dashCooldown;
+    public int ConsecutiveDashCount => consecutiveDashCount;
     private Transform NormalContainer => hoverBehaviour.normalContainer;
 
     public ControllerState State {
@@ -102,6 +103,9 @@ public class SimpleController : MonoBehaviour
     public Action enterRail;
     public Action exitRail;
     public Action<int> dash;
+    public Action<string> triggerAnim;
+    public Action<string> enableBoolAnim;
+    public Action<string> disableBoolAnim;
 
     private void Awake()
     {
@@ -231,6 +235,9 @@ public class SimpleController : MonoBehaviour
             // PLAY FMOD PLAYER ACTION JUMP SOUND
             PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.JUMP);
 
+            //Play anim
+            triggerAnim.Invoke("Spin");
+
             if (jumpRoutine != null)
                 StopCoroutine(jumpRoutine);
             jumpRoutine = StartCoroutine(JumpRoutine());
@@ -263,13 +270,11 @@ public class SimpleController : MonoBehaviour
     {
         jumpCount = 2;
         State = ControllerState.JUMPING;
-
         //if (conditions pour target dash true)
         Collider[] colliders = Physics.OverlapSphere(hoverBehaviour.normalContainer.position, controllerData.targetDetectionRadius, controllerData.targetObjectsMask);
         // Checl Valid target and choose valid Target
 
         List<Collider> validColliders = new List<Collider>();
-
         foreach (Collider target in colliders)
         {
             if (CameraTargetDetection.Instance.validTargets.Contains(target))
@@ -283,6 +288,8 @@ public class SimpleController : MonoBehaviour
             int index = 0;
             float distance = 0;
             Transform target = null;
+            //Play anim
+            triggerAnim.Invoke("TargetJump");
             if (validColliders.Count == 1)
             {
                     target = validColliders[0].transform;
@@ -322,6 +329,8 @@ public class SimpleController : MonoBehaviour
 
         else
         {
+            //Play anim
+            triggerAnim.Invoke("Spin");
             Vector3 direction;
             if (airControl.x != 0 || airControl.y != 0)
             {
@@ -356,7 +365,6 @@ public class SimpleController : MonoBehaviour
         }
     }
 
-    int lastDashCount = 0;
     private void Update()
     {
         if (Input.GetKeyUp(KeyCode.R))
@@ -369,13 +377,24 @@ public class SimpleController : MonoBehaviour
         brake = inputs.brake.action.ReadValue<float>();
         airControl = inputs.airControl.action.ReadValue<Vector2>();
 
-        if (consecutiveDashCount != lastDashCount)
+        //if (consecutiveDashCount != lastDashCount)
+        //{
+        //    lastDashCount = consecutiveDashCount;
+        //    FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_StyleState, consecutiveDashCount);
+        //}
+
+        if (turn < 0)
         {
-            lastDashCount = consecutiveDashCount;
-            FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_StyleState, consecutiveDashCount);
+            FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_TurnAngle, -1f);
         }
-
-
+        else if(turn > 0)
+        {
+            FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_TurnAngle, 1f);
+        }
+        else
+        {
+            FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_TurnAngle, 0f);
+        }
         if (Velocity.magnitude <= controllerData.maxSpeed)
         {
             FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Speed, ValueMapping.Map(Velocity.magnitude, 0, 40, 0, 0.7f));
@@ -709,6 +728,7 @@ public class SimpleController : MonoBehaviour
     {
         rb.AddForce(hoverBehaviour.normalContainer.forward * force, ForceMode.VelocityChange);
         boost.Invoke();
+        triggerAnim.Invoke("Boost");
     }
 
     private void DriftBoost()

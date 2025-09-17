@@ -36,7 +36,7 @@ public class PlayerActionFMODManager : MonoBehaviour
     public void PlayStyleAction(PlayerActionFMOD actionName, int State)
     {
         EventInstance instance = RuntimeManager.CreateInstance(playerFmodActions[(int)actionName]);
-        instance.setParameterByName("StyleState", State);
+        FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_StyleState, State);
 
         instance.start();
         instance.release();

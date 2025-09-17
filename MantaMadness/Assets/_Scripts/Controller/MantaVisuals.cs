@@ -48,6 +48,21 @@ public class MantaVisuals : MonoBehaviour
         mantaController.boost += BoostParticles;
         mantaController.updateRaceTarget += SetArrowTarget;
         mantaController.dash += Dash;
+        mantaController.triggerAnim += triggerAnimation;
+        mantaController.enableBoolAnim += enableBoolAnimation;
+        mantaController.disableBoolAnim+= disableBoolAnimation;
+    }
+
+    private void OnDisable()
+    {
+        mantaController.stateChanged -= UpdateState;
+        mantaController.updateDrift -= UpdateDrift;
+        mantaController.boost -= BoostParticles;
+        mantaController.updateRaceTarget -= SetArrowTarget;
+        mantaController.dash -= Dash;
+        mantaController.triggerAnim  -= triggerAnimation;
+        mantaController.enableBoolAnim -= enableBoolAnimation;
+        mantaController.disableBoolAnim -= disableBoolAnimation;
     }
 
     private void Dash(int dashCount)
@@ -64,7 +79,7 @@ public class MantaVisuals : MonoBehaviour
         }
 
         var index = Mathf.Max(0, dashCount);
-        PlayerActionFMODManager.Instance.PlayStyleAction(PlayerActionFMOD.STYLE, index);
+        PlayerActionFMODManager.Instance.PlayStyleAction(PlayerActionFMOD.STYLE, dashCount);
     }
 
     private void Start()
@@ -98,8 +113,6 @@ public class MantaVisuals : MonoBehaviour
         }
     }
 
-        
-
     private void UpdateState(ControllerState previous, ControllerState newState)
     {
         if(previous == ControllerState.FALLING && newState == ControllerState.SURFING)
@@ -108,10 +121,17 @@ public class MantaVisuals : MonoBehaviour
         else if (previous == ControllerState.SURFING && newState == ControllerState.JUMPING)
             SplashParticles();
 
-        if (newState == ControllerState.JUMPING)
-        {
-            mantaAnimator.SetTrigger("Spin");
-        }
+        //if (newState == ControllerState.JUMPING)
+        //{
+        //    if (mantaController.targetJumps == true)
+        //    {
+        //        mantaAnimator.SetTrigger("TargetJump");
+        //    }
+        //    else 
+        //    {
+        //        mantaAnimator.SetTrigger("Spin");
+        //    }
+        //}
 
         if(newState == ControllerState.SWIMMING)
         {
@@ -125,7 +145,6 @@ public class MantaVisuals : MonoBehaviour
             MusicManager.Instance.ToggleUnderwater();
         }
     }
-
     private void Update()
     {
         UpdateModelRoll();
@@ -133,8 +152,6 @@ public class MantaVisuals : MonoBehaviour
 
         mantaAnimator.SetBool(driftId, mantaController.IsDrifting);
         mantaAnimator.SetFloat(driftDirId, mantaController.DriftDirection);
-
-
 
         if(arrowTarget != null && arrow.gameObject.activeSelf)
         {
@@ -227,5 +244,20 @@ public class MantaVisuals : MonoBehaviour
             arrow.gameObject.SetActive(false);
         else
             arrow.gameObject.SetActive(true);
+    }
+
+    public void triggerAnimation(string triggerName)
+    {
+        mantaAnimator.SetTrigger(triggerName);
+    }
+
+    public void enableBoolAnimation(string boolName)
+    {
+        mantaAnimator.SetBool(boolName, true);
+    }
+
+    public void disableBoolAnimation(string boolName)
+    {
+        mantaAnimator.SetBool(boolName, false);
     }
 }
