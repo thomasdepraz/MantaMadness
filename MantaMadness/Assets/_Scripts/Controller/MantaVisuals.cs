@@ -32,6 +32,7 @@ public class MantaVisuals : MonoBehaviour
     public ParticleSystem styleParticles;
     public ParticleSystem[] driftParticles = new ParticleSystem[4];
     public ParticleSystem[] boostParticles = new ParticleSystem[3];
+    public ParticleSystem targetJumpParticles;
 
     private int driftId = Animator.StringToHash("Drifting");
     private int driftDirId = Animator.StringToHash("DriftDirection");
@@ -51,6 +52,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.triggerAnim += triggerAnimation;
         mantaController.enableBoolAnim += enableBoolAnimation;
         mantaController.disableBoolAnim+= disableBoolAnimation;
+        mantaController.playTargetJumpParticles += JumpTargetParticles;
     }
 
     private void OnDisable()
@@ -63,6 +65,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.triggerAnim  -= triggerAnimation;
         mantaController.enableBoolAnim -= enableBoolAnimation;
         mantaController.disableBoolAnim -= disableBoolAnimation;
+        mantaController.playTargetJumpParticles -= JumpTargetParticles;
     }
 
     private void Dash(int dashCount)
@@ -249,6 +252,11 @@ public class MantaVisuals : MonoBehaviour
     public void triggerAnimation(string triggerName)
     {
         mantaAnimator.SetTrigger(triggerName);
+    }
+
+    public void JumpTargetParticles()
+    {
+        targetJumpParticles.Play();
     }
 
     public void enableBoolAnimation(string boolName)

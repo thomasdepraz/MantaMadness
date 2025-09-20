@@ -106,6 +106,7 @@ public class SimpleController : MonoBehaviour
     public Action<string> triggerAnim;
     public Action<string> enableBoolAnim;
     public Action<string> disableBoolAnim;
+    public Action playTargetJumpParticles;
 
     private void Awake()
     {
@@ -272,7 +273,7 @@ public class SimpleController : MonoBehaviour
         State = ControllerState.JUMPING;
         //if (conditions pour target dash true)
         Collider[] colliders = Physics.OverlapSphere(hoverBehaviour.normalContainer.position, controllerData.targetDetectionRadius, controllerData.targetObjectsMask);
-        // Checl Valid target and choose valid Target
+        // Check Valid target and choose valid Target
 
         List<Collider> validColliders = new List<Collider>();
         foreach (Collider target in colliders)
@@ -290,6 +291,7 @@ public class SimpleController : MonoBehaviour
             Transform target = null;
             //Play anim
             triggerAnim.Invoke("TargetJump");
+            playTargetJumpParticles.Invoke();
             if (validColliders.Count == 1)
             {
                     target = validColliders[0].transform;
