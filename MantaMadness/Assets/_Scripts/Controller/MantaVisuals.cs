@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.VFX;
+using UnityEngine.VFX.Utility;
 
 public class MantaVisuals : MonoBehaviour
 {
@@ -26,8 +28,7 @@ public class MantaVisuals : MonoBehaviour
 
     [Header("Parameters")]
     public ParticleSystem surfParticles;
-    public ParticleSystem surfBladeParticles;
-    public ParticleSystem boostSurfBladeParticles;
+    public VisualEffect surfBladeEffect;
     public ParticleSystem splashParticles;
     public ParticleSystem styleParticles;
     public ParticleSystem[] driftParticles = new ParticleSystem[4];
@@ -199,23 +200,39 @@ public class MantaVisuals : MonoBehaviour
 
         modelTransform.localRotation = Quaternion.Lerp(modelTransform.localRotation, targetRotation, Time.deltaTime * rotationSpeed);
     }
-
+    ExposedProperty surfBladePlayProperty = "State";
     private void UpdateParticles()
     {
-
         if (mantaController.State == ControllerState.SURFING && mantaController.HorizontalVelocity.magnitude > mantaController.controllerData.maxSpeed / 4f)
         {
             if ((!surfParticles.isPlaying))
                 surfParticles.Play();
 
-            if (!surfBladeParticles.isPlaying)
-                surfBladeParticles.Play();
+            if(mantaController.HorizontalVelocity.magnitude > mantaController.controllerData.maxSpeed + 5f)
+            {
+                print("TA MERE LA");
+                //if (!surfBladeEffect.)
+                if (surfBladeEffect.GetInt(surfBladePlayProperty) != 2)
+                {
+                    surfBladeEffect.SetInt(surfBladePlayProperty, 2);
+                }
+            }
+
+            //if (!surfBladeEffect.)
+            else if (surfBladeEffect.GetInt(surfBladePlayProperty) != 1)
+            {
+                surfBladeEffect.SetInt(surfBladePlayProperty, 1);
+            }
+
+
         }
         else if (mantaController.State == ControllerState.SURFING && mantaController.HorizontalVelocity.magnitude <= mantaController.controllerData.maxSpeed / 4f || mantaController.State != ControllerState.SURFING)
         {
             surfParticles.Stop();
-            surfBladeParticles.Stop();
-            boostSurfBladeParticles.Stop();
+            if (surfBladeEffect.GetInt(surfBladePlayProperty) != 0)
+            {
+                surfBladeEffect.SetInt(surfBladePlayProperty, 0);
+            }
         }
     }
 
@@ -233,7 +250,7 @@ public class MantaVisuals : MonoBehaviour
         {
             boostParticles[i].Play();
         }
-        boostSurfBladeParticles.Play();
+
         UIParticleManager.Instance.playtSpecificParticle("SPEEDLINE", "");
 
         //play UI Sun Animation

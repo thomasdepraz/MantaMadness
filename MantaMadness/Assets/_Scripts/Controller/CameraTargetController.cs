@@ -39,11 +39,16 @@ public class CameraTargetController : MonoBehaviour
 
     private SimpleController player;
 
+    private bool isControllerDevice = false;
+    private InputActionMap playerActionsMap;
+
     private void OnEnable()
     {
         if (lookAction != null)
             lookAction.action.Enable();
         Cursor.lockState = CursorLockMode.Locked;
+        playerActionsMap = InputSystem.actions.FindActionMap("Player");
+        playerActionsMap.actionTriggered += OnActionPerformed;
     }
 
     private void Start()
@@ -59,6 +64,19 @@ public class CameraTargetController : MonoBehaviour
         if (lookAction != null)
             lookAction.action.Disable();
     }
+    private void OnActionPerformed(InputAction.CallbackContext context)
+    {
+        InputDevice device = context.control.device;
+
+        if (device is Keyboard)
+        {
+            isControllerDevice = false;
+        }
+        else if (device is Gamepad gamepad)
+        {
+            isControllerDevice = true;
+        }
+    }
 
     private void Update()
     {
@@ -70,7 +88,15 @@ public class CameraTargetController : MonoBehaviour
         {
             if(player.HorizontalVelocity.magnitude > 5f)
             {
-                sensitivity = _data.surf_sensitivity;
+                if(isControllerDevice)
+                {
+                    sensitivity = _data.surf_sensitivity_controller;
+                }
+                else
+                {
+                    sensitivity = _data.surf_sensitivity;
+                }
+
                 minPitch = _data.surf_minPitch;
                 maxPitch = _data.surf_maxPitch;
                 minYawn = _data.surf_minYaw;
@@ -94,7 +120,14 @@ public class CameraTargetController : MonoBehaviour
             }
             else
             {
-                sensitivity = _data.idle_sensitivity;
+                if (isControllerDevice)
+                {
+                    sensitivity = _data.idle_sensitivity_controller;
+                }
+                else
+                {
+                    sensitivity = _data.idle_sensitivity;
+                }
                 minPitch = _data.idle_minPitch;
                 maxPitch = _data.idle_maxPitch;
                 minYawn = _data.idle_minYaw;
@@ -118,7 +151,14 @@ public class CameraTargetController : MonoBehaviour
 
         else if (player.State == ControllerState.SWIMMING)
         {
-            sensitivity = _data.swim_sensitivity;
+            if (isControllerDevice)
+            {
+                sensitivity = _data.swim_sensitivity_controller;
+            }
+            else
+            {
+                sensitivity = _data.swim_sensitivity;
+            }
             minPitch = _data.swim_minPitch;
             maxPitch = _data.swim_maxPitch;
             minYawn = _data.swim_minYaw;
@@ -143,7 +183,14 @@ public class CameraTargetController : MonoBehaviour
 
         else if (player.State == ControllerState.JUMPING)
         {
-            sensitivity = _data.jump_sensitivity;
+            if (isControllerDevice)
+            {
+                sensitivity = _data.jump_sensitivity_controller;
+            }
+            else
+            {
+                sensitivity = _data.jump_sensitivity;
+            }
             minPitch = _data.jump_minPitch;
             maxPitch = _data.jump_maxPitch;
             minYawn = _data.jump_minYaw;
@@ -167,7 +214,14 @@ public class CameraTargetController : MonoBehaviour
 
         else if(player.State == ControllerState.FALLING)
         {
-            sensitivity = _data.fall_sensitivity;
+            if (isControllerDevice)
+            {
+                sensitivity = _data.fall_sensitivity_controller;
+            }
+            else
+            {
+                sensitivity = _data.fall_sensitivity;
+            }
             minPitch = _data.fall_minPitch;
             maxPitch = _data.fall_maxPitch;
             minYawn = _data.fall_minYaw;
