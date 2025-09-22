@@ -266,7 +266,7 @@ public class SimpleController : MonoBehaviour
         jumpRoutine = null;
     }
 
-
+    Vector3 targetDashDirection = Vector3.zero;
     private void AirDash()
     {
         jumpCount = 2;
@@ -313,15 +313,16 @@ public class SimpleController : MonoBehaviour
                 }
                 target = validColliders[index].transform;
             }
-            Vector3 dir = new Vector3(target.position.x - hoverBehaviour.normalContainer.transform.position.x,
+
+            targetDashDirection = new Vector3(target.position.x - hoverBehaviour.normalContainer.transform.position.x,
                           target.position.y - hoverBehaviour.normalContainer.transform.position.y,
                           target.position.z - hoverBehaviour.normalContainer.transform.position.z);
-            dir = dir.normalized;
+            targetDashDirection = targetDashDirection.normalized;
 
-            transform.forward = new Vector3(dir.x, 0, dir.z);
-            rb.linearVelocity = dir * HorizontalVelocity.magnitude;
+            transform.forward = new Vector3(targetDashDirection.x, 0, targetDashDirection.z);
+            rb.linearVelocity = targetDashDirection * HorizontalVelocity.magnitude;
 
-            rb.AddForce(dir * controllerData.targetBoostFactor, ForceMode.VelocityChange);
+            rb.AddForce(targetDashDirection * controllerData.targetBoostFactor, ForceMode.VelocityChange);
 
             if (jumpRoutine != null)
                 StopCoroutine(jumpRoutine);
@@ -446,7 +447,7 @@ public class SimpleController : MonoBehaviour
     private void FixedUpdate()
     {
         hasHit = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit info, controllerData.hoverRaycastLength, raycastLayer.value);
-        hasHitTarget = Physics.Raycast(hoverBehaviour.normalContainer.position, hoverBehaviour.normalContainer.forward, out RaycastHit targetInfo, controllerData.hoverRaycastLength, targetRaycastLayer.value);
+        hasHitTarget = Physics.SphereCast(hoverBehaviour.normalContainer.position,3f, targetDashDirection, out RaycastHit targetInfo, controllerData.hoverRaycastLength, targetRaycastLayer.value);
 
         if (OnRail)
         {
