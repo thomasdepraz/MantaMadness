@@ -34,6 +34,8 @@ public class MantaVisuals : MonoBehaviour
     public ParticleSystem[] driftParticles = new ParticleSystem[4];
     public ParticleSystem[] boostParticles = new ParticleSystem[3];
     public ParticleSystem targetJumpParticles;
+    public SkinnedMeshRenderer[] mantaBodyVisual;
+
 
     private int driftId = Animator.StringToHash("Drifting");
     private int driftDirId = Animator.StringToHash("DriftDirection");
@@ -54,6 +56,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.enableBoolAnim += enableBoolAnimation;
         mantaController.disableBoolAnim+= disableBoolAnimation;
         mantaController.playTargetJumpParticles += JumpTargetParticles;
+        mantaController.togglePlayerBodyVisual += ToggleMantaVisual;
     }
 
     private void OnDisable()
@@ -67,6 +70,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.enableBoolAnim -= enableBoolAnimation;
         mantaController.disableBoolAnim -= disableBoolAnimation;
         mantaController.playTargetJumpParticles -= JumpTargetParticles;
+        mantaController.togglePlayerBodyVisual -= ToggleMantaVisual;
     }
 
     private void Dash(int dashCount)
@@ -210,7 +214,6 @@ public class MantaVisuals : MonoBehaviour
 
             if(mantaController.HorizontalVelocity.magnitude > mantaController.controllerData.maxSpeed + 5f)
             {
-                print("TA MERE LA");
                 //if (!surfBladeEffect.)
                 if (surfBladeEffect.GetInt(surfBladePlayProperty) != 2)
                 {
@@ -284,5 +287,13 @@ public class MantaVisuals : MonoBehaviour
     public void disableBoolAnimation(string boolName)
     {
         mantaAnimator.SetBool(boolName, false);
+    }
+
+    public void ToggleMantaVisual(bool toggle)
+    {
+        foreach (SkinnedMeshRenderer skin in mantaBodyVisual)
+        {
+            skin.enabled = toggle;
+        }
     }
 }

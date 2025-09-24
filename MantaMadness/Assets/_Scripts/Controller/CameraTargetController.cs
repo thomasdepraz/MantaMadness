@@ -23,7 +23,7 @@ public class CameraTargetController : MonoBehaviour
     public float maxYawn = 45f;
 
     [Tooltip("Smooth Value for movement.")]
-    public float smoothValue = 10f;
+    public float smoothValue = 0.08f;
 
     [Header("Input Action Asset")]
     [Tooltip("Reference to the InputAction for looking (Vector2).")]
@@ -241,7 +241,37 @@ public class CameraTargetController : MonoBehaviour
             yaw = Mathf.SmoothDamp(yaw, targetYaw, ref yawVelocity, smoothValue);
             pitch = Mathf.SmoothDamp(pitch, targetPitch, ref pitchVelocity, smoothValue);
         }
-            // Apply rotation
-            target.localRotation = Quaternion.Euler(pitch, yaw, 0f);
+
+        else if (player.State == ControllerState.AIRRIDE)
+        {
+            if (isControllerDevice)
+            {
+                sensitivity = _data.air_sensitivity_controller;
+            }
+            else
+            {
+                sensitivity = _data.air_sensitivity;
+            }
+            minPitch = _data.air_minPitch;
+            maxPitch = _data.air_maxPitch;
+            minYawn = _data.air_minYaw;
+            maxYawn = _data.air_maxYaw;
+            smoothValue = _data.air_smooth;
+
+
+            // Apply sensitivity and deltaTime
+            float mouseX = lookInput.x * sensitivity * Time.deltaTime;
+            float mouseY = lookInput.y * sensitivity * Time.deltaTime;
+
+            float targetYaw = yaw + mouseX;
+            float targetPitch = pitch - mouseY;
+
+            targetPitch = Mathf.Clamp(targetPitch, minPitch, maxPitch);
+
+            yaw = Mathf.SmoothDamp(yaw, targetYaw, ref yawVelocity, smoothValue);
+            pitch = Mathf.SmoothDamp(pitch, targetPitch, ref pitchVelocity, smoothValue);
+        }
+        // Apply rotation
+        target.localRotation = Quaternion.Euler(pitch, yaw, 0f);
     }
 }

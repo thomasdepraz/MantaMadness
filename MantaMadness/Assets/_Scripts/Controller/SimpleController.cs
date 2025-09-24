@@ -107,6 +107,7 @@ public class SimpleController : MonoBehaviour
     public Action<string> enableBoolAnim;
     public Action<string> disableBoolAnim;
     public Action playTargetJumpParticles;
+    public Action<bool> togglePlayerBodyVisual;
 
     private void Awake()
     {
@@ -514,7 +515,8 @@ public class SimpleController : MonoBehaviour
                 print("TARGET HIT");
                 State = ControllerState.JUMPING;
                 targetInfo.collider.gameObject.GetComponent<JumpTarget>().DeactivateTarget();
-                BounceOnTarget();
+                //target.getcomp<target>().startcoroutine(procedure)
+                StopByTargetImpact(targetInfo.collider.gameObject);
             }
         }
 
@@ -743,11 +745,30 @@ public class SimpleController : MonoBehaviour
         }
     }
 
-    public void BounceOnTarget()
+    public void StopByTargetImpact(GameObject target)
     {
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-        rb.AddForce(hoverBehaviour.normalContainer.up * controllerData.targetBounceForce, ForceMode.VelocityChange);
+        togglePlayerBodyVisual.Invoke(false);
+
+        ForceLock(true);
+
+        if(target.GetComponent<JumpTarget>() != null)
+        {
+            transform.position = target.transform.position;
+            target.GetComponent<JumpTarget>().StartLaunchCoroutine();
+        }
+
+        //rb.AddForce(hoverBehaviour.normalContainer.up * controllerData.targetBounceForce, ForceMode.VelocityChange);
+        //ResetJump();
+    }
+
+    public void PropelledByTarget(Transform target, float propulsionForce)
+    {
+        if(forceLocked == true)
+        {
+            ForceLock(false);
+        }
+        transform.rotation = new Quaternion(0, target.transform.rotation.y, 0, target.transform.rotation.w);
+        rb.AddForce(target.forward * propulsionForce, ForceMode.VelocityChange);
         ResetJump();
     }
 
