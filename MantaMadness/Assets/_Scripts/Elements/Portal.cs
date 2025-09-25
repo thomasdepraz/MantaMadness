@@ -39,7 +39,8 @@ public class Portal : MonoBehaviour
     public void Teleport()
     {
         player.transform.position = teleportPoint.position;
-        player.transform.forward = teleportPoint.forward;
+        player.transform.rotation = new Quaternion(0, teleportPoint.transform.rotation.y, 0, teleportPoint.transform.rotation.w);
+        //player.transform.forward = teleportPoint.forward;
     }
 
     private void OnTriggerEnter(Collider other)
