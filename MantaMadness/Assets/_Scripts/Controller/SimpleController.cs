@@ -212,14 +212,14 @@ public class SimpleController : MonoBehaviour
         SetDrift(0, false);
     }
 
-    private float jumpChargeTimer;
-    bool chargesJump = false;
+    [HideInInspector] public float jumpChargeTimer { get; private set; }
+    [HideInInspector] public bool chargesJump { get; private set; } = false;
     private void Jump(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         if (IsLocked)
             return;
 
-        if (State == ControllerState.DIVING || State == ControllerState.SWIMMING)
+        if (State == ControllerState.DIVING || State == ControllerState.SWIMMING || State == ControllerState.AIRRIDE)
             return;
 
         if (isCoyote)
@@ -469,8 +469,8 @@ public class SimpleController : MonoBehaviour
     private void FixedUpdate()
     {
         hasHit = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit info, controllerData.hoverRaycastLength, raycastLayer.value);
-        hasHitTarget = Physics.SphereCast(hoverBehaviour.normalContainer.position,3f, targetDashDirection, out RaycastHit targetInfo, controllerData.hoverRaycastLength, targetRaycastLayer.value);
-
+        hasHitTarget = Physics.SphereCast(hoverBehaviour.normalContainer.position,controllerData.targetRaycastRadius, targetDashDirection, out RaycastHit targetInfo, controllerData.targetRaycastLength, targetRaycastLayer.value);
+        //hasHitTarget = Physics.OverlapSphere(hoverBehaviour.normalContainer.position, controllerData.targetDetectionRadius, controllerData.targetObjectsMask);
         if (OnRail)
         {
             if(false == currentRail.Progress(Time.fixedDeltaTime, out Vector3 nextPos, out Vector3 normal, out Vector3 direction))

@@ -80,6 +80,8 @@ public class ControllerData : ScriptableObject
     public float airRideGravityScale;
 
     [Header("Target Jump")]
+    public float targetRaycastLength = 2f;
+    public float targetRaycastRadius = 5f;
     public float targetJumpSpeed;
     public LayerMask targetObjectsMask;
     public float targetDetectionRadius;

@@ -34,6 +34,7 @@ public class MantaVisuals : MonoBehaviour
     public ParticleSystem[] driftParticles = new ParticleSystem[4];
     public ParticleSystem[] boostParticles = new ParticleSystem[3];
     public VisualEffect targetJumpParticles;
+    public VisualEffect chargeJumpParticles;
 
     [Header("Visual")]
     public SkinnedMeshRenderer[] mantaBodyVisual;
@@ -207,6 +208,7 @@ public class MantaVisuals : MonoBehaviour
         modelTransform.localRotation = Quaternion.Lerp(modelTransform.localRotation, targetRotation, Time.deltaTime * rotationSpeed);
     }
     ExposedProperty surfBladePlayProperty = "State";
+    ExposedProperty chargeJumpProperty = "State";
     private void UpdateParticles()
     {
         if (mantaController.State == ControllerState.SURFING && mantaController.HorizontalVelocity.magnitude > mantaController.controllerData.maxSpeed / 4f)
@@ -238,6 +240,22 @@ public class MantaVisuals : MonoBehaviour
             {
                 surfBladeEffect.SetInt(surfBladePlayProperty, 0);
             }
+        }
+
+        if (mantaController.chargesJump == true && mantaController.State == ControllerState.SURFING)
+        {
+            if(mantaController.jumpChargeTimer >= mantaController.controllerData.jumpChargeTime)
+            {
+                chargeJumpParticles.SetInt(chargeJumpProperty, 2);
+            }
+            else
+            {
+                chargeJumpParticles.SetInt(chargeJumpProperty, 1);
+            }
+        }
+        else if(mantaController.chargesJump == false || mantaController.State != ControllerState.SURFING)
+        {
+            chargeJumpParticles.SetInt(chargeJumpProperty, 0);
         }
     }
 

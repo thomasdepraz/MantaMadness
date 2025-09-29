@@ -48,6 +48,11 @@ public class JumpTarget : MonoBehaviour
 
     private IEnumerator DisableCoroutine()
     {
+        if (CameraTargetDetection.Instance.validTargets.Contains(gameObject.GetComponent<Collider>()))
+            {
+                CameraTargetDetection.Instance.validTargets.Remove(gameObject.GetComponent<Collider>());
+                print(gameObject.GetComponent<Collider>() + "Has been removed");
+            }
         ToggleFunctionElements(false);
         yield return new WaitForSeconds(respawnCooldown);
         ToggleFunctionElements(true);

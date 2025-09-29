@@ -15,7 +15,7 @@ MonoBehaviour:
   acceleration: 60
   maxSpeed: 40
   overSpeedCoeff: 0.5
-  baseTurnSpeed: 8
+  baseTurnSpeed: 10
   speedToSteeringRatio:
     serializedVersion: 2
     m_Curve:
@@ -39,7 +39,7 @@ MonoBehaviour:
       outWeight: 0.12556387
     - serializedVersion: 3
       time: 1
-      value: 0.45
+      value: 0.65
       inSlope: -0.16835363
       outSlope: 0
       tangentMode: 1
@@ -130,6 +130,8 @@ MonoBehaviour:
   driftBoostTimer: 2
   airRideVelocityThreshold: 40
   airRideGravityScale: 0.4
+  targetRaycastLength: 2
+  targetRaycastRadius: 5
   targetJumpSpeed: 20
   targetObjectsMask:
     serializedVersion: 2

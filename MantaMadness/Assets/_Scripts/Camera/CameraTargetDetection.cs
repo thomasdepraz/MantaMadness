@@ -54,6 +54,7 @@ public class CameraTargetDetection : MonoBehaviour
                     {
                         validTargets.Add(target);
                         target.GetComponent<JumpTarget>().SwitchIndicatorVisibility(true);
+                        print(target + "Has been added");
                     }
                 }
                 else
@@ -64,6 +65,7 @@ public class CameraTargetDetection : MonoBehaviour
                     {
                         validTargets.Remove(target);
                         target.GetComponent<JumpTarget>().SwitchIndicatorVisibility(false);
+                        print(target + "Has been removed");
                     }
                 }
             }
@@ -74,6 +76,7 @@ public class CameraTargetDetection : MonoBehaviour
                 {
                     validTargets.Remove(target);
                     target.GetComponent<JumpTarget>().SwitchIndicatorVisibility(false);
+                    print(target + "Has been removed");
                 }
             }
         }

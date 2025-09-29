@@ -51,7 +51,7 @@ public class CameraControllerData : ScriptableObject
     public float fall_maxYaw = 45f;
     public float fall_smooth = 10f;
 
-    [Header("Fall Camera Parameters")]
+    [Header("Air ride Camera Parameters")]
     public float air_sensitivity = 100f;
     public float air_sensitivity_controller = 1000f;
     public float air_minPitch = -45f;
