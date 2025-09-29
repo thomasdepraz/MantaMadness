@@ -26,14 +26,16 @@ public class MantaVisuals : MonoBehaviour
     public float airRideAngle;
     public float rotationSpeed;
 
-    [Header("Parameters")]
+    [Header("Particles")]
     public ParticleSystem surfParticles;
     public VisualEffect surfBladeEffect;
     public ParticleSystem splashParticles;
     public ParticleSystem styleParticles;
     public ParticleSystem[] driftParticles = new ParticleSystem[4];
     public ParticleSystem[] boostParticles = new ParticleSystem[3];
-    public ParticleSystem targetJumpParticles;
+    public VisualEffect targetJumpParticles;
+
+    [Header("Visual")]
     public SkinnedMeshRenderer[] mantaBodyVisual;
 
 
@@ -274,8 +276,10 @@ public class MantaVisuals : MonoBehaviour
         mantaAnimator.SetTrigger(triggerName);
     }
 
+    ExposedProperty targetJumpDirection = "Direction";
     public void JumpTargetParticles()
     {
+        targetJumpParticles.SetVector3(targetJumpDirection, transform.forward);
         targetJumpParticles.Play();
     }
 

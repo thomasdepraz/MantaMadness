@@ -126,6 +126,6 @@ public class FmodGlobalParameters : MonoBehaviour
     void SetParameter(FMODGlobalParamInfo param)
     {
         RuntimeManager.StudioSystem.setParameterByName(param.name, param.value);
-        print(param.name + "Value = " + param.value);
+        //print(param.name + "Value = " + param.value);
     }
 }

@@ -123,6 +123,7 @@ public class SimpleController : MonoBehaviour
 
         inputs.boost.action.performed += Boost;
         inputs.jump.action.performed += Jump;
+        inputs.jump.action.canceled += Jump;
         inputs.drift.action.performed += Drift;
         inputs.drift.action.canceled += DriftReleased;
         inputs.dash.action.performed += StyleDash;
@@ -136,6 +137,7 @@ public class SimpleController : MonoBehaviour
     {
         inputs.boost.action.performed -= Boost;
         inputs.jump.action.performed -= Jump;
+        inputs.jump.action.canceled -= Jump;
         inputs.drift.action.performed -= Drift;
         inputs.drift.action.canceled -= DriftReleased;
         inputs.dash.action.performed -= StyleDash;
@@ -210,6 +212,8 @@ public class SimpleController : MonoBehaviour
         SetDrift(0, false);
     }
 
+    private float jumpChargeTimer;
+    bool chargesJump = false;
     private void Jump(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         if (IsLocked)
@@ -224,38 +228,55 @@ public class SimpleController : MonoBehaviour
             currentCoyoteTime = 0;
             boostBehaviour.IncrementGauge(BoostAction.PerfectJump);
         }
-
-        if(State == ControllerState.SURFING && jumpCount < 1)
+        //CHARGE JUMP
+        if (context.performed)
         {
-            // spin when surfing
-            State = ControllerState.JUMPING;
-            jumpCount++;
-            rb.linearVelocity = hoverBehaviour.normalContainer.forward * HorizontalVelocity.magnitude;
-            rb.AddForce(NormalContainer.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
-            rb.linearDamping = controllerData.jumpDamping;
-
-            // PLAY FMOD PLAYER ACTION JUMP SOUND
-            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.JUMP);
-
-            //Play anim
-            triggerAnim.Invoke("Spin");
-
-            if (jumpRoutine != null)
-                StopCoroutine(jumpRoutine);
-            jumpRoutine = StartCoroutine(JumpRoutine());
-            return;
+            chargesJump = true;
+            print(chargesJump);
         }
-
-        if(State == ControllerState.JUMPING || State == ControllerState.FALLING)
+        //RELEASE JUMP
+        if (context.canceled)
         {
-            //Default in - air jump
-            if(jumpCount <= 1)
+            chargesJump = false;
+            float t = Mathf.Clamp01(jumpChargeTimer / controllerData.jumpChargeTime);
+            float forceMultiplier = Mathf.Lerp(controllerData.jumpForceMultiplierMin, controllerData.jumpForceMultiplierMax, t);
+            print("Force multiplier = " + forceMultiplier);
+            //RESET TIMER AT END
+            jumpChargeTimer = 0f;
+
+            if (State == ControllerState.SURFING && jumpCount < 1)
             {
-                AirDash();
+                // spin when surfing
+                State = ControllerState.JUMPING;
+                jumpCount++;
+                rb.linearVelocity = hoverBehaviour.normalContainer.forward * HorizontalVelocity.magnitude;
+                rb.AddForce(NormalContainer.up * controllerData.upwardImpulseForce * forceMultiplier, ForceMode.VelocityChange);
+                rb.linearDamping = controllerData.jumpDamping;
+
+                // PLAY FMOD PLAYER ACTION JUMP SOUND
+                PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.JUMP);
+
+                //Play anim
+                triggerAnim.Invoke("Spin");
+
+                if (jumpRoutine != null)
+                    StopCoroutine(jumpRoutine);
+                jumpRoutine = StartCoroutine(JumpRoutine());
+                return;
             }
-            else if(jumpCount > 1) //boost gauge air-dash
+
+            if (State == ControllerState.JUMPING || State == ControllerState.FALLING)
             {
-                boostBehaviour.UseBoost(AirDash);
+                //Default in - air jump
+                if (jumpCount <= 1)
+                {
+                    AirDash();
+                }
+                else if (jumpCount > 1) //boost gauge air-dash
+                {
+                    boostBehaviour.UseBoost(AirDash);
+
+                }
             }
         }
     }
@@ -330,35 +351,35 @@ public class SimpleController : MonoBehaviour
             jumpRoutine = StartCoroutine(JumpRoutine());
 
         }
+        //DOUBLE JUMP
+        //else
+        //{
+        //    //Play anim
+        //    triggerAnim.Invoke("Spin");
+        //    Vector3 direction;
+        //    if (airControl.x != 0 || airControl.y != 0)
+        //    {
+        //        direction = airControl.normalized;
+        //        direction = transform.TransformDirection(new Vector3(direction.x, 0, direction.y));
+        //    }
+        //    else
+        //    {
+        //        direction = transform.forward;
+        //    }
 
-        else
-        {
-            //Play anim
-            triggerAnim.Invoke("Spin");
-            Vector3 direction;
-            if (airControl.x != 0 || airControl.y != 0)
-            {
-                direction = airControl.normalized;
-                direction = transform.TransformDirection(new Vector3(direction.x, 0, direction.y));
-            }
-            else
-            {
-                direction = transform.forward;
-            }
+        //    transform.forward = direction;
+        //    rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude;
 
-            transform.forward = direction;
-            rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude;
+        //    rb.AddForce(NormalContainer.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
+        //    rb.linearDamping = controllerData.jumpDamping;
 
-            rb.AddForce(NormalContainer.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
-            rb.linearDamping = controllerData.jumpDamping;
+        //    // PLAY FMOD PLAYER ACTION JUMP SOUND
+        //    PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.JUMP);
 
-            // PLAY FMOD PLAYER ACTION JUMP SOUND
-            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.JUMP);
-
-            if (jumpRoutine != null)
-                StopCoroutine(jumpRoutine);
-            jumpRoutine = StartCoroutine(JumpRoutine());
-        }
+        //    if (jumpRoutine != null)
+        //        StopCoroutine(jumpRoutine);
+        //    jumpRoutine = StartCoroutine(JumpRoutine());
+        //}
     }
 
     private void Boost(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -497,6 +518,15 @@ public class SimpleController : MonoBehaviour
                 SetDrift(driftDir, true, true);
             }
         }
+
+        //Charging a Jump
+        if (chargesJump)
+        {
+            jumpChargeTimer += Time.deltaTime;
+            jumpChargeTimer = Mathf.Clamp(jumpChargeTimer, 0, controllerData.jumpChargeTime);
+            print(jumpChargeTimer);
+        }
+
         //Falling to Surfing
         if (State == ControllerState.FALLING)
         {
@@ -506,6 +536,7 @@ public class SimpleController : MonoBehaviour
                 ResetJump();
             }
         }
+
 
         // Fall / Jump on target
         if (State == ControllerState.FALLING || State == ControllerState.JUMPING)

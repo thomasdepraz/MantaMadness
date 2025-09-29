@@ -51,6 +51,9 @@ public class ControllerData : ScriptableObject
     public float upwardImpulseForce;
     public float maxFallingSpeed;
     public float perfectLandingForce;
+    public float jumpForceMultiplierMin;
+    public float jumpForceMultiplierMax;
+    public float jumpChargeTime;
 
     [Header("Swimming parameters")]
     public float minimumFloatingForce;

@@ -2,13 +2,27 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Splines;
 
-public class FairyTrail : MonoBehaviour
+public class PoulpsBehavior : MonoBehaviour
 {
+    [Header("Spline Components")]
     [SerializeField] private SplineAnimate splinePlayer;
     [SerializeField] private SplineContainer path;
-    [SerializeField] private ParticleSystem sparkles;
+
+    [Header("Particles")]
+    [SerializeField] private ParticleSystem sleepParticles;
+    [SerializeField] private ParticleSystem exclamationParticles;
+    [SerializeField] private ParticleSystem smokeInkParticles;
+
+
+    [Header("Components")]
     [SerializeField] private Transform body;
     [SerializeField] private GameObject[] toActivate;
+    [SerializeField] private Vector3 offset;
+
+    [Header ("Poulp Visual + Anim")]
+    [SerializeField] private GameObject visual;
+    [SerializeField] private Animator animator;
+    [SerializeField] private PoulpsRelay relay;
 
     private bool hasActivated =  false;
 
@@ -21,6 +35,7 @@ public class FairyTrail : MonoBehaviour
                 item.gameObject.SetActive(false);
             }
         }
+        sleepParticles.Play();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -30,10 +45,19 @@ public class FairyTrail : MonoBehaviour
             if(hasActivated == false)
             {
                 hasActivated = true;
-                StartCoroutine(spawnCoroutine());
-                StartCoroutine(Timer());
+                StartCoroutine(Suprised());
             }
         }
+    }
+
+    private void OnEnable()
+    {
+        relay.AnimationTriggerAction += AnimationEventTrigger;
+    }
+
+    private void OnDisable()
+    {
+        relay.AnimationTriggerAction -= AnimationEventTrigger;
     }
 
     private IEnumerator spawnCoroutine()
@@ -45,7 +69,7 @@ public class FairyTrail : MonoBehaviour
             if(i == 0)
             {
                 toActivate[i].gameObject.SetActive(true);
-                toActivate[i].gameObject.transform.position = body.transform.position;
+                toActivate[i].gameObject.transform.position = body.transform.position + offset;
                 yield return new WaitForSeconds(splinePlayer.Duration / (toActivate.Length + 3));
             }        
             //else if (i == toActivate.Length - 2)
@@ -57,7 +81,7 @@ public class FairyTrail : MonoBehaviour
             else
             {
                 toActivate[i].gameObject.SetActive(true);
-                toActivate[i].gameObject.transform.position = body.transform.position;
+                toActivate[i].gameObject.transform.position = body.transform.position + offset;
                 yield return new WaitForSeconds(splinePlayer.Duration / (toActivate.Length + 3));
             }
         }
@@ -68,7 +92,29 @@ public class FairyTrail : MonoBehaviour
     {
         yield return new WaitForSeconds(splinePlayer.Duration);
         splinePlayer.Pause();
-        sparkles.Stop();
+        visual.SetActive(false);
+        smokeInkParticles.Stop();
+        smokeInkParticles.gameObject.SetActive(false);
+    }
+
+    private bool OnAnimationEvent = false;
+    private IEnumerator Suprised()
+    {
+        sleepParticles.Stop();
+        sleepParticles.gameObject.SetActive(false);
+        exclamationParticles.Play();
+        animator.SetTrigger("Suprised");
+        yield return new WaitUntil(() => OnAnimationEvent);
+        animator.SetTrigger("Sprint");
+        smokeInkParticles.Play();
+        OnAnimationEvent = false;
+        StartCoroutine(spawnCoroutine());
+        StartCoroutine(Timer());
+    }
+
+    private void AnimationEventTrigger()
+    {
+        OnAnimationEvent = true;
     }
 
 }

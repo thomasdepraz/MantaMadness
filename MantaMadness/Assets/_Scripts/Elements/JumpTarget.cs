@@ -7,13 +7,17 @@ using static UnityEngine.Rendering.DebugUI;
 public class JumpTarget : MonoBehaviour
 {
     private SimpleController player;
+    [Header("Collision Layer")]
     [SerializeField] LayerMask playerMask;
-
+    [Header("Particles")]
     [SerializeField] private ParticleSystem indicator;
-    [SerializeField] private Material[] materials;
+    [SerializeField] private ParticleSystem burstParticle;
+    [Header("Parameters")]
     [SerializeField] private float respawnCooldown = 1f; 
     [SerializeField] private float propulsionForce;
+    [Header("Animation")]
     [SerializeField] private Animator animator;
+    [Header("Camera")]
     [SerializeField] private CinemachineCamera targetCam;
 
     private void Start()
@@ -82,7 +86,7 @@ public class JumpTarget : MonoBehaviour
         OnAnimationEvent = false;
         player.togglePlayerBodyVisual(true);
         player.PropelledByTarget(transform, propulsionForce);
-
+        burstParticle.Play();
     }
 
     private void AnimationEventTrigger()
