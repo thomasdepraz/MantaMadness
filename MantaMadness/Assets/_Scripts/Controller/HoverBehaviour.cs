@@ -57,11 +57,13 @@ public class HoverBehaviour : MonoBehaviour
     {
         surfaceNormal = Vector3.zero;
         hitPoint = Vector3.zero;
-        if (inputDirection.x == 0 && inputDirection.y ==0)
-            return false;
+        //if (inputDirection.x == 0 && inputDirection.y ==0)
+        //    return false;
 
         float inputDirAngle = 0;
-        if (Physics.Raycast(normalContainer.position, inputDirection, out RaycastHit inputDirectionHit, m_data.hoverRaycastLength, layerMask, QueryTriggerInteraction.UseGlobal))
+        //if (Physics.Raycast(normalContainer.position, inputDirection, out RaycastHit inputDirectionHit, m_data.hoverRaycastLength, layerMask, QueryTriggerInteraction.UseGlobal))
+        //    inputDirAngle = Vector3.Angle(Vector3.up, inputDirectionHit.normal);
+        if (Physics.SphereCast(normalContainer.position, 1.5f ,normalContainer.forward, out RaycastHit inputDirectionHit, m_data.hoverRaycastLength, layerMask, QueryTriggerInteraction.UseGlobal))
             inputDirAngle = Vector3.Angle(Vector3.up, inputDirectionHit.normal);
         else
             return false;

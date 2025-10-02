@@ -126,7 +126,7 @@ public class MantaVisuals : MonoBehaviour
 
     private void UpdateState(ControllerState previous, ControllerState newState)
     {
-        if(previous == ControllerState.FALLING && newState == ControllerState.SURFING)
+        if(previous == ControllerState.FALLING && newState == ControllerState.SURFING || previous == ControllerState.JUMPING && newState == ControllerState.SURFING)
             SplashParticles();
 
         else if (previous == ControllerState.SURFING && newState == ControllerState.JUMPING)

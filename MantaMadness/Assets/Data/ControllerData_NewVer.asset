@@ -60,7 +60,7 @@ MonoBehaviour:
   maxAngleToHover: 95
   minSpeedToDash: 0
   dashTimer: 0.5
-  dashForce: 5
+  dashForce: 0
   dashCooldown: 0.75
   dashTimeThreshold: 0.3
   maxConsecutiveDashCount: 5
@@ -107,13 +107,13 @@ MonoBehaviour:
   maxDivingFallingSpeed: 100
   jumpDamping: 0.3
   coyoteTime: 0.2
-  forwardImpulseForce: 1
+  forwardImpulseForce: 5
   upwardImpulseForce: 20
   maxFallingSpeed: 200
   perfectLandingForce: 50
-  jumpForceMultiplierMin: 0.5
-  jumpForceMultiplierMax: 2
-  jumpChargeTime: 2
+  jumpForceMultiplierMin: 0.75
+  jumpForceMultiplierMax: 1.5
+  jumpChargeTime: 1
   minimumFloatingForce: 2
   maximumFloatingForce: 50
   floatingForceMultiplier: 5
@@ -131,7 +131,7 @@ MonoBehaviour:
   airRideVelocityThreshold: 40
   airRideGravityScale: 0.4
   targetRaycastLength: 2
-  targetRaycastRadius: 5
+  targetRaycastRadius: 3
   targetJumpSpeed: 20
   targetObjectsMask:
     serializedVersion: 2

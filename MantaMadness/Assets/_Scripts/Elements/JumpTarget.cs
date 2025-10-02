@@ -94,6 +94,15 @@ public class JumpTarget : MonoBehaviour
         burstParticle.Play();
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.GetComponent<SimpleController>() != null)
+        {
+            DeactivateTarget();
+            other.GetComponent<SimpleController>().StopByTargetImpact(gameObject);
+        }
+    }
+
     private void AnimationEventTrigger()
     {
         OnAnimationEvent = true;

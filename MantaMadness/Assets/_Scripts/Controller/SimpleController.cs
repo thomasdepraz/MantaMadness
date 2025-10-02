@@ -232,7 +232,7 @@ public class SimpleController : MonoBehaviour
         if (context.performed)
         {
             chargesJump = true;
-            print(chargesJump);
+            //print(chargesJump);
         }
         //RELEASE JUMP
         if (context.canceled)
@@ -250,7 +250,7 @@ public class SimpleController : MonoBehaviour
                 State = ControllerState.JUMPING;
                 jumpCount++;
                 rb.linearVelocity = hoverBehaviour.normalContainer.forward * HorizontalVelocity.magnitude;
-                rb.AddForce(NormalContainer.up * controllerData.upwardImpulseForce * forceMultiplier, ForceMode.VelocityChange);
+                rb.AddForce((NormalContainer.up * controllerData.upwardImpulseForce * forceMultiplier) + (NormalContainer.forward * controllerData.forwardImpulseForce * forceMultiplier), ForceMode.VelocityChange);
                 rb.linearDamping = controllerData.jumpDamping;
 
                 // PLAY FMOD PLAYER ACTION JUMP SOUND
@@ -463,14 +463,12 @@ public class SimpleController : MonoBehaviour
             }
         }
     }
-    public bool hasHitTarget = false;
+
     bool hasHit = false;
     float xRotation = 0f;
     private void FixedUpdate()
     {
         hasHit = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit info, controllerData.hoverRaycastLength, raycastLayer.value);
-        hasHitTarget = Physics.SphereCast(hoverBehaviour.normalContainer.position,controllerData.targetRaycastRadius, targetDashDirection, out RaycastHit targetInfo, controllerData.targetRaycastLength, targetRaycastLayer.value);
-        //hasHitTarget = Physics.OverlapSphere(hoverBehaviour.normalContainer.position, controllerData.targetDetectionRadius, controllerData.targetObjectsMask);
         if (OnRail)
         {
             if(false == currentRail.Progress(Time.fixedDeltaTime, out Vector3 nextPos, out Vector3 normal, out Vector3 direction))
@@ -534,20 +532,6 @@ public class SimpleController : MonoBehaviour
             {
                 State = ControllerState.SURFING;
                 ResetJump();
-            }
-        }
-
-
-        // Fall / Jump on target
-        if (State == ControllerState.FALLING || State == ControllerState.JUMPING)
-        {
-            if (hasHitTarget)
-            {
-                print("TARGET HIT");
-                State = ControllerState.JUMPING;
-                targetInfo.collider.gameObject.GetComponent<JumpTarget>().DeactivateTarget();
-                //target.getcomp<target>().startcoroutine(procedure)
-                StopByTargetImpact(targetInfo.collider.gameObject);
             }
         }
 
