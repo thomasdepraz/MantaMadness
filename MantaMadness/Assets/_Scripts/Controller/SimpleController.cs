@@ -787,6 +787,14 @@ public class SimpleController : MonoBehaviour
         ResetJump();
     }
 
+    public void BounceOnTarget(float propulsionForce)
+    {
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.AddForce((hoverBehaviour.normalContainer.forward * propulsionForce) + (hoverBehaviour.normalContainer.up * propulsionForce / 1.5f), ForceMode.VelocityChange);
+        ResetJump();
+    }
+
     public void EnterAirRail(AirRail rail)
     {
         if (State != ControllerState.SURFING || currentAirRail != null)

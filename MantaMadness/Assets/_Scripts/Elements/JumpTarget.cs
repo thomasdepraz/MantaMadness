@@ -6,24 +6,20 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class JumpTarget : MonoBehaviour
 {
-    private SimpleController player;
+    protected SimpleController player;
     [Header("Collision Layer")]
     [SerializeField] LayerMask playerMask;
     [Header("Particles")]
-    [SerializeField] private ParticleSystem indicator;
-    [SerializeField] private ParticleSystem burstParticle;
+    [SerializeField] protected ParticleSystem indicator;
     [Header("Parameters")]
-    [SerializeField] private float respawnCooldown = 1f; 
-    [SerializeField] private float propulsionForce;
-    [Header("Animation")]
-    [SerializeField] private Animator animator;
-    [Header("Camera")]
-    [SerializeField] private CinemachineCamera targetCam;
+    [SerializeField] protected float respawnCooldown = 1f;
 
-    private void Start()
+
+
+
+    protected virtual void Start()
     {
         player = Game.Instance.player;
-        targetCam.enabled = false;
     }
     
     public void SwitchIndicatorVisibility(bool validTarget)
@@ -46,7 +42,7 @@ public class JumpTarget : MonoBehaviour
         StartCoroutine(DisableCoroutine());
     }
 
-    private IEnumerator DisableCoroutine()
+    protected IEnumerator DisableCoroutine()
     {
         if (CameraTargetDetection.Instance.validTargets.Contains(gameObject.GetComponent<Collider>()))
             {
@@ -59,7 +55,7 @@ public class JumpTarget : MonoBehaviour
         yield return null;
     }
 
-    private void ToggleFunctionElements(bool toggleValue)
+    protected virtual void ToggleFunctionElements(bool toggleValue)
     {
         if (toggleValue)
         {
@@ -73,7 +69,6 @@ public class JumpTarget : MonoBehaviour
             gameObject.GetComponent<Collider>().enabled = false;
             indicator.gameObject.SetActive(false);
         }
-
     }
 
     public void StartLaunchCoroutine()
@@ -81,31 +76,17 @@ public class JumpTarget : MonoBehaviour
         StartCoroutine(LaunchCoroutine());
     }
 
-    private bool OnAnimationEvent = false;
-    private IEnumerator LaunchCoroutine()
+    protected bool OnAnimationEvent = false;
+    protected virtual IEnumerator LaunchCoroutine()
     {
-        animator.SetTrigger("Trigger");
-        targetCam.enabled = true;
-        yield return new WaitUntil(() => OnAnimationEvent);
-        targetCam.enabled = false;
-        OnAnimationEvent = false;
-        player.togglePlayerBodyVisual(true);
-        player.PropelledByTarget(transform, propulsionForce);
-        burstParticle.Play();
+        yield return null;
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         if(other.GetComponent<SimpleController>() != null)
         {
             DeactivateTarget();
-            other.GetComponent<SimpleController>().StopByTargetImpact(gameObject);
         }
     }
-
-    private void AnimationEventTrigger()
-    {
-        OnAnimationEvent = true;
-    }
-
 }
