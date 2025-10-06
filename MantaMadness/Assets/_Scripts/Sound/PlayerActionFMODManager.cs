@@ -1,6 +1,7 @@
 using FMOD.Studio;
 using FMODUnity;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,14 +11,15 @@ public enum PlayerActionFMOD
     JUMP,
     SPLASH,
     STYLE,
-    SURF
+    SURF,
+    DRIFT
 }
 
 public class PlayerActionFMODManager : MonoBehaviour
 {
     [HideInInspector]public static PlayerActionFMODManager Instance;
 
-    [SerializeField] private EventReference[] playerFmodActions; 
+    [SerializeField] private EventReference[] playerFmodActions;
 
     public void Awake()
     {
@@ -27,18 +29,19 @@ public class PlayerActionFMODManager : MonoBehaviour
         }
     }
 
-
     public void PlayPlayerAction(PlayerActionFMOD actionName)
     {
         RuntimeManager.PlayOneShot(playerFmodActions[(int)actionName], Game.Instance.player.transform.position);
     }
-
     public void PlayStyleAction(PlayerActionFMOD actionName, int State)
     {
         EventInstance instance = RuntimeManager.CreateInstance(playerFmodActions[(int)actionName]);
-        FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_StyleState, State);
 
-        instance.start();
-        instance.release();
+            FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_StyleState, State);
+
+            instance.start();
+            instance.release();
     }
+
+
 }

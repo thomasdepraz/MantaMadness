@@ -124,6 +124,7 @@ public class SimpleController : MonoBehaviour
         inputs.boost.action.performed += Boost;
         inputs.jump.action.performed += Jump;
         inputs.jump.action.canceled += Jump;
+        inputs.drift.action.started += DrifStart;
         inputs.drift.action.performed += Drift;
         inputs.drift.action.canceled += DriftReleased;
         inputs.dash.action.performed += StyleDash;
@@ -138,6 +139,7 @@ public class SimpleController : MonoBehaviour
         inputs.boost.action.performed -= Boost;
         inputs.jump.action.performed -= Jump;
         inputs.jump.action.canceled -= Jump;
+        inputs.drift.action.started -= DrifStart;
         inputs.drift.action.performed -= Drift;
         inputs.drift.action.canceled -= DriftReleased;
         inputs.dash.action.performed -= StyleDash;
@@ -178,6 +180,11 @@ public class SimpleController : MonoBehaviour
             dash.Invoke(consecutiveDashCount);
         }
     }
+    private void DrifStart(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DRIFT);
+        print("DRIFT STARTED");
+    }
 
     private void Drift(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
@@ -210,6 +217,7 @@ public class SimpleController : MonoBehaviour
         }
 
         SetDrift(0, false);
+        print("DRIFT CANCELED");
     }
 
     [HideInInspector] public float jumpChargeTimer { get; private set; }

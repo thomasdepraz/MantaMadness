@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.UIElements;
@@ -8,12 +9,19 @@ public class FlyMode : MonoBehaviour
    [Header("Vitesse de déplacement")]
    public float moveSpeed = 10f;
    public float boostMultiplier = 2f;
+    public float smoothSpeed = 10f;
 
-   [Header("Sensibilité de la souris")]
+    [Header("Sensibilité de la souris")]
    public float mouseSensitivity = 2f;
+    public float rotationSmoothSpeed = 10f;
 
-   float rotationX = 0f;
+    float rotationX = 0f;
    float rotationY = 0f;
+
+    Vector3 currentVelocity;
+    Vector3 targetPosition;
+    Quaternion targetRotation;
+
 
     bool isEnabled = false;
     public Camera flyCam;
@@ -38,7 +46,9 @@ public class FlyMode : MonoBehaviour
             rotationY -= Input.GetAxis("Mouse Y") * mouseSensitivity;
             rotationY = Mathf.Clamp(rotationY, -90f, 90f); // Empêche la caméra de se retourner
 
-            transform.rotation = Quaternion.Euler(rotationY, rotationX, 0f);
+            targetRotation = Quaternion.Euler(rotationY, rotationX, 0f);
+
+            //transform.rotation = Quaternion.Euler(rotationY, rotationX, 0f);
 
             // --- Déplacement avec ZQSD ---
             float speed = moveSpeed;
@@ -50,15 +60,18 @@ public class FlyMode : MonoBehaviour
                 Input.GetAxisRaw("Vertical")    // Z/S
             );
 
-            Vector3 move = transform.TransformDirection(direction).normalized * speed * Time.deltaTime;
-            transform.position += move;
+            Vector3 move = (transform.TransformDirection(direction).normalized) * speed * Time.deltaTime;
 
-            // Monter/Descendre avec espace/ctrl
             if (Input.GetKey(KeyCode.E))
-                transform.position += Vector3.up * speed * Time.deltaTime;
-            if (Input.GetKey(KeyCode.LeftControl
-                ))
-                transform.position += Vector3.down * speed * Time.deltaTime;
+                move += Vector3.up * speed * Time.deltaTime;
+            if (Input.GetKey(KeyCode.LeftShift))
+                move += Vector3.down * speed * Time.deltaTime;
+
+            targetPosition += move;
+
+            // --- Appliquer le lissage ---
+            transform.position = Vector3.SmoothDamp(transform.position, transform.position + targetPosition, ref currentVelocity, 1f / smoothSpeed);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSmoothSpeed * Time.deltaTime);
 
             // Quitter le mode "fly" en débloquant la souris avec ESC
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -77,7 +90,8 @@ public class FlyMode : MonoBehaviour
     {
         if (isEnabled == true)
         {
-            Game.Instance.player.transform.position = flyCam.transform.position;
+            //Game.Instance.player.transform.position = flyCam.transform.position;
+            flyCam.transform.position = Game.Instance.player.transform.position;
             Game.Instance.player.ForceLock(false);
             isEnabled = false;
             UnityEngine.Cursor.lockState = CursorLockMode.None;
