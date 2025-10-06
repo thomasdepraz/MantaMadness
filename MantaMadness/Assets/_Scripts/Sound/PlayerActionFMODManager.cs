@@ -3,7 +3,6 @@ using FMODUnity;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public enum PlayerActionFMOD
 {
@@ -15,11 +14,21 @@ public enum PlayerActionFMOD
     DRIFT
 }
 
+[Serializable]
+public struct PlayerActionEventReferencePair
+{
+    public PlayerActionFMOD action;
+    public EventReference eventReference;
+    public bool isLooping;
+}
+
 public class PlayerActionFMODManager : MonoBehaviour
 {
     [HideInInspector]public static PlayerActionFMODManager Instance;
+    [SerializeField] private List<PlayerActionEventReferencePair> playerFmodActionsList = new();
 
-    [SerializeField] private EventReference[] playerFmodActions;
+    private readonly Dictionary<PlayerActionFMOD, EventInstance> loopingSounds = new();
+
 
     public void Awake()
     {
@@ -31,16 +40,62 @@ public class PlayerActionFMODManager : MonoBehaviour
 
     public void PlayPlayerAction(PlayerActionFMOD actionName)
     {
-        RuntimeManager.PlayOneShot(playerFmodActions[(int)actionName], Game.Instance.player.transform.position);
+        EventReference eventReference = GetEventReference(actionName, out bool isLooping);
+
+        if(false == isLooping)
+        {
+            RuntimeManager.PlayOneShot(eventReference, Game.Instance.player.transform.position);
+            return;
+        }
+
+        //Handle looping sounds
+        if (loopingSounds.ContainsKey(actionName))
+        {
+            //stop current before 
+            loopingSounds[actionName].stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            loopingSounds.Remove(actionName);
+        }
+
+        EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
+        loopingSounds[actionName] = eventInstance;
+        eventInstance.start();
     }
+
+    public bool TryStopLoopingSound(PlayerActionFMOD action)
+    {
+        if (loopingSounds.ContainsKey(action))
+        {
+            //stop current looping sound
+            loopingSounds[action].stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            loopingSounds.Remove(action);
+            return true;
+        }
+
+        return false;
+    }
+
+    private EventReference GetEventReference(PlayerActionFMOD action, out bool isLooping)
+    {
+        isLooping = false;
+        foreach (var item in playerFmodActionsList)
+        { 
+            if(item.action == action)
+            {
+                isLooping = item.isLooping;
+                return item.eventReference;
+            }
+        }
+        Debug.LogError($"Found no matching event reference for action : {action}");
+        return default;
+    }
+
     public void PlayStyleAction(PlayerActionFMOD actionName, int State)
     {
-        EventInstance instance = RuntimeManager.CreateInstance(playerFmodActions[(int)actionName]);
+        EventInstance instance = RuntimeManager.CreateInstance(GetEventReference(actionName, out _));
+        FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_StyleState, State);
 
-            FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_StyleState, State);
-
-            instance.start();
-            instance.release();
+        instance.start();
+        instance.release();
     }
 
 

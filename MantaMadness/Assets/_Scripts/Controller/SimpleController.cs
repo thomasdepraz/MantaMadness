@@ -152,6 +152,7 @@ public class SimpleController : MonoBehaviour
 
         if (drifting == false)
         {
+            PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.DRIFT);
             currentDriftTime = 0;
             hasDriftBoost = false;
         }
@@ -183,7 +184,6 @@ public class SimpleController : MonoBehaviour
     private void DrifStart(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DRIFT);
-        print("DRIFT STARTED");
     }
 
     private void Drift(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -217,7 +217,6 @@ public class SimpleController : MonoBehaviour
         }
 
         SetDrift(0, false);
-        print("DRIFT CANCELED");
     }
 
     [HideInInspector] public float jumpChargeTimer { get; private set; }
