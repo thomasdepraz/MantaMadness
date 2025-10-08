@@ -183,7 +183,13 @@ public class SimpleController : MonoBehaviour
     }
     private void DrifStart(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DRIFT);
+        if (IsLocked)
+            return;
+
+        if (State == ControllerState.SURFING)
+        {
+            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DRIFT);
+        }
     }
 
     private void Drift(UnityEngine.InputSystem.InputAction.CallbackContext context)

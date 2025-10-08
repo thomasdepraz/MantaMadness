@@ -64,14 +64,14 @@ public class FlyMode : MonoBehaviour
 
             if (Input.GetKey(KeyCode.E))
                 move += Vector3.up * speed * Time.deltaTime;
-            if (Input.GetKey(KeyCode.LeftShift))
-                move += Vector3.down * speed * Time.deltaTime;
+            if (Input.GetKey(KeyCode.A))
+                move -= Vector3.up * speed * Time.deltaTime;
 
             targetPosition += move;
 
             // --- Appliquer le lissage ---
-            transform.position = Vector3.SmoothDamp(transform.position, transform.position + targetPosition, ref currentVelocity, 1f / smoothSpeed);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSmoothSpeed * Time.deltaTime);
+                transform.position = Vector3.SmoothDamp(transform.localPosition, targetPosition, ref currentVelocity, 1f / smoothSpeed);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSmoothSpeed * Time.deltaTime);
 
             // Quitter le mode "fly" en débloquant la souris avec ESC
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -79,6 +79,10 @@ public class FlyMode : MonoBehaviour
                 UnityEngine.Cursor.lockState = CursorLockMode.None;
                 UnityEngine.Cursor.visible = true;
             }
+        }
+        else if (isEnabled == false)
+        {
+            flyCam.transform.position = Game.Instance.player.transform.position;
         }
         if (Input.GetKeyDown(KeyCode.G))
         {
@@ -90,14 +94,12 @@ public class FlyMode : MonoBehaviour
     {
         if (isEnabled == true)
         {
-            //Game.Instance.player.transform.position = flyCam.transform.position;
-            flyCam.transform.position = Game.Instance.player.transform.position;
+            Game.Instance.player.transform.position = flyCam.transform.position;
             Game.Instance.player.ForceLock(false);
             isEnabled = false;
             UnityEngine.Cursor.lockState = CursorLockMode.None;
             UnityEngine.Cursor.visible = true;
             flyCam.enabled = false;
-
         }
         else if (isEnabled == false)
         {
@@ -107,6 +109,7 @@ public class FlyMode : MonoBehaviour
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
             UnityEngine.Cursor.visible = false;
             flyCam.enabled = true;
+            targetPosition = transform.position;
         }
 
     }
