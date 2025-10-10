@@ -365,34 +365,37 @@ public class SimpleController : MonoBehaviour
 
         }
         //DOUBLE JUMP
-        //else
-        //{
-        //    //Play anim
-        //    triggerAnim.Invoke("Spin");
-        //    Vector3 direction;
-        //    if (airControl.x != 0 || airControl.y != 0)
-        //    {
-        //        direction = airControl.normalized;
-        //        direction = transform.TransformDirection(new Vector3(direction.x, 0, direction.y));
-        //    }
-        //    else
-        //    {
-        //        direction = transform.forward;
-        //    }
+        else
+        {
 
-        //    transform.forward = direction;
-        //    rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude;
+            //REFACTO POUR EN FAIRE UN DASH ? BRO à LA VISION
 
-        //    rb.AddForce(NormalContainer.up * controllerData.upwardImpulseForce, ForceMode.VelocityChange);
-        //    rb.linearDamping = controllerData.jumpDamping;
+            //Play anim
+            triggerAnim.Invoke("Spin");
+            Vector3 direction;
+            if (airControl.x != 0 || airControl.y != 0)
+            {
+                direction = airControl.normalized;
+                direction = transform.TransformDirection(new Vector3(direction.x, 0, direction.y));
+            }
+            else
+            {
+                direction = transform.forward;
+            }
 
-        //    // PLAY FMOD PLAYER ACTION JUMP SOUND
-        //    PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.JUMP);
+            //transform.forward = direction;
+            //rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude / 2;
 
-        //    if (jumpRoutine != null)
-        //        StopCoroutine(jumpRoutine);
-        //    jumpRoutine = StartCoroutine(JumpRoutine());
-        //}
+            rb.AddForce((NormalContainer.up * controllerData.upwardImpulseForce * 2 + direction * controllerData.upwardImpulseForce), ForceMode.VelocityChange);
+            rb.linearDamping = controllerData.jumpDamping;
+
+            // PLAY FMOD PLAYER ACTION JUMP SOUND
+            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.JUMP);
+
+            //if (jumpRoutine != null)
+            //    StopCoroutine(jumpRoutine);
+            //jumpRoutine = StartCoroutine(JumpRoutine());
+        }
     }
 
     private void Boost(UnityEngine.InputSystem.InputAction.CallbackContext context)
