@@ -87,4 +87,10 @@ public class ControllerData : ScriptableObject
     public float targetDetectionRadius;
     public float targetBoostFactor;
     public float targetBounceForce;
+
+
+    [Header("Double Jump")]
+    public float doubleJumpForce;
+    public float doubleJumpDamping;
+
 }

@@ -298,6 +298,7 @@ public class SimpleController : MonoBehaviour
     private IEnumerator JumpRoutine()
     {
         yield return new WaitForSeconds(0.5f);
+        
         jumpRoutine = null;
     }
 
@@ -367,34 +368,48 @@ public class SimpleController : MonoBehaviour
         //DOUBLE JUMP
         else
         {
+            rb.linearDamping = controllerData.doubleJumpDamping;
+            triggerAnim.Invoke("TargetJump");
+            playTargetJumpParticles.Invoke();
 
-            //REFACTO POUR EN FAIRE UN DASH ? BRO à LA VISION
+            ////REFACTO POUR EN FAIRE UN DASH ? BRO à LA VISION
+            targetDashDirection = Camera.main.transform.forward;
+            targetDashDirection = targetDashDirection.normalized;
 
-            //Play anim
-            triggerAnim.Invoke("Spin");
-            Vector3 direction;
-            if (airControl.x != 0 || airControl.y != 0)
-            {
-                direction = airControl.normalized;
-                direction = transform.TransformDirection(new Vector3(direction.x, 0, direction.y));
-            }
-            else
-            {
-                direction = transform.forward;
-            }
+            transform.forward = new Vector3(targetDashDirection.x, 0, targetDashDirection.z);
+            rb.linearVelocity = targetDashDirection * HorizontalVelocity.magnitude;
 
-            //transform.forward = direction;
-            //rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude / 2;
+            rb.AddForce(targetDashDirection * controllerData.doubleJumpForce, ForceMode.Impulse);
 
-            rb.AddForce((NormalContainer.up * controllerData.upwardImpulseForce * 2 + direction * controllerData.upwardImpulseForce), ForceMode.VelocityChange);
-            rb.linearDamping = controllerData.jumpDamping;
+            if (jumpRoutine != null)
+                StopCoroutine(jumpRoutine);
+            jumpRoutine = StartCoroutine(JumpRoutine());
 
-            // PLAY FMOD PLAYER ACTION JUMP SOUND
-            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.JUMP);
+            ////Play anim
+            //triggerAnim.Invoke("Spin");
+            //Vector3 direction;
+            //if (airControl.x != 0 || airControl.y != 0)
+            //{
+            //    direction = airControl.normalized;
+            //    direction = transform.TransformDirection(new Vector3(direction.x, 0, direction.y));
+            //}
+            //else
+            //{
+            //    direction = transform.forward;
+            //}
 
-            //if (jumpRoutine != null)
-            //    StopCoroutine(jumpRoutine);
-            //jumpRoutine = StartCoroutine(JumpRoutine());
+            ////transform.forward = direction;
+            ////rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude / 2;
+
+            //rb.AddForce((NormalContainer.up * controllerData.upwardImpulseForce * 2 + direction * controllerData.upwardImpulseForce), ForceMode.VelocityChange);
+            //rb.linearDamping = controllerData.jumpDamping;
+
+            //// PLAY FMOD PLAYER ACTION JUMP SOUND
+            //PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.JUMP);
+
+            ////if (jumpRoutine != null)
+            ////    StopCoroutine(jumpRoutine);
+            ////jumpRoutine = StartCoroutine(JumpRoutine());
         }
     }
 
