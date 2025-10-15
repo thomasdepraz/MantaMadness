@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class MantaCameraController : MonoBehaviour
 {
+    public GameObject cameraTarget;
+
     public float fallingSpeedThreshold;
     public float airRideSpeedThreshold;
 
@@ -53,16 +55,18 @@ public class MantaCameraController : MonoBehaviour
     private void Start()
     {
         CameraManager.Instance.SetDefaultCamera(surfingCamera);
-        SetActiveCamera(fallingCamera);
+        SetActiveCamera(surfingCamera);
     }
 
     private void Update()
     {
-        if(mantaController.State == ControllerState.SURFING)
+        cameraTarget.transform.position = Game.Instance.player.transform.position;
+        if (mantaController.State == ControllerState.SURFING)
         {
             float t =  math.remap(5, -5, 0, 1, mantaController.AngularVelocity.y);
             float target = Mathf.Lerp(minMaxPosition.x, minMaxPosition.y, t);
-            surfingCameraRotationComposer.Composition.ScreenPosition.x = Mathf.Lerp(surfingCameraRotationComposer.Composition.ScreenPosition.x, target, Time.deltaTime * rotationSpeed);
+
+            //surfingCameraRotationComposer.Composition.ScreenPosition.x = Mathf.Lerp(surfingCameraRotationComposer.Composition.ScreenPosition.x, target, Time.deltaTime * rotationSpeed);
         }
     }
 
@@ -94,19 +98,19 @@ public class MantaCameraController : MonoBehaviour
         switch (newState)
         {
             case ControllerState.FALLING:
-                SetActiveCamera(fallingCamera);
+                SetActiveCamera(surfingCamera);
                 break;
             case ControllerState.JUMPING:
-                SetActiveCamera(jumpingCamera);
+                SetActiveCamera(surfingCamera);
                 break;
             case ControllerState.SURFING:
                 SetActiveCamera(surfingCamera);
                 break;
             case ControllerState.DIVING:
-                SetActiveCamera(divingCamera);
+                SetActiveCamera(surfingCamera);
                 break;
             case ControllerState.SWIMMING:
-                SetActiveCamera(swimmingCamera);
+                SetActiveCamera(surfingCamera);
                 break;
             default:
                 break;

@@ -742,6 +742,7 @@ public class SimpleController : MonoBehaviour
         //Apply forces (grip - thrust - steer)
         rb.AddForce(hoverBehaviour.normalContainer.right * desiredVelocityChange, ForceMode.VelocityChange);
         rb.AddForce(hoverBehaviour.normalContainer.forward * forward, ForceMode.Acceleration);
+        //rb.AddForce(Camera.main.transform.forward * forward, ForceMode.Acceleration);
 
         if (IsDrifting)
         {

@@ -180,6 +180,7 @@ public class MantaVisuals : MonoBehaviour
         {
             float angular = mantaController.AngularVelocity.y;
             targetRotation = Quaternion.Euler(0, 0, -angular * (mantaController.IsDrifting ? driftTurnAngle : surfTurnAngle));
+            //targetRotation = Quaternion.Euler(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
         }
 
         //Falling
