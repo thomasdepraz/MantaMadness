@@ -8,6 +8,7 @@ public class ControllerData : ScriptableObject
     [Header("Global parameters")]
     public float acceleration;
     public float maxSpeed;
+    public float rotationTorque;
     [Range(0f,1f)]
     public float overSpeedCoeff;
     public float baseTurnSpeed;

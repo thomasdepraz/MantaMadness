@@ -206,8 +206,7 @@ public class MantaVisuals : MonoBehaviour
             targetRotation = Quaternion.Euler(maxPitch, 0, 0);
         }
 
-        //modelTransform.localRotation = Quaternion.Lerp(modelTransform.localRotation, targetRotation, Time.deltaTime * rotationSpeed);
-        modelTransform.localRotation = Quaternion.LookRotation(-Camera.main.transform.forward, Camera.main.transform.up);
+        modelTransform.localRotation = Quaternion.Lerp(modelTransform.localRotation, targetRotation, Time.deltaTime * rotationSpeed);
     }
     ExposedProperty surfBladePlayProperty = "State";
     ExposedProperty chargeJumpProperty = "State";

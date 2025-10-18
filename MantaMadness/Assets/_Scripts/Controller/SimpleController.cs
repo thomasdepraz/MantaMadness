@@ -374,8 +374,7 @@ public class SimpleController : MonoBehaviour
             playTargetJumpParticles.Invoke();
 
             ////REFACTO POUR EN FAIRE UN DASH ? BRO à LA VISION
-            targetDashDirection = Camera.main.transform.forward;
-            targetDashDirection = targetDashDirection.normalized;
+            targetDashDirection = Camera.main.transform.forward.normalized;
 
             transform.forward = new Vector3(targetDashDirection.x, 0, targetDashDirection.z);
             rb.linearVelocity = targetDashDirection * HorizontalVelocity.magnitude;
@@ -747,6 +746,19 @@ public class SimpleController : MonoBehaviour
         //    direction = new Vector3(inputDirection.x, 0f, inputDirection.y);
         //}
 
+        Vector3 targetDir = direction;
+
+        if (targetDir.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(targetDir);
+            Quaternion deltaRot = targetRot * Quaternion.Inverse(rb.rotation);
+
+            deltaRot.ToAngleAxis(out float angle, out Vector3 axis);
+            if (angle > 180f) angle -= 360f;
+
+            Vector3 torque = axis * angle * Mathf.Deg2Rad * controllerData.rotationTorque;
+            rb.AddTorque(torque, ForceMode.Acceleration);
+        }
 
         float speedRatio = GetSpeedRatio();
         float steer = stats.GetSteering(speedRatio, turn, false);
