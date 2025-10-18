@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,12 +16,6 @@ public class CameraTargetController : MonoBehaviour
 
     [Tooltip("Maximum pitch angle (looking up).")]
     public float maxPitch = 45f;
-
-    [Tooltip("Minimum pitch angle (looking down).")]
-    public float minYawn = -45f;
-
-    [Tooltip("Maximum pitch angle (looking up).")]
-    public float maxYawn = 45f;
 
     [Tooltip("Smooth Value for movement.")]
     public float smoothValue = 0.08f;
@@ -42,6 +37,10 @@ public class CameraTargetController : MonoBehaviour
     private bool isControllerDevice = false;
     private InputActionMap playerActionsMap;
 
+    private Vector3 currentUp;
+    [SerializeField] private Vector3 offset;
+
+
     private void OnEnable()
     {
         if (lookAction != null)
@@ -57,6 +56,8 @@ public class CameraTargetController : MonoBehaviour
         {
             player = Game.Instance.player;
         }
+
+        currentUp = target.transform.up;
     }
 
     private void OnDisable()
@@ -84,194 +85,40 @@ public class CameraTargetController : MonoBehaviour
 
         Vector2 lookInput = lookAction.action.ReadValue<Vector2>();
 
-        if (player.State == ControllerState.SURFING)
+        if(isControllerDevice)
         {
-            if(player.HorizontalVelocity.magnitude > 5f)
-            {
-                if(isControllerDevice)
-                {
-                    sensitivity = _data.surf_sensitivity_controller;
-                }
-                else
-                {
-                    sensitivity = _data.surf_sensitivity;
-                }
-
-                minPitch = _data.surf_minPitch;
-                maxPitch = _data.surf_maxPitch;
-                minYawn = _data.surf_minYaw;
-                maxYawn = _data.surf_maxYaw;
-                smoothValue = _data.surf_smooth;
-
-
-                // Apply sensitivity and deltaTime
-                float mouseX = lookInput.x * sensitivity * Time.deltaTime;
-                float mouseY = lookInput.y * sensitivity * Time.deltaTime;
-
-                float targetYaw = yaw + mouseX;
-                float targetPitch = pitch - mouseY;
-
-                targetPitch = Mathf.Clamp(targetPitch, minPitch, maxPitch);
-                targetYaw = Mathf.Clamp(targetYaw, minYawn, maxYawn);
-
-
-                yaw = Mathf.SmoothDamp(yaw, targetYaw,ref yawVelocity,  smoothValue);
-                pitch = Mathf.SmoothDamp(pitch, targetPitch, ref pitchVelocity, smoothValue);
-            }
-            else
-            {
-                if (isControllerDevice)
-                {
-                    sensitivity = _data.idle_sensitivity_controller;
-                }
-                else
-                {
-                    sensitivity = _data.idle_sensitivity;
-                }
-                minPitch = _data.idle_minPitch;
-                maxPitch = _data.idle_maxPitch;
-                minYawn = _data.idle_minYaw;
-                maxYawn = _data.idle_maxYaw;
-                smoothValue = _data.idle_smooth;
-
-                // Apply sensitivity and deltaTime
-                float mouseX = lookInput.x * sensitivity * Time.deltaTime;
-                float mouseY = lookInput.y * sensitivity * Time.deltaTime;
-
-                float targetYaw = yaw + mouseX;
-                float targetPitch = pitch - mouseY;
-
-                targetPitch = Mathf.Clamp(targetPitch, minPitch, maxPitch);
-
-                yaw = Mathf.SmoothDamp(yaw, targetYaw, ref yawVelocity, smoothValue);
-                pitch = Mathf.SmoothDamp(pitch, targetPitch, ref pitchVelocity, smoothValue);
-            }
-
+            sensitivity = _data.sensitivity_controller;
+        }
+        else
+        {
+            sensitivity = _data.sensitivity;
         }
 
-        else if (player.State == ControllerState.SWIMMING)
-        {
-            if (isControllerDevice)
-            {
-                sensitivity = _data.swim_sensitivity_controller;
-            }
-            else
-            {
-                sensitivity = _data.swim_sensitivity;
-            }
-            minPitch = _data.swim_minPitch;
-            maxPitch = _data.swim_maxPitch;
-            minYawn = _data.swim_minYaw;
-            maxYawn = _data.swim_maxYaw;
-            smoothValue = _data.swim_smooth;
+        minPitch = _data.minPitch;
+        maxPitch = _data.maxPitch;
+        smoothValue = _data.smooth;
 
 
-            // Apply sensitivity and deltaTime
-            float mouseX = lookInput.x * sensitivity * Time.deltaTime;
-            float mouseY = lookInput.y * sensitivity * Time.deltaTime;
+        // Apply sensitivity and deltaTime
+        float mouseX = lookInput.x * sensitivity * Time.deltaTime;
+        float mouseY = lookInput.y * sensitivity * Time.deltaTime;
 
-            float targetYaw = yaw + mouseX;
-            float targetPitch = pitch - mouseY;
+        float targetYaw = yaw + mouseX;
+        float targetPitch = pitch - mouseY;
 
-            targetPitch = Mathf.Clamp(targetPitch, minPitch, maxPitch);
-            targetYaw = Mathf.Clamp(targetYaw, minYawn, maxYawn);
+        targetPitch = Mathf.Clamp(targetPitch, minPitch, maxPitch);
 
-            yaw = Mathf.SmoothDamp(yaw, targetYaw, ref yawVelocity, smoothValue);
-            pitch = Mathf.SmoothDamp(pitch, targetPitch, ref pitchVelocity, smoothValue);
-        }
-
-
-        else if (player.State == ControllerState.JUMPING)
-        {
-            if (isControllerDevice)
-            {
-                sensitivity = _data.jump_sensitivity_controller;
-            }
-            else
-            {
-                sensitivity = _data.jump_sensitivity;
-            }
-            minPitch = _data.jump_minPitch;
-            maxPitch = _data.jump_maxPitch;
-            minYawn = _data.jump_minYaw;
-            maxYawn = _data.jump_maxYaw;
-            smoothValue = _data.jump_smooth;
-
-
-            // Apply sensitivity and deltaTime
-            float mouseX = lookInput.x * sensitivity * Time.deltaTime;
-            float mouseY = lookInput.y * sensitivity * Time.deltaTime;
-
-            float targetYaw = yaw + mouseX;
-            float targetPitch = pitch - mouseY;
-
-            targetPitch = Mathf.Clamp(targetPitch, minPitch, maxPitch);
-            targetYaw = Mathf.Clamp(targetYaw, minYawn, maxYawn);
-
-            yaw = Mathf.SmoothDamp(yaw, targetYaw, ref yawVelocity, smoothValue);
-            pitch = Mathf.SmoothDamp(pitch, targetPitch, ref pitchVelocity, smoothValue);
-        }
-
-        else if(player.State == ControllerState.FALLING)
-        {
-            if (isControllerDevice)
-            {
-                sensitivity = _data.fall_sensitivity_controller;
-            }
-            else
-            {
-                sensitivity = _data.fall_sensitivity;
-            }
-            minPitch = _data.fall_minPitch;
-            maxPitch = _data.fall_maxPitch;
-            minYawn = _data.fall_minYaw;
-            maxYawn = _data.fall_maxYaw;
-            smoothValue = _data.fall_smooth;
-
-
-            // Apply sensitivity and deltaTime
-            float mouseX = lookInput.x * sensitivity * Time.deltaTime;
-            float mouseY = lookInput.y * sensitivity * Time.deltaTime;
-
-            float targetYaw = yaw + mouseX;
-            float targetPitch = pitch - mouseY;
-
-            targetPitch = Mathf.Clamp(targetPitch, minPitch, maxPitch);
-
-            yaw = Mathf.SmoothDamp(yaw, targetYaw, ref yawVelocity, smoothValue);
-            pitch = Mathf.SmoothDamp(pitch, targetPitch, ref pitchVelocity, smoothValue);
-        }
-
-        else if (player.State == ControllerState.AIRRIDE)
-        {
-            if (isControllerDevice)
-            {
-                sensitivity = _data.air_sensitivity_controller;
-            }
-            else
-            {
-                sensitivity = _data.air_sensitivity;
-            }
-            minPitch = _data.air_minPitch;
-            maxPitch = _data.air_maxPitch;
-            minYawn = _data.air_minYaw;
-            maxYawn = _data.air_maxYaw;
-            smoothValue = _data.air_smooth;
-
-
-            // Apply sensitivity and deltaTime
-            float mouseX = lookInput.x * sensitivity * Time.deltaTime;
-            float mouseY = lookInput.y * sensitivity * Time.deltaTime;
-
-            float targetYaw = yaw + mouseX;
-            float targetPitch = pitch - mouseY;
-
-            targetPitch = Mathf.Clamp(targetPitch, minPitch, maxPitch);
-
-            yaw = Mathf.SmoothDamp(yaw, targetYaw, ref yawVelocity, smoothValue);
-            pitch = Mathf.SmoothDamp(pitch, targetPitch, ref pitchVelocity, smoothValue);
-        }
+        yaw = Mathf.SmoothDamp(yaw, targetYaw,ref yawVelocity,  smoothValue);
+        pitch = Mathf.SmoothDamp(pitch, targetPitch, ref pitchVelocity, smoothValue);
         // Apply rotation
-        target.localRotation = Quaternion.Euler(pitch, yaw, 0f);
+        Vector3 targetUp = player.hoverBehaviour.normalContainer.up;
+        currentUp = Vector3.Slerp(currentUp, targetUp, Time.deltaTime * 5f);  
+    }
+
+    private void FixedUpdate()
+    {
+        target.up = currentUp;
+        target.position = player.transform.position + offset;
+        target.Rotate(new Vector3(currentUp.x + pitch, currentUp.y + yaw, currentUp.z));
     }
 }

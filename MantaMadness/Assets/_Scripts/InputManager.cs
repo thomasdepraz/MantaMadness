@@ -16,6 +16,7 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    public InputActionReference moveDirection;
     public InputActionReference thrust;
     public InputActionReference turn;
     public InputActionReference brake;

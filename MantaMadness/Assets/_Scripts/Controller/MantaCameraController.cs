@@ -7,8 +7,6 @@ using UnityEngine;
 
 public class MantaCameraController : MonoBehaviour
 {
-    public GameObject cameraTarget;
-
     public float fallingSpeedThreshold;
     public float airRideSpeedThreshold;
 
@@ -60,7 +58,6 @@ public class MantaCameraController : MonoBehaviour
 
     private void Update()
     {
-        cameraTarget.transform.position = Game.Instance.player.transform.position;
         if (mantaController.State == ControllerState.SURFING)
         {
             float t =  math.remap(5, -5, 0, 1, mantaController.AngularVelocity.y);
@@ -95,26 +92,26 @@ public class MantaCameraController : MonoBehaviour
 
     private void UpdateState(ControllerState previousState, ControllerState newState)
     {
-        switch (newState)
-        {
-            case ControllerState.FALLING:
-                SetActiveCamera(surfingCamera);
-                break;
-            case ControllerState.JUMPING:
-                SetActiveCamera(surfingCamera);
-                break;
-            case ControllerState.SURFING:
-                SetActiveCamera(surfingCamera);
-                break;
-            case ControllerState.DIVING:
-                SetActiveCamera(surfingCamera);
-                break;
-            case ControllerState.SWIMMING:
-                SetActiveCamera(surfingCamera);
-                break;
-            default:
-                break;
-        }
+        //switch (newState)
+        //{
+        //    case ControllerState.FALLING:
+        //        SetActiveCamera(surfingCamera);
+        //        break;
+        //    case ControllerState.JUMPING:
+        //        SetActiveCamera(surfingCamera);
+        //        break;
+        //    case ControllerState.SURFING:
+        //        SetActiveCamera(surfingCamera);
+        //        break;
+        //    case ControllerState.DIVING:
+        //        SetActiveCamera(surfingCamera);
+        //        break;
+        //    case ControllerState.SWIMMING:
+        //        SetActiveCamera(surfingCamera);
+        //        break;
+        //    default:
+        //        break;
+        //}
     }
 
     private void SetActiveCamera(CinemachineCamera camera)

@@ -19,7 +19,7 @@ public class SimpleController : MonoBehaviour
     [SerializeField]
     private Rigidbody rb;
     [SerializeField]
-    private HoverBehaviour hoverBehaviour;
+    public HoverBehaviour hoverBehaviour;
     [SerializeField]
     public BoostBehaviour boostBehaviour;
     [SerializeField]
@@ -74,6 +74,7 @@ public class SimpleController : MonoBehaviour
     private float defaultDrag;
     float thrust, turn, brake = 0f;
     Vector2 airControl;
+    Vector2 inputDirection;
 
     private ControllerState state;
     private WaterBlock currentWaterBlock;
@@ -672,7 +673,7 @@ public class SimpleController : MonoBehaviour
         }
 
         //movement
-        if (State == ControllerState.SURFING || State == ControllerState.SWIMMING)
+        if (State == ControllerState.SURFING)
         {
             Movement();
         }
@@ -719,19 +720,32 @@ public class SimpleController : MonoBehaviour
         rb.AddForce(airControl * coeff * Time.fixedDeltaTime, ForceMode.VelocityChange);
     }
 
+    public Vector3 direction;
     private void Movement()
     {
         float speed = controllerData.acceleration;
 
-        float forward = 0.0f;
-        if (thrust > 0.0 && HorizontalVelocity.sqrMagnitude < (controllerData.maxSpeed * controllerData.maxSpeed))
-        {
-            forward = thrust * speed;
-        }
-        else
-        {
-            forward = thrust * speed * controllerData.overSpeedCoeff;
-        }
+        Vector3 camForward = Camera.main.transform.forward;
+        Vector3 camRight = Camera.main.transform.right;
+
+        camForward.y = 0;
+        camRight.y = 0;
+
+        camForward.Normalize();
+        camRight.Normalize();
+
+        inputDirection = inputs.moveDirection.action.ReadValue<Vector2>();
+        direction = camForward * inputDirection.y + camRight * inputDirection.x;
+
+        //if (thrust > 0.0 && HorizontalVelocity.sqrMagnitude < (controllerData.maxSpeed * controllerData.maxSpeed))
+        //{
+        //    direction = new Vector3(inputDirection.x, 0f, inputDirection.y);
+        //}
+        //else
+        //{
+        //    //direction = inputDirection * speed * controllerData.overSpeedCoeff;
+        //    direction = new Vector3(inputDirection.x, 0f, inputDirection.y);
+        //}
 
 
         float speedRatio = GetSpeedRatio();
@@ -739,10 +753,7 @@ public class SimpleController : MonoBehaviour
         float steeringVelocity = Vector3.Dot(transform.right, Velocity);
         float desiredVelocityChange = -steeringVelocity * stats.GetGrip() * Time.fixedDeltaTime;
 
-        //Apply forces (grip - thrust - steer)
-        rb.AddForce(hoverBehaviour.normalContainer.right * desiredVelocityChange, ForceMode.VelocityChange);
-        rb.AddForce(hoverBehaviour.normalContainer.forward * forward, ForceMode.Acceleration);
-        //rb.AddForce(Camera.main.transform.forward * forward, ForceMode.Acceleration);
+        rb.AddForce(direction * speed, ForceMode.Acceleration);
 
         if (IsDrifting)
         {
@@ -750,7 +761,7 @@ public class SimpleController : MonoBehaviour
         }
         else
         {
-            Steer(steer);
+            //Steer(steer);
         }
 
         //Apply drag if braking
