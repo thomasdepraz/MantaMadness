@@ -76,6 +76,10 @@ public class ControllerData : ScriptableObject
     public float driftBoostForce;
     public float driftBoostTimer;
 
+    [Header("Straf")]
+    public float strafForce;
+    public float strafCooldown;
+
     [Header("Air ride")]
     public float airRideVelocityThreshold;
     public float airRideGravityScale;

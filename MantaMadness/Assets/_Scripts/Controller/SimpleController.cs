@@ -109,6 +109,7 @@ public class SimpleController : MonoBehaviour
     public Action<string> disableBoolAnim;
     public Action playTargetJumpParticles;
     public Action<bool> togglePlayerBodyVisual;
+    public Action<string> straf;
 
     private void Awake()
     {
@@ -125,10 +126,9 @@ public class SimpleController : MonoBehaviour
         inputs.boost.action.performed += Boost;
         inputs.jump.action.performed += Jump;
         inputs.jump.action.canceled += Jump;
-        inputs.drift.action.started += DrifStart;
-        inputs.drift.action.performed += Drift;
-        inputs.drift.action.canceled += DriftReleased;
         inputs.dash.action.performed += StyleDash;
+        inputs.strafLeft.action.performed += Straf;
+        inputs.strafRight.action.performed += Straf;
 
         //Components Setup
         hoverBehaviour.Initialize(controllerData, rb);
@@ -140,25 +140,9 @@ public class SimpleController : MonoBehaviour
         inputs.boost.action.performed -= Boost;
         inputs.jump.action.performed -= Jump;
         inputs.jump.action.canceled -= Jump;
-        inputs.drift.action.started -= DrifStart;
-        inputs.drift.action.performed -= Drift;
-        inputs.drift.action.canceled -= DriftReleased;
         inputs.dash.action.performed -= StyleDash;
-    }
-
-    private void SetDrift(int dir, bool drifting, bool boost = false)
-    {
-        this.drifting = drifting;
-        driftDir = dir;
-
-        if (drifting == false)
-        {
-            PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.DRIFT);
-            currentDriftTime = 0;
-            hasDriftBoost = false;
-        }
-
-        updateDrift.Invoke(dir, drifting, boost);
+        inputs.strafLeft.action.performed -= Straf;
+        inputs.strafRight.action.performed -= Straf;
     }
 
     private void StyleDash(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -181,49 +165,6 @@ public class SimpleController : MonoBehaviour
             boostBehaviour.IncrementGauge(BoostAction.Dash);
             dash.Invoke(consecutiveDashCount);
         }
-    }
-    private void DrifStart(UnityEngine.InputSystem.InputAction.CallbackContext context)
-    {
-        if (IsLocked)
-            return;
-
-        if (State == ControllerState.SURFING)
-        {
-            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DRIFT);
-        }
-    }
-
-    private void Drift(UnityEngine.InputSystem.InputAction.CallbackContext context)
-    {
-        if (IsLocked)
-            return;
-
-        if (State == ControllerState.SURFING)
-        {
-            if (turn == 0 || CanDrift == false)
-                return;
-            
-            SetDrift(turn > 0 ? 1 : -1, true);
-        }
-        
-        //Backflip
-        if(state == ControllerState.AIRRIDE)
-        {
-            rb.linearVelocity = HorizontalVelocity;
-        }
-    }
-
-    private void DriftReleased(UnityEngine.InputSystem.InputAction.CallbackContext context)
-    {
-        if (IsLocked)
-            return;
-
-        if(IsDrifting && State == ControllerState.SURFING)
-        {
-            DriftBoost();
-        }
-
-        SetDrift(0, false);
     }
 
     [HideInInspector] public float jumpChargeTimer { get; private set; }
@@ -421,6 +362,38 @@ public class SimpleController : MonoBehaviour
         }
     }
 
+    private Coroutine strafRoutine = null;
+    private IEnumerator StrafRoutine()
+    {
+        yield return new WaitForSeconds(controllerData.strafCooldown);
+
+        strafRoutine = null;
+    }
+
+    private void Straf(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if(strafRoutine == null)
+        {
+            strafRoutine = StartCoroutine(StrafRoutine());
+            if (State == ControllerState.SURFING)
+            {
+                if(rb.linearVelocity.magnitude > controllerData.maxSpeed / 2)
+                {
+                    if (context.action.name == InputManager.Instance.strafLeft.action.name)
+                    {
+                        rb.AddForce(-Camera.main.transform.right * controllerData.driftBoostForce, ForceMode.VelocityChange);
+                        straf.Invoke("StrafLeft");
+                    }
+                    else if (context.action.name == InputManager.Instance.strafRight.action.name)
+                    {
+                        rb.AddForce(Camera.main.transform.right * controllerData.driftBoostForce, ForceMode.VelocityChange);
+                        straf.Invoke("StrafRight");
+                    }
+                }
+            }
+        }
+    }
+
     private void Update()
     {
         if (Input.GetKeyUp(KeyCode.R))
@@ -530,22 +503,6 @@ public class SimpleController : MonoBehaviour
                 currentAirRail = null;
             }
             return;
-        }
-
-        if(IsDrifting)
-        {
-            if(State != ControllerState.SURFING || CanDriftBreak)
-            {
-                //Stop drifting
-                SetDrift(0, false);
-            }
-
-            currentDriftTime += Time.fixedDeltaTime;
-            if(currentDriftTime > controllerData.driftBoostTimer && hasDriftBoost == false)
-            {
-                hasDriftBoost = true;
-                SetDrift(driftDir, true, true);
-            }
         }
 
         //Charging a Jump
@@ -727,14 +684,14 @@ public class SimpleController : MonoBehaviour
         Vector3 camForward = Camera.main.transform.forward;
         Vector3 camRight = Camera.main.transform.right;
 
-        camForward.y = 0;
-        camRight.y = 0;
+        //camForward.y = 0;
+        //camRight.y = 0;
 
         camForward.Normalize();
         camRight.Normalize();
 
         inputDirection = inputs.moveDirection.action.ReadValue<Vector2>();
-        direction = camForward * inputDirection.y + camRight * inputDirection.x;
+        direction = (camForward * inputDirection.y + camRight * inputDirection.x).normalized;
 
         //if (thrust > 0.0 && HorizontalVelocity.sqrMagnitude < (controllerData.maxSpeed * controllerData.maxSpeed))
         //{
@@ -766,15 +723,6 @@ public class SimpleController : MonoBehaviour
         float desiredVelocityChange = -steeringVelocity * stats.GetGrip() * Time.fixedDeltaTime;
 
         rb.AddForce(direction * speed, ForceMode.Acceleration);
-
-        if (IsDrifting)
-        {
-            Steer(stats.GetSteering(speedRatio, turn, true, driftDir));
-        }
-        else
-        {
-            //Steer(steer);
-        }
 
         //Apply drag if braking
         if (brake > 0.0f)

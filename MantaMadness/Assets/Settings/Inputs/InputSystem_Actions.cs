@@ -108,6 +108,24 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""StrafLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""c9b1c946-8d94-4001-a5c3-8095b6477978"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""StrafRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""c8e9eb00-85f4-4f65-8ad8-3fad55511b7d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -433,7 +451,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""bf6db0c4-481c-425a-870b-bfe4843eb583"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -471,6 +489,50 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c3f7bf17-3a3a-4e7c-8b5e-02f6478497a1"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StrafLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""93f78ad9-fafd-4de5-a439-4220293aae8e"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StrafLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""997394cb-7680-4d40-a229-d76eeec543a3"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StrafRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0dff420c-33c0-451f-9a5d-8e2e10e1f06a"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StrafRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1067,6 +1129,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Dive = m_Player.FindAction("Dive", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
+        m_Player_StrafLeft = m_Player.FindAction("StrafLeft", throwIfNotFound: true);
+        m_Player_StrafRight = m_Player.FindAction("StrafRight", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1155,6 +1219,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Dive;
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_Look;
+    private readonly InputAction m_Player_StrafLeft;
+    private readonly InputAction m_Player_StrafRight;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1168,6 +1234,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @Dive => m_Wrapper.m_Player_Dive;
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputAction @Look => m_Wrapper.m_Player_Look;
+        public InputAction @StrafLeft => m_Wrapper.m_Player_StrafLeft;
+        public InputAction @StrafRight => m_Wrapper.m_Player_StrafRight;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1204,6 +1272,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
+            @StrafLeft.started += instance.OnStrafLeft;
+            @StrafLeft.performed += instance.OnStrafLeft;
+            @StrafLeft.canceled += instance.OnStrafLeft;
+            @StrafRight.started += instance.OnStrafRight;
+            @StrafRight.performed += instance.OnStrafRight;
+            @StrafRight.canceled += instance.OnStrafRight;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1235,6 +1309,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
+            @StrafLeft.started -= instance.OnStrafLeft;
+            @StrafLeft.performed -= instance.OnStrafLeft;
+            @StrafLeft.canceled -= instance.OnStrafLeft;
+            @StrafRight.started -= instance.OnStrafRight;
+            @StrafRight.performed -= instance.OnStrafRight;
+            @StrafRight.canceled -= instance.OnStrafRight;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1426,6 +1506,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnDive(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
+        void OnStrafLeft(InputAction.CallbackContext context);
+        void OnStrafRight(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.VFX;
 using UnityEngine.VFX.Utility;
@@ -37,7 +39,14 @@ public class MantaVisuals : MonoBehaviour
     public VisualEffect chargeJumpParticles;
 
     [Header("Visual")]
-    public SkinnedMeshRenderer[] mantaBodyVisual;
+    public SkinnedMeshRenderer[] mantaAllVisuals;
+
+    [Header("After Image")]
+    public SkinnedMeshRenderer mantaBodyVisual;
+    public Material afterImageMat;
+    public float fadeDuration= 1f;
+    public float interval = 0.05f;
+    public float strafEffectDuration = 0.75f;
 
 
     private int driftId = Animator.StringToHash("Drifting");
@@ -51,7 +60,6 @@ public class MantaVisuals : MonoBehaviour
     {
         mantaController = GetComponent<SimpleController>();
         mantaController.stateChanged += UpdateState;
-        mantaController.updateDrift += UpdateDrift;
         mantaController.boost += BoostParticles;
         mantaController.updateRaceTarget += SetArrowTarget;
         mantaController.dash += Dash;
@@ -60,12 +68,12 @@ public class MantaVisuals : MonoBehaviour
         mantaController.disableBoolAnim+= disableBoolAnimation;
         mantaController.playTargetJumpParticles += JumpTargetParticles;
         mantaController.togglePlayerBodyVisual += ToggleMantaVisual;
+        mantaController.straf += strafEffectsAndVisual;
     }
 
     private void OnDisable()
     {
         mantaController.stateChanged -= UpdateState;
-        mantaController.updateDrift -= UpdateDrift;
         mantaController.boost -= BoostParticles;
         mantaController.updateRaceTarget -= SetArrowTarget;
         mantaController.dash -= Dash;
@@ -74,6 +82,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.disableBoolAnim -= disableBoolAnimation;
         mantaController.playTargetJumpParticles -= JumpTargetParticles;
         mantaController.togglePlayerBodyVisual -= ToggleMantaVisual;
+        mantaController.straf -= strafEffectsAndVisual;
     }
 
     private void Dash(int dashCount)
@@ -99,29 +108,29 @@ public class MantaVisuals : MonoBehaviour
         PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.SURF);
     }
 
-    private void UpdateDrift(int driftDir, bool drifting, bool boost)
+    private IEnumerator SpawnAfterImageForDuration(float duration)
     {
-        for (int i = 0; i < driftParticles.Length; i++)
-        {
-            driftParticles[i].Stop();
-            driftParticles[i].gameObject.SetActive(false);
-        }
+        float timer = 0f;
 
-        if(drifting)
+        while (timer < duration)
         {
-            if(driftDir > 0)
-            {
-                int index = boost ? 3 : 2;
-                driftParticles[index].gameObject.SetActive(true);
-                driftParticles[index].Play();
-            }
-            else
-            {
-                int index = boost ? 1 : 0;
-                driftParticles[index].gameObject.SetActive(true);
-                driftParticles[index].Play();
-            }
+            SpawnAfterImage();
+            yield return new WaitForSeconds(interval);
+            timer += interval;
         }
+    }
+
+    void SpawnAfterImage()
+    {
+        Mesh mesh = new Mesh();
+        mantaBodyVisual.BakeMesh(mesh);
+
+        Mesh snapshot = Instantiate(mesh);
+
+        var ghost = AfterImagePool.Instance.GetGhost();
+        ghost.Initialize(afterImageMat, fadeDuration);
+        ghost.SetMesh(snapshot);
+        ghost.Show(transform.position, transform.rotation, transform.localScale);
     }
 
     private void UpdateState(ControllerState previous, ControllerState newState)
@@ -156,6 +165,7 @@ public class MantaVisuals : MonoBehaviour
             MusicManager.Instance.ToggleUnderwater();
         }
     }
+
     private void Update()
     {
         UpdateModelRoll();
@@ -314,9 +324,16 @@ public class MantaVisuals : MonoBehaviour
 
     public void ToggleMantaVisual(bool toggle)
     {
-        foreach (SkinnedMeshRenderer skin in mantaBodyVisual)
+        foreach (SkinnedMeshRenderer skin in mantaAllVisuals)
         {
             skin.enabled = toggle;
         }
+    }
+
+    public void strafEffectsAndVisual(string strafSide)
+    {
+        mantaAnimator.SetTrigger(strafSide);
+        StartCoroutine(SpawnAfterImageForDuration(strafEffectDuration));
+
     }
 }
