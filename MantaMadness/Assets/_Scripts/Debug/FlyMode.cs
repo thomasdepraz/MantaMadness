@@ -12,11 +12,12 @@ public class FlyMode : MonoBehaviour
     public float smoothSpeed = 10f;
 
     [Header("Sensibilité de la souris")]
-   public float mouseSensitivity = 2f;
+    public float mouseSensitivity = 2f;
     public float rotationSmoothSpeed = 10f;
 
     float rotationX = 0f;
-   float rotationY = 0f;
+    float rotationY = 0f;
+    bool smoothMode = false;
 
     Vector3 currentVelocity;
     Vector3 targetPosition;
@@ -47,7 +48,6 @@ public class FlyMode : MonoBehaviour
             rotationY = Mathf.Clamp(rotationY, -90f, 90f); // Empêche la caméra de se retourner
 
             targetRotation = Quaternion.Euler(rotationY, rotationX, 0f);
-
             //transform.rotation = Quaternion.Euler(rotationY, rotationX, 0f);
 
             // --- Déplacement avec ZQSD ---
@@ -60,25 +60,40 @@ public class FlyMode : MonoBehaviour
                 Input.GetAxisRaw("Vertical")    // Z/S
             );
 
-            Vector3 move = (transform.TransformDirection(direction).normalized) * speed * Time.deltaTime;
+            if (smoothMode == true)
+            {
+                Vector3 move = (transform.TransformDirection(direction).normalized) * speed * Time.deltaTime;
 
-            if (Input.GetKey(KeyCode.E))
-                move += Vector3.up * speed * Time.deltaTime;
-            if (Input.GetKey(KeyCode.A))
-                move -= Vector3.up * speed * Time.deltaTime;
+                if (Input.GetKey(KeyCode.E))
+                    move += Vector3.up * speed * Time.deltaTime;
+                if (Input.GetKey(KeyCode.LeftControl))
+                    move -= Vector3.up * speed * Time.deltaTime;
 
-            targetPosition += move;
+                targetPosition += move;
 
-            // --- Appliquer le lissage ---
+                // --- Appliquer le lissage ---
                 transform.position = Vector3.SmoothDamp(transform.localPosition, targetPosition, ref currentVelocity, 1f / smoothSpeed);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSmoothSpeed * Time.deltaTime);
+            }
+
+            else
+            {
+                transform.rotation = Quaternion.Euler(rotationY, rotationX, 0f);
+                Vector3 move = transform.TransformDirection(direction).normalized * speed * Time.deltaTime; 
+                transform.position += move;
+
+                if (Input.GetKey(KeyCode.E)) transform.position += Vector3.up * speed * Time.deltaTime;
+                if (Input.GetKey(KeyCode.LeftControl)) transform.position += Vector3.down * speed * Time.deltaTime;
+            }
 
             // Quitter le mode "fly" en débloquant la souris avec ESC
             if (Input.GetKeyDown(KeyCode.Escape))
             {
+
                 UnityEngine.Cursor.lockState = CursorLockMode.None;
                 UnityEngine.Cursor.visible = true;
             }
+
         }
         else if (isEnabled == false)
         {
@@ -94,12 +109,20 @@ public class FlyMode : MonoBehaviour
     {
         if (isEnabled == true)
         {
+            if(smoothMode == false)
+            {
+                smoothMode = true;
+                targetPosition = transform.position;
+                return;
+            }
+
             Game.Instance.player.transform.position = flyCam.transform.position;
             Game.Instance.player.ForceLock(false);
             isEnabled = false;
             UnityEngine.Cursor.lockState = CursorLockMode.None;
             UnityEngine.Cursor.visible = true;
             flyCam.enabled = false;
+            smoothMode = false;
         }
         else if (isEnabled == false)
         {

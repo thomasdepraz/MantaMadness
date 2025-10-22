@@ -11,6 +11,7 @@ public class Game : MonoBehaviour
     private float respawnTimer = -1f;
     private System.Action onTimerFinished;
     private bool isRespawning = false;
+    public bool isHitStop = false;
     private void Awake()
     {
         if (Instance != null && Instance != this)

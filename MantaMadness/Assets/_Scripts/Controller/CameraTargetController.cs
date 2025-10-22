@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 
 public class CameraTargetController : MonoBehaviour
 {
+
+    public static CameraTargetController instance;
     [SerializeField]
     private CameraControllerData _data;
 
@@ -40,6 +42,17 @@ public class CameraTargetController : MonoBehaviour
     private Vector3 currentUp;
     [SerializeField] private Vector3 offset;
 
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
 
     private void OnEnable()
     {
@@ -83,7 +96,7 @@ public class CameraTargetController : MonoBehaviour
     {
         if (lookAction == null) return;
 
-        Vector2 lookInput = lookAction.action.ReadValue<Vector2>();
+            Vector2 lookInput = lookAction.action.ReadValue<Vector2>();
 
         if(isControllerDevice)
         {
@@ -94,11 +107,18 @@ public class CameraTargetController : MonoBehaviour
             sensitivity = _data.sensitivity;
         }
 
-        minPitch = _data.minPitch;
-        maxPitch = _data.maxPitch;
         smoothValue = _data.smooth;
 
-
+        if(Game.Instance.player.State == ControllerState.STOMP)
+        {
+            minPitch = _data.stomp_minPitch;
+            maxPitch = _data.stomp_maxPitch;
+        }
+        else
+        {
+            minPitch = _data.minPitch;
+            maxPitch = _data.maxPitch;
+        }
         // Apply sensitivity and deltaTime
         float mouseX = lookInput.x * sensitivity * Time.deltaTime;
         float mouseY = lookInput.y * sensitivity * Time.deltaTime;
@@ -108,17 +128,19 @@ public class CameraTargetController : MonoBehaviour
 
         targetPitch = Mathf.Clamp(targetPitch, minPitch, maxPitch);
 
-        yaw = Mathf.SmoothDamp(yaw, targetYaw,ref yawVelocity,  smoothValue);
+        yaw = Mathf.SmoothDamp(yaw, targetYaw, ref yawVelocity, smoothValue);
         pitch = Mathf.SmoothDamp(pitch, targetPitch, ref pitchVelocity, smoothValue);
         // Apply rotation
         Vector3 targetUp = player.hoverBehaviour.normalContainer.up;
-        currentUp = Vector3.Slerp(currentUp, targetUp, Time.deltaTime * 5f);  
+        currentUp = Vector3.Slerp(currentUp, targetUp, Time.deltaTime * 5f);
+
     }
 
     private void FixedUpdate()
     {
         target.up = currentUp;
         target.position = player.transform.position + offset;
+        Quaternion rotation = Quaternion.Euler(currentUp.x + pitch, currentUp.y + yaw, currentUp.z);
         target.Rotate(new Vector3(currentUp.x + pitch, currentUp.y + yaw, currentUp.z));
     }
 }

@@ -9,6 +9,7 @@ public class MoaiStatue : MonoBehaviour
     [SerializeField] private GameObject moaiVisual;
     [SerializeField] private GameObject moaiRemain;
     [SerializeField] private ParticleSystem MoaiParticle;
+    [SerializeField] private ParticleSystem ImpactParticle;
     [SerializeField] private MoaiStatueCollisionRelay hitbox;
     [SerializeField] private int clamNumber;
     [SerializeField] private GameObject clam;
@@ -19,8 +20,6 @@ public class MoaiStatue : MonoBehaviour
 
     private void Start()
     {
-        hitbox.HitCollision += StartMoaiDestruction;
-
         if (moaiVisual.activeSelf == false)
             moaiVisual.SetActive(true);
 
@@ -28,33 +27,48 @@ public class MoaiStatue : MonoBehaviour
             moaiRemain.SetActive(false);
     }
 
-    void StartMoaiDestruction(float velocity)
+    private void OnEnable()
+    {
+        hitbox.HitCollision += StartMoaiDestruction;
+    }
+
+    private void OnDisable()
+    {
+        hitbox.HitCollision -= StartMoaiDestruction;
+    }
+
+    void StartMoaiDestruction(float velocity, Vector3 point)
     {
         if (isBroken == false)
         {
             if (!hard)
             {
-                StartCoroutine(MoaiDestructionRoutine());
+                StartCoroutine(MoaiDestructionRoutine(point));
             }
             else if (hard)
             {
                 if(velocity > Game.Instance.player.controllerData.maxSpeed)
                 {
-                    StartCoroutine(MoaiDestructionRoutine());
+                    StartCoroutine(MoaiDestructionRoutine(point));
                 }
             }
 
         }
     }
 
-    private IEnumerator MoaiDestructionRoutine()
+    private IEnumerator MoaiDestructionRoutine(Vector3 point)
     {
-        // PLAY PARTICLE AND DEACTIVATE VISUAL
+        //HITSTOP
+        ImpactParticle.transform.position = point;
+        ImpactParticle.Play();
         MoaiParticle.Play();
+        Game.Instance.player.triggerAnim.Invoke("HitStop");
+        HitStopManager.instance.Stop(0.05f);
+        // PLAY PARTICLE AND DEACTIVATE VISUAL
         //yield return new WaitForSeconds(0.1f);
         isBroken = true;
         moaiVisual.SetActive(false);
-        moaiRemain.SetActive(true);
+        //moaiRemain.SetActive(true);
 
 
         //START SPAWNING CLAMS

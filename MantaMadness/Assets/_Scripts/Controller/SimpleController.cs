@@ -12,6 +12,7 @@ public enum ControllerState
     DIVING, 
     SWIMMING,
     AIRRIDE,
+    STOMP,
 }
 
 public class SimpleController : MonoBehaviour
@@ -93,7 +94,6 @@ public class SimpleController : MonoBehaviour
     private int consecutiveDashCount;
     private bool hasDriftBoost;
     private bool forceLocked;
-    public bool inBubbleCanon = false;
 
     public Action<ControllerState, ControllerState> stateChanged;
     public Action<AirRail> enterAirRail;
@@ -110,6 +110,7 @@ public class SimpleController : MonoBehaviour
     public Action playTargetJumpParticles;
     public Action<bool> togglePlayerBodyVisual;
     public Action<string> straf;
+    public Action<float> afterImageEffect;
 
     private void Awake()
     {
@@ -124,6 +125,7 @@ public class SimpleController : MonoBehaviour
         State = ControllerState.FALLING;
 
         inputs.boost.action.performed += Boost;
+        inputs.boost.action.performed += Stomp;
         inputs.jump.action.performed += Jump;
         inputs.jump.action.canceled += Jump;
         inputs.dash.action.performed += StyleDash;
@@ -138,6 +140,7 @@ public class SimpleController : MonoBehaviour
     private void OnDisable()
     {
         inputs.boost.action.performed -= Boost;
+        inputs.boost.action.performed -= Stomp;
         inputs.jump.action.performed -= Jump;
         inputs.jump.action.canceled -= Jump;
         inputs.dash.action.performed -= StyleDash;
@@ -358,12 +361,12 @@ public class SimpleController : MonoBehaviour
     {
         if (State == ControllerState.SURFING)
         {
-            boostBehaviour.UseBoost(() => Boost(controllerData.driftBoostForce));
+            boostBehaviour.UseBoost(() => Boost(controllerData.boostForce));
         }
     }
 
     private Coroutine strafRoutine = null;
-    private IEnumerator StrafRoutine()
+    private IEnumerator StrafCooldownRoutine()
     {
         yield return new WaitForSeconds(controllerData.strafCooldown);
 
@@ -374,24 +377,53 @@ public class SimpleController : MonoBehaviour
     {
         if(strafRoutine == null)
         {
-            strafRoutine = StartCoroutine(StrafRoutine());
+            strafRoutine = StartCoroutine(StrafCooldownRoutine());
             if (State == ControllerState.SURFING)
             {
                 if(rb.linearVelocity.magnitude > controllerData.maxSpeed / 2)
                 {
                     if (context.action.name == InputManager.Instance.strafLeft.action.name)
                     {
-                        rb.AddForce(-Camera.main.transform.right * controllerData.driftBoostForce, ForceMode.VelocityChange);
+                        //rb.AddForce(-Camera.main.transform.right * controllerData.driftBoostForce, ForceMode.VelocityChange);
+                        rb.linearVelocity = Vector3.zero;
+                        rb.AddForce(-Camera.main.transform.right * controllerData.boostForce, ForceMode.VelocityChange);
                         straf.Invoke("StrafLeft");
                     }
                     else if (context.action.name == InputManager.Instance.strafRight.action.name)
                     {
-                        rb.AddForce(Camera.main.transform.right * controllerData.driftBoostForce, ForceMode.VelocityChange);
+                        //rb.AddForce(Camera.main.transform.right * controllerData.driftBoostForce, ForceMode.VelocityChange);
+                        rb.linearVelocity = Vector3.zero;
+                        rb.AddForce(Camera.main.transform.right * controllerData.boostForce, ForceMode.VelocityChange);
                         straf.Invoke("StrafRight");
                     }
                 }
             }
         }
+    }
+
+    private Coroutine stompRoutine;
+    private void Stomp(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if(state == ControllerState.FALLING ||  state == ControllerState.JUMPING)
+        {
+            if (stompRoutine == null)
+            {
+                stompRoutine = StartCoroutine(StompRoutine(context));
+            }
+        }
+    }
+
+    private IEnumerator StompRoutine(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        State = ControllerState.STOMP;
+        rb.linearVelocity = Vector3.zero;
+        triggerAnim.Invoke("StompCharge");
+        yield return new WaitForSeconds(controllerData.stompChargeTime);
+        triggerAnim.Invoke("Stomp");
+        afterImageEffect.Invoke(controllerData.stompAfterImageEffectTime);
+        //play particle
+        rb.AddForce(-hoverBehaviour.normalContainer.up * controllerData.stompForce, ForceMode.VelocityChange);
+        
     }
 
     private void Update()
@@ -519,6 +551,19 @@ public class SimpleController : MonoBehaviour
             if (hasHit)
             {
                 State = ControllerState.SURFING;
+                ResetJump();
+            }
+        }
+
+        //Stomping to Surfing
+        if (State == ControllerState.STOMP)
+        {
+            rb.AddForce(-hoverBehaviour.normalContainer.up * controllerData.stompAccelForce, ForceMode.Acceleration);
+            if (hasHit)
+            {
+                State = ControllerState.SURFING;
+                Boost(controllerData.boostForce);
+                stompRoutine = null;
                 ResetJump();
             }
         }
@@ -750,6 +795,7 @@ public class SimpleController : MonoBehaviour
     private void Boost(float force)
     {
         rb.AddForce(hoverBehaviour.normalContainer.forward * force, ForceMode.VelocityChange);
+        afterImageEffect.Invoke(controllerData.boostAfterImageEffectDuration);
         boost.Invoke();
         triggerAnim.Invoke("Boost");
     }
@@ -758,7 +804,7 @@ public class SimpleController : MonoBehaviour
     {
         if (currentDriftTime > controllerData.driftBoostTimer)
         {
-            Boost(controllerData.driftBoostForce);
+            Boost(controllerData.boostForce);
             boostBehaviour.IncrementGauge(BoostAction.BoostedDrift);
         }
     }

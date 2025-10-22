@@ -69,6 +69,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.playTargetJumpParticles += JumpTargetParticles;
         mantaController.togglePlayerBodyVisual += ToggleMantaVisual;
         mantaController.straf += strafEffectsAndVisual;
+        mantaController.afterImageEffect += AfterImageEffect;
     }
 
     private void OnDisable()
@@ -83,6 +84,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.playTargetJumpParticles -= JumpTargetParticles;
         mantaController.togglePlayerBodyVisual -= ToggleMantaVisual;
         mantaController.straf -= strafEffectsAndVisual;
+        mantaController.afterImageEffect -= AfterImageEffect;
     }
 
     private void Dash(int dashCount)
@@ -108,6 +110,7 @@ public class MantaVisuals : MonoBehaviour
         PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.SURF);
     }
 
+    private Coroutine afterImageRoutine;
     private IEnumerator SpawnAfterImageForDuration(float duration)
     {
         float timer = 0f;
@@ -135,23 +138,13 @@ public class MantaVisuals : MonoBehaviour
 
     private void UpdateState(ControllerState previous, ControllerState newState)
     {
-        if(previous == ControllerState.FALLING && newState == ControllerState.SURFING || previous == ControllerState.JUMPING && newState == ControllerState.SURFING)
+        if(previous == ControllerState.FALLING && newState == ControllerState.SURFING || 
+            previous == ControllerState.JUMPING && newState == ControllerState.SURFING ||
+            previous == ControllerState.STOMP && newState == ControllerState.SURFING)
             SplashParticles();
 
         else if (previous == ControllerState.SURFING && newState == ControllerState.JUMPING)
             SplashParticles();
-
-        //if (newState == ControllerState.JUMPING)
-        //{
-        //    if (mantaController.targetJumps == true)
-        //    {
-        //        mantaAnimator.SetTrigger("TargetJump");
-        //    }
-        //    else 
-        //    {
-        //        mantaAnimator.SetTrigger("Spin");
-        //    }
-        //}
 
         if(newState == ControllerState.SWIMMING)
         {
@@ -163,6 +156,16 @@ public class MantaVisuals : MonoBehaviour
         {
             VolumeManager.Instance.toggleUnderwater(false);
             MusicManager.Instance.ToggleUnderwater();
+        }
+
+        if(newState == ControllerState.FALLING)
+        {
+            mantaAnimator.SetBool("Falling", true);
+        }
+
+        if(previous == ControllerState.FALLING)
+        {
+            mantaAnimator.SetBool("Falling", false);
         }
     }
 
@@ -332,8 +335,20 @@ public class MantaVisuals : MonoBehaviour
 
     public void strafEffectsAndVisual(string strafSide)
     {
-        mantaAnimator.SetTrigger(strafSide);
-        StartCoroutine(SpawnAfterImageForDuration(strafEffectDuration));
+        AfterImageEffect(strafEffectDuration);
+        triggerAnimation(strafSide);     
+    }
 
+    public void AfterImageEffect(float duration)
+    {
+        if(afterImageRoutine != null)
+        {
+            afterImageRoutine = null;
+            afterImageRoutine = StartCoroutine(SpawnAfterImageForDuration(duration));
+        }
+        else
+        {
+            afterImageRoutine = StartCoroutine(SpawnAfterImageForDuration(duration));
+        }
     }
 }
