@@ -767,7 +767,7 @@ public class SimpleController : MonoBehaviour
         float steeringVelocity = Vector3.Dot(transform.right, Velocity);
         float desiredVelocityChange = -steeringVelocity * stats.GetGrip() * Time.fixedDeltaTime;
 
-        rb.AddForce(direction * speed, ForceMode.Acceleration);
+        rb.AddForce(direction.normalized * speed, ForceMode.Acceleration);
 
         //Apply drag if braking
         if (brake > 0.0f)

@@ -7,9 +7,10 @@ public class FlyMode : MonoBehaviour
 {
    public static FlyMode instance;
    [Header("Vitesse de déplacement")]
-   public float moveSpeed = 10f;
-   public float boostMultiplier = 2f;
+   public float moveSpeed = 50f;
+   public float boostMultiplier = 5f;
     public float smoothSpeed = 10f;
+    public float smoothFactor = 10f;
 
     [Header("Sensibilité de la souris")]
     public float mouseSensitivity = 2f;
@@ -53,6 +54,8 @@ public class FlyMode : MonoBehaviour
             // --- Déplacement avec ZQSD ---
             float speed = moveSpeed;
             if (Input.GetKey(KeyCode.LeftShift)) speed *= boostMultiplier;
+            if (Input.GetKey(KeyCode.LeftShift)) smoothSpeed *= boostMultiplier;
+
 
             Vector3 direction = new Vector3(
                 Input.GetAxisRaw("Horizontal"), // Q/D
@@ -62,17 +65,17 @@ public class FlyMode : MonoBehaviour
 
             if (smoothMode == true)
             {
-                Vector3 move = (transform.TransformDirection(direction).normalized) * speed * Time.deltaTime;
+                Vector3 move = (transform.TransformDirection(direction).normalized) * smoothSpeed * Time.deltaTime;
 
                 if (Input.GetKey(KeyCode.E))
-                    move += Vector3.up * speed * Time.deltaTime;
+                    move += Vector3.up * smoothSpeed * Time.deltaTime;
                 if (Input.GetKey(KeyCode.LeftControl))
-                    move -= Vector3.up * speed * Time.deltaTime;
+                    move -= Vector3.up * smoothSpeed * Time.deltaTime;
 
                 targetPosition += move;
 
                 // --- Appliquer le lissage ---
-                transform.position = Vector3.SmoothDamp(transform.localPosition, targetPosition, ref currentVelocity, 1f / smoothSpeed);
+                transform.position = Vector3.SmoothDamp(transform.localPosition, targetPosition, ref currentVelocity, 1f / smoothFactor);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSmoothSpeed * Time.deltaTime);
             }
 
