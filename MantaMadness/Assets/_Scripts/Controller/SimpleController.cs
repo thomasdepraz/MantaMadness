@@ -125,7 +125,9 @@ public class SimpleController : MonoBehaviour
         State = ControllerState.FALLING;
 
         inputs.boost.action.performed += Boost;
+        inputs.drift.action.started += DrifStart;
         inputs.drift.action.performed += Drift;
+        inputs.drift.action.canceled += DriftReleased;
         inputs.boost.action.performed += Stomp;
         inputs.jump.action.performed += Jump;
         inputs.jump.action.canceled += Jump;
@@ -142,7 +144,9 @@ public class SimpleController : MonoBehaviour
     {
         inputs.boost.action.performed -= Boost;
         inputs.boost.action.performed -= Stomp;
+        inputs.drift.action.started -= DrifStart;
         inputs.drift.action.performed -= Drift;
+        inputs.drift.action.canceled -= DriftReleased;
         inputs.jump.action.performed -= Jump;
         inputs.jump.action.canceled -= Jump;
         inputs.dash.action.performed -= StyleDash;

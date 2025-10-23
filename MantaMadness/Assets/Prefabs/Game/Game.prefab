@@ -15,6 +15,9 @@ GameObject:
   - component: {fileID: 6940516031190403126}
   - component: {fileID: 7925588284556986215}
   - component: {fileID: 5055552378613368542}
+  - component: {fileID: 1938381613075376899}
+  - component: {fileID: 887437798498588529}
+  - component: {fileID: 9013187420255892262}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -49,6 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2352725ce7d3a0047ae9fbb0f9c67c00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHitStop: 0
   screenEffectData: {fileID: 11400000, guid: 4b5cffd7e40f85b459610b08b3081e96, type: 2}
   player: {fileID: 0}
   m_SpawnPosition: {x: 0, y: 0, z: 0}
@@ -65,14 +69,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f419ac5dd5ca384bbd47a40e122c2cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveDirection: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   thrust: {fileID: -593101127290015902, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   turn: {fileID: 9211691509310632545, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   brake: {fileID: 5445423009074504303, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   boost: {fileID: 7040659881675835329, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   jump: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   airControl: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  drift: {fileID: -7471211009204490832, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   dash: {fileID: -6787516137552756796, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  drift: {fileID: -7471211009204490832, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  strafLeft: {fileID: -7944096410784951038, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  strafRight: {fileID: 6790945411342083927, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  resetCamera: {fileID: -2297281972354256271, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!114 &7913848029518680306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,6 +114,10 @@ MonoBehaviour:
   coinHolders:
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &7925588284556986215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,6 +146,17 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &5055552378613368542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,9 +164,53 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 711859319428096486}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1f18c30e6f8f6fc44965133398ae76a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EventName: event:/Music
+  eventRef:
+    Guid:
+      Data1: -750965112
+      Data2: 1261987731
+      Data3: 718435512
+      Data4: -248969867
+    Path: event:/MUSIC/InGame/Music_Level01
+--- !u!114 &1938381613075376899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 711859319428096486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd14e4749e23f054ea502b5836e1ffa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &887437798498588529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 711859319428096486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45608c7b4a7d0594db17c2bdcbe6c67a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  globalParameters: []
+  selectedIndex: 0
+--- !u!114 &9013187420255892262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 711859319428096486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32df7aba6b2131541a77ff6c460e8a49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

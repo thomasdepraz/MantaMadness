@@ -1,4 +1,4 @@
-using Unity.Cinemachine;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -40,7 +40,13 @@ public class CameraTargetController : MonoBehaviour
     private InputActionMap playerActionsMap;
 
     private Vector3 currentUp;
+    private Vector3 currentForward;
     [SerializeField] private Vector3 offset;
+
+
+    private InputManager inputs;
+
+    public GameObject mantavisual;
 
     private void Awake()
     {
@@ -52,6 +58,20 @@ public class CameraTargetController : MonoBehaviour
         {
             Destroy(this);
         }
+
+
+    }
+    private void Start()
+    {
+        currentUp = target.transform.up;
+        if (inputs == null)
+            inputs = InputManager.Instance;
+
+        if (player == null)
+            player = Game.Instance.player;
+        playerActionsMap = InputSystem.actions.FindActionMap("Player");
+        playerActionsMap.actionTriggered += OnActionPerformed;
+        inputs.resetCamera.action.performed += ResetCamPos;
     }
 
     private void OnEnable()
@@ -59,24 +79,22 @@ public class CameraTargetController : MonoBehaviour
         if (lookAction != null)
             lookAction.action.Enable();
         Cursor.lockState = CursorLockMode.Locked;
-        playerActionsMap = InputSystem.actions.FindActionMap("Player");
+        if(playerActionsMap != null)
         playerActionsMap.actionTriggered += OnActionPerformed;
-    }
 
-    private void Start()
-    {
-        if (player == null)
-        {
-            player = Game.Instance.player;
-        }
-
-        currentUp = target.transform.up;
+        if(inputs != null)
+        inputs.resetCamera.action.performed += ResetCamPos;
     }
 
     private void OnDisable()
     {
         if (lookAction != null)
             lookAction.action.Disable();
+
+        playerActionsMap.actionTriggered -= OnActionPerformed;
+        inputs.resetCamera.action.performed -= ResetCamPos;
+        StopAllCoroutines();
+        ResetCamRoutine = null;
     }
     private void OnActionPerformed(InputAction.CallbackContext context)
     {
@@ -131,16 +149,69 @@ public class CameraTargetController : MonoBehaviour
         yaw = Mathf.SmoothDamp(yaw, targetYaw, ref yawVelocity, smoothValue);
         pitch = Mathf.SmoothDamp(pitch, targetPitch, ref pitchVelocity, smoothValue);
         // Apply rotation
-        Vector3 targetUp = player.hoverBehaviour.normalContainer.up;
-        currentUp = Vector3.Slerp(currentUp, targetUp, Time.deltaTime * 5f);
+        if(ResetCamRoutine == null)
+        {
+            Vector3 targetUp = player.hoverBehaviour.normalContainer.up;
+            currentUp = Vector3.Slerp(currentUp, targetUp, Time.deltaTime * 5f);
+        }
+        //else
+        //{
+        //    Vector3 targetUp = player.transform.rotation.eulerAngles;
+        //    currentUp = Vector3.Slerp(currentUp, targetUp, Time.deltaTime * 50f);
+        //}
+
 
     }
 
     private void FixedUpdate()
     {
-        target.up = currentUp;
         target.position = player.transform.position + offset;
-        Quaternion rotation = Quaternion.Euler(currentUp.x + pitch, currentUp.y + yaw, currentUp.z);
-        target.Rotate(new Vector3(currentUp.x + pitch, currentUp.y + yaw, currentUp.z));
+        target.up = currentUp;
+
+        if (ResetCamRoutine == null)
+        {
+            //Quaternion rotation = Quaternion.Euler(currentUp.x + pitch, currentUp.y + yaw, currentUp.z);
+            //target.rotation = rotation;
+            target.Rotate(new Vector3(currentUp.x + pitch, currentUp.y + yaw, currentUp.z));
+        }
+        else
+        {      
+
+            //Quaternion rotation = Quaternion.Euler(player.transform.rotation.eulerAngles);
+            //target.rotation = rotation;
+            target.Rotate(player.transform.rotation.eulerAngles);
+        }
+    }
+
+    private void ResetCamPos(InputAction.CallbackContext context)
+    {
+        if(ResetCamRoutine == null)
+        {
+            ResetCamRoutine = StartCoroutine(ResetCamCoroutine());
+        }
+    }
+
+    private Coroutine ResetCamRoutine;
+    private IEnumerator ResetCamCoroutine()
+    {
+        UIManager.Instance.gameInterface.StartBlackBarEffect(0.5f);
+        yield return new WaitForSeconds(0.35f);
+
+        // Phase 2 : on garde la rotation actuelle comme nouvelle base
+        Vector3 euler = target.rotation.eulerAngles;
+
+        // Comme Unity stocke les angles de 0 à 360°, on les recentre autour de -180 à 180
+        float newYaw = euler.y;
+        float newPitch = euler.x;
+        if (newPitch > 180) newPitch -= 360;
+        if (newYaw > 180) newYaw -= 360;
+
+        yaw = newYaw;
+        pitch = Mathf.Clamp(newPitch, minPitch, maxPitch);
+
+
+        // Maintenant, on peut remettre le comportement normal
+        ResetCamRoutine = null;
+
     }
 }

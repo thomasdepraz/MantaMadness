@@ -126,6 +126,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ResetCam"",
+                    ""type"": ""Button"",
+                    ""id"": ""85147493-d946-4f4f-b2fc-4e480385f5f8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -533,6 +542,39 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
                     ""action"": ""StrafRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2582386a-9d1e-4288-94db-810f3757f3d6"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""ResetCam"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""569ff154-5308-48c5-924c-1bf0a6175a40"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ResetCam"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2d33b452-91cb-495e-9807-54c182e298c2"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ResetCam"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1131,6 +1173,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_StrafLeft = m_Player.FindAction("StrafLeft", throwIfNotFound: true);
         m_Player_StrafRight = m_Player.FindAction("StrafRight", throwIfNotFound: true);
+        m_Player_ResetCam = m_Player.FindAction("ResetCam", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1221,6 +1264,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_StrafLeft;
     private readonly InputAction m_Player_StrafRight;
+    private readonly InputAction m_Player_ResetCam;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1236,6 +1280,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @StrafLeft => m_Wrapper.m_Player_StrafLeft;
         public InputAction @StrafRight => m_Wrapper.m_Player_StrafRight;
+        public InputAction @ResetCam => m_Wrapper.m_Player_ResetCam;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1278,6 +1323,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @StrafRight.started += instance.OnStrafRight;
             @StrafRight.performed += instance.OnStrafRight;
             @StrafRight.canceled += instance.OnStrafRight;
+            @ResetCam.started += instance.OnResetCam;
+            @ResetCam.performed += instance.OnResetCam;
+            @ResetCam.canceled += instance.OnResetCam;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1315,6 +1363,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @StrafRight.started -= instance.OnStrafRight;
             @StrafRight.performed -= instance.OnStrafRight;
             @StrafRight.canceled -= instance.OnStrafRight;
+            @ResetCam.started -= instance.OnResetCam;
+            @ResetCam.performed -= instance.OnResetCam;
+            @ResetCam.canceled -= instance.OnResetCam;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1508,6 +1559,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnStrafLeft(InputAction.CallbackContext context);
         void OnStrafRight(InputAction.CallbackContext context);
+        void OnResetCam(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

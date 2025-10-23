@@ -59,6 +59,7 @@ public class MantaVisuals : MonoBehaviour
     private void Awake()
     {
         mantaController = GetComponent<SimpleController>();
+        mantaController.updateDrift += UpdateDrift;
         mantaController.stateChanged += UpdateState;
         mantaController.boost += BoostParticles;
         mantaController.updateRaceTarget += SetArrowTarget;
@@ -76,6 +77,7 @@ public class MantaVisuals : MonoBehaviour
     {
         mantaController.stateChanged -= UpdateState;
         mantaController.boost -= BoostParticles;
+        mantaController.updateDrift -= UpdateDrift;
         mantaController.updateRaceTarget -= SetArrowTarget;
         mantaController.dash -= Dash;
         mantaController.triggerAnim  -= triggerAnimation;
@@ -273,6 +275,30 @@ public class MantaVisuals : MonoBehaviour
         }
     }
 
+    private void UpdateDrift(int driftDir, bool drifting, bool boost)
+    {
+        for (int i = 0; i < driftParticles.Length; i++)
+        {
+            driftParticles[i].Stop();
+            driftParticles[i].gameObject.SetActive(false);
+        }
+
+        if (drifting)
+        {
+            if (driftDir > 0)
+            {
+                int index = boost ? 3 : 2;
+                driftParticles[index].gameObject.SetActive(true);
+                driftParticles[index].Play();
+            }
+            else
+            {
+                int index = boost ? 1 : 0;
+                driftParticles[index].gameObject.SetActive(true);
+                driftParticles[index].Play();
+            }
+        }
+    }
     private void SplashParticles()
     {
         splashParticles.Play();

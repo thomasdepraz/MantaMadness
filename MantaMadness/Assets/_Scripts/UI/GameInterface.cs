@@ -22,6 +22,13 @@ public class GameInterface : MonoBehaviour, IScreen
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private TextEffect textEffects;
 
+    [Header("Black Bar Effect Parameters")]
+    [SerializeField] private GameObject topBar;
+    [SerializeField] private GameObject bottomBar;
+    [SerializeField] private RectTransform topBarStartPosition;
+    [SerializeField] private RectTransform bottomBarStartPosition;
+    [SerializeField] private Vector3 barOffset;
+
 
     public void Start()
     {
@@ -98,5 +105,16 @@ public class GameInterface : MonoBehaviour, IScreen
 
         yield return new WaitForSeconds(4f);
         text.transform.DOMove(startPosition.position, 1.5f).SetEase(Ease.InQuad);
+    }
+    public void StartBlackBarEffect(float duration)
+    {
+        StartCoroutine(BlackBarEffect(duration));
+    }
+    private IEnumerator BlackBarEffect(float duration)
+    {
+        topBar.transform.DOMove(topBarStartPosition.transform.position - barOffset, duration / 2f).SetEase(Ease.OutQuad).SetLoops(2, LoopType.Yoyo);
+        bottomBar.transform.DOMove(bottomBarStartPosition.position + barOffset, duration / 2f).SetEase(Ease.OutQuad).SetLoops(2, LoopType.Yoyo);
+        yield return new WaitForSeconds(duration);
+        print("done");
     }
 }
