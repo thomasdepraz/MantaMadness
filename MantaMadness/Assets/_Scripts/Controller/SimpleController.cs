@@ -125,6 +125,7 @@ public class SimpleController : MonoBehaviour
         State = ControllerState.FALLING;
 
         inputs.boost.action.performed += Boost;
+        inputs.drift.action.performed += Drift;
         inputs.boost.action.performed += Stomp;
         inputs.jump.action.performed += Jump;
         inputs.jump.action.canceled += Jump;
@@ -141,6 +142,7 @@ public class SimpleController : MonoBehaviour
     {
         inputs.boost.action.performed -= Boost;
         inputs.boost.action.performed -= Stomp;
+        inputs.drift.action.performed -= Drift;
         inputs.jump.action.performed -= Jump;
         inputs.jump.action.canceled -= Jump;
         inputs.dash.action.performed -= StyleDash;
@@ -356,6 +358,64 @@ public class SimpleController : MonoBehaviour
             ////jumpRoutine = StartCoroutine(JumpRoutine());
         }
     }
+    private void SetDrift(int dir, bool drifting, bool boost = false)
+    {
+        this.drifting = drifting;
+        driftDir = dir;
+
+        if (drifting == false)
+        {
+            PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.DRIFT);
+            currentDriftTime = 0;
+            hasDriftBoost = false;
+        }
+
+        updateDrift.Invoke(dir, drifting, boost);
+    }
+
+    private void DrifStart(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if (IsLocked)
+            return;
+
+        if (State == ControllerState.SURFING)
+        {
+            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DRIFT);
+        }
+    }
+
+    private void Drift(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if (IsLocked)
+            return;
+
+        if (State == ControllerState.SURFING)
+        {
+            if (turn == 0 || CanDrift == false)
+                return;
+
+            SetDrift(turn > 0 ? 1 : -1, true);
+        }
+
+        //Backflip
+        if (state == ControllerState.AIRRIDE)
+        {
+            rb.linearVelocity = HorizontalVelocity;
+        }
+    }
+
+    private void DriftReleased(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if (IsLocked)
+            return;
+
+        if (IsDrifting && State == ControllerState.SURFING)
+        {
+            DriftBoost();
+        }
+
+        SetDrift(0, false);
+    }
 
     private void Boost(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
@@ -543,6 +603,23 @@ public class SimpleController : MonoBehaviour
             jumpChargeTimer += Time.deltaTime;
             jumpChargeTimer = Mathf.Clamp(jumpChargeTimer, 0, controllerData.jumpChargeTime);
             print(jumpChargeTimer);
+        }
+
+        //DRIFT
+        if (IsDrifting)
+        {
+            if (State != ControllerState.SURFING || CanDriftBreak)
+            {
+                //Stop drifting
+                SetDrift(0, false);
+            }
+
+            currentDriftTime += Time.fixedDeltaTime;
+            if (currentDriftTime > controllerData.driftBoostTimer && hasDriftBoost == false)
+            {
+                hasDriftBoost = true;
+                SetDrift(driftDir, true, true);
+            }
         }
 
         //Falling to Surfing

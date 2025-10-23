@@ -451,10 +451,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""bf6db0c4-481c-425a-870b-bfe4843eb583"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/c"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
+                    ""groups"": "";Keyboard&Mouse;Gamepad"",
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -495,10 +495,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""c3f7bf17-3a3a-4e7c-8b5e-02f6478497a1"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""StrafLeft"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -509,7 +509,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""StrafLeft"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -517,10 +517,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""997394cb-7680-4d40-a229-d76eeec543a3"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""StrafRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -531,7 +531,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""StrafRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false

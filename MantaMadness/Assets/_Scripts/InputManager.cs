@@ -24,6 +24,7 @@ public class InputManager : MonoBehaviour
     public InputActionReference jump;
     public InputActionReference airControl;
     public InputActionReference dash;
+    public InputActionReference drift;
     public InputActionReference strafLeft;
     public InputActionReference strafRight;
 
