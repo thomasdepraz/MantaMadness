@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8165c5f1327d46249aa039486e9e5915, type: 3}
   m_Name: ControllerData_NewVer
   m_EditorClassIdentifier: 
-  acceleration: 60
-  maxSpeed: 40
+  acceleration: 50
+  maxSpeed: 50
   rotationTorque: 9
   overSpeedCoeff: 0.5
   baseTurnSpeed: 10
@@ -122,15 +122,16 @@ MonoBehaviour:
   airControlRotationSpeed: 10
   fallingAirControl: 10
   divingAirControl: 5
-  minSpeedToDrift: 25
-  minSpeedToDriftBreak: 10
+  minSpeedToDrift: 0
   driftTurnSpeed: 5
+  driftMoveSpeed: 40
   steeringMult: 1
   driftingGrip: 0
   driftBoostTimer: 2
   boostForce: 70
   boostAfterImageEffectDuration: 0.25
-  strafForce: 20
+  boostCooldown: 0.5
+  strafForce: 50
   strafCooldown: 0.75
   airRideVelocityThreshold: 40
   airRideGravityScale: 0.4

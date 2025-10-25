@@ -5070,6 +5070,7 @@ GameObject:
   - component: {fileID: 7011436242177722551}
   - component: {fileID: 5168940181503916690}
   - component: {fileID: 8865812224042178264}
+  - component: {fileID: 3519549669702712170}
   m_Layer: 0
   m_Name: P_Lagoon_Moai
   m_TagString: Untagged
@@ -5168,6 +5169,42 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 3890122937593936320, guid: 30105ae545b354a4cba7f84e3ba552b3, type: 3}
+--- !u!114 &3519549669702712170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8403885319507603810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playOnStart: 0
+  playOnEnable: 0
+  playOnBeat: 1
+  animateRotation: 0
+  loopRotationAmount: -1
+  yoyoRotation: 0
+  xRotation: 0
+  yRotation: 0
+  zRotation: 0
+  rotationDuration: 0
+  animatePosition: 0
+  loopPositionAmount: -1
+  yoyoPosition: 0
+  xPos: 0
+  yPos: 0
+  zPos: 0
+  moveDuration: 0
+  animateScale: 0
+  loopScaleAmount: -1
+  yoyoScale: 1
+  xScale: 0.95
+  yScale: 0.95
+  zScale: 0.95
+  scaleDuration: 1
 --- !u!1 &8676719547476644568
 GameObject:
   m_ObjectHideFlags: 0

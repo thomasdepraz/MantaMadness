@@ -7,6 +7,7 @@ public class TweenAnimation : MonoBehaviour
 
     public bool playOnStart;
     public bool playOnEnable;
+    public bool playOnBeat = false;
 
     [Header("Rotation Tween")]
     public bool animateRotation;
@@ -49,12 +50,22 @@ public class TweenAnimation : MonoBehaviour
 
     void Start()
     {
+        if(playOnBeat == true)
+        {
+            MusicManager.OnBeat += BeatTween;
+        }
+
         if (playOnStart == true)
             Tween();
     }
 
     public void OnEnable()
     {
+        if (playOnBeat == true)
+        {
+            MusicManager.OnBeat += BeatTween;
+        }
+
         if (playOnEnable == true)
             Tween();
     }
@@ -62,6 +73,12 @@ public class TweenAnimation : MonoBehaviour
     public void OnDisable()
     {
         StopTween();
+        MusicManager.OnBeat -= BeatTween;
+    }
+
+    public void OnDestroy()
+    {
+        MusicManager.OnBeat -= BeatTween;
     }
 
     public void Tween()
@@ -121,5 +138,14 @@ public class TweenAnimation : MonoBehaviour
         transform.localPosition = originalPosition;
         transform.localRotation = originalRotation;
         transform.localScale = originalScale;
+    }
+
+    public void BeatTween(int bar, int beat, float tempo)
+    {
+        //print("bar =" + bar + " beat=" + beat + " tempo=" + tempo);
+        //print(60 / tempo);
+        StopTween();
+        print(tempo);
+        transform.DOScale(new Vector3(originalScale.x * xScale, originalScale.y * yScale, originalScale.z * zScale), 60/tempo).SetEase(Ease.InOutQuad).SetLoops(loopScaleAmount, LoopType.Yoyo);
     }
 }

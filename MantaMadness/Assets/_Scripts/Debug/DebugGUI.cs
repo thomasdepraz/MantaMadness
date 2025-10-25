@@ -51,7 +51,12 @@ public class DebugGUI : MonoBehaviour
             MusicManager.Instance.ToggleMusic();
         }
 
-        if(GUILayout.Button($"Toggle Fly Mode"))
+        if (GUILayout.Button($"Change Music"))
+        {
+            FmodGlobalParameters.instance.ToggleGlobalParameter(FmodGlobalParamName.G_SecretRoom);
+        }
+
+        if (GUILayout.Button($"Toggle Fly Mode"))
         {
             FlyMode.instance.SwitchCamMode();
         }

@@ -37,6 +37,7 @@ public class MantaVisuals : MonoBehaviour
     public ParticleSystem[] boostParticles = new ParticleSystem[3];
     public VisualEffect targetJumpParticles;
     public VisualEffect chargeJumpParticles;
+    public VisualEffect chargeDriftParticles;
 
     [Header("Visual")]
     public SkinnedMeshRenderer[] mantaAllVisuals;
@@ -225,6 +226,7 @@ public class MantaVisuals : MonoBehaviour
     }
     ExposedProperty surfBladePlayProperty = "State";
     ExposedProperty chargeJumpProperty = "State";
+    ExposedProperty chargeDriftProperty = "State";
     private void UpdateParticles()
     {
         if (mantaController.State == ControllerState.SURFING && mantaController.HorizontalVelocity.magnitude > mantaController.controllerData.maxSpeed / 4f)
@@ -258,45 +260,71 @@ public class MantaVisuals : MonoBehaviour
             }
         }
 
-        if (mantaController.chargesJump == true && mantaController.State == ControllerState.SURFING)
-        {
-            if(mantaController.jumpChargeTimer >= mantaController.controllerData.jumpChargeTime)
-            {
-                chargeJumpParticles.SetInt(chargeJumpProperty, 2);
-            }
-            else
-            {
-                chargeJumpParticles.SetInt(chargeJumpProperty, 1);
-            }
-        }
-        else if(mantaController.chargesJump == false || mantaController.State != ControllerState.SURFING)
-        {
-            chargeJumpParticles.SetInt(chargeJumpProperty, 0);
-        }
+        //if (mantaController.chargesJump == true && mantaController.State == ControllerState.SURFING)
+        //{
+        //    if(mantaController.jumpChargeTimer >= mantaController.controllerData.jumpChargeTime)
+        //    {
+        //        chargeJumpParticles.SetInt(chargeJumpProperty, 2);
+        //    }
+        //    else
+        //    {
+        //        chargeJumpParticles.SetInt(chargeJumpProperty, 1);
+        //    }
+        //}
+        //else if(mantaController.chargesJump == false || mantaController.State != ControllerState.SURFING)
+        //{
+        //    chargeJumpParticles.SetInt(chargeJumpProperty, 0);
+        //}
+
+        //if (mantaController.IsDrifting == true && mantaController.State == ControllerState.SURFING)
+        //{
+        //    chargeDriftParticles.SetInt(chargeDriftProperty, 1);
+        //}
     }
 
-    private void UpdateDrift(int driftDir, bool drifting, bool boost)
+    private void UpdateDrift(bool drifting, bool boost)
     {
-        for (int i = 0; i < driftParticles.Length; i++)
-        {
-            driftParticles[i].Stop();
-            driftParticles[i].gameObject.SetActive(false);
-        }
+        //for (int i = 0; i < driftParticles.Length; i++)
+        //{
+        //    driftParticles[i].Stop();
+        //    driftParticles[i].gameObject.SetActive(false);
+        //}
+
+        //if (drifting)
+        //{
+        //    if (driftDir > 0)
+        //    {
+        //        int index = boost ? 3 : 2;
+        //        driftParticles[index].gameObject.SetActive(true);
+        //        driftParticles[index].Play();
+        //    }
+        //    else
+        //    {
+        //        int index = boost ? 1 : 0;
+        //        driftParticles[index].gameObject.SetActive(true);
+        //        driftParticles[index].Play();
+        //    }
+        //}
 
         if (drifting)
         {
-            if (driftDir > 0)
+            if (boost)
             {
-                int index = boost ? 3 : 2;
-                driftParticles[index].gameObject.SetActive(true);
-                driftParticles[index].Play();
+                chargeDriftParticles.SetInt(chargeDriftProperty, 2);
             }
             else
             {
-                int index = boost ? 1 : 0;
-                driftParticles[index].gameObject.SetActive(true);
-                driftParticles[index].Play();
+                chargeDriftParticles.SetInt(chargeDriftProperty, 1);
             }
+                //foreach (ParticleSystem particles in driftParticles)
+                //{
+                //    particles.gameObject.SetActive(true);
+                //    particles.Play();
+                //}
+        }
+        else
+        {
+            chargeDriftParticles.SetInt(chargeDriftProperty, 0);
         }
     }
     private void SplashParticles()

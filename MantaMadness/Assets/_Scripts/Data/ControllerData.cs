@@ -69,8 +69,9 @@ public class ControllerData : ScriptableObject
 
     [Header("Drift")]
     public float minSpeedToDrift;
-    public float minSpeedToDriftBreak;
+    //public float minSpeedToDriftBreak;
     public float driftTurnSpeed;
+    public float driftMoveSpeed;
     [Min(1)]public float steeringMult;
     public float driftingGrip;
     public float driftBoostTimer;
@@ -78,6 +79,7 @@ public class ControllerData : ScriptableObject
     [Header("Boost")]
     public float boostForce;
     public float boostAfterImageEffectDuration;
+    public float boostCooldown;
 
     [Header("Straf")]
     public float strafForce;

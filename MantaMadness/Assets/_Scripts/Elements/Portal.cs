@@ -31,9 +31,6 @@ public class Portal : MonoBehaviour
         {
             signText.text = index;
         }
-
-
-
     }
 
     public void Teleport()

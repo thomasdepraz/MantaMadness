@@ -51,7 +51,7 @@ public class SimpleController : MonoBehaviour
     public bool OnRail => currentRail != null;
     public bool IsLocked => OnRail || InAirRail || forceLocked;
     private bool CanDrift => HorizontalVelocity.sqrMagnitude > controllerData.minSpeedToDrift * controllerData.minSpeedToDrift;
-    private bool CanDriftBreak => HorizontalVelocity.sqrMagnitude < (controllerData.minSpeedToDriftBreak * controllerData.minSpeedToDriftBreak);
+    //private bool CanDriftBreak => HorizontalVelocity.sqrMagnitude < (controllerData.minSpeedToDriftBreak * controllerData.minSpeedToDriftBreak);
     private bool CanDash => (State == ControllerState.SURFING || State == ControllerState.FALLING) && 
                             currentDashTime > controllerData.dashTimer && 
                             (Time.time - lastDashTimestamp) > controllerData.dashCooldown;
@@ -98,7 +98,7 @@ public class SimpleController : MonoBehaviour
     public Action<ControllerState, ControllerState> stateChanged;
     public Action<AirRail> enterAirRail;
     public Action<AirRail> exitAirRail;
-    public Action<int, bool, bool> updateDrift;
+    public Action<bool, bool> updateDrift;
     public Action boost;
     public Action<Transform> updateRaceTarget;
     public Action enterRail;
@@ -176,8 +176,8 @@ public class SimpleController : MonoBehaviour
         }
     }
 
-    [HideInInspector] public float jumpChargeTimer { get; private set; }
-    [HideInInspector] public bool chargesJump { get; private set; } = false;
+    //[HideInInspector] public float jumpChargeTimer { get; private set; }
+    //[HideInInspector] public bool chargesJump { get; private set; } = false;
     private void Jump(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         if (IsLocked)
@@ -193,20 +193,21 @@ public class SimpleController : MonoBehaviour
             boostBehaviour.IncrementGauge(BoostAction.PerfectJump);
         }
         //CHARGE JUMP
+        //if (context.performed)
+        //{
+        //    chargesJump = true;
+        //    print(chargesJump);
+        //}
+
+        //RELEASE JUMP
         if (context.performed)
         {
-            chargesJump = true;
-            //print(chargesJump);
-        }
-        //RELEASE JUMP
-        if (context.canceled)
-        {
-            chargesJump = false;
-            float t = Mathf.Clamp01(jumpChargeTimer / controllerData.jumpChargeTime);
-            float forceMultiplier = Mathf.Lerp(controllerData.jumpForceMultiplierMin, controllerData.jumpForceMultiplierMax, t);
-            print("Force multiplier = " + forceMultiplier);
+            //chargesJump = false;
+            //float t = Mathf.Clamp01(jumpChargeTimer / controllerData.jumpChargeTime);
+            //float forceMultiplier = Mathf.Lerp(controllerData.jumpForceMultiplierMin, controllerData.jumpForceMultiplierMax, t);
+            //print("Force multiplier = " + forceMultiplier);
             //RESET TIMER AT END
-            jumpChargeTimer = 0f;
+            //jumpChargeTimer = 0f;
 
             if (State == ControllerState.SURFING && jumpCount < 1)
             {
@@ -214,7 +215,7 @@ public class SimpleController : MonoBehaviour
                 State = ControllerState.JUMPING;
                 jumpCount++;
                 rb.linearVelocity = hoverBehaviour.normalContainer.forward * HorizontalVelocity.magnitude;
-                rb.AddForce((NormalContainer.up * controllerData.upwardImpulseForce * forceMultiplier) + (NormalContainer.forward * controllerData.forwardImpulseForce * forceMultiplier), ForceMode.VelocityChange);
+                rb.AddForce((NormalContainer.up * controllerData.upwardImpulseForce /* forceMultiplier*/) + (NormalContainer.forward * controllerData.forwardImpulseForce /* forceMultiplier*/), ForceMode.VelocityChange);
                 rb.linearDamping = controllerData.jumpDamping;
 
                 // PLAY FMOD PLAYER ACTION JUMP SOUND
@@ -362,10 +363,9 @@ public class SimpleController : MonoBehaviour
             ////jumpRoutine = StartCoroutine(JumpRoutine());
         }
     }
-    private void SetDrift(int dir, bool drifting, bool boost = false)
+    private void SetDrift(bool drifting, bool boost = false)
     {
         this.drifting = drifting;
-        driftDir = dir;
 
         if (drifting == false)
         {
@@ -374,7 +374,7 @@ public class SimpleController : MonoBehaviour
             hasDriftBoost = false;
         }
 
-        updateDrift.Invoke(dir, drifting, boost);
+        updateDrift.Invoke(drifting, boost);
     }
 
     private void DrifStart(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -395,17 +395,17 @@ public class SimpleController : MonoBehaviour
 
         if (State == ControllerState.SURFING)
         {
-            if (turn == 0 || CanDrift == false)
+            if (CanDrift == false)//|| turn == 0 || )
                 return;
 
-            SetDrift(turn > 0 ? 1 : -1, true);
+            SetDrift(true);
         }
 
-        //Backflip
-        if (state == ControllerState.AIRRIDE)
-        {
-            rb.linearVelocity = HorizontalVelocity;
-        }
+        ////Backflip
+        //if (state == ControllerState.AIRRIDE)
+        //{
+        //    rb.linearVelocity = HorizontalVelocity;
+        //}
     }
 
     private void DriftReleased(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -418,14 +418,17 @@ public class SimpleController : MonoBehaviour
             DriftBoost();
         }
 
-        SetDrift(0, false);
+        SetDrift(false);
     }
 
     private void Boost(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         if (State == ControllerState.SURFING)
         {
-            boostBehaviour.UseBoost(() => Boost(controllerData.boostForce));
+            if(boostRoutine == null && IsDrifting == false)
+            {
+                boostBehaviour.UseBoost(() => Boost(controllerData.boostForce));
+            }
         }
     }
 
@@ -450,14 +453,14 @@ public class SimpleController : MonoBehaviour
                     {
                         //rb.AddForce(-Camera.main.transform.right * controllerData.driftBoostForce, ForceMode.VelocityChange);
                         rb.linearVelocity = Vector3.zero;
-                        rb.AddForce(-Camera.main.transform.right * controllerData.boostForce, ForceMode.VelocityChange);
+                        rb.AddForce(-Camera.main.transform.right * controllerData.strafForce, ForceMode.VelocityChange);
                         straf.Invoke("StrafLeft");
                     }
                     else if (context.action.name == InputManager.Instance.strafRight.action.name)
                     {
                         //rb.AddForce(Camera.main.transform.right * controllerData.driftBoostForce, ForceMode.VelocityChange);
                         rb.linearVelocity = Vector3.zero;
-                        rb.AddForce(Camera.main.transform.right * controllerData.boostForce, ForceMode.VelocityChange);
+                        rb.AddForce(Camera.main.transform.right * controllerData.strafForce, ForceMode.VelocityChange);
                         straf.Invoke("StrafRight");
                     }
                 }
@@ -470,7 +473,7 @@ public class SimpleController : MonoBehaviour
     {
         if(state == ControllerState.FALLING ||  state == ControllerState.JUMPING)
         {
-            if (stompRoutine == null)
+            if (stompRoutine == null && jumpRoutine == null)
             {
                 stompRoutine = StartCoroutine(StompRoutine(context));
             }
@@ -602,27 +605,27 @@ public class SimpleController : MonoBehaviour
         }
 
         //Charging a Jump
-        if (chargesJump)
-        {
-            jumpChargeTimer += Time.deltaTime;
-            jumpChargeTimer = Mathf.Clamp(jumpChargeTimer, 0, controllerData.jumpChargeTime);
-            print(jumpChargeTimer);
-        }
+        //if (chargesJump)
+        //{
+        //    jumpChargeTimer += Time.deltaTime;
+        //    jumpChargeTimer = Mathf.Clamp(jumpChargeTimer, 0, controllerData.jumpChargeTime);
+        //    print(jumpChargeTimer);
+        //}
 
         //DRIFT
         if (IsDrifting)
         {
-            if (State != ControllerState.SURFING || CanDriftBreak)
+            if (State != ControllerState.SURFING) //|| CanDriftBreak)
             {
                 //Stop drifting
-                SetDrift(0, false);
+                SetDrift(false);
             }
 
             currentDriftTime += Time.fixedDeltaTime;
             if (currentDriftTime > controllerData.driftBoostTimer && hasDriftBoost == false)
             {
                 hasDriftBoost = true;
-                SetDrift(driftDir, true, true);
+                SetDrift(true, true);
             }
         }
 
@@ -848,7 +851,14 @@ public class SimpleController : MonoBehaviour
         float steeringVelocity = Vector3.Dot(transform.right, Velocity);
         float desiredVelocityChange = -steeringVelocity * stats.GetGrip() * Time.fixedDeltaTime;
 
-        rb.AddForce(direction.normalized * speed, ForceMode.Acceleration);
+        if(IsDrifting == true)
+        {
+            rb.AddForce(direction.normalized * controllerData.driftMoveSpeed, ForceMode.Acceleration);
+        }
+        else
+        {
+            rb.AddForce(direction.normalized * speed, ForceMode.Acceleration);
+        }
 
         //Apply drag if braking
         if (brake > 0.0f)
@@ -872,9 +882,20 @@ public class SimpleController : MonoBehaviour
         rb.linearDamping = controllerData.jumpDamping;
         jumpCount++;
     }
-    
+
+    private Coroutine boostRoutine;
+    private IEnumerator BoostCoroutine()
+    {
+        yield return new WaitForSeconds(controllerData.boostCooldown);
+        boostRoutine = null;
+    }
+
     private void Boost(float force)
     {
+        if(boostRoutine == null)
+        {
+            boostRoutine = StartCoroutine(BoostCoroutine());
+        }
         rb.AddForce(hoverBehaviour.normalContainer.forward * force, ForceMode.VelocityChange);
         afterImageEffect.Invoke(controllerData.boostAfterImageEffectDuration);
         boost.Invoke();
@@ -885,8 +906,11 @@ public class SimpleController : MonoBehaviour
     {
         if (currentDriftTime > controllerData.driftBoostTimer)
         {
-            Boost(controllerData.boostForce);
-            boostBehaviour.IncrementGauge(BoostAction.BoostedDrift);
+            if(boostRoutine == null)
+            {
+                Boost(controllerData.boostForce);
+                boostBehaviour.IncrementGauge(BoostAction.BoostedDrift);
+            }
         }
     }
 

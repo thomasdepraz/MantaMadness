@@ -108,13 +108,17 @@ public class GameInterface : MonoBehaviour, IScreen
     }
     public void StartBlackBarEffect(float duration)
     {
-        StartCoroutine(BlackBarEffect(duration));
+        if(blackBarEffectRoutine == null)
+        {
+            blackBarEffectRoutine = StartCoroutine(BlackBarEffect(duration));
+        }
     }
+    private Coroutine blackBarEffectRoutine;
     private IEnumerator BlackBarEffect(float duration)
     {
         topBar.transform.DOMove(topBarStartPosition.transform.position - barOffset, duration / 2f).SetEase(Ease.OutQuad).SetLoops(2, LoopType.Yoyo);
         bottomBar.transform.DOMove(bottomBarStartPosition.position + barOffset, duration / 2f).SetEase(Ease.OutQuad).SetLoops(2, LoopType.Yoyo);
         yield return new WaitForSeconds(duration);
-        print("done");
+        blackBarEffectRoutine = null;
     }
 }
