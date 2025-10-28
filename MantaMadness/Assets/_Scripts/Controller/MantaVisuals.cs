@@ -136,7 +136,7 @@ public class MantaVisuals : MonoBehaviour
         var ghost = AfterImagePool.Instance.GetGhost();
         ghost.Initialize(afterImageMat, fadeDuration);
         ghost.SetMesh(snapshot);
-        ghost.Show(transform.position, transform.rotation, transform.localScale);
+        ghost.Show(transform.position, Game.Instance.player.hoverBehaviour.normalContainer.transform.rotation, transform.localScale);
     }
 
     private void UpdateState(ControllerState previous, ControllerState newState)
