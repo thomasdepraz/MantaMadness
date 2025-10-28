@@ -511,7 +511,10 @@ public class SimpleController : MonoBehaviour
     {
         if(state == ControllerState.FALLING ||  state == ControllerState.JUMPING)
         {
-            if (stompRoutine == null && jumpRoutine == null)
+            if(jumpRoutine != null)
+                StopCoroutine(jumpRoutine);
+
+            if (stompRoutine == null)
             {
                 stompRoutine = StartCoroutine(StompRoutine(context));
             }
@@ -690,7 +693,11 @@ public class SimpleController : MonoBehaviour
             if (hasHitWater)
             {
                 State = ControllerState.SURFING;
-                Boost(controllerData.boostForce, hoverBehaviour.normalContainer.transform.forward);
+
+                Vector3 camForward = Camera.main.transform.forward;
+                Vector3 direction = Vector3.ProjectOnPlane(camForward, waterInfo.normal);
+
+                Boost(controllerData.boostForce, direction);
                 stompRoutine = null;
                 ResetJump();
             }
@@ -862,26 +869,14 @@ public class SimpleController : MonoBehaviour
         Vector3 camForward = Camera.main.transform.forward;
         Vector3 camRight = Camera.main.transform.right;
 
-        //camForward.y = 0;
-        //camRight.y = 0;
-
         camForward.Normalize();
         camRight.Normalize();
 
         inputDirection = inputs.moveDirection.action.ReadValue<Vector2>();
         direction = (camForward * inputDirection.y + camRight * inputDirection.x).normalized;
 
-        //if (thrust > 0.0 && HorizontalVelocity.sqrMagnitude < (controllerData.maxSpeed * controllerData.maxSpeed))
-        //{
-        //    direction = new Vector3(inputDirection.x, 0f, inputDirection.y);
-        //}
-        //else
-        //{
-        //    //direction = inputDirection * speed * controllerData.overSpeedCoeff;
-        //    direction = new Vector3(inputDirection.x, 0f, inputDirection.y);
-        //}
+        Vector3 targetDir = Vector3.ProjectOnPlane(direction, hoverBehaviour.normalContainer.up);
 
-        Vector3 targetDir = direction;
 
         if (targetDir.sqrMagnitude > 0.01f)
         {
@@ -902,11 +897,11 @@ public class SimpleController : MonoBehaviour
 
         if(IsDrifting == true)
         {
-            rb.AddForce(direction.normalized * controllerData.driftMoveSpeed, ForceMode.Acceleration);
+            rb.AddForce(targetDir.normalized * controllerData.driftMoveSpeed, ForceMode.Acceleration);
         }
         else
         {
-            rb.AddForce(direction.normalized * speed, ForceMode.Acceleration);
+            rb.AddForce(targetDir.normalized * speed, ForceMode.Acceleration);
         }
 
         //Apply drag if braking
