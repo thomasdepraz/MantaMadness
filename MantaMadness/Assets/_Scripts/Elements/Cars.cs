@@ -9,10 +9,10 @@ public class Cars : MonoBehaviour
     public SplineContainer splineRoad;
     [SerializeField] Spline trackSpline;
 
-    [SerializeField] private float followSpeed = 5f;
+    //[SerializeField] private float followSpeed = 5f;
     [SerializeField] private float acceleration = 5f;
 
-    private float splineT = 0f;
+    //private float splineT = 0f;
 
     [SerializeField] private Rigidbody rb;
 

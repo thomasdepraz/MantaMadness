@@ -43,6 +43,8 @@ public class CameraTargetController : MonoBehaviour
     private Vector3 currentForward;
     [SerializeField] private Vector3 offset;
 
+    private bool toggleFixedCam;
+
 
     private InputManager inputs;
 
@@ -168,7 +170,7 @@ public class CameraTargetController : MonoBehaviour
         target.position = player.transform.position + offset;
         target.up = currentUp;
 
-        if (ResetCamRoutine == null)
+        if (toggleFixedCam == false)
         {
             //Quaternion rotation = Quaternion.Euler(currentUp.x + pitch, currentUp.y + yaw, currentUp.z);
             //target.rotation = rotation;
@@ -185,18 +187,22 @@ public class CameraTargetController : MonoBehaviour
 
     private void ResetCamPos(InputAction.CallbackContext context)
     {
-        if(ResetCamRoutine == null)
+        if(toggleFixedCam == true && ResetCamRoutine == null)
         {
-            ResetCamRoutine = StartCoroutine(ResetCamCoroutine());
+            ResetCamRoutine = StartCoroutine(ResetCamCoroutine(false));
+        }
+        else if(toggleFixedCam == false && ResetCamRoutine == null)
+        {
+            ResetCamRoutine = StartCoroutine(ResetCamCoroutine(true));
         }
     }
 
     private Coroutine ResetCamRoutine;
-    private IEnumerator ResetCamCoroutine()
+    private IEnumerator ResetCamCoroutine(bool toggleValue)
     {
-        UIManager.Instance.gameInterface.StartBlackBarEffect(0.5f);
-        yield return new WaitForSeconds(0.35f);
-
+        UIManager.Instance.gameInterface.ToggleBlackBarEffect(toggleValue, 0.5f);
+        yield return new WaitForSeconds(0.15f);
+        toggleFixedCam = toggleValue;
         // Phase 2 : on garde la rotation actuelle comme nouvelle base
         Vector3 euler = target.rotation.eulerAngles;
 
@@ -208,7 +214,6 @@ public class CameraTargetController : MonoBehaviour
 
         yaw = newYaw;
         pitch = Mathf.Clamp(newPitch, minPitch, maxPitch);
-
 
         // Maintenant, on peut remettre le comportement normal
         ResetCamRoutine = null;

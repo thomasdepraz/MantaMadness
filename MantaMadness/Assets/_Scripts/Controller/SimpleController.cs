@@ -13,6 +13,8 @@ public enum ControllerState
     SWIMMING,
     AIRRIDE,
     STOMP,
+    BOOSTJUMP,
+    DRIFT,
 }
 
 public class SimpleController : MonoBehaviour
@@ -46,7 +48,7 @@ public class SimpleController : MonoBehaviour
     // Legacy water block behavior
     public float MaxDepth => currentWaterBlock is null ? 0 : maxDivingDepth;
     public bool IsDrifting => drifting;
-    public int DriftDirection => driftDir;
+    public float DriftDirection => driftDir;
     public Vector2 AirControlDirection => airControl;
     public bool InAirRail => currentAirRail != null;
     public bool OnRail => currentRail != null;
@@ -86,7 +88,7 @@ public class SimpleController : MonoBehaviour
     private float maxDepth;
     private int jumpCount;
     private bool drifting;
-    private int driftDir;
+    private float driftDir;
     private bool isCoyote => currentCoyoteTime > 0;
     private float currentCoyoteTime;
     private float currentDriftTime;
@@ -99,7 +101,7 @@ public class SimpleController : MonoBehaviour
     public Action<ControllerState, ControllerState> stateChanged;
     public Action<AirRail> enterAirRail;
     public Action<AirRail> exitAirRail;
-    public Action<bool, bool> updateDrift;
+    public Action<bool, bool, int> updateDrift;
     public Action boost;
     public Action<Transform> updateRaceTarget;
     public Action enterRail;
@@ -129,7 +131,7 @@ public class SimpleController : MonoBehaviour
         inputs.drift.action.started += DrifStart;
         inputs.drift.action.performed += Drift;
         inputs.drift.action.canceled += DriftReleased;
-        inputs.boost.action.performed += Stomp;
+        inputs.stomp.action.performed += Stomp;
         inputs.jump.action.performed += Jump;
         inputs.jump.action.canceled += Jump;
         inputs.dash.action.performed += StyleDash;
@@ -144,7 +146,7 @@ public class SimpleController : MonoBehaviour
     private void OnDisable()
     {
         inputs.boost.action.performed -= Boost;
-        inputs.boost.action.performed -= Stomp;
+        inputs.stomp.action.performed -= Stomp;
         inputs.drift.action.started -= DrifStart;
         inputs.drift.action.performed -= Drift;
         inputs.drift.action.canceled -= DriftReleased;
@@ -254,11 +256,11 @@ public class SimpleController : MonoBehaviour
                 {
                     AirDash();
                 }
-                else if (jumpCount > 1) //boost gauge air-dash
-                {
-                    boostBehaviour.UseBoost(AirDash);
+                //else if (jumpCount > 1) //boost gauge air-dash
+                //{
+                //    boostBehaviour.UseBoost(AirDash);
 
-                }
+                //}
             }
         }
     }
@@ -368,7 +370,8 @@ public class SimpleController : MonoBehaviour
             transform.forward = new Vector3(targetDashDirection.x, 0, targetDashDirection.z);
             rb.linearVelocity = targetDashDirection * HorizontalVelocity.magnitude;
 
-            rb.AddForce(targetDashDirection * controllerData.doubleJumpForce, ForceMode.Impulse);
+            //rb.AddForce(targetDashDirection * controllerData.doubleJumpForce, ForceMode.Impulse);
+            rb.AddForce(NormalContainer.up * controllerData.doubleJumpForce, ForceMode.Impulse);
 
             if (jumpRoutine != null)
                 StopCoroutine(jumpRoutine);
@@ -411,8 +414,9 @@ public class SimpleController : MonoBehaviour
             currentDriftTime = 0;
             hasDriftBoost = false;
         }
-
-        updateDrift.Invoke(drifting, boost);
+        int xDir = (int)inputs.airControl.action.ReadValue<Vector2>().x;
+        print(xDir);
+        updateDrift.Invoke(drifting, boost, xDir);
     }
 
     private void DrifStart(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -468,6 +472,14 @@ public class SimpleController : MonoBehaviour
                 boostBehaviour.UseBoost(() => Boost(controllerData.boostForce, Camera.main.transform.forward));
             }
         }
+
+        if (State == ControllerState.JUMPING || State == ControllerState.FALLING)
+        {
+            if(boostJumpRoutine == null)
+            {
+                boostBehaviour.UseBoost(() => BoostJump());
+            }
+        }
     }
 
     private Coroutine strafRoutine = null;
@@ -516,12 +528,12 @@ public class SimpleController : MonoBehaviour
 
             if (stompRoutine == null)
             {
-                stompRoutine = StartCoroutine(StompRoutine(context));
+                stompRoutine = StartCoroutine(StompCoroutine(context));
             }
         }
     }
 
-    private IEnumerator StompRoutine(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    private IEnumerator StompCoroutine(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         State = ControllerState.STOMP;
         rb.linearVelocity = Vector3.zero;
@@ -532,6 +544,34 @@ public class SimpleController : MonoBehaviour
         //play particle
         rb.AddForce(-hoverBehaviour.normalContainer.up * controllerData.stompForce, ForceMode.VelocityChange);
         
+    }
+
+    private Coroutine boostJumpRoutine;
+
+    private void BoostJump()
+    {
+        if (state == ControllerState.FALLING || state == ControllerState.JUMPING)
+        {
+            if(jumpRoutine != null)
+                StopCoroutine(jumpRoutine);
+
+            if (boostJumpRoutine == null)
+            {
+                boostJumpRoutine = StartCoroutine(BoostJumpCoroutine());
+            }
+        }
+    }
+
+    private IEnumerator BoostJumpCoroutine()
+    {
+        State = ControllerState.BOOSTJUMP;
+        rb.linearVelocity = Vector3.zero;
+        triggerAnim.Invoke("Boost");
+        boost.Invoke();
+        afterImageEffect.Invoke(controllerData.boostAfterImageEffectDuration);
+        rb.AddForce(Camera.main.transform.forward * controllerData.boostForce, ForceMode.VelocityChange);
+        yield return new WaitForSeconds(controllerData.boostCooldown);
+        boostJumpRoutine = null;
     }
 
     private void Update()
@@ -605,12 +645,17 @@ public class SimpleController : MonoBehaviour
             {
                 FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Drift, 0);
             }
+
+            if(IsDrifting == true)
+            {
+                driftDir = inputs.moveDirection.action.ReadValue<Vector2>().x;
+            }
         }
     }
 
     bool hasHitWater = false;
     bool hasHitWalls = false;
-    float xRotation = 0f;
+    //float xRotation = 0f;
     private void FixedUpdate()
     {
         hasHitWater = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit waterInfo, controllerData.hoverRaycastLength, waterRaycastLayer.value);
@@ -697,7 +742,10 @@ public class SimpleController : MonoBehaviour
                 Vector3 camForward = Camera.main.transform.forward;
                 Vector3 direction = Vector3.ProjectOnPlane(camForward, waterInfo.normal);
 
-                Boost(controllerData.boostForce, direction);
+                if(inputs.moveDirection.action.ReadValue<Vector2>() != Vector2.zero)
+                {
+                    Boost(controllerData.boostForce, direction);
+                }
                 stompRoutine = null;
                 ResetJump();
             }
@@ -705,6 +753,14 @@ public class SimpleController : MonoBehaviour
             {
                 State = ControllerState.FALLING;
                 rb.AddForce(hoverBehaviour.normalContainer.up * rb.linearVelocity.magnitude / 2f, ForceMode.Acceleration);
+            }
+        }
+
+        if(State == ControllerState.BOOSTJUMP)
+        {
+            if(boostJumpRoutine == null)
+            {
+                State = ControllerState.FALLING;
             }
         }
 
@@ -730,7 +786,8 @@ public class SimpleController : MonoBehaviour
         //Apply gravity
         if (State == ControllerState.JUMPING ||
             State ==  ControllerState.FALLING ||
-            State == ControllerState.AIRRIDE)
+            State == ControllerState.AIRRIDE || 
+            State == ControllerState.BOOSTJUMP)
         {
             float force = controllerData.gravity;
             if (State == ControllerState.AIRRIDE)
@@ -845,20 +902,26 @@ public class SimpleController : MonoBehaviour
 
     private void AirControl()
     {
+
+        Vector3 camForward = Camera.main.transform.forward;
+        Vector3 camRight = Camera.main.transform.right;
+
+        camForward.Normalize();
+        camRight.Normalize();
+
         rb.linearDamping = 0;
-        float inputMagnitude = Mathf.Max(Mathf.Abs(this.airControl.x), Mathf.Abs(this.airControl.y));
-        Vector2 direction = this.airControl.normalized * inputMagnitude;
-        float coeff = State == ControllerState.FALLING ? controllerData.fallingAirControl : controllerData.divingAirControl;
+        Vector3 direction = (camForward * airControl.y + camRight * airControl.x).normalized;
+        print(direction);
+        float coeff = controllerData.fallingAirControl;
 
-        if(State == ControllerState.FALLING && turn != 0)
-            rb.AddTorque(new Vector3(0,Mathf.Sign(turn) * controllerData.airControlRotationSpeed ,0), ForceMode.Acceleration);
+        //if(State == ControllerState.FALLING && turn != 0)
+        //    rb.AddTorque(new Vector3(0,Mathf.Sign(turn) * controllerData.airControlRotationSpeed ,0), ForceMode.Acceleration);
 
-        Vector3 airControl = transform.TransformDirection(new Vector3(direction.x, 0, direction.y));
-        var dot = Vector3.Dot(airControl, HorizontalVelocity);
+        var dot = Vector3.Dot(direction, HorizontalVelocity);
         if (dot > 0 && dot > controllerData.maxAirControl)
             return;
 
-        rb.AddForce(airControl * coeff * Time.fixedDeltaTime, ForceMode.VelocityChange);
+        rb.AddForce(direction * coeff * Time.fixedDeltaTime, ForceMode.VelocityChange);
     }
 
     public Vector3 direction;

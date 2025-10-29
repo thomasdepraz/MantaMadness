@@ -170,6 +170,16 @@ public class MantaVisuals : MonoBehaviour
         {
             mantaAnimator.SetBool("Falling", false);
         }
+
+        if (newState == ControllerState.SURFING)
+        {
+            mantaAnimator.SetBool("Surfing", true);
+        }
+        if (previous == ControllerState.SURFING)
+        {
+            mantaAnimator.SetBool("Surfing", false);
+        }
+
     }
 
     private void Update()
@@ -185,6 +195,7 @@ public class MantaVisuals : MonoBehaviour
             Vector3 direction = (arrowTarget.position - arrow.position).normalized;
             arrow.forward = Vector3.Lerp(arrow.forward, new Vector3(direction.x, 0, direction.z), Time.deltaTime * 3);
         }
+
     }
 
     Quaternion targetRotation;
@@ -282,8 +293,25 @@ public class MantaVisuals : MonoBehaviour
         //}
     }
 
-    private void UpdateDrift(bool drifting, bool boost)
+    private void UpdateDrift(bool drifting, bool boost, int xDir)
     {
+        if (xDir == 1)
+        {
+            //Right
+            mantaAnimator.SetFloat("x", 1);
+        }
+
+        else if (xDir == -1)
+        {
+            //Left
+            mantaAnimator.SetFloat("x", 0);
+        }
+        else
+        {
+            //No Direction
+            mantaAnimator.SetFloat("x", 0.5f);
+        }
+
         //for (int i = 0; i < driftParticles.Length; i++)
         //{
         //    driftParticles[i].Stop();
@@ -316,11 +344,11 @@ public class MantaVisuals : MonoBehaviour
             {
                 chargeDriftParticles.SetInt(chargeDriftProperty, 1);
             }
-                //foreach (ParticleSystem particles in driftParticles)
-                //{
-                //    particles.gameObject.SetActive(true);
-                //    particles.Play();
-                //}
+            //foreach (ParticleSystem particles in driftParticles)
+            //{
+            //    particles.gameObject.SetActive(true);
+            //    particles.Play();
+            //}
         }
         else
         {

@@ -118,10 +118,10 @@ MonoBehaviour:
   minimumFloatingForce: 2
   maximumFloatingForce: 50
   floatingForceMultiplier: 5
-  maxAirControl: 10
-  airControlRotationSpeed: 10
-  fallingAirControl: 10
-  divingAirControl: 5
+  maxAirControl: 30
+  airControlRotationSpeed: 40
+  fallingAirControl: 20
+  divingAirControl: 0
   minSpeedToDrift: 0
   driftTurnSpeed: 5
   driftMoveSpeed: 40
@@ -144,9 +144,12 @@ MonoBehaviour:
   targetDetectionRadius: 40
   targetBoostFactor: 70
   targetBounceForce: 25
-  doubleJumpForce: 7000
+  doubleJumpForce: 10000
   doubleJumpDamping: 0.7
   stompForce: 70
   stompChargeTime: 0.45
   stompAfterImageEffectTime: 0.45
   stompAccelForce: 10
+  boostJumpForce: 70
+  boostJumpChargeTime: 0
+  boostJumpAfterImageEffectTime: 0

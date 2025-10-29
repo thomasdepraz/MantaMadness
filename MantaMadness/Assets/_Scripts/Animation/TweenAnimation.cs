@@ -145,7 +145,7 @@ public class TweenAnimation : MonoBehaviour
         //print("bar =" + bar + " beat=" + beat + " tempo=" + tempo);
         //print(60 / tempo);
         StopTween();
-        print(tempo);
+        //print(tempo);
         transform.DOScale(new Vector3(originalScale.x * xScale, originalScale.y * yScale, originalScale.z * zScale), 60/tempo).SetEase(Ease.InOutQuad).SetLoops(loopScaleAmount, LoopType.Yoyo);
     }
 }

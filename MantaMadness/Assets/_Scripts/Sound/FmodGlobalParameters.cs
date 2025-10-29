@@ -78,7 +78,7 @@ public class FmodGlobalParameters : MonoBehaviour
                     defaultValue = paramDesc[i].defaultvalue,
                     value = paramDesc[i].defaultvalue,
                 });
-                print(globalParameters[i].name);
+                //print(globalParameters[i].name);
             }
         }
         if(globalParameters.Count == 0)

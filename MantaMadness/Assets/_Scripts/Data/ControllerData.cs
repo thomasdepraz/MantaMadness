@@ -107,5 +107,4 @@ public class ControllerData : ScriptableObject
     public float stompChargeTime;
     public float stompAfterImageEffectTime;
     public float stompAccelForce;
-
 }

@@ -106,18 +106,31 @@ public class GameInterface : MonoBehaviour, IScreen
         yield return new WaitForSeconds(4f);
         text.transform.DOMove(startPosition.position, 1.5f).SetEase(Ease.InQuad);
     }
-    public void StartBlackBarEffect(float duration)
+
+    public void ToggleBlackBarEffect(bool enable, float duration)
     {
-        if(blackBarEffectRoutine == null)
+        if (enable && blackBarEffectRoutine == null)
         {
-            blackBarEffectRoutine = StartCoroutine(BlackBarEffect(duration));
+            blackBarEffectRoutine = StartCoroutine(EnableBlackBarEffect(duration));
+        }
+        else if(enable == false && blackBarEffectRoutine == null)
+        {
+            blackBarEffectRoutine = StartCoroutine(DisableBlackBarEffect(duration));
         }
     }
     private Coroutine blackBarEffectRoutine;
-    private IEnumerator BlackBarEffect(float duration)
+    private IEnumerator EnableBlackBarEffect(float duration)
     {
-        topBar.transform.DOMove(topBarStartPosition.transform.position - barOffset, duration / 2f).SetEase(Ease.OutQuad).SetLoops(2, LoopType.Yoyo);
-        bottomBar.transform.DOMove(bottomBarStartPosition.position + barOffset, duration / 2f).SetEase(Ease.OutQuad).SetLoops(2, LoopType.Yoyo);
+        topBar.transform.DOMove(topBarStartPosition.transform.position - barOffset, duration / 2f).SetEase(Ease.OutQuad);
+        bottomBar.transform.DOMove(bottomBarStartPosition.position + barOffset, duration / 2f).SetEase(Ease.OutQuad);
+        yield return new WaitForSeconds(duration);
+        blackBarEffectRoutine = null;
+    }
+
+    private IEnumerator DisableBlackBarEffect(float duration)
+    {
+        topBar.transform.DOMove(topBarStartPosition.transform.position, duration / 2f).SetEase(Ease.OutQuad);
+        bottomBar.transform.DOMove(bottomBarStartPosition.position, duration / 2f).SetEase(Ease.OutQuad);
         yield return new WaitForSeconds(duration);
         blackBarEffectRoutine = null;
     }

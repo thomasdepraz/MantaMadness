@@ -11,7 +11,7 @@ public class AfterImageGhost : MonoBehaviour
     private Color endColor;
     private float fadeDuration;
 
-    private bool fading;
+    //private bool fading;
 
     void Awake()
     {
@@ -29,7 +29,7 @@ public class AfterImageGhost : MonoBehaviour
         endColor = baseColor;
         endColor.a = 0f;
         fadeDuration = fade;
-        fading = false;
+        //fading = false;
     }
 
     public void SetMesh(Mesh mesh)
