@@ -112,7 +112,7 @@ public class SimpleController : MonoBehaviour
     public Action<string> disableBoolAnim;
     public Action playTargetJumpParticles;
     public Action<bool> togglePlayerBodyVisual;
-    public Action<string> straf;
+    public Action straf;
     public Action<float> afterImageEffect;
 
     private void Awake()
@@ -504,14 +504,14 @@ public class SimpleController : MonoBehaviour
                         //rb.AddForce(-Camera.main.transform.right * controllerData.driftBoostForce, ForceMode.VelocityChange);
                         rb.linearVelocity = Vector3.zero;
                         rb.AddForce(-Camera.main.transform.right * controllerData.strafForce, ForceMode.VelocityChange);
-                        straf.Invoke("StrafLeft");
+                        straf.Invoke();
                     }
                     else if (context.action.name == InputManager.Instance.strafRight.action.name)
                     {
                         //rb.AddForce(Camera.main.transform.right * controllerData.driftBoostForce, ForceMode.VelocityChange);
                         rb.linearVelocity = Vector3.zero;
                         rb.AddForce(Camera.main.transform.right * controllerData.strafForce, ForceMode.VelocityChange);
-                        straf.Invoke("StrafRight");
+                        straf.Invoke();
                     }
                 }
             }

@@ -295,22 +295,6 @@ public class MantaVisuals : MonoBehaviour
 
     private void UpdateDrift(bool drifting, bool boost, int xDir)
     {
-        if (xDir == 1)
-        {
-            //Right
-            mantaAnimator.SetFloat("x", 1);
-        }
-
-        else if (xDir == -1)
-        {
-            //Left
-            mantaAnimator.SetFloat("x", 0);
-        }
-        else
-        {
-            //No Direction
-            mantaAnimator.SetFloat("x", 0.5f);
-        }
 
         //for (int i = 0; i < driftParticles.Length; i++)
         //{
@@ -415,10 +399,10 @@ public class MantaVisuals : MonoBehaviour
         }
     }
 
-    public void strafEffectsAndVisual(string strafSide)
+    public void strafEffectsAndVisual()
     {
         AfterImageEffect(strafEffectDuration);
-        triggerAnimation(strafSide);     
+        triggerAnimation("Straf");     
     }
 
     public void AfterImageEffect(float duration)
