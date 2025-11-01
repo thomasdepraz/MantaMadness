@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class Game : MonoBehaviour
+public class Game : MonoBehaviour, IDataPersistence
 {
     public static Game Instance;
 
@@ -51,8 +51,21 @@ public class Game : MonoBehaviour
         // PLay level Music
         //SoundManager.PlayMusic(Music.THEME_001);
 
-        m_SpawnPosition = player.transform.position;
+        //m_SpawnPosition = player.transform.position;
+        //m_SpawnRotation = player.transform.rotation;
+    }
+
+    public void LoadData(GameData data)
+    {
+        m_SpawnPosition = data.playerPosition;
         m_SpawnRotation = player.transform.rotation;
+
+        player.transform.position = m_SpawnPosition;
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.playerPosition = player.transform.position;
     }
 
     public void Update()

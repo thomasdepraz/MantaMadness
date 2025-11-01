@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
-public class CoinManager : MonoBehaviour
+public class CoinManager : MonoBehaviour, IDataPersistence
 {
     public static CoinManager Instance;
 
@@ -48,9 +49,26 @@ public class CoinManager : MonoBehaviour
     public void Start()
     {
         PickupCoinCount = 0;
-        PickupCollectibleCount = 0;
+        //PickupCollectibleCount = 0;
     }
 #endif
+
+    public void LoadData(GameData data)
+    {
+        pickupCollectibleCount = data.clamCount;
+        StartCoroutine(LateLoadUpdate(data));
+    }
+
+    public IEnumerator LateLoadUpdate(GameData data)
+    {
+        yield return new WaitForSeconds(0.1f);
+        UIManager.Instance.gameInterface.UpdateCollectibleCount(data.clamCount);
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.clamCount = pickupCollectibleCount;
+    }
 
     public void PickupCoin()
     {

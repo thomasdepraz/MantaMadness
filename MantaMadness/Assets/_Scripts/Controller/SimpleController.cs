@@ -415,7 +415,6 @@ public class SimpleController : MonoBehaviour
             hasDriftBoost = false;
         }
         int xDir = (int)inputs.airControl.action.ReadValue<Vector2>().x;
-        print(xDir);
         updateDrift.Invoke(drifting, boost, xDir);
     }
 
@@ -911,7 +910,6 @@ public class SimpleController : MonoBehaviour
 
         rb.linearDamping = 0;
         Vector3 direction = (camForward * airControl.y + camRight * airControl.x).normalized;
-        print(direction);
         float coeff = controllerData.fallingAirControl;
 
         //if(State == ControllerState.FALLING && turn != 0)
