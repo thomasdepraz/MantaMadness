@@ -9,6 +9,7 @@ public class Checkpoint : MonoBehaviour
     public int RaceIndex { get => raceIndex; }
     public Transform respawnTransform;
     public GameObject[] outlines;
+
     public void Activate(int raceIndex)
     {
         this.raceIndex = raceIndex;

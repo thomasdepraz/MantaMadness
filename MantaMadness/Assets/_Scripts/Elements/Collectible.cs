@@ -9,7 +9,7 @@ public class Collectible : MonoBehaviour
     private Coroutine routine;
     
     [SerializeField] private CollectibleType type;
-    public enum CollectibleType { normal, super, mega}
+    public enum CollectibleType { normal, super, mega, greyCoin}
 
     [SerializeField] private CollectibleRelay relay;
 
@@ -66,6 +66,11 @@ public class Collectible : MonoBehaviour
                 CoinManager.Instance.PickupCollectible(20);
                 break;
             case CollectibleType.mega:
+                UIManager.Instance.gameInterface.StartCoroutine("pickupMegaClam");
+                //Increase coincount
+                CoinManager.Instance.PickupCollectible(100);
+                break;
+            case CollectibleType.greyCoin:
                 UIManager.Instance.gameInterface.StartCoroutine("pickupMegaClam");
                 //Increase coincount
                 CoinManager.Instance.PickupCollectible(100);

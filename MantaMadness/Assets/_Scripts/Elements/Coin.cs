@@ -2,6 +2,7 @@ using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 using FMODUnity;
+using System;
 
 public class Coin : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class Coin : MonoBehaviour
     private WaitForSeconds wait;
     private Coroutine routine;
 
+    public Action<bool> pickedUpCoin;
     private IEnumerator PickupCoroutine(SimpleController controller)
     {
         wait = new WaitForSeconds(c_LockDuration);
@@ -55,7 +57,7 @@ public class Coin : MonoBehaviour
 
         //Deactivate game object
         routine = null;
-
+        pickedUpCoin.Invoke(true);
         gameObject.SetActive(false);
     }
 

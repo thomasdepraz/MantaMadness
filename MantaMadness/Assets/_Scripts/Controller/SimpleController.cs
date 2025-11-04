@@ -17,7 +17,7 @@ public enum ControllerState
     DRIFT,
 }
 
-public class SimpleController : MonoBehaviour
+public class SimpleController : MonoBehaviour, IDataPersistence
 {
     [SerializeField]
     private Rigidbody rb;
@@ -36,6 +36,13 @@ public class SimpleController : MonoBehaviour
     [SerializeField] private LayerMask waterRaycastLayer;
     [SerializeField] private LayerMask defaultRaycastLayer;
     [SerializeField] private LayerMask targetRaycastLayer;
+
+    [Header("Player Abilities")]
+    [SerializeField] private bool doubleJumpAbility;
+    [SerializeField] private bool chargeBoostAbility;
+    [SerializeField] private bool stompAbility;
+    [SerializeField] private bool lavaResistanceAbility;
+    [SerializeField] private bool alienAntennasAbility;
 
     //PLayer velocity
     public Vector3 Velocity => this.rb.linearVelocity;
@@ -155,6 +162,24 @@ public class SimpleController : MonoBehaviour
         inputs.dash.action.performed -= StyleDash;
         inputs.strafLeft.action.performed -= Straf;
         inputs.strafRight.action.performed -= Straf;
+    }
+
+    public void LoadData(GameData data)
+    {
+        doubleJumpAbility = data.doubleJump;
+        chargeBoostAbility = data.chargeBoost;
+        stompAbility = data.stomp;
+        lavaResistanceAbility = data.lavaResistance;
+        alienAntennasAbility = data.alienAntennas;
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.doubleJump = doubleJumpAbility;
+        data.chargeBoost = chargeBoostAbility;
+        data.stomp = stompAbility;
+        data.lavaResistance = lavaResistanceAbility;
+        data.alienAntennas = alienAntennasAbility;
     }
 
     private void StyleDash(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -1199,4 +1224,5 @@ public class SimpleController : MonoBehaviour
     private void ResetJump() => jumpCount = 0;
 
     public void UpdateRaceTarget(Transform target) => updateRaceTarget.Invoke(target);
+
 }

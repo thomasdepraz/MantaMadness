@@ -1,20 +1,35 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class GameData
 {
-    public int deathCount;
-
+    //Currencies Counters
     public int clamCount;
-    public Vector3 playerPosition;
+    public SerializableDictionnary<string, bool> coinsCollected;
+
+    //Checkpoints
+    public SerializableDictionnary<string, bool> checkpoints;
+
+    //Player Upgrades Tracking
+    public bool doubleJump;
+    public bool chargeBoost;
+    public bool stomp;
+    public bool lavaResistance;
+    public bool alienAntennas;
 
     // The values defined in this constructor will be the default values
-    // Start with this whenn there's no data to load
+    // Start with this when there's no data to load
     public GameData()
     {
-        this.deathCount = 0;
         this.clamCount = 0;
-        playerPosition = Vector3.zero;
+        coinsCollected = new SerializableDictionnary<string, bool>();
+        checkpoints = new SerializableDictionnary<string, bool>();
 
+        doubleJump = false;
+        chargeBoost = false;
+        stomp = false;
+        lavaResistance = false;
+        alienAntennas = false;
     }
 }

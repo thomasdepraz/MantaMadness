@@ -57,15 +57,12 @@ public class Game : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        m_SpawnPosition = data.playerPosition;
-        m_SpawnRotation = player.transform.rotation;
 
-        player.transform.position = m_SpawnPosition;
     }
 
     public void SaveData(ref GameData data)
     {
-        data.playerPosition = player.transform.position;
+
     }
 
     public void Update()

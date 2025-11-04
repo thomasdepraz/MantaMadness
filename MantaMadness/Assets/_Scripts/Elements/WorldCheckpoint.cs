@@ -1,15 +1,22 @@
+using NUnit.Framework;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 public class WorldCheckpoint : MonoBehaviour
 {
-    [SerializeField] private Transform respawnTransform;
+    [SerializeField] public Transform respawnTransform;
     [SerializeField] public string indexName;
-    [SerializeField] private bool displayAreaName;
-    [SerializeField] private string nameToDisplay;
-
+    [SerializeField] public bool displayAreaName;
+    [SerializeField] public string nameToDisplay;
 
     private void Start()
     {
+        if (!WorldCheckpointManager.Instance.checkpoints.Contains(this))
+        {
+            WorldCheckpointManager.Instance.checkpoints.Add(this);
+        }
+
         if(gameObject.GetComponent<MeshRenderer>().enabled == true)
         {
             gameObject.GetComponent<MeshRenderer>().enabled = false;

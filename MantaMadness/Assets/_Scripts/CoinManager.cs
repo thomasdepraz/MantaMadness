@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 public class CoinManager : MonoBehaviour, IDataPersistence
@@ -45,17 +47,18 @@ public class CoinManager : MonoBehaviour, IDataPersistence
         }
     }
 
-#if UNITY_EDITOR
-    public void Start()
-    {
-        PickupCoinCount = 0;
-        //PickupCollectibleCount = 0;
-    }
-#endif
-
     public void LoadData(GameData data)
     {
         pickupCollectibleCount = data.clamCount;
+
+        foreach(KeyValuePair<string, bool> pair in data.coinsCollected)
+        {
+            if (pair.Value)
+            {
+                pickupCointCount++;
+            }
+        }
+
         StartCoroutine(LateLoadUpdate(data));
     }
 
@@ -63,6 +66,7 @@ public class CoinManager : MonoBehaviour, IDataPersistence
     {
         yield return new WaitForSeconds(0.1f);
         UIManager.Instance.gameInterface.UpdateCollectibleCount(data.clamCount);
+        UIManager.Instance.gameInterface.UpdateCoinCount(pickupCointCount);
     }
 
     public void SaveData(ref GameData data)
