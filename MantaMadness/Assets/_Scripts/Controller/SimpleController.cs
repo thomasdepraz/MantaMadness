@@ -2,6 +2,7 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum ControllerState
@@ -15,6 +16,15 @@ public enum ControllerState
     STOMP,
     BOOSTJUMP,
     DRIFT,
+}
+
+public enum ControllerAbility
+{
+    DOUBLEJUMP,
+    CHARGEBOOST,
+    STOMP,
+    LAVARESIST,
+    ALIEN,
 }
 
 public class SimpleController : MonoBehaviour, IDataPersistence
@@ -38,11 +48,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     [SerializeField] private LayerMask targetRaycastLayer;
 
     [Header("Player Abilities")]
-    [SerializeField] private bool doubleJumpAbility;
-    [SerializeField] private bool chargeBoostAbility;
-    [SerializeField] private bool stompAbility;
-    [SerializeField] private bool lavaResistanceAbility;
-    [SerializeField] private bool alienAntennasAbility;
+    [SerializeField] public bool doubleJumpAbility { get; private set; }
+    [SerializeField] public bool chargeBoostAbility { get; private set; }
+    [SerializeField] public bool stompAbility { get; private set; }
+    [SerializeField] public bool lavaResistanceAbility { get; private set; }
+    [SerializeField] public bool alienAntennasAbility { get; private set; }
+
 
     //PLayer velocity
     public Vector3 Velocity => this.rb.linearVelocity;
@@ -121,6 +132,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public Action<bool> togglePlayerBodyVisual;
     public Action straf;
     public Action<float> afterImageEffect;
+    public Action updateEquipmentVisual;
 
     private void Awake()
     {
@@ -171,6 +183,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         stompAbility = data.stomp;
         lavaResistanceAbility = data.lavaResistance;
         alienAntennasAbility = data.alienAntennas;
+
+        updateEquipmentVisual.Invoke();
     }
 
     public void SaveData(ref GameData data)
@@ -245,13 +259,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         //RELEASE JUMP
         if (context.performed)
         {
-            //chargesJump = false;
-            //float t = Mathf.Clamp01(jumpChargeTimer / controllerData.jumpChargeTime);
-            //float forceMultiplier = Mathf.Lerp(controllerData.jumpForceMultiplierMin, controllerData.jumpForceMultiplierMax, t);
-            //print("Force multiplier = " + forceMultiplier);
-            //RESET TIMER AT END
-            //jumpChargeTimer = 0f;
-
             if (State == ControllerState.SURFING && jumpCount < 1)
             {
                 // spin when surfing
@@ -276,16 +283,14 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
             if (State == ControllerState.JUMPING || State == ControllerState.FALLING)
             {
-                //Default in - air jump
-                if (jumpCount <= 1)
+                if (doubleJumpAbility)
                 {
-                    AirDash();
+                    //Default in - air jump
+                    if (jumpCount <= 1)
+                    {
+                        AirDash();
+                    }
                 }
-                //else if (jumpCount > 1) //boost gauge air-dash
-                //{
-                //    boostBehaviour.UseBoost(AirDash);
-
-                //}
             }
         }
     }
@@ -545,14 +550,17 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private Coroutine stompRoutine;
     private void Stomp(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if(state == ControllerState.FALLING ||  state == ControllerState.JUMPING)
+        if (stompAbility)
         {
-            if(jumpRoutine != null)
-                StopCoroutine(jumpRoutine);
-
-            if (stompRoutine == null)
+            if (state == ControllerState.FALLING || state == ControllerState.JUMPING)
             {
-                stompRoutine = StartCoroutine(StompCoroutine(context));
+                if (jumpRoutine != null)
+                    StopCoroutine(jumpRoutine);
+
+                if (stompRoutine == null)
+                {
+                    stompRoutine = StartCoroutine(StompCoroutine(context));
+                }
             }
         }
     }
@@ -762,14 +770,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             if (hasHitWater)
             {
                 State = ControllerState.SURFING;
-
                 Vector3 camForward = Camera.main.transform.forward;
                 Vector3 direction = Vector3.ProjectOnPlane(camForward, waterInfo.normal);
-
-                if(inputs.moveDirection.action.ReadValue<Vector2>() != Vector2.zero)
-                {
-                    Boost(controllerData.boostForce, direction);
-                }
+                Boost(controllerData.boostForce, direction);
                 stompRoutine = null;
                 ResetJump();
             }
@@ -1224,5 +1227,31 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private void ResetJump() => jumpCount = 0;
 
     public void UpdateRaceTarget(Transform target) => updateRaceTarget.Invoke(target);
+
+    public void UnlockAbility(string ability)
+    {
+        if(Enum.TryParse(ability,true,out ControllerAbility parsedAbility))
+        switch (parsedAbility)
+        {
+                case ControllerAbility.DOUBLEJUMP:
+                    doubleJumpAbility = true;
+                    break;
+                case ControllerAbility.STOMP:
+                    stompAbility = true;
+                    break;
+                case ControllerAbility.CHARGEBOOST:
+                    chargeBoostAbility = true;
+                    break;
+                case ControllerAbility.LAVARESIST:
+                    lavaResistanceAbility = true;
+                    break;
+                case ControllerAbility.ALIEN:
+                    alienAntennasAbility = true;
+                    break;
+                default:
+                    break;
+        }
+        updateEquipmentVisual.Invoke();
+    }
 
 }

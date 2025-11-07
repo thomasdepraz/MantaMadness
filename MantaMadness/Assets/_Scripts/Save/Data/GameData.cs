@@ -11,6 +11,9 @@ public class GameData
     //Checkpoints
     public SerializableDictionnary<string, bool> checkpoints;
 
+    //Altar
+    public SerializableDictionnary<string, bool> abilityAltars;
+
     //Player Upgrades Tracking
     public bool doubleJump;
     public bool chargeBoost;
@@ -25,6 +28,7 @@ public class GameData
         this.clamCount = 0;
         coinsCollected = new SerializableDictionnary<string, bool>();
         checkpoints = new SerializableDictionnary<string, bool>();
+        abilityAltars = new SerializableDictionnary<string, bool>();
 
         doubleJump = false;
         chargeBoost = false;

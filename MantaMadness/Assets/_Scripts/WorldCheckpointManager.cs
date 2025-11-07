@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class WorldCheckpointManager : MonoBehaviour, IDataPersistence
@@ -21,7 +22,7 @@ public class WorldCheckpointManager : MonoBehaviour, IDataPersistence
 
         foreach (var key in keys)
         {
-            if(data.checkpoints[key] == true)
+            if (data.checkpoints[key] == true)
             {
                 currentCheckpoint = key;
                 print(key);
@@ -32,9 +33,8 @@ public class WorldCheckpointManager : MonoBehaviour, IDataPersistence
         {
             if(check.indexName == currentCheckpoint)
             {
-
+                print("checkpoint loading");
                 SetStartCheckpoint(check.respawnTransform);
-
                 Vector3 pos = Vector3.zero;
                 Quaternion rotation;
                 Game.Instance.Respawn(out pos, out rotation);
@@ -45,6 +45,22 @@ public class WorldCheckpointManager : MonoBehaviour, IDataPersistence
     public void SaveData(ref GameData data)
     {
         //Nothing to save
+        foreach(WorldCheckpoint worldPoint in checkpoints)
+        {
+            if (data.checkpoints.ContainsKey(worldPoint.indexName))
+            {
+                data.checkpoints.Remove(worldPoint.indexName);
+            }
+
+            if(worldPoint.indexName == currentCheckpoint)
+            {
+                data.checkpoints.Add(worldPoint.indexName, true);
+            }
+            else
+            {
+                data.checkpoints.Add(worldPoint.indexName, false);
+            }
+        }
     }
 
     public void SetStartCheckpoint(Transform respawnTransform)

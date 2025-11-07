@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_SunMouth
-  m_Shader: {fileID: -6465566751694194690, guid: a5c1875e72da5a24494e4fd0466cddeb, type: 3}
+  m_Name: M_Ability_Outline
+  m_Shader: {fileID: -6465566751694194690, guid: cd31d82390b149442bf4221bb18a0103, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -24,10 +24,6 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _Texture:
-        m_Texture: {fileID: 2800000, guid: f6b07f3047877ec4bae20f9a86a295fe, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -42,15 +38,15 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 1
+    - _Fade_Distance: 1000
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Thickness: 0.09
     m_Colors:
-    - _Color: {r: 1.3026689, g: 1.2168201, b: 0.47313914, a: 0}
-    - _Texture_Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Outline_Color: {r: 0.78751576, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &1093839202247114390
+--- !u!114 &7305423807238673397
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

@@ -10,7 +10,7 @@ public class WorldCheckpoint : MonoBehaviour
     [SerializeField] public bool displayAreaName;
     [SerializeField] public string nameToDisplay;
 
-    private void Start()
+    private void Awake()
     {
         if (!WorldCheckpointManager.Instance.checkpoints.Contains(this))
         {

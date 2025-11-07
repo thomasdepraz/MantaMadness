@@ -41,6 +41,9 @@ public class MantaVisuals : MonoBehaviour
 
     [Header("Visual")]
     public SkinnedMeshRenderer[] mantaAllVisuals;
+    public SkinnedMeshRenderer stompVisual;
+    public SkinnedMeshRenderer alienAntennaVisual;
+    public SkinnedMeshRenderer doubleJumpGlassesVisual;
 
     [Header("After Image")]
     public SkinnedMeshRenderer mantaBodyVisual;
@@ -72,6 +75,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.togglePlayerBodyVisual += ToggleMantaVisual;
         mantaController.straf += strafEffectsAndVisual;
         mantaController.afterImageEffect += AfterImageEffect;
+        mantaController.updateEquipmentVisual += UpdateAbilityVisuals;
     }
 
     private void OnDisable()
@@ -88,6 +92,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.togglePlayerBodyVisual -= ToggleMantaVisual;
         mantaController.straf -= strafEffectsAndVisual;
         mantaController.afterImageEffect -= AfterImageEffect;
+        mantaController.updateEquipmentVisual -= UpdateAbilityVisuals;
     }
 
     private void Dash(int dashCount)
@@ -179,7 +184,6 @@ public class MantaVisuals : MonoBehaviour
         {
             mantaAnimator.SetBool("Surfing", false);
         }
-
     }
 
     private void Update()
@@ -270,54 +274,10 @@ public class MantaVisuals : MonoBehaviour
                 surfBladeEffect.SetInt(surfBladePlayProperty, 0);
             }
         }
-
-        //if (mantaController.chargesJump == true && mantaController.State == ControllerState.SURFING)
-        //{
-        //    if(mantaController.jumpChargeTimer >= mantaController.controllerData.jumpChargeTime)
-        //    {
-        //        chargeJumpParticles.SetInt(chargeJumpProperty, 2);
-        //    }
-        //    else
-        //    {
-        //        chargeJumpParticles.SetInt(chargeJumpProperty, 1);
-        //    }
-        //}
-        //else if(mantaController.chargesJump == false || mantaController.State != ControllerState.SURFING)
-        //{
-        //    chargeJumpParticles.SetInt(chargeJumpProperty, 0);
-        //}
-
-        //if (mantaController.IsDrifting == true && mantaController.State == ControllerState.SURFING)
-        //{
-        //    chargeDriftParticles.SetInt(chargeDriftProperty, 1);
-        //}
     }
 
     private void UpdateDrift(bool drifting, bool boost, int xDir)
     {
-
-        //for (int i = 0; i < driftParticles.Length; i++)
-        //{
-        //    driftParticles[i].Stop();
-        //    driftParticles[i].gameObject.SetActive(false);
-        //}
-
-        //if (drifting)
-        //{
-        //    if (driftDir > 0)
-        //    {
-        //        int index = boost ? 3 : 2;
-        //        driftParticles[index].gameObject.SetActive(true);
-        //        driftParticles[index].Play();
-        //    }
-        //    else
-        //    {
-        //        int index = boost ? 1 : 0;
-        //        driftParticles[index].gameObject.SetActive(true);
-        //        driftParticles[index].Play();
-        //    }
-        //}
-
         if (drifting)
         {
             if (boost)
@@ -328,11 +288,6 @@ public class MantaVisuals : MonoBehaviour
             {
                 chargeDriftParticles.SetInt(chargeDriftProperty, 1);
             }
-            //foreach (ParticleSystem particles in driftParticles)
-            //{
-            //    particles.gameObject.SetActive(true);
-            //    particles.Play();
-            //}
         }
         else
         {
@@ -415,6 +370,39 @@ public class MantaVisuals : MonoBehaviour
         else
         {
             afterImageRoutine = StartCoroutine(SpawnAfterImageForDuration(duration));
+        }
+    }
+
+    public void UpdateAbilityVisuals()
+    {
+        //DOUBLE JUMP ABILITY VISUAL
+        if(Game.Instance.player.doubleJumpAbility == true)
+        {
+            doubleJumpGlassesVisual.enabled = true;
+        }
+        else
+        {
+            doubleJumpGlassesVisual.enabled = false;
+        }
+
+        //STOMP ABILITY VISUAL
+        if (Game.Instance.player.stompAbility == true)
+        {
+            stompVisual.enabled = true;
+        }
+        else
+        {
+            stompVisual.enabled = false;
+        }
+
+        //ALIEN ABILITY VISUAL
+        if (Game.Instance.player.alienAntennasAbility == true)
+        {
+            alienAntennaVisual.enabled = true;
+        }
+        else
+        {
+            alienAntennaVisual.enabled = false;
         }
     }
 }

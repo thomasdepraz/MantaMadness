@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_AbilityAltarInterior
-  m_Shader: {fileID: -6465566751694194690, guid: ced317eec71b81049a163685384e4efe, type: 3}
+  m_Name: M_AbilityAltarRays_02
+  m_Shader: {fileID: -6465566751694194690, guid: 3811ddd44ec56294a831ecb04c5d4829, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -46,7 +46,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture:
-        m_Texture: {fileID: 2800000, guid: 8a23c92998525954a904781a8da89261, type: 3}
+        m_Texture: {fileID: 2800000, guid: fa429d204d1c45d4f9326854a9a2ea6d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -63,7 +63,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 1
+    - _Alpha: 0.114
     - _Blend: 1
     - _ColorMask: 15
     - _Cutoff: 0.5
@@ -80,16 +80,16 @@ Material:
     - _StencilWriteMask: 255
     - _Tile: 97.07
     - _Tiling: 0
-    - _TwirlSpeed: 1
-    - _TwirlStrength: 20
     - _UseUIAlphaClip: 0
+    - _speed: 2
+    - _strenght: 0.1
     m_Colors:
-    - _Color: {r: 2.670157, g: 0.6752343, b: 0, a: 0}
+    - _Color: {r: 3.9999995, g: 1.4239033, b: 0, a: 1}
     - _ColorA: {r: 1, g: 1, b: 1, a: 0}
     - _ColorB: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 0}
     - _Direction: {r: 1, g: 1, b: 1, a: 0}
     - _RippleColor: {r: 0, g: 0, b: 0, a: 0}
     - _Specular: {r: 0, g: 0, b: 0, a: 0}
-    - _Texture_Offset: {r: 4.5, g: 0, b: 0, a: 0}
+    - _Texture_Offset: {r: 0, g: 0.34, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
