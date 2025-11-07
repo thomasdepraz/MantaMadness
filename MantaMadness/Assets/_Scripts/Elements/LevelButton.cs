@@ -2,7 +2,7 @@ using UnityEngine;
 using Unity.Cinemachine;
 using System.Collections;
 
-public class Button : MonoBehaviour
+public class LevelButton : MonoBehaviour
 {
     [Header("Cinemachine")]
     public CinemachineCamera vcam;

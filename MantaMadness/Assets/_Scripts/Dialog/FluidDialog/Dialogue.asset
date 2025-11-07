@@ -1,0 +1,133 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8466448209877494994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f157564dbc846468ec0ac2b6f7d545e, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  _uniqueId: 8c7922a7-41fb-46de-b10a-13ca8c86978f
+  rect:
+    serializedVersion: 2
+    x: 50862
+    y: 50140
+    width: 200
+    height: 146
+  nodeTitle: 
+  children: []
+  conditions: []
+  enterActions:
+  - {fileID: -2727906676822826440}
+  exitActions: []
+  choices: []
+  actor: {fileID: 11400000, guid: a7eb5b01d25f27348a08c734b0810b72, type: 2}
+  audio: {fileID: 0}
+  dialogue: Bizarre le type.
+--- !u!114 &-2727906676822826440
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c353b6025d3fdc46858d64d5050fee6, type: 3}
+  m_Name: TestAction
+  m_EditorClassIdentifier: 
+  _title: TestAction
+  _uniqueId: 73853b83-721f-43be-b096-8655926da02f
+--- !u!114 &-1476954131068448520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d8d0566afe4d5fa9596c80df966df6, type: 3}
+  m_Name: Root
+  m_EditorClassIdentifier: 
+  _uniqueId: d6a80d99-9141-49d9-b5d9-de4f170bb824
+  rect:
+    serializedVersion: 2
+    x: 50050
+    y: 50202
+    width: 100
+    height: 57
+  nodeTitle: 
+  children:
+  - {fileID: 7754317168401376502}
+  conditions: []
+  enterActions: []
+  exitActions: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b35851dfd8754a74b333944d50d05bbd, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  _nodes:
+  - {fileID: -1476954131068448520}
+  - {fileID: 7754317168401376502}
+  - {fileID: -8466448209877494994}
+  root: {fileID: -1476954131068448520}
+  scrollPosition: {x: 50021.094, y: 49924}
+--- !u!114 &6355249410348446375
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbb407621a43446dac370b409a9ddc29, type: 3}
+  m_Name: Choice
+  m_EditorClassIdentifier: 
+  text: Oui
+  children:
+  - {fileID: -8466448209877494994}
+  _uniqueId: 5879f1fe-df0c-48df-8753-296847719259
+--- !u!114 &7754317168401376502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f157564dbc846468ec0ac2b6f7d545e, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  _uniqueId: 64a19576-46aa-4fa7-9f21-b65a1f92d768
+  rect:
+    serializedVersion: 2
+    x: 50306
+    y: 50123
+    width: 200
+    height: 166
+  nodeTitle: 
+  children: []
+  conditions: []
+  enterActions: []
+  exitActions: []
+  choices:
+  - {fileID: 6355249410348446375}
+  actor: {fileID: 11400000, guid: a7eb5b01d25f27348a08c734b0810b72, type: 2}
+  audio: {fileID: 0}
+  dialogue: Plutot caca ou pipi ?

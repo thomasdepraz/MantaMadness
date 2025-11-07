@@ -10388,6 +10388,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1218507271668550944
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7768918239490445176}
+  m_Layer: 5
+  m_Name: ChoiceButtonPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7768918239490445176
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218507271668550944}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3623818220783285571}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1329755208753359580
 GameObject:
   m_ObjectHideFlags: 0
@@ -41683,6 +41718,7 @@ RectTransform:
   - {fileID: 8464145787354839906}
   - {fileID: 8350610557856911882}
   - {fileID: 5876517067400526536}
+  - {fileID: 7768918239490445176}
   m_Father: {fileID: 4286737196087520408}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -93371,7 +93407,7 @@ GameObject:
   - component: {fileID: 7715922144190260319}
   - component: {fileID: 7969399773841978105}
   - component: {fileID: 2382799243013746248}
-  - component: {fileID: 7149877208037157574}
+  - component: {fileID: 1274667855106717540}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -93587,7 +93623,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   container: {fileID: 6872165645968929929}
   fadeTransform: {fileID: 2228249283947068685}
---- !u!114 &7149877208037157574
+--- !u!114 &1274667855106717540
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93596,16 +93632,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 8891975113576828678}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f16e31a304a8a174898a64bad67c4454, type: 3}
+  m_Script: {fileID: 11500000, guid: 1cdb4e3f599fca94c8db0470841dbd97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogSequences:
-  - {fileID: 11400000, guid: e3fee5901ec965a40854f7002b794618, type: 2}
-  dialogUIVisuals:
-  - {fileID: 9096691840943631699}
-  - {fileID: 1402697882181746291}
-  - {fileID: 7130428263292636354}
-  - {fileID: 3949419664082171971}
+  dialogue: {fileID: 11400000, guid: 6cad714c05b56d14f9dc9483b2d1c95f, type: 2}
+  speakerContainer: {fileID: 4149558635531942201}
+  portrait: {fileID: 0}
+  lines: {fileID: 1904715000528275766}
+  choiceList: {fileID: 7768918239490445176}
+  choicePrefab: {fileID: 7929134006300669148, guid: a87e300b8e3ca114b92ef6639b19f236, type: 3}
 --- !u!1 &9059421201618366336
 GameObject:
   m_ObjectHideFlags: 0
