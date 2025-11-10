@@ -4,6 +4,7 @@ using UnityEngine;
 public class DialogAsset : ScriptableObject
 {
     public float delayBeforeTextBox;
+    public float typingSpeed;
     public CinemachineCamera virtualCam;
     public Transform camTransform;
     [TextArea]

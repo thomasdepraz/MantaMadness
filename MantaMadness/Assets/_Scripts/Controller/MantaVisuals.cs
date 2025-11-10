@@ -283,10 +283,12 @@ public class MantaVisuals : MonoBehaviour
             if (boost)
             {
                 chargeDriftParticles.SetInt(chargeDriftProperty, 2);
+                print("Drift ?");
             }
             else
             {
                 chargeDriftParticles.SetInt(chargeDriftProperty, 1);
+                print("Drouft ?");
             }
         }
         else
