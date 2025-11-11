@@ -118,6 +118,7 @@ public class DialogManager : MonoBehaviour
     public void PlayDialog()
     {
         StartCoroutine(Dialog(currentSequence.sequence[currentSequenceCount]));
+        Game.Instance.player.ToggleDialogState(true);
     }
 
     public IEnumerator Dialog(DialogAsset dialog)
@@ -204,5 +205,6 @@ public class DialogManager : MonoBehaviour
         }
 
         UIManager.Instance.ToggleBaseInterface(true);
+        Game.Instance.player.ToggleDialogState(false);
     }
 }

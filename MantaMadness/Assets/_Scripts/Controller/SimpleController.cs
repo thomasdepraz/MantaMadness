@@ -16,6 +16,7 @@ public enum ControllerState
     STOMP,
     BOOSTJUMP,
     DRIFT,
+    DIALOG,
 }
 
 public enum ControllerAbility
@@ -1252,6 +1253,23 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                     break;
         }
         updateEquipmentVisual.Invoke();
+    }
+
+    public void ToggleDialogState(bool value)
+    {
+        if (value)
+        {
+            state = ControllerState.DIALOG;
+            forceLocked = true;
+            togglePlayerBodyVisual(false);
+        }
+        else
+        {
+            state = ControllerState.SURFING;
+            forceLocked = false;
+            togglePlayerBodyVisual(true);
+        }
+
     }
 
 }
