@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class BoostGaugeInterface : MonoBehaviour
 {
+    public GameObject[] m_container;
     public GameObject speedGauge;
     public GameObject speedNeedle;
     public GameObject[] speedStatesVisuals;
@@ -143,6 +144,14 @@ public class BoostGaugeInterface : MonoBehaviour
             {
                 boostBubblesParticles[index].Stop();
             }
+        }
+    }
+
+    public void ToggleInterface(bool toggle)
+    {
+        foreach (GameObject container in m_container)
+        {
+            container.SetActive(toggle);
         }
     }
 }

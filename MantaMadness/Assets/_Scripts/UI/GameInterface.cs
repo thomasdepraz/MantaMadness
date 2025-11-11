@@ -134,4 +134,8 @@ public class GameInterface : MonoBehaviour, IScreen
         yield return new WaitForSeconds(duration);
         blackBarEffectRoutine = null;
     }
+    public void ToggleInterface(bool toggle)
+    {
+        m_Container.SetActive(toggle);
+    }
 }

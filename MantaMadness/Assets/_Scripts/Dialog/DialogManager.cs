@@ -1,9 +1,14 @@
-﻿using NUnit.Framework;
+﻿using DG.Tweening;
+using DG.Tweening.Core;
+using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using UnityEngine.Windows;
 
 public class DialogManager : MonoBehaviour
 {
@@ -17,12 +22,16 @@ public class DialogManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI speakerTextBox;
     [SerializeField] private TextMeshProUGUI dialogTextBox;
+    [SerializeField] private Image dialogIndicator;
 
     [Header("Parameters")]
     public float typingSpeed = 0.25f;
 
     private bool isTyping = false;
     private bool skipTyping = false;
+
+    private InputManager inputs;
+    private bool interacted = false;
 
     private void Awake()
     {
@@ -38,12 +47,36 @@ public class DialogManager : MonoBehaviour
 
     private void Start()
     {
+        inputs = InputManager.Instance;
+        inputs.jump.action.performed += Interacts;
+
         speakerTextBox = GameObject.Find("DialogSpeaker").GetComponent<TextMeshProUGUI>();
         dialogTextBox = GameObject.Find("DialogContent").GetComponent<TextMeshProUGUI>();
+        dialogIndicator = GameObject.Find("DialogIndicator").GetComponent<Image>();
+        dialogIndicator.color = new Color(255, 255, 255, 0);
         foreach (GameObject visual in dialogUIVisuals)
         {
             visual.SetActive(false);
         }
+
+        foreach(DialogSequence asset in dialogSequences)
+        {
+            for (int i = 0; i < asset.sequence.Length; i++)
+            {
+                asset.sequence[i].dialogText = DialogLoader.GetText(asset.sequence[i].key);
+            }
+        }
+    }
+
+    private void OnDisable()
+    {
+        inputs.jump.action.performed -= Interacts;
+    }
+
+    private void Interacts(InputAction.CallbackContext context)
+    {
+        interacted = true;
+        print("Has interacted");
     }
 
     public void StartSequence(string sequenceKey)
@@ -52,7 +85,6 @@ public class DialogManager : MonoBehaviour
         {
             if(dialogSequence.sequenceKey == sequenceKey)
             {
-                Debug.Log("ENTERED");
                 if(currentSequence != null)
                 {
                     currentSequence = null;
@@ -88,7 +120,7 @@ public class DialogManager : MonoBehaviour
         //TODO Switch Cam
         //TODO LOCK PLAYER / player inputs (pause et autres)
         //TODO Disable regular UI
-
+        UIManager.Instance.ToggleBaseInterface(false);
         yield return new WaitForSeconds(dialog.delayBeforeTextBox);
 
         foreach(GameObject visual in dialogUIVisuals)
@@ -102,38 +134,20 @@ public class DialogManager : MonoBehaviour
         //TODO text defilement script / text = dialog.text
         yield return StartCoroutine(TypeText(dialog));
         //TODO Wait until player input / yield return new WaitUntil
-        yield return StartCoroutine(WaitForPlayerInput());
-        //TODO if dialogwrite not ended = show full dialogs then WaitUntil again
-        yield return new WaitForSeconds(dialog.delayBeforeTextBox);
-        currentSequenceCount++;
-        if (currentSequenceCount >= currentSequence.sequence.Length)
-        {
-            print("Current count" + currentSequenceCount);
-            print("Sequence length" + currentSequence.sequence.Length);
-            ResetSequence();
-            yield return null;
-        }
-        else
-        {
-            PlayDialog();
-            print("Sequence continues");
-            yield return null;
-        }
     }
 
     private IEnumerator TypeText(DialogAsset dialog)
     {
         isTyping = true;
-        skipTyping = false;
         dialogTextBox.text = "";
 
         foreach (char letter in dialog.dialogText.ToCharArray())
         {
             // Si le joueur veut skip, afficher tout le texte directement
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+            if (interacted == true)
             {
                 dialogTextBox.text = dialog.dialogText;
-                skipTyping = true;
+                interacted = false;
                 break;
             }
 
@@ -149,20 +163,39 @@ public class DialogManager : MonoBehaviour
             }
             yield return new WaitForSeconds(delay);
         }
-        
+
+
+        //Enable indicator visual
+        dialogIndicator.DOFade(1, 0.5f).SetLoops(-1,LoopType.Yoyo);
+
         isTyping = false;
+
+        yield return StartCoroutine(EndDialog());
     }
 
-    private IEnumerator WaitForPlayerInput()
+    private IEnumerator EndDialog()
     {
-        while (true)
+        yield return new WaitUntil(() => interacted == true);
+        interacted = false;
+        currentSequenceCount++;
+
+        //Disable indicator visual
+        dialogIndicator.DOKill();
+        dialogIndicator.color = new Color(255, 255, 255, 0);
+        if (currentSequenceCount >= currentSequence.sequence.Length)
         {
-            if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
-            {
-                break;
-            }
+            print("Current count" + currentSequenceCount);
+            print("Sequence length" + currentSequence.sequence.Length);
+            ResetSequence();
             yield return null;
         }
+        else
+        {
+            PlayDialog();
+            print("Sequence continues");
+            yield return null;
+        }
+
     }
 
     private void ResetSequence()
@@ -174,5 +207,7 @@ public class DialogManager : MonoBehaviour
         {
             visual.SetActive(false);
         }
+
+        UIManager.Instance.ToggleBaseInterface(true);
     }
 }
