@@ -12,39 +12,57 @@ public class DialogLoader : MonoBehaviour
     }
     [Header("Language Settings")]
     [SerializeField]private Languages language;
-    public static Dictionary<string, string> dialogues = new Dictionary<string, string>();
+    public static Dictionary<string, DialogueEntry> dialogues = new Dictionary<string, DialogueEntry>();
 
     void Awake()
     {
+        dialogues.Clear();
         TextAsset csvFile = Resources.Load<TextAsset>("Localization");
         string[] lines = csvFile.text.Split('\n');
         for (int i = 1; i < lines.Length; i++)
         {
             var cols = lines[i].Split(',');
-            if (cols.Length < 2) continue;
+            if (cols.Length < 5) continue;
+
+            string dialogKey = cols[0].Trim();
+            string dialogSpeaker = cols[1].Trim();
+
+            string dialogText = "";
             switch (language)
             {
                 case Languages.English:
-                    dialogues[cols[0]] = cols[2];
+                    dialogText = cols[2];
                     break;
                 case Languages.French:
-                    dialogues[cols[0]] = cols[3];
+                    dialogText = cols[3];
                     break;
                 case Languages.Italian:
-                    dialogues[cols[0]] = cols[4];
+                    dialogText = cols[4];
                     break;
                 default:
                     //Default to English
-                    dialogues[cols[0]] = cols[2];
+                    dialogText = cols[2];
                     break;
+            }
+
+            if (!dialogues.ContainsKey(dialogKey))
+            {
+                dialogues.Add(dialogKey, new DialogueEntry { key = dialogKey, speaker = dialogSpeaker, dialog = dialogText});
             }
         }
 
         Debug.Log("Langue = " + language);
     }
 
-    public static string GetText(string key)
+    public static DialogueEntry GetText(string key)
     {
-        return dialogues.ContainsKey(key) ? dialogues[key] : $"[Missing: {key}]";
+        return dialogues.ContainsKey(key) ? dialogues[key]: new DialogueEntry { key = key, dialog = $"[Missing: {key}]", speaker = "Unknown" };
     }
 }
+
+    public class DialogueEntry
+    {
+        public string key;
+        public string dialog;
+        public string speaker;
+    }

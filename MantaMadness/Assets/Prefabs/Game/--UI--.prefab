@@ -31082,7 +31082,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1000
+  m_text: '0
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 79cc82e9576cd3b4fa2aa43f54386245, type: 2}
   m_sharedMaterial: {fileID: -5694196318490335612, guid: 79cc82e9576cd3b4fa2aa43f54386245, type: 2}
@@ -31169,13 +31171,7 @@ MonoBehaviour:
   usePreset: 0
   preset: {fileID: 0}
   tagEffects: []
-  globalEffects:
-  - triggerWhen: 0
-    effect: {fileID: 11400000, guid: 9f80497845b16a94e91632e6c91cb5dc, type: 2}
-    onEffectCompleted:
-      m_PersistentCalls:
-        m_Calls: []
-    overrideTagEffects: 0
+  globalEffects: []
   updatesPerSecond: 30
 --- !u!1 &2877218870995224800
 GameObject:
@@ -41391,6 +41387,7 @@ GameObject:
   - component: {fileID: 5876517067400526536}
   - component: {fileID: 8155746725045939049}
   - component: {fileID: 5040246834230613062}
+  - component: {fileID: 4151585662980579980}
   m_Layer: 5
   m_Name: DialogSpeaker
   m_TagString: Untagged
@@ -41510,12 +41507,56 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -3.774994, y: -11.047195, z: -172.40634, w: -22.297516}
+  m_margin: {x: -3.774994, y: -11.047195, z: -191.66437, w: -22.297516}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &4151585662980579980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3949419664082171971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64cc8a40f9848a54c94bf232155b0b4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  database: {fileID: 11400000, guid: f0a33761ff6919d4a9979ee36980a29d, type: 2}
+  context:
+    scaleAnimations: 1
+    scaleUniformly: 1
+    useScaledTime: 1
+    tmpAnimator: {fileID: 4151585662980579980}
+  updateFrom: 0
+  animateOnStart: 1
+  animationsOverride: 0
+  defaultAnimationsStrings: []
+  defaultShowAnimationsStrings: []
+  defaultHideAnimationsStrings: []
+  excludedCharacters: 
+  excludedCharactersShow: 
+  excludedCharactersHide: 
+  excludePunctuation: 0
+  excludePunctuationShow: 0
+  excludePunctuationHide: 0
+  sceneKeywordDatabase: {fileID: 0}
+  keywordDatabase: {fileID: 0}
+  sceneAnimations:
+    _serializedList: []
+  sceneShowAnimations:
+    _serializedList: []
+  sceneHideAnimations:
+    _serializedList: []
+  preview: 1
+  useDefaultDatabase: 1
+  useDefaultKeywordDatabase: 0
+  initDatabase: 1
+  previewUpdatesPerSecond: 60
+  previewTimeScale: 1
 --- !u!1 &3958219846889056404
 GameObject:
   m_ObjectHideFlags: 0
@@ -47066,10 +47107,10 @@ RectTransform:
   - {fileID: 1602622854538472666}
   m_Father: {fileID: 5051866633591248575}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: -1820, y: -980}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5199986399319179435
 GameObject:
@@ -67390,7 +67431,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -210.00002, y: 0}
+  m_AnchoredPosition: {x: -175.00002, y: 0}
   m_SizeDelta: {x: 250, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6606177639301005585
@@ -72812,6 +72853,8 @@ GameObject:
   - component: {fileID: 8350610557856911882}
   - component: {fileID: 6264964379520047464}
   - component: {fileID: 1904715000528275766}
+  - component: {fileID: 3034364067245226624}
+  - component: {fileID: 6542195843808723086}
   m_Layer: 5
   m_Name: DialogContent
   m_TagString: Untagged
@@ -72866,7 +72909,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Salut c'est le texte
+  m_text: <wave>Salut c'est le texte
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 79cc82e9576cd3b4fa2aa43f54386245, type: 2}
   m_sharedMaterial: {fileID: -5694196318490335612, guid: 79cc82e9576cd3b4fa2aa43f54386245, type: 2}
@@ -72937,6 +72980,113 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3034364067245226624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7130428263292636354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64cc8a40f9848a54c94bf232155b0b4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  database: {fileID: 11400000, guid: f0a33761ff6919d4a9979ee36980a29d, type: 2}
+  context:
+    scaleAnimations: 1
+    scaleUniformly: 1
+    useScaledTime: 1
+    tmpAnimator: {fileID: 3034364067245226624}
+  updateFrom: 0
+  animateOnStart: 1
+  animationsOverride: 0
+  defaultAnimationsStrings: []
+  defaultShowAnimationsStrings: []
+  defaultHideAnimationsStrings: []
+  excludedCharacters: 
+  excludedCharactersShow: 
+  excludedCharactersHide: 
+  excludePunctuation: 0
+  excludePunctuationShow: 0
+  excludePunctuationHide: 0
+  sceneKeywordDatabase: {fileID: 0}
+  keywordDatabase: {fileID: 0}
+  sceneAnimations:
+    _serializedList: []
+  sceneShowAnimations:
+    _serializedList: []
+  sceneHideAnimations:
+    _serializedList: []
+  preview: 1
+  useDefaultDatabase: 1
+  useDefaultKeywordDatabase: 0
+  initDatabase: 1
+  previewUpdatesPerSecond: 60
+  previewTimeScale: 1
+--- !u!114 &6542195843808723086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7130428263292636354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cf9594e2a3b8eb4eaf3cc57f263076f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnTextEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCharacterShown:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStartWriter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStopWriter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnWaitStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnWaitEnded:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFinishWriter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSkipWriter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnResetWriter:
+    m_PersistentCalls:
+      m_Calls: []
+  keywordDatabase: {fileID: 0}
+  sceneKeywordDatabase: {fileID: 0}
+  database: {fileID: 11400000, guid: 290ad04254a96934aa269d5b8d258008, type: 2}
+  maySkip: 1
+  writeOnStart: 1
+  writeOnNewText: 1
+  useScaledTime: 1
+  delays:
+    delay: 0.035
+    whitespaceDelay: 0
+    whitespaceDelayType: 0
+    linebreakDelay: 0
+    linebreakDelayType: 0
+    punctuationDelay: 0
+    punctuationDelayType: 0
+    visibleDelay: 0
+    visibleDelayType: 0
+  sceneCommands:
+    _serializedList: []
+  useDefaultDatabase: 1
+  useDefaultKeywordDatabase: 0
+  initDatabase: 1
+  eventsEnabled: 0
+  commandsEnabled: 1
 --- !u!1 &7316656479096410712
 GameObject:
   m_ObjectHideFlags: 0
@@ -77954,7 +78104,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7542486301177806127}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -935.7149}
+  m_LocalPosition: {x: 0, y: 0, z: -931}
   m_LocalScale: {x: 9.357149, y: 9.357149, z: 9.357149}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -93556,7 +93706,7 @@ MonoBehaviour:
   bottomBar: {fileID: 381036155529587992}
   topBarStartPosition: {fileID: 2675204062269095560}
   bottomBarStartPosition: {fileID: 1602622854538472666}
-  barOffset: {x: 0, y: 200, z: 0}
+  barOffset: {x: 0, y: 10, z: 0}
 --- !u!114 &2127098123460412490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93689,8 +93839,9 @@ MonoBehaviour:
   - {fileID: 4117290190910597199}
   speakerTextBox: {fileID: 0}
   dialogTextBox: {fileID: 0}
+  dialogWriter: {fileID: 6542195843808723086}
   dialogIndicator: {fileID: 0}
-  typingSpeed: 0.25
+  typingSpeed: 0.05
 --- !u!1 &9059421201618366336
 GameObject:
   m_ObjectHideFlags: 0
@@ -93758,6 +93909,7 @@ MonoBehaviour:
   - {fileID: 1064741597860383983}
   - {fileID: 1341138356311948889}
   - {fileID: 4447712031320127937}
+  - {fileID: 716841087409148694}
   uiParticleGood:
   - {fileID: 2850378968480543505}
   - {fileID: 3827954011866697327}
@@ -98808,23 +98960,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1875989868732492905, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 4.95
       objectReference: {fileID: 0}
     - target: {fileID: 1875989868732492905, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.41808808
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1875989868732492905, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1875989868732492905, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.90840656
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1875989868732492905, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1875989868732492905, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -98832,7 +98984,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1875989868732492905, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 1875989868732492905, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -98844,6 +98996,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: ShapeModule.m_Rotation.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4523273951427350409, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
@@ -98861,13 +99017,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4523273951427350409, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 716841087409148694}
   m_SourcePrefab: {fileID: 100100000, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
 --- !u!4 &1521878096448937134 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1875989868732492905, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
   m_PrefabInstance: {fileID: 1087081409954279623}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3590481032901279566 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4523273951427350409, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+  m_PrefabInstance: {fileID: 1087081409954279623}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &716841087409148694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3590481032901279566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 714c5df8b65f8494fa8f961738139123, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  VfxName: SPEEDLINE
 --- !u!1001 &1985803399123234424
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -4,6 +4,7 @@ using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPEffects.Components;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -22,6 +23,7 @@ public class DialogManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI speakerTextBox;
     [SerializeField] private TextMeshProUGUI dialogTextBox;
+    [SerializeField] private TMPWriter dialogWriter;
     [SerializeField] private Image dialogIndicator;
 
     [Header("Parameters")]
@@ -63,7 +65,10 @@ public class DialogManager : MonoBehaviour
         {
             for (int i = 0; i < asset.sequence.Length; i++)
             {
-                asset.sequence[i].dialogText = DialogLoader.GetText(asset.sequence[i].key);
+                var entry = DialogLoader.GetText(asset.sequence[i].key);
+
+                asset.sequence[i].dialogText = entry.dialog;
+                asset.sequence[i].speakerName = entry.speaker;
             }
         }
     }
@@ -139,31 +144,21 @@ public class DialogManager : MonoBehaviour
     private IEnumerator TypeText(DialogAsset dialog)
     {
         isTyping = true;
-        dialogTextBox.text = "";
+        dialogTextBox.text = dialog.dialogText;
 
-        foreach (char letter in dialog.dialogText.ToCharArray())
+        dialogWriter.StartWriter();
+
+        while(dialogWriter.IsWriting == true)
         {
-            // Si le joueur veut skip, afficher tout le texte directement
             if (interacted == true)
             {
-                dialogTextBox.text = dialog.dialogText;
+                dialogWriter.SkipWriter(true);
                 interacted = false;
                 break;
             }
-
-            dialogTextBox.text += letter;
-            float delay;
-            if (dialog.typingSpeed == 0)
-            {
-                delay = typingSpeed;
-            }
-            else
-            {
-                delay = dialog.typingSpeed;
-            }
-            yield return new WaitForSeconds(delay);
+            yield return null;
         }
-
+        yield return new WaitUntil(() => dialogTextBox.text == dialog.dialogText && dialogWriter.IsWriting == false);
 
         //Enable indicator visual
         dialogIndicator.DOFade(1, 0.5f).SetLoops(-1,LoopType.Yoyo);
