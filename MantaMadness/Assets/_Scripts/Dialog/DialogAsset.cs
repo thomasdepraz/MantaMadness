@@ -1,5 +1,6 @@
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Timeline;
 [CreateAssetMenu]
 public class DialogAsset : ScriptableObject
 {
@@ -7,8 +8,7 @@ public class DialogAsset : ScriptableObject
 
     public float delayBeforeTextBox;
     public float typingSpeed;
-    public CinemachineCamera virtualCam;
-    public Transform camTransform;
+    public TimelineAsset cinematic;
     [TextArea]
     public string speakerName;
     [TextArea]

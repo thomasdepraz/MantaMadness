@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class MantaCameraController : MonoBehaviour
 {
+    public static MantaCameraController instance;
+
     public float fallingSpeedThreshold;
     public float airRideSpeedThreshold;
 
@@ -32,6 +34,15 @@ public class MantaCameraController : MonoBehaviour
 
     private void Awake()
     {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+
         mantaController = GetComponent<SimpleController>();
         mantaController.stateChanged += UpdateState;
         mantaController.enterAirRail += EnterAirRail;
@@ -140,4 +151,17 @@ public class MantaCameraController : MonoBehaviour
             }
         }
     }
+
+    public void DeactivatePlayerCamera()
+    {
+        for (int i = 0; i < cameras.Count; i++)
+        {
+            cameras[i].gameObject.SetActive(false);
+        }
+    }
+    public void ActivatePlayerCamera()
+    {
+        SetActiveCamera(surfingCamera);
+    }
+
 }

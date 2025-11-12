@@ -46,11 +46,13 @@ public class CoinHolder : MonoBehaviour, IDataPersistence
             {
                 coin.SetActive(true);
                 greyCoin.SetActive(false);
+                vcam.enabled = false;
             }
             else
             {
                 coin.SetActive(false);
                 greyCoin.SetActive(true);
+                vcam.enabled = false;
             }
         }
     }

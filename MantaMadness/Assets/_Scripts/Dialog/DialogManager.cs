@@ -118,14 +118,17 @@ public class DialogManager : MonoBehaviour
     public void PlayDialog()
     {
         StartCoroutine(Dialog(currentSequence.sequence[currentSequenceCount]));
+        //LOCK PLAYER / player inputs (pause et autres)
         Game.Instance.player.ToggleDialogState(true);
     }
 
     public IEnumerator Dialog(DialogAsset dialog)
     {
-        //TODO Switch Cam
-        //TODO LOCK PLAYER / player inputs (pause et autres)
-        //TODO Disable regular UI
+        //Play Cinematic
+        if(dialog.cinematic != null)
+        CinematicManager.instance.PlayCinematic(dialog.cinematic);
+
+        //Disable regular UI
         UIManager.Instance.ToggleBaseInterface(false);
         yield return new WaitForSeconds(dialog.delayBeforeTextBox);
 
@@ -137,9 +140,8 @@ public class DialogManager : MonoBehaviour
         //If text box is not show > Tween in textbox
         speakerTextBox.text = dialog.speakerName;
 
-        //TODO text defilement script / text = dialog.text
+        //text defilement script / text = dialog.text
         yield return StartCoroutine(TypeText(dialog));
-        //TODO Wait until player input / yield return new WaitUntil
     }
 
     private IEnumerator TypeText(DialogAsset dialog)
@@ -178,6 +180,7 @@ public class DialogManager : MonoBehaviour
         //Disable indicator visual
         dialogIndicator.DOKill();
         dialogIndicator.color = new Color(255, 255, 255, 0);
+        CinematicManager.instance.EndCinematic();
         if (currentSequenceCount >= currentSequence.sequence.Length)
         {
             print("Current count" + currentSequenceCount);
@@ -192,11 +195,13 @@ public class DialogManager : MonoBehaviour
             yield return null;
         }
 
+
     }
 
     private void ResetSequence()
     {
         Debug.Log("Stop sequence");
+
         currentSequence = null;
         currentSequenceCount = 0;
         foreach (GameObject visual in dialogUIVisuals)

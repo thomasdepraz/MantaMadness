@@ -1260,14 +1260,14 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (value)
         {
             state = ControllerState.DIALOG;
-            forceLocked = true;
-            togglePlayerBodyVisual(false);
+            ForceLock(true);
+            //togglePlayerBodyVisual(false);
         }
         else
         {
             state = ControllerState.SURFING;
-            forceLocked = false;
-            togglePlayerBodyVisual(true);
+            ForceLock(false);
+            //togglePlayerBodyVisual(true);
         }
 
     }
