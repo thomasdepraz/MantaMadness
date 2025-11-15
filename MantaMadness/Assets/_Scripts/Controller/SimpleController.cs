@@ -80,6 +80,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public int ConsecutiveDashCount => consecutiveDashCount;
     private Transform NormalContainer => hoverBehaviour.normalContainer;
 
+    public bool CanInteract => interact;
+
     public ControllerState State {
         get
         { 
@@ -116,6 +118,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private int consecutiveDashCount;
     private bool hasDriftBoost;
     private bool forceLocked;
+    private bool interact;
 
     public Action<ControllerState, ControllerState> stateChanged;
     public Action<AirRail> enterAirRail;
@@ -175,6 +178,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         inputs.dash.action.performed -= StyleDash;
         inputs.strafLeft.action.performed -= Straf;
         inputs.strafRight.action.performed -= Straf;
+
     }
 
     public void LoadData(GameData data)
@@ -316,7 +320,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         List<Collider> validColliders = new List<Collider>();
         foreach (Collider target in colliders)
         {
-            if (CameraTargetDetection.Instance.validTargets.Contains(target))
+            if (CameraTargetDetection.Instance.validJumpTargets.Contains(target))
             {
                 validColliders.Add(target);
             }
@@ -352,7 +356,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 distance = Vector3.Distance(validColliders[0].transform.position, hoverBehaviour.normalContainer.position);
                 for (int i = 1; i < validColliders.Count; i++)
                 {
-                    if (CameraTargetDetection.Instance.validTargets.Contains(validColliders[i]))
+                    if (CameraTargetDetection.Instance.validJumpTargets.Contains(validColliders[i]))
                     {
                         var dist = Vector3.Distance(validColliders[i].transform.position, hoverBehaviour.normalContainer.transform.position);
                         if (dist < distance)

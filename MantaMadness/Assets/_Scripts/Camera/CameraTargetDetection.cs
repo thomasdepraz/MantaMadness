@@ -5,12 +5,15 @@ public class CameraTargetDetection : MonoBehaviour
 {
     public static CameraTargetDetection Instance;
 
-    [SerializeField] private float detectionRange;
+    [SerializeField] private float jumpDetectionRange;
+    [SerializeField] private float npcDetectionRange;
     [SerializeField] private float viewAngle;
     [SerializeField] private LayerMask obstacleMask;
-    [SerializeField] private LayerMask targetMask;
+    [SerializeField] private LayerMask jumpargetMask;
+    [SerializeField] private LayerMask npcTargetMask;
 
-    [SerializeField] public List<Collider> validTargets = new List<Collider>();
+    [SerializeField] public List<Collider> validJumpTargets = new List<Collider>();
+    [SerializeField] public List<Collider> validNPCTargets = new List<Collider>();
 
 
     private void Awake()
@@ -22,18 +25,31 @@ public class CameraTargetDetection : MonoBehaviour
     }
     private void Start()
     {
-        detectionRange = Game.Instance.player.controllerData.targetDetectionRadius + 5f;
+        jumpDetectionRange = Game.Instance.player.controllerData.targetDetectionRadius + 5f;
+        npcDetectionRange = Game.Instance.player.controllerData.npcInteractionRadius;
         viewAngle = Camera.main.fieldOfView;
     }
 
     private void Update()
     {
-        DetectTargets();
+        DetectJumpTargets();
+        DetectNPCTargets();
     }
 
-    void DetectTargets()
+    void DetectJumpTargets()
     {
-        Collider[] targetsInRange = Physics.OverlapSphere(transform.position, detectionRange, targetMask);
+        Collider[] targetsInRange = Physics.OverlapSphere(transform.position, jumpDetectionRange, jumpargetMask);
+
+        for (int i = validJumpTargets.Count - 1; i >= 0; i--)
+        {
+            Collider npc = validJumpTargets[i];
+            if (npc == null || Vector3.Distance(transform.position, npc.transform.position) > jumpDetectionRange)
+            {
+                validJumpTargets.RemoveAt(i);
+                npc?.GetComponent<JumpTarget>().SwitchIndicatorVisibility(false);
+                print(npc + "removed (out of range)");
+            }
+        }
 
         foreach (Collider target in targetsInRange)
         {
@@ -50,9 +66,9 @@ public class CameraTargetDetection : MonoBehaviour
                 {
                     //Add to list
                     //Debug.Log("Objet VISIBLE : " + target.name);
-                    if (!validTargets.Contains(target))
+                    if (!validJumpTargets.Contains(target))
                     {
-                        validTargets.Add(target);
+                        validJumpTargets.Add(target);
                         target.GetComponent<JumpTarget>().SwitchIndicatorVisibility(true);
                         print(target + "Has been added");
                     }
@@ -61,9 +77,9 @@ public class CameraTargetDetection : MonoBehaviour
                 {
                     //Remove from list
                     //Debug.Log("Objet CACHÉ : " + target.name);
-                    if (validTargets.Contains(target))
+                    if (validJumpTargets.Contains(target))
                     {
-                        validTargets.Remove(target);
+                        validJumpTargets.Remove(target);
                         target.GetComponent<JumpTarget>().SwitchIndicatorVisibility(false);
                         print(target + "Has been removed");
                     }
@@ -72,10 +88,73 @@ public class CameraTargetDetection : MonoBehaviour
             else
             {
                 //Debug.Log(target.name + "is in range but not in view");
-                if (validTargets.Contains(target))
+                if (validJumpTargets.Contains(target))
                 {
-                    validTargets.Remove(target);
+                    validJumpTargets.Remove(target);
                     target.GetComponent<JumpTarget>().SwitchIndicatorVisibility(false);
+                    print(target + "Has been removed");
+                }
+            }
+        }
+    }
+
+    void DetectNPCTargets()
+    {
+        Collider[] targetsInRange = Physics.OverlapSphere(transform.position, npcDetectionRange, npcTargetMask);
+
+        for (int i = validNPCTargets.Count - 1; i >= 0; i--)
+        {
+            Collider npc = validNPCTargets[i];
+            if(npc == null || Vector3.Distance(transform.position, npc.transform.position) > npcDetectionRange)
+            {
+                validNPCTargets.RemoveAt(i);
+                npc?.GetComponent<InteractableNPC>().DisableVisual();
+                print(npc + "removed (out of range)");
+            }
+        }
+
+
+        foreach (Collider target in targetsInRange)
+        {
+            Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
+            float distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
+
+            // Vérifie si la cible est dans le champ de vision
+            float angleToTarget = Vector3.Angle(transform.forward, directionToTarget);
+
+            if (angleToTarget < viewAngle / 2f) // Si dans le FOV
+            {
+                // Vérifie qu’aucun obstacle ne bloque la vue
+                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleMask))
+                {
+                    //Add to list
+                    //Debug.Log("Objet VISIBLE : " + target.name);
+                    if (!validNPCTargets.Contains(target))
+                    {
+                        validNPCTargets.Add(target);
+                        target.GetComponent<InteractableNPC>().EnableVisual();
+                        print(target + "Has been added");
+                    }
+                }
+                else
+                {
+                    //Remove from list
+                    //Debug.Log("Objet CACHÉ : " + target.name);
+                    if (validNPCTargets.Contains(target))
+                    {
+                        validNPCTargets.Remove(target);
+                        target.GetComponent<InteractableNPC>().DisableVisual();
+                        print(target + "Has been removed");
+                    }
+                }
+            }
+            else
+            {
+                //Debug.Log(target.name + "is in range but not in view");
+                if (validNPCTargets.Contains(target))
+                {
+                    validNPCTargets.Remove(target);
+                    target.GetComponent<InteractableNPC>().DisableVisual();
                     print(target + "Has been removed");
                 }
             }
@@ -85,7 +164,7 @@ public class CameraTargetDetection : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
+        Gizmos.DrawWireSphere(transform.position, jumpDetectionRange);
     }
 
 }

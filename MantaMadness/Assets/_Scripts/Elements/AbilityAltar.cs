@@ -65,7 +65,6 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
                 player.UnlockAbility(abilityTypeNames[i]);
             }
         }
-        DialogManager.instance.StartSequence("FIDODOBEBE");
         hasBeenObtained = true;
 
         DisablePickup();

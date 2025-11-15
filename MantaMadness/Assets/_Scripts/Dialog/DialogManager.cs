@@ -50,7 +50,8 @@ public class DialogManager : MonoBehaviour
     private void Start()
     {
         inputs = InputManager.Instance;
-        inputs.jump.action.performed += Interacts;
+        inputs.interact.action.performed += Interacts;
+        inputs.interact.action.performed += StartNPCInteraction;
 
         speakerTextBox = GameObject.Find("DialogSpeaker").GetComponent<TextMeshProUGUI>();
         dialogTextBox = GameObject.Find("DialogContent").GetComponent<TextMeshProUGUI>();
@@ -75,13 +76,59 @@ public class DialogManager : MonoBehaviour
 
     private void OnDisable()
     {
-        inputs.jump.action.performed -= Interacts;
+        inputs.interact.action.performed -= Interacts;
+        inputs.interact.action.performed -= StartNPCInteraction;
     }
 
     private void Interacts(InputAction.CallbackContext context)
     {
         interacted = true;
         print("Has interacted");
+    }
+
+    private void StartNPCInteraction(InputAction.CallbackContext context)
+    {
+        if(currentSequence == null)
+        {
+            List<Collider> npc = CameraTargetDetection.Instance.validNPCTargets;
+
+            float closestNpcDistance = 0f;
+
+            InteractableNPC selectedNpc = null;
+
+            if (npc.Count > 1)
+            {
+                for (int i = 0; i < npc.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        closestNpcDistance = Vector3.Distance(CameraTargetController.instance.transform.position, npc[i].transform.position);
+                        selectedNpc = npc[i].GetComponent<InteractableNPC>();
+                    }
+                    else
+                    {
+                        if (closestNpcDistance > Vector3.Distance(CameraTargetController.instance.transform.position, npc[i].transform.position))
+                        {
+                            closestNpcDistance = Vector3.Distance(CameraTargetController.instance.transform.position, npc[i].transform.position);
+                            selectedNpc = npc[i].GetComponent<InteractableNPC>();
+                        }
+                    }
+                }
+            }
+            else if (npc.Count == 1)
+            {
+                selectedNpc = npc[0].GetComponent<InteractableNPC>();
+            }
+            else
+            {
+                Debug.Log("NPC in range list is empty");
+            }
+
+            if (selectedNpc != null)
+            {
+                StartSequence(selectedNpc.dialogKey);
+            }
+        }
     }
 
     public void StartSequence(string sequenceKey)
@@ -138,7 +185,13 @@ public class DialogManager : MonoBehaviour
         }
 
         //If text box is not show > Tween in textbox
+
+        //Set name and name material
         speakerTextBox.text = dialog.speakerName;
+        speakerTextBox.font = dialog.speakerMat;
+
+        //Set Dialog material
+        dialogTextBox.font = dialog.dialogMat;
 
         //text defilement script / text = dialog.text
         yield return StartCoroutine(TypeText(dialog));

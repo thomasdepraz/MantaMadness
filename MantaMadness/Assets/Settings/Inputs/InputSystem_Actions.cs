@@ -144,6 +144,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""ca6ecf0b-9338-4465-bdc6-abd45c739c0d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -573,6 +582,28 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
                     ""action"": ""Boost"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""501fc150-2960-4d8c-a80b-ecf830401e68"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9cdd53a4-7f99-4931-adae-bd0c60051cc6"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1173,6 +1204,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_StrafRight = m_Player.FindAction("StrafRight", throwIfNotFound: true);
         m_Player_ResetCam = m_Player.FindAction("ResetCam", throwIfNotFound: true);
         m_Player_Boost = m_Player.FindAction("Boost", throwIfNotFound: true);
+        m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1265,6 +1297,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_StrafRight;
     private readonly InputAction m_Player_ResetCam;
     private readonly InputAction m_Player_Boost;
+    private readonly InputAction m_Player_Interact;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1282,6 +1315,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @StrafRight => m_Wrapper.m_Player_StrafRight;
         public InputAction @ResetCam => m_Wrapper.m_Player_ResetCam;
         public InputAction @Boost => m_Wrapper.m_Player_Boost;
+        public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1330,6 +1364,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Boost.started += instance.OnBoost;
             @Boost.performed += instance.OnBoost;
             @Boost.canceled += instance.OnBoost;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1373,6 +1410,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Boost.started -= instance.OnBoost;
             @Boost.performed -= instance.OnBoost;
             @Boost.canceled -= instance.OnBoost;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1568,6 +1608,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnStrafRight(InputAction.CallbackContext context);
         void OnResetCam(InputAction.CallbackContext context);
         void OnBoost(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

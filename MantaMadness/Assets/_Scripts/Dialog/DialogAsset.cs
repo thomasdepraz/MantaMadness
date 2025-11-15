@@ -1,6 +1,7 @@
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Timeline;
+using TMPro;
 [CreateAssetMenu]
 public class DialogAsset : ScriptableObject
 {
@@ -13,4 +14,8 @@ public class DialogAsset : ScriptableObject
     public string speakerName;
     [TextArea]
     public string dialogText;
+
+    public TMPro.TMP_FontAsset speakerMat;
+    public TMPro.TMP_FontAsset dialogMat;
+
 }
