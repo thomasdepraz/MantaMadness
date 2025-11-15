@@ -1,5 +1,7 @@
 ﻿using DG.Tweening;
 using DG.Tweening.Core;
+using FMOD.Studio;
+using FMODUnity;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
@@ -201,7 +203,8 @@ public class DialogManager : MonoBehaviour
     {
         isTyping = true;
         dialogTextBox.text = dialog.dialogText;
-
+        RuntimeManager.PlayOneShot(dialog.dialogSound);
+        dialogWriter.OnCharacterShown.AddListener(PlaySoundOnCharWritten);
         dialogWriter.StartWriter();
 
         while(dialogWriter.IsWriting == true)
@@ -222,6 +225,14 @@ public class DialogManager : MonoBehaviour
         isTyping = false;
 
         yield return StartCoroutine(EndDialog());
+    }
+
+    private void PlaySoundOnCharWritten(TMPEffects.Components.TMPWriter writer, TMPEffects.CharacterData.CharData c)
+    {
+        if (c == null) return;
+
+        //if(currentSequence.sequence[currentSequenceCount].dialogSound != null)
+        RuntimeManager.PlayOneShot(currentSequence.sequence[currentSequenceCount].dialogSound);
     }
 
     private IEnumerator EndDialog()
