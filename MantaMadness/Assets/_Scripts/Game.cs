@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Timeline;
 
 public class Game : MonoBehaviour, IDataPersistence
 {
@@ -12,6 +13,11 @@ public class Game : MonoBehaviour, IDataPersistence
     private System.Action onTimerFinished;
     private bool isRespawning = false;
     public bool isHitStop = false;
+
+    //Cinematic / State Points
+    public bool introCinematic = false;
+    public TimelineAsset introCinematicTimeline;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -57,12 +63,22 @@ public class Game : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
+        introCinematic  = data.introCinematic;
 
+        if(introCinematic == false)
+        {
+            //Play intro cinematic
+            if(introCinematicTimeline != null)
+            {
+                CinematicManager.instance.PlayCinematic(introCinematicTimeline);
+                introCinematic = true;
+            }
+        }
     }
 
     public void SaveData(ref GameData data)
     {
-
+        data.introCinematic = introCinematic;
     }
 
     public void Update()

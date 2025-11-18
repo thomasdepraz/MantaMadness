@@ -4,6 +4,11 @@ using UnityEngine;
 [System.Serializable]
 public class GameData
 {
+    //Game State
+    public bool introCinematic;
+
+
+
     //Currencies Counters
     public int clamCount;
     public SerializableDictionnary<string, bool> coinsCollected;
@@ -25,6 +30,8 @@ public class GameData
     // Start with this when there's no data to load
     public GameData()
     {
+        introCinematic = false;
+
         this.clamCount = 0;
         coinsCollected = new SerializableDictionnary<string, bool>();
         checkpoints = new SerializableDictionnary<string, bool>();
