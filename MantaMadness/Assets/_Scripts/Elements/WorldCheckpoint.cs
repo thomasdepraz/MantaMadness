@@ -12,14 +12,18 @@ public class WorldCheckpoint : MonoBehaviour
 
     private void Awake()
     {
-        if (!WorldCheckpointManager.Instance.checkpoints.Contains(this))
-        {
-            WorldCheckpointManager.Instance.checkpoints.Add(this);
-        }
-
         if(gameObject.GetComponent<MeshRenderer>().enabled == true)
         {
             gameObject.GetComponent<MeshRenderer>().enabled = false;
+        }
+    }
+
+    private void Start()
+    {
+        if (!WorldCheckpointManager.Instance.checkpoints.Contains(this))
+        {
+            WorldCheckpointManager.Instance.checkpoints.Add(this);
+            print(indexName + " Has been added to checkpoint list");
         }
     }
     private void OnTriggerEnter(Collider other)
