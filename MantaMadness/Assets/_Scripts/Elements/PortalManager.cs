@@ -1,11 +1,12 @@
 using UnityEngine;
 using Unity.Cinemachine;
+using System.Collections.Generic;
 using System.Collections;
 
 public class PortalManager : MonoBehaviour
 {
     public static PortalManager Instance;
-    public Portal[] portals;
+    public List<Portal> portals;
 
     private float teleportTransitionDuration = 1.5f;
 
@@ -29,7 +30,7 @@ public class PortalManager : MonoBehaviour
         UIManager.Instance.transitionScreen.TransitionInOut();
         FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Warping, 1);
         yield return new WaitForSeconds(teleportTransitionDuration/2);
-        for(int i = 0; i < portals.Length; i++)
+        for(int i = 0; i < portals.Count; i++)
         {
             if (portals[i].index == targetIndex)
             {
@@ -56,7 +57,7 @@ public class PortalManager : MonoBehaviour
     {
         Transform respawnPos = transform;
 
-        for (int i = 0; i < portals.Length; i++)
+        for (int i = 0; i < portals.Count; i++)
         {
             if (portals[i].index == index)
             {

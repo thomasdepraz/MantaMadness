@@ -10,8 +10,6 @@ public class Portal : MonoBehaviour
     public Transform teleportPoint;
     private SimpleController player;
 
-    public GameObject objectTest;
-
 
     [SerializeField] public TextMeshProUGUI signText;
     [Header("Checkpoint Parameters")]
@@ -30,6 +28,11 @@ public class Portal : MonoBehaviour
         if (signText != null)
         {
             signText.text = index;
+        }
+
+        if (!PortalManager.Instance.portals.Contains(this))
+        {
+            PortalManager.Instance.portals.Add(this);
         }
     }
 
