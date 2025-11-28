@@ -18,7 +18,6 @@ public class Rail : MonoBehaviour
     private float invRailLength;
 
     [Header("Rail parameters")]
-    public CinemachineCamera railCamera;
     public float railSpeed;
     public RailDirection railDirection = RailDirection.None;
 

@@ -95,7 +95,7 @@ public class MantaCameraController : MonoBehaviour
 
     private void EnterRail()
     {
-        SetActiveCamera(railCamera);
+        //SetActiveCamera(railCamera);
     }
 
     private void ExitRail()

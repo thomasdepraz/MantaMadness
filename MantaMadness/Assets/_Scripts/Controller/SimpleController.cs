@@ -17,6 +17,7 @@ public enum ControllerState
     BOOSTJUMP,
     DRIFT,
     DIALOG,
+    BUMP,
 }
 
 public enum ControllerAbility
@@ -26,6 +27,7 @@ public enum ControllerAbility
     STOMP,
     LAVARESIST,
     ALIEN,
+    GRIND,
 }
 
 public class SimpleController : MonoBehaviour, IDataPersistence
@@ -54,6 +56,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     [SerializeField] public bool stompAbility { get; private set; }
     [SerializeField] public bool lavaResistanceAbility { get; private set; }
     [SerializeField] public bool alienAntennasAbility { get; private set; }
+    [SerializeField] public bool grindAbility { get; private set; }
 
 
     //PLayer velocity
@@ -81,6 +84,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private Transform NormalContainer => hoverBehaviour.normalContainer;
 
     public bool CanInteract => interact;
+
+    public Vector3 grindOffset = new Vector3(0, 2f, 0);
 
     public ControllerState State {
         get
@@ -132,6 +137,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public Action<string> triggerAnim;
     public Action<string> enableBoolAnim;
     public Action<string> disableBoolAnim;
+    public Action railGrindAnim;
     public Action playTargetJumpParticles;
     public Action<bool> togglePlayerBodyVisual;
     public Action straf;
@@ -160,6 +166,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         inputs.dash.action.performed += StyleDash;
         inputs.strafLeft.action.performed += Straf;
         inputs.strafRight.action.performed += Straf;
+        inputs.jump.action.performed += JumpOutOfRail;
 
         //Components Setup
         hoverBehaviour.Initialize(controllerData, rb);
@@ -178,6 +185,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         inputs.dash.action.performed -= StyleDash;
         inputs.strafLeft.action.performed -= Straf;
         inputs.strafRight.action.performed -= Straf;
+        inputs.jump.action.performed -= JumpOutOfRail;
 
     }
 
@@ -188,6 +196,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         stompAbility = data.stomp;
         lavaResistanceAbility = data.lavaResistance;
         alienAntennasAbility = data.alienAntennas;
+        grindAbility = data.grind;
 
         updateEquipmentVisual.Invoke();
     }
@@ -199,6 +208,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         data.stomp = stompAbility;
         data.lavaResistance = lavaResistanceAbility;
         data.alienAntennas = alienAntennasAbility;
+        data.grind = grindAbility;
     }
 
     private void StyleDash(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -526,26 +536,31 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     private void Straf(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if(strafRoutine == null)
+        if(grindAbility == true)
         {
-            strafRoutine = StartCoroutine(StrafCooldownRoutine());
-            if (State == ControllerState.SURFING)
+            if (strafRoutine == null)
             {
-                if(rb.linearVelocity.magnitude > controllerData.maxSpeed / 2)
+                strafRoutine = StartCoroutine(StrafCooldownRoutine());
+                if (State == ControllerState.SURFING)
                 {
-                    if (context.action.name == InputManager.Instance.strafLeft.action.name)
+                    if (OnRail)
                     {
-                        //rb.AddForce(-Camera.main.transform.right * controllerData.driftBoostForce, ForceMode.VelocityChange);
-                        rb.linearVelocity = Vector3.zero;
-                        rb.AddForce(-Camera.main.transform.right * controllerData.strafForce, ForceMode.VelocityChange);
-                        straf.Invoke();
+                        railGrindAnim();
                     }
-                    else if (context.action.name == InputManager.Instance.strafRight.action.name)
+                    else
                     {
-                        //rb.AddForce(Camera.main.transform.right * controllerData.driftBoostForce, ForceMode.VelocityChange);
-                        rb.linearVelocity = Vector3.zero;
-                        rb.AddForce(Camera.main.transform.right * controllerData.strafForce, ForceMode.VelocityChange);
-                        straf.Invoke();
+                        if (context.action.name == InputManager.Instance.strafLeft.action.name)
+                        {
+                            rb.linearVelocity = Vector3.zero;
+                            rb.AddForce(-Camera.main.transform.right * controllerData.strafForce, ForceMode.VelocityChange);
+                            straf.Invoke();
+                        }
+                        else if (context.action.name == InputManager.Instance.strafRight.action.name)
+                        {
+                            rb.linearVelocity = Vector3.zero;
+                            rb.AddForce(Camera.main.transform.right * controllerData.strafForce, ForceMode.VelocityChange);
+                            straf.Invoke();
+                        }
                     }
                 }
             }
@@ -650,7 +665,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Speed, 1f);
         }
 
-        if(State == ControllerState.FALLING || State == ControllerState.JUMPING || State == ControllerState.AIRRIDE) 
+        if(State == ControllerState.FALLING || State == ControllerState.JUMPING || State == ControllerState.AIRRIDE || State == ControllerState.BUMP) 
         {
             FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Flying, 1);
         }
@@ -692,6 +707,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     bool hasHitWater = false;
     bool hasHitWalls = false;
+
     //float xRotation = 0f;
     private void FixedUpdate()
     {
@@ -707,10 +723,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 rb.AddForce(direction * 50, ForceMode.VelocityChange);
                 exitRail.Invoke();
                 railDetector.ExitRail();
+                disableBoolAnim("Grind");
             }
             else
             {
-                transform.position = nextPos;
+                transform.position = nextPos + grindOffset;
                 transform.forward = direction;
             }
 
@@ -796,7 +813,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             }
         }
 
-        //Jumping / AirRide to Falling
+        //Jumping / AirRide / Bump to Falling
         if ((State == ControllerState.JUMPING || State == ControllerState.AIRRIDE) && 
             (Vector3.Dot(NormalContainer.up, rb.linearVelocity.normalized) < 0 || hasHitWater) && 
             currentWaterBlock == null && 
@@ -805,8 +822,16 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             State = ControllerState.FALLING;
         }
 
+        if ((State == ControllerState.BUMP) &&
+        (Vector3.Dot(NormalContainer.up, rb.linearVelocity.normalized) < 0) &&
+        currentWaterBlock == null &&
+        jumpRoutine == null)
+        {
+            State = ControllerState.FALLING;
+        }
+
         //Jumping to AirRide
-        if(State == ControllerState.JUMPING)
+        if (State == ControllerState.JUMPING)
         {
             if(Velocity.y > controllerData.airRideVelocityThreshold)
             {
@@ -819,7 +844,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (State == ControllerState.JUMPING ||
             State ==  ControllerState.FALLING ||
             State == ControllerState.AIRRIDE || 
-            State == ControllerState.BOOSTJUMP)
+            State == ControllerState.BOOSTJUMP ||
+            State == ControllerState.BUMP)
         {
             float force = controllerData.gravity;
             if (State == ControllerState.AIRRIDE)
@@ -1093,6 +1119,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (State != ControllerState.SURFING || currentAirRail != null)
             return;
 
+        Debug.Log("BROTHER");
         enterAirRail.Invoke(rail);
         boost.Invoke();
         currentAirRail = rail;
@@ -1103,12 +1130,26 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (OnRail)
             return false;
 
-        currentRail = rail;
-        rail.EnterRail(transform.position, Velocity);
-        rb.isKinematic = true;
-        boost.Invoke();
-        enterRail.Invoke();
-        return true;
+        if(grindAbility == true)
+        {
+            currentRail = rail;
+            rail.EnterRail(transform.position, Velocity);
+            rb.isKinematic = true;
+            boost.Invoke();
+            enterRail.Invoke();
+            enableBoolAnim.Invoke("Grind");
+            triggerAnim("StartGrind");
+            ResetJump();
+            if (State != ControllerState.SURFING)
+                State = ControllerState.SURFING;
+            return true;
+        }
+        else
+        {
+            //BUMP PLAYER
+            Bump(rail.gameObject.transform.position);
+        }
+        return false;
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -1129,7 +1170,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             maxDivingDepth = Mathf.Lerp(controllerData.baseDivingDepth, controllerData.maxDivingDepth, controllerData.VelocityToDivingDepthRatio.Evaluate(speedRatio));
         }
 
-        if (State == ControllerState.FALLING || State == ControllerState.JUMPING || State == ControllerState.AIRRIDE)
+        if (State == ControllerState.FALLING || State == ControllerState.JUMPING || State == ControllerState.AIRRIDE || State == ControllerState.BUMP)
         {
             State = ControllerState.SWIMMING;
             rb.linearVelocity = HorizontalVelocity;
@@ -1253,6 +1294,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 case ControllerAbility.ALIEN:
                     alienAntennasAbility = true;
                     break;
+                case ControllerAbility.GRIND:
+                    grindAbility = true;
+                    break;
                 default:
                     break;
         }
@@ -1276,4 +1320,28 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     }
 
+    public void Bump(Vector3 direction)
+    {
+        if(state != ControllerState.BUMP)
+        {
+            state = ControllerState.BUMP;
+            rb.AddForce((NormalContainer.up * 30f) + (new Vector3(-Camera.main.transform.forward.x, 0f, -Camera.main.transform.forward.z) * controllerData.forwardImpulseForce), ForceMode.VelocityChange);
+        }
+    }
+
+    public void JumpOutOfRail(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if(currentRail != null && OnRail == true)
+        {
+            currentRail = null;
+            transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
+            rb.isKinematic = false;
+            exitRail.Invoke();
+            railDetector.ExitRail();
+            disableBoolAnim("Grind");
+            Jump(context);
+            Debug.Log("Jumping out of rail");
+        }
+
+    }
 }

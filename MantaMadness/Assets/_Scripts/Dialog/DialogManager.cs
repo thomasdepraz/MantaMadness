@@ -141,14 +141,12 @@ public class DialogManager : MonoBehaviour
             {
                 if(currentSequence != null)
                 {
-                    Debug.Log("Mais allo putain");
                     currentSequence = null;
                     currentSequence = dialogSequence;
                     StartDialog();
                 }
                 else
                 {
-                    Debug.Log("Ca fais rien la");
                     currentSequence = dialogSequence;
                     StartDialog();
                 }

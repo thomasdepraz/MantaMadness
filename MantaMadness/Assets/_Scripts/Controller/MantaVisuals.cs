@@ -44,6 +44,7 @@ public class MantaVisuals : MonoBehaviour
     public SkinnedMeshRenderer stompVisual;
     public SkinnedMeshRenderer alienAntennaVisual;
     public SkinnedMeshRenderer doubleJumpGlassesVisual;
+    public SkinnedMeshRenderer grindVisual;
 
     [Header("After Image")]
     public SkinnedMeshRenderer mantaBodyVisual;
@@ -76,6 +77,9 @@ public class MantaVisuals : MonoBehaviour
         mantaController.straf += strafEffectsAndVisual;
         mantaController.afterImageEffect += AfterImageEffect;
         mantaController.updateEquipmentVisual += UpdateAbilityVisuals;
+        mantaController.enterRail += StartGrindOnRail;
+        mantaController.railGrindAnim += GrindOnRail;
+        mantaController.exitRail += ResetGrindOnRail;
     }
 
     private void OnDisable()
@@ -93,6 +97,9 @@ public class MantaVisuals : MonoBehaviour
         mantaController.straf -= strafEffectsAndVisual;
         mantaController.afterImageEffect -= AfterImageEffect;
         mantaController.updateEquipmentVisual -= UpdateAbilityVisuals;
+        mantaController.enterRail -= StartGrindOnRail;
+        mantaController.railGrindAnim -= GrindOnRail;
+        mantaController.exitRail -= ResetGrindOnRail;
     }
 
     private void Dash(int dashCount)
@@ -360,6 +367,60 @@ public class MantaVisuals : MonoBehaviour
         triggerAnimation("Straf");     
     }
 
+    bool railStrafRight = true;
+    public void StartGrindOnRail()
+    {
+        railStrafRight = true;
+        driftParticles[0].gameObject.SetActive(true);
+        driftParticles[0].Play();
+    }
+
+    public void GrindOnRail()
+    {
+        AfterImageEffect(strafEffectDuration);
+        if (railStrafRight == true)
+        {
+            foreach(ParticleSystem p in driftParticles)
+            {
+                if(p == driftParticles[1])
+                {
+                    p.gameObject.SetActive(true);
+                    p.Play();
+                }
+                else
+                {
+                    p.gameObject.SetActive(false);
+                }
+            }
+            railStrafRight =false;
+        }
+        else 
+        {
+            foreach (ParticleSystem p in driftParticles)
+            {
+                if (p == driftParticles[0])
+                {
+                    p.gameObject.SetActive(true);
+                    p.Play();
+                }
+                else
+                {
+                    p.gameObject.SetActive(false);
+                }
+            }
+            railStrafRight = true;
+        }
+            triggerAnimation("GrindSwitch");
+    }
+
+    public void ResetGrindOnRail()
+    {
+        foreach (ParticleSystem p in driftParticles)
+        {
+            p.gameObject.SetActive(false);
+        }
+    }
+
     public void AfterImageEffect(float duration)
     {
         if(afterImageRoutine != null)
@@ -403,6 +464,16 @@ public class MantaVisuals : MonoBehaviour
         else
         {
             alienAntennaVisual.enabled = false;
+        }
+
+        //ALIEN ABILITY VISUAL
+        if (Game.Instance.player.grindAbility== true)
+        {
+            grindVisual.enabled = true;
+        }
+        else
+        {
+            grindVisual.enabled = false;
         }
     }
 }

@@ -25,6 +25,7 @@ public class GameData
     public bool stomp;
     public bool lavaResistance;
     public bool alienAntennas;
+    public bool grind;
 
     // The values defined in this constructor will be the default values
     // Start with this when there's no data to load
@@ -42,5 +43,6 @@ public class GameData
         stomp = false;
         lavaResistance = false;
         alienAntennas = false;
+        grind = false;
     }
 }

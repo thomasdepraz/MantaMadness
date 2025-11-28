@@ -10,6 +10,7 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
     [SerializeField] private Transform playerPoint;
     [SerializeField] private CinemachineCamera cam;
     [SerializeField] private string abilityName;
+    [SerializeField] private string dialogSequenceName;
 
     [SerializeField] private GameObject[] visuals;
 
@@ -68,6 +69,12 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
         hasBeenObtained = true;
 
         DisablePickup();
+
+        player.transform.position = playerPoint.transform.position;
+
+        if(dialogSequenceName != null)
+        DialogManager.instance.StartSequence(dialogSequenceName);
+
 
         // Unlock player ability => set the right boolean
         // Lock player
