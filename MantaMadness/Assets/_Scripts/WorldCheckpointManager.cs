@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
+using System.Collections;
 
 public class WorldCheckpointManager : MonoBehaviour, IDataPersistence
 {
@@ -29,9 +30,26 @@ public class WorldCheckpointManager : MonoBehaviour, IDataPersistence
             }
         }
 
+        StartCoroutine(DelayLoadData());
+        //foreach (WorldCheckpoint check in checkpoints)
+        //{
+        //    if(check.indexName == currentCheckpoint)
+        //    {
+        //        print("checkpoint loading");
+        //        SetStartCheckpoint(check.respawnTransform);
+        //        Vector3 pos = Vector3.zero;
+        //        Quaternion rotation;
+        //        Game.Instance.Respawn(out pos, out rotation);
+        //    }
+        //}
+    }
+
+    private IEnumerator DelayLoadData()
+    {
+        yield return new WaitForSeconds(0.1f);
         foreach (WorldCheckpoint check in checkpoints)
         {
-            if(check.indexName == currentCheckpoint)
+            if (check.indexName == currentCheckpoint)
             {
                 print("checkpoint loading");
                 SetStartCheckpoint(check.respawnTransform);

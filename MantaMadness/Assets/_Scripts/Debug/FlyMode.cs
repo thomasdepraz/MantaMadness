@@ -8,7 +8,7 @@ public class FlyMode : MonoBehaviour
    public static FlyMode instance;
    [Header("Vitesse de déplacement")]
    public float moveSpeed = 50f;
-   public float boostMultiplier = 5f;
+   public float boostMultiplier = 15f;
     public float smoothSpeed = 10f;
     public float smoothFactor = 10f;
 
@@ -112,12 +112,12 @@ public class FlyMode : MonoBehaviour
     {
         if (isEnabled == true)
         {
-            if(smoothMode == false)
-            {
-                smoothMode = true;
-                targetPosition = transform.position;
-                return;
-            }
+            //if(smoothMode == false)
+            //{
+            //    smoothMode = true;
+            //    targetPosition = transform.position;
+            //    return;
+            //}
 
             Game.Instance.player.transform.position = flyCam.transform.position;
             Game.Instance.player.ForceLock(false);

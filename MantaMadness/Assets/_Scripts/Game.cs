@@ -17,6 +17,7 @@ public class Game : MonoBehaviour, IDataPersistence
     //Cinematic / State Points
     public bool introCinematic = false;
     public TimelineAsset introCinematicTimeline;
+    public WorldCheckpoint introCheckpoint;
 
     private void Awake()
     {
@@ -67,13 +68,25 @@ public class Game : MonoBehaviour, IDataPersistence
 
         if(introCinematic == false)
         {
+            introCinematic = true;
             //Play intro cinematic
-            if(introCinematicTimeline != null)
+            if (introCinematicTimeline != null)
             {
                 CinematicManager.instance.PlayCinematic(introCinematicTimeline);
-                introCinematic = true;
+                //introCinematic = true;
             }
+            StartCoroutine(DelayLoad());
         }
+    }
+
+    private IEnumerator DelayLoad()
+    {
+        yield return new WaitForSeconds(0.1f);
+        WorldCheckpointManager.Instance.SetStartCheckpoint(introCheckpoint.respawnTransform);
+        WorldCheckpointManager.Instance.SetCheckpoint(introCheckpoint.respawnTransform, introCheckpoint.indexName, introCheckpoint.displayAreaName, introCheckpoint.nameToDisplay);
+        Vector3 pos = Vector3.zero;
+        Quaternion rotation;
+        Respawn(out pos, out rotation);
     }
 
     public void SaveData(ref GameData data)
