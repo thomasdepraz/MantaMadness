@@ -958,6 +958,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             return;
 
         rb.AddForce(direction * coeff * Time.fixedDeltaTime, ForceMode.VelocityChange);
+
+        //hard clamp -  probably there is a better way to do this eg. add inverse force
+        ClampHorizontalVelocity(10);
     }
 
     public Vector3 direction;
@@ -1012,7 +1015,17 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         {
             rb.linearDamping = defaultDrag;
         }
+
+        //hard clamp -  probably there is a better way to do this eg. add inverse force
+        ClampHorizontalVelocity(10);
     }
+
+    private void ClampHorizontalVelocity(float maxHorizontalMagnitude)
+    {
+        Vector3 clamped = Vector3.ClampMagnitude(HorizontalVelocity, maxHorizontalMagnitude);
+        rb.linearVelocity = new Vector3(clamped.x, rb.linearVelocity.y, clamped.z);
+    }
+
 
     private void Steer(float steerAmount)
     {
