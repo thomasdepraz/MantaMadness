@@ -83,6 +83,7 @@ public class ControllerData : ScriptableObject
 
     [Header("Straf")]
     public float strafForce;
+    public float strafForwardForce;
     public float strafCooldown;
 
     [Header("Air ride")]

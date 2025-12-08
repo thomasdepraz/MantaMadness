@@ -52,7 +52,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   brakeForce: 2.75
   grip: 1
-  gravity: 20
+  gravity: 30
   hoverRaycastLength: 2
   hoverHeight: 0.4
   hoverStrength: 20
@@ -120,7 +120,7 @@ MonoBehaviour:
   floatingForceMultiplier: 5
   maxAirControl: 30
   airControlRotationSpeed: 40
-  fallingAirControl: 20
+  fallingAirControl: 40
   divingAirControl: 0
   minSpeedToDrift: 0
   driftTurnSpeed: 5
@@ -132,6 +132,7 @@ MonoBehaviour:
   boostAfterImageEffectDuration: 0.25
   boostCooldown: 0.5
   strafForce: 50
+  strafForwardForce: 5
   strafCooldown: 0.75
   airRideVelocityThreshold: 40
   airRideGravityScale: 0.4

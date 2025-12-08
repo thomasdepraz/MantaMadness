@@ -276,13 +276,14 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         {
             if (State == ControllerState.SURFING && jumpCount < 1)
             {
-                // spin when surfing
                 State = ControllerState.JUMPING;
                 jumpCount++;
+
                 //rb.linearVelocity = hoverBehaviour.normalContainer.forward * HorizontalVelocity.magnitude;
                 rb.linearVelocity = moveDir * HorizontalVelocity.magnitude;
                 rb.AddForce((NormalContainer.up * controllerData.upwardImpulseForce /* forceMultiplier*/) + (NormalContainer.forward * controllerData.forwardImpulseForce /* forceMultiplier*/), ForceMode.VelocityChange);
                 rb.linearDamping = controllerData.jumpDamping;
+
 
                 // PLAY FMOD PLAYER ACTION JUMP SOUND
                 PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.JUMP);
@@ -402,51 +403,29 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             playTargetJumpParticles.Invoke();
 
             ////REFACTO POUR EN FAIRE UN DASH ? BRO à LA VISION
-            if (airControl.x != 0 || airControl.y != 0)
-            {
-                targetDashDirection = moveDir;
-            }
+            //if (airControl.x != 0 || airControl.y != 0)
+            //{
+            //    targetDashDirection = moveDir;
+            //}
             //else
             //{
             //    targetDashDirection = Camera.main.transform.forward.normalized;
             //}
 
 
-            transform.forward = new Vector3(targetDashDirection.x, 0, targetDashDirection.z);
-            rb.linearVelocity = targetDashDirection * HorizontalVelocity.magnitude;
+            //-transform.forward = new Vector3(targetDashDirection.x, 0, targetDashDirection.z);
+            //rb.linearVelocity = targetDashDirection * HorizontalVelocity.magnitude;
 
             //rb.AddForce(targetDashDirection * controllerData.doubleJumpForce, ForceMode.Impulse);
-            rb.AddForce(NormalContainer.up * controllerData.doubleJumpForce, ForceMode.Impulse);
+            //rb.AddForce(NormalContainer.up * controllerData.doubleJumpForce, ForceMode.Impulse);
+
+            rb.linearVelocity = moveDir * HorizontalVelocity.magnitude;
+            rb.AddForce((NormalContainer.up * controllerData.upwardImpulseForce /* forceMultiplier*/) + (NormalContainer.forward * controllerData.forwardImpulseForce /* forceMultiplier*/), ForceMode.VelocityChange);
+            rb.linearDamping = controllerData.jumpDamping;
 
             if (jumpRoutine != null)
                 StopCoroutine(jumpRoutine);
             jumpRoutine = StartCoroutine(JumpRoutine());
-
-            ////Play anim
-            //triggerAnim.Invoke("Spin");
-            //Vector3 direction;
-            //if (airControl.x != 0 || airControl.y != 0)
-            //{
-            //    direction = airControl.normalized;
-            //    direction = transform.TransformDirection(new Vector3(direction.x, 0, direction.y));
-            //}
-            //else
-            //{
-            //    direction = transform.forward;
-            //}
-
-            ////transform.forward = direction;
-            ////rb.linearVelocity = transform.forward * HorizontalVelocity.magnitude / 2;
-
-            //rb.AddForce((NormalContainer.up * controllerData.upwardImpulseForce * 2 + direction * controllerData.upwardImpulseForce), ForceMode.VelocityChange);
-            //rb.linearDamping = controllerData.jumpDamping;
-
-            //// PLAY FMOD PLAYER ACTION JUMP SOUND
-            //PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.JUMP);
-
-            ////if (jumpRoutine != null)
-            ////    StopCoroutine(jumpRoutine);
-            ////jumpRoutine = StartCoroutine(JumpRoutine());
         }
     }
     private void SetDrift(bool drifting, bool boost = false)
@@ -552,13 +531,13 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                         if (context.action.name == InputManager.Instance.strafLeft.action.name)
                         {
                             rb.linearVelocity = Vector3.zero;
-                            rb.AddForce(-Camera.main.transform.right * controllerData.strafForce, ForceMode.VelocityChange);
+                            rb.AddForce(-Camera.main.transform.right * controllerData.strafForce + Camera.main.transform.forward * controllerData.strafForwardForce, ForceMode.VelocityChange);
                             straf.Invoke();
                         }
                         else if (context.action.name == InputManager.Instance.strafRight.action.name)
                         {
                             rb.linearVelocity = Vector3.zero;
-                            rb.AddForce(Camera.main.transform.right * controllerData.strafForce, ForceMode.VelocityChange);
+                            rb.AddForce(Camera.main.transform.right * controllerData.strafForce + Camera.main.transform.forward * controllerData.strafForwardForce, ForceMode.VelocityChange);
                             straf.Invoke();
                         }
                     }
@@ -934,7 +913,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             Movement();
         }
 
-        if(State == ControllerState.FALLING || State == ControllerState.DIVING)
+        if(State == ControllerState.FALLING || State == ControllerState.DIVING || State == ControllerState.JUMPING)
         {
             AirControl();
         }
@@ -1329,12 +1308,16 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         }
     }
 
+    private bool railJump = false;
     public void JumpOutOfRail(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         if(currentRail != null && OnRail == true)
         {
+            railJump = true;
             currentRail = null;
+            //direction = (camForward * inputDirection.y + camRight * inputDirection.x).normalized;
             transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
+            rb.AddForce(direction * 50f, ForceMode.VelocityChange);
             rb.isKinematic = false;
             exitRail.Invoke();
             railDetector.ExitRail();

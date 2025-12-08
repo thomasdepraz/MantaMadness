@@ -16,6 +16,8 @@ public class Collectible : MonoBehaviour
     private bool movingTowardtarget = false;
     private GameObject player;
 
+    [SerializeField] private float speed = 0.8f;
+
     private void Start()
     {
         if(relay != null)
@@ -41,7 +43,7 @@ public class Collectible : MonoBehaviour
     {
         if (movingTowardtarget == true && player != null)
         {
-            transform.position = Vector3.Lerp(transform.position, player.transform.position, 0.4f);
+            transform.position = Vector3.Lerp(transform.position, player.transform.position, speed);
         }
     }
     public void OnTriggerEnter(Collider other)

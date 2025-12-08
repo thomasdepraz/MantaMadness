@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -42,6 +42,19 @@ public class CameraTargetController : MonoBehaviour
     private Vector3 currentUp;
     private Vector3 currentForward;
     [SerializeField] private Vector3 offset;
+
+    [SerializeField]private float stretchyYaw = 0f;
+    [SerializeField] private float stretchyPitch = 0f;
+    [SerializeField] private float stretchyReturnSpeed = 12f;    // vitesse de retour vers neutre
+    [SerializeField] private float stretchStrengthHorizontal = 35f;
+    [SerializeField] private float stretchStrengthUp = 25f;
+    [SerializeField] private float stretchStrengthDown = 45f;
+    [SerializeField] private float stretchyDamp = 0.1f;
+
+    [Header("Mouse Parameters")]
+    [SerializeField] private float stretchMouseStrengthHorizontal = 2.5f;
+    [SerializeField] private float stretchMouseStrengthUp = 2.0f;
+    [SerializeField] private float stretchMouseStrengthDown = 3.0f;
 
     private bool toggleFixedCam;
 
@@ -177,11 +190,13 @@ public class CameraTargetController : MonoBehaviour
             target.Rotate(new Vector3(currentUp.x + pitch, currentUp.y + yaw, currentUp.z));
         }
         else
-        {      
+        {
 
             //Quaternion rotation = Quaternion.Euler(player.transform.rotation.eulerAngles);
             //target.rotation = rotation;
             target.Rotate(player.transform.rotation.eulerAngles);
+            // ---- On ajoute seulement cette ligne ----
+            StretchyCamBehavior(lookAction.action.ReadValue<Vector2>());
         }
     }
 
@@ -206,7 +221,7 @@ public class CameraTargetController : MonoBehaviour
         // Phase 2 : on garde la rotation actuelle comme nouvelle base
         Vector3 euler = target.rotation.eulerAngles;
 
-        // Comme Unity stocke les angles de 0 � 360�, on les recentre autour de -180 � 180
+        // Comme Unity stocke les angles de 0 à 360°, on les recentre autour de -180 à 180
         float newYaw = euler.y;
         float newPitch = euler.x;
         if (newPitch > 180) newPitch -= 360;
@@ -218,5 +233,42 @@ public class CameraTargetController : MonoBehaviour
         // Maintenant, on peut remettre le comportement normal
         ResetCamRoutine = null;
 
+    }
+
+    private void StretchyCamBehavior(Vector2 lookInput)
+    {
+        Vector2 targetOffset;
+
+        // Si c'est la souris → les deltas sont super sensibles donc on adapte
+        if (!isControllerDevice)
+        {
+            target.rotation = Quaternion.Euler(player.transform.rotation.eulerAngles);
+        }
+        else
+        {
+            // === VERSION MANETTE (déjà fonctionnelle) ===
+            if (lookInput.sqrMagnitude < 0.01f)
+            {
+                targetOffset = Vector2.zero;
+            }
+            else
+            {
+                float xOffset = lookInput.x * stretchStrengthHorizontal;
+
+                float yStrength = lookInput.y > 0 ? stretchStrengthUp : stretchStrengthDown;
+                float yOffset = lookInput.y * yStrength;
+
+                targetOffset = new Vector2(xOffset, yOffset);
+
+                // Lissage exponentiel "stretchy"
+                stretchyYaw = Mathf.Lerp(stretchyYaw, targetOffset.x,
+                    1f - Mathf.Exp(-stretchyReturnSpeed * Time.deltaTime));
+                stretchyPitch = Mathf.Lerp(stretchyPitch, -targetOffset.y,
+                    1f - Mathf.Exp(-stretchyReturnSpeed * Time.deltaTime));
+
+                // Applique la rotation offset
+                target.Rotate(new Vector3(stretchyPitch, stretchyYaw, 0f));
+            }
+        }
     }
 }
