@@ -62,7 +62,8 @@ public class ControllerData : ScriptableObject
     public float floatingForceMultiplier;
 
     [Header("Air Control")]
-    public float maxAirControl;
+    public float maxAirControl; 
+    public float maxAirControlSpeed;
     public float airControlRotationSpeed;
     public float fallingAirControl;
     public float divingAirControl;
@@ -89,6 +90,7 @@ public class ControllerData : ScriptableObject
     [Header("Air ride")]
     public float airRideVelocityThreshold;
     public float airRideGravityScale;
+
 
     [Header("Target Jump")]
     public float targetRaycastLength = 2f;

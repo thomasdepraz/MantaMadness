@@ -960,7 +960,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         rb.AddForce(direction * coeff * Time.fixedDeltaTime, ForceMode.VelocityChange);
 
         //hard clamp -  probably there is a better way to do this eg. add inverse force
-        ClampHorizontalVelocity(10);
+        ClampHorizontalVelocity(controllerData.maxAirControlSpeed);
     }
 
     public Vector3 direction;
@@ -1017,7 +1017,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         }
 
         //hard clamp -  probably there is a better way to do this eg. add inverse force
-        ClampHorizontalVelocity(10);
+        ClampHorizontalVelocity(controllerData.maxSpeed);
     }
 
     private void ClampHorizontalVelocity(float maxHorizontalMagnitude)
