@@ -89,25 +89,28 @@ public class Rail : MonoBehaviour
     //return false when out
     public bool Progress(float deltaTime, out Vector3 position, out Vector3 normal, out Vector3 direction)
     {
+        bool isClosed = railSpline.Closed;
         bool isIn = true;
-        currentProgress += deltaTime * railSpeed * dir * invRailLength;//multiply by inv rail length
-        if(dir < 0 && currentProgress <0)
-        {
-            isIn = false;
-        }
-        else if(dir > 0 && currentProgress > 1)
-        {
-            isIn = false;
-        }
 
-        currentProgress = Mathf.Clamp01(currentProgress);
+        currentProgress += deltaTime * railSpeed * dir * invRailLength;
+
+        if (isClosed)
+        {
+            // Boucle automatiquement entre 0 et 1
+            currentProgress = Mathf.Repeat(currentProgress, 1f);
+        }
+        else
+        {
+            // Rail non fermé : sortie normale
+            if (dir < 0 && currentProgress < 0f)
+                isIn = false;
+            else if (dir > 0 && currentProgress > 1f)
+                isIn = false;
+
+            currentProgress = Mathf.Clamp01(currentProgress);
+        }
 
         railSpline.Evaluate(currentProgress, out float3 pos, out float3 tan, out float3 up);
-
-        //position = transform.position + new Vector3(pos.x, pos.y, pos.z);
-        //direction = position - currentPosition;
-        //currentPosition = position;
-        //normal = new Vector3(up.x, up.y, up.z);
 
         Vector3 worldPos = splineContainer.transform.TransformPoint(pos);
         Vector3 worldTan = splineContainer.transform.TransformDirection(tan);

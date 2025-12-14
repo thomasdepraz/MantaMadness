@@ -123,6 +123,9 @@ MonoBehaviour:
   airControlRotationSpeed: 40
   fallingAirControl: 40
   divingAirControl: 0
+  maxAirTime: 3
+  maxAirTimeGravityFactor: 2
+  limitFallingSpeedFactor: 2
   minSpeedToDrift: 0
   driftTurnSpeed: 5
   driftMoveSpeed: 40
@@ -149,7 +152,8 @@ MonoBehaviour:
   doubleJumpForce: 10000
   doubleJumpDamping: 0.7
   stompForce: 70
-  stompChargeTime: 0.45
+  stompChargeTime: 0.55
   stompAfterImageEffectTime: 0.45
   stompAccelForce: 10
   npcInteractionRadius: 30
+  railImpulseForce: 50

@@ -1,4 +1,4 @@
-using DG.Tweening;
+ï»¿using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,6 +18,7 @@ public enum ControllerState
     DRIFT,
     DIALOG,
     BUMP,
+    RAIL,
 }
 
 public enum ControllerAbility
@@ -61,9 +62,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     //PLayer velocity
     public Vector3 Velocity => this.rb.linearVelocity;
-    // Vector world space en local space par rapport a l'objet: permet de recup la vélocité horizontal peut importe la rotation
+    // Vector world space en local space par rapport a l'objet: permet de recup la vÃ©locitÃ© horizontal peut importe la rotation
     private Vector3 TransformedVelocity => NormalContainer.InverseTransformVector(rb.linearVelocity);
-    // Velocité horizontal
+    // VelocitÃ© horizontal
     public Vector3 HorizontalVelocity => NormalContainer.rotation * new Vector3(TransformedVelocity.x, 0f, TransformedVelocity.z);
     public Vector3 AngularVelocity => this.rb.angularVelocity;
     public float CurrentDepth => currentWaterBlock is null ? 0 : currentWaterBlock.GetDepthAtPosition(transform.position, out _);
@@ -74,6 +75,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public Vector2 AirControlDirection => airControl;
     public bool InAirRail => currentAirRail != null;
     public bool OnRail => currentRail != null;
+    public bool OnWaterFall => currentWaterFall != null;
     public bool IsLocked => OnRail || InAirRail || forceLocked;
     private bool CanDrift => HorizontalVelocity.sqrMagnitude > controllerData.minSpeedToDrift * controllerData.minSpeedToDrift;
     //private bool CanDriftBreak => HorizontalVelocity.sqrMagnitude < (controllerData.minSpeedToDriftBreak * controllerData.minSpeedToDriftBreak);
@@ -110,6 +112,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private WaterBlock currentWaterBlock;
     private AirRail currentAirRail;
     private Rail currentRail;
+    private WaterFall currentWaterFall;
     private float maxDivingDepth;
     private float maxDepth;
     private int jumpCount;
@@ -133,6 +136,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public Action<Transform> updateRaceTarget;
     public Action enterRail;
     public Action exitRail;
+    public Action enterWaterfall;
+    public Action exitWaterfall;
     public Action<int> dash;
     public Action<string> triggerAnim;
     public Action<string> enableBoolAnim;
@@ -186,7 +191,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         inputs.strafLeft.action.performed -= Straf;
         inputs.strafRight.action.performed -= Straf;
         inputs.jump.action.performed -= JumpOutOfRail;
-
     }
 
     public void LoadData(GameData data)
@@ -276,12 +280,36 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         {
             if (State == ControllerState.SURFING && jumpCount < 1)
             {
+                //NORMAL JUMP
                 State = ControllerState.JUMPING;
                 jumpCount++;
 
                 //rb.linearVelocity = hoverBehaviour.normalContainer.forward * HorizontalVelocity.magnitude;
                 rb.linearVelocity = moveDir * HorizontalVelocity.magnitude;
                 rb.AddForce((NormalContainer.up * controllerData.upwardImpulseForce /* forceMultiplier*/) + (NormalContainer.forward * controllerData.forwardImpulseForce /* forceMultiplier*/), ForceMode.VelocityChange);
+                rb.linearDamping = controllerData.jumpDamping;
+
+
+                // PLAY FMOD PLAYER ACTION JUMP SOUND
+                PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.JUMP);
+
+                //Play anim
+                triggerAnim.Invoke("Spin");
+
+                if (jumpRoutine != null)
+                    StopCoroutine(jumpRoutine);
+                jumpRoutine = StartCoroutine(JumpRoutine());
+                return;
+            }
+            else if(State == ControllerState.RAIL && jumpCount < 1)
+            {
+                //RAIL JUMP
+                State = ControllerState.JUMPING;
+                jumpCount++;
+
+                //rb.linearVelocity = hoverBehaviour.normalContainer.forward * HorizontalVelocity.magnitude;
+                rb.linearVelocity = moveDir * HorizontalVelocity.magnitude;
+                rb.AddForce((NormalContainer.up * controllerData.upwardImpulseForce /* forceMultiplier*/) + (NormalContainer.forward * controllerData.railImpulseForce /* forceMultiplier*/), ForceMode.VelocityChange);
                 rb.linearDamping = controllerData.jumpDamping;
 
 
@@ -402,7 +430,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             triggerAnim.Invoke("TargetJump");
             playTargetJumpParticles.Invoke();
 
-            ////REFACTO POUR EN FAIRE UN DASH ? BRO à LA VISION
+            ////REFACTO POUR EN FAIRE UN DASH ? BRO Ã  LA VISION
             //if (airControl.x != 0 || airControl.y != 0)
             //{
             //    targetDashDirection = moveDir;
@@ -522,12 +550,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 strafRoutine = StartCoroutine(StrafCooldownRoutine());
                 if (State == ControllerState.SURFING)
                 {
-                    if (OnRail)
-                    {
-                        railGrindAnim();
-                    }
-                    else
-                    {
                         if (context.action.name == InputManager.Instance.strafLeft.action.name)
                         {
                             rb.linearVelocity = Vector3.zero;
@@ -540,7 +562,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                             rb.AddForce(Camera.main.transform.right * controllerData.strafForce + Camera.main.transform.forward * controllerData.strafForwardForce, ForceMode.VelocityChange);
                             straf.Invoke();
                         }
-                    }
+                }
+                else if(State == ControllerState.RAIL)
+                {
+                    StrafOutOfRail(context);
                 }
             }
         }
@@ -569,6 +594,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         State = ControllerState.STOMP;
         rb.linearVelocity = Vector3.zero;
         triggerAnim.Invoke("StompCharge");
+        fallTime = 0f;
         yield return new WaitForSeconds(controllerData.stompChargeTime);
         triggerAnim.Invoke("Stomp");
         afterImageEffect.Invoke(controllerData.stompAfterImageEffectTime);
@@ -686,15 +712,18 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     bool hasHitWater = false;
     bool hasHitWalls = false;
+    float fallTime = 0f;
 
     //float xRotation = 0f;
     private void FixedUpdate()
     {
         hasHitWater = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit waterInfo, controllerData.hoverRaycastLength, waterRaycastLayer.value);
         hasHitWalls = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit defaultInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
+
         if (OnRail)
         {
-            if(false == currentRail.Progress(Time.fixedDeltaTime, out Vector3 nextPos, out Vector3 normal, out Vector3 direction))
+            State = ControllerState.RAIL;
+            if (false == currentRail.Progress(Time.fixedDeltaTime, out Vector3 nextPos, out Vector3 normal, out Vector3 direction))
             {
                 currentRail = null;
                 transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
@@ -702,6 +731,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 rb.AddForce(direction * 50, ForceMode.VelocityChange);
                 exitRail.Invoke();
                 railDetector.ExitRail();
+                State = ControllerState.SURFING;
                 disableBoolAnim("Grind");
             }
             else
@@ -713,7 +743,36 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             return;
         }
 
-        if(InAirRail)
+        if (OnWaterFall)
+        {
+            State = ControllerState.SWIMMING;
+
+            if (false == currentWaterFall.FollowSpline(Time.fixedDeltaTime,out Vector3 nextPos,out Vector3 normal,out Vector3 direction))
+            {
+                currentWaterFall.ToggleWaterFallCamera(false);
+                currentWaterFall = null;
+
+                transform.rotation = new Quaternion(0,transform.rotation.y,0,transform.rotation.w);
+
+                rb.isKinematic = false;
+                rb.AddForce(direction * 50, ForceMode.VelocityChange);
+
+                exitWaterfall.Invoke();
+                railDetector.ExitWaterfall();
+
+                State = ControllerState.SURFING;
+                //disableBoolAnim("Grind");
+            }
+            else
+            {
+                transform.position = nextPos;
+                transform.forward = direction.normalized;
+            }
+
+            return;
+        }
+
+        if (InAirRail)
         {
             rb.linearVelocity = currentAirRail.direction.forward * currentAirRail.rideForce;
             
@@ -761,13 +820,18 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                     stompRoutine = null;
                 }
                 ResetJump();
+                fallTime = 0f;
             }
+
+            fallTime += Time.fixedDeltaTime;
         }
 
         //Stomping to Surfing
         if (State == ControllerState.STOMP)
         {
             rb.AddForce(-hoverBehaviour.normalContainer.up * controllerData.stompAccelForce, ForceMode.Acceleration);
+            fallTime = 0f;
+            fallTime += Time.fixedDeltaTime;
             if (hasHitWater)
             {
                 State = ControllerState.SURFING;
@@ -776,6 +840,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 Boost(controllerData.boostForce, direction);
                 stompRoutine = null;
                 ResetJump();
+                fallTime = 0f;
             }
             else if (hasHitWalls)
             {
@@ -821,7 +886,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         //Apply gravity
         if (State == ControllerState.JUMPING ||
-            State ==  ControllerState.FALLING ||
             State == ControllerState.AIRRIDE || 
             State == ControllerState.BOOSTJUMP ||
             State == ControllerState.BUMP)
@@ -833,15 +897,41 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             rb.AddForce(Vector3.down * force, ForceMode.Acceleration);
             rb.linearVelocity = ClampYVelocity(Velocity, -controllerData.maxFallingSpeed, float.MaxValue);
         }
+        else if(State == ControllerState.FALLING)
+        {
+            float force = 1f;
+            if (fallTime > controllerData.maxAirTime)
+            {
+                force = controllerData.gravity * controllerData.maxAirTimeGravityFactor;
+                rb.AddForce(Vector3.down * force, ForceMode.Acceleration);
+                rb.linearVelocity = ClampYVelocity(Velocity, -controllerData.maxFallingSpeed * controllerData.limitFallingSpeedFactor, float.MaxValue);
+            }
+            else
+            {
+                force = controllerData.gravity;
+                rb.AddForce(Vector3.down * force, ForceMode.Acceleration);
+                rb.linearVelocity = ClampYVelocity(Velocity, -controllerData.maxFallingSpeed, float.MaxValue);
+            }
+        }
+        else if (State == ControllerState.STOMP)
+        {
+            if(fallTime > controllerData.stompChargeTime)
+            {
+                float force = 1f;
+                force = controllerData.gravity * controllerData.maxAirTimeGravityFactor;
+                rb.AddForce(Vector3.down * force, ForceMode.Acceleration);
+                rb.linearVelocity = ClampYVelocity(Velocity, -controllerData.maxFallingSpeed * controllerData.limitFallingSpeedFactor, float.MaxValue);
+            }
+        }
 
         //Hover on water
         if (State == ControllerState.SURFING)
         {
-            if(hasHitWater)
+            if (hasHitWater)
             {
                 hoverBehaviour.Hover(waterInfo, Time.fixedDeltaTime);
 
-                if (HorizontalVelocity.sqrMagnitude > controllerData.minSpeedToDash)   
+                if (HorizontalVelocity.sqrMagnitude > controllerData.minSpeedToDash)
                     currentDashTime += Time.deltaTime;
                 else
                     currentDashTime = 0f;
@@ -854,10 +944,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             else
             {
                 currentCoyoteTime += Time.fixedDeltaTime;
-                if(currentCoyoteTime > controllerData.coyoteTime)
+                if (currentCoyoteTime > controllerData.coyoteTime)
                 {
                     State = ControllerState.FALLING;
-                    currentCoyoteTime = 0; 
+                    currentCoyoteTime = 0;
                 }
             }
         }
@@ -1017,7 +1107,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         }
 
         //hard clamp -  probably there is a better way to do this eg. add inverse force
-        ClampHorizontalVelocity(controllerData.maxSpeed);
+        //ClampHorizontalVelocity(controllerData.maxSpeed);
     }
 
     private void ClampHorizontalVelocity(float maxHorizontalMagnitude)
@@ -1111,7 +1201,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (State != ControllerState.SURFING || currentAirRail != null)
             return;
 
-        Debug.Log("BROTHER");
         enterAirRail.Invoke(rail);
         boost.Invoke();
         currentAirRail = rail;
@@ -1119,7 +1208,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     public bool EnterRail(Rail rail)
     {
-        if (OnRail)
+        if (State == ControllerState.RAIL)
             return false;
 
         if(grindAbility == true)
@@ -1132,16 +1221,22 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             enableBoolAnim.Invoke("Grind");
             triggerAnim("StartGrind");
             ResetJump();
-            if (State != ControllerState.SURFING)
-                State = ControllerState.SURFING;
             return true;
         }
-        else
-        {
-            //BUMP PLAYER
-            Bump(rail.gameObject.transform.position);
-        }
         return false;
+    }
+
+    public bool EnterWaterfall(WaterFall waterfall)
+    {
+        if(State == ControllerState.SWIMMING)
+            return false;
+
+        currentWaterFall = waterfall;
+        waterfall.EnterWaterFall();
+        enterWaterfall.Invoke();
+        rb.isKinematic = true;
+        return true;
+
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -1320,24 +1415,47 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             rb.AddForce((NormalContainer.up * 30f) + (new Vector3(-Camera.main.transform.forward.x, 0f, -Camera.main.transform.forward.z) * controllerData.forwardImpulseForce), ForceMode.VelocityChange);
         }
     }
-
-    private bool railJump = false;
     public void JumpOutOfRail(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if(currentRail != null && OnRail == true)
+        if(currentRail != null && State == ControllerState.RAIL)
         {
-            railJump = true;
             currentRail = null;
             //direction = (camForward * inputDirection.y + camRight * inputDirection.x).normalized;
             transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
-            rb.AddForce(direction * 50f, ForceMode.VelocityChange);
             rb.isKinematic = false;
             exitRail.Invoke();
             railDetector.ExitRail();
             disableBoolAnim("Grind");
             Jump(context);
-            Debug.Log("Jumping out of rail");
         }
 
+    }
+
+    public void StrafOutOfRail(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if (currentRail != null && State == ControllerState.RAIL)
+        {
+            railGrindAnim();
+            currentRail = null;
+            transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
+            rb.isKinematic = false;
+            exitRail.Invoke();
+            railDetector.ExitRail();
+            disableBoolAnim("Grind");
+            State = ControllerState.SURFING;
+            //Rail jump behavior
+            if (context.action.name == InputManager.Instance.strafLeft.action.name)
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.AddForce(-NormalContainer.transform.right * controllerData.strafForce + NormalContainer.transform.forward * controllerData.strafForwardForce, ForceMode.VelocityChange);
+                straf.Invoke();
+            }
+            else if (context.action.name == InputManager.Instance.strafRight.action.name)
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.AddForce(NormalContainer.transform.right * controllerData.strafForce + NormalContainer.transform.forward * controllerData.strafForwardForce, ForceMode.VelocityChange);
+                straf.Invoke();
+            }
+        }
     }
 }

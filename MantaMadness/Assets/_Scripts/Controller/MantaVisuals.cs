@@ -59,7 +59,9 @@ public class MantaVisuals : MonoBehaviour
     private int styleTriggerId = Animator.StringToHash("StyleTrigger");
     private int styleIndexId = Animator.StringToHash("Style");
     private int boostId = Animator.StringToHash("Boosting");
-  
+    private int horizontalSpeedId = Animator.StringToHash("HorizontalSpeedFactor");
+    private int verticalSpeedId = Animator.StringToHash("VerticalVelocity");
+
 
     private void Awake()
     {
@@ -80,6 +82,8 @@ public class MantaVisuals : MonoBehaviour
         mantaController.enterRail += StartGrindOnRail;
         mantaController.railGrindAnim += GrindOnRail;
         mantaController.exitRail += ResetGrindOnRail;
+        mantaController.enterWaterfall += StartWaterfall;
+        mantaController.exitWaterfall += ExitWaterfall;
     }
 
     private void OnDisable()
@@ -100,7 +104,10 @@ public class MantaVisuals : MonoBehaviour
         mantaController.enterRail -= StartGrindOnRail;
         mantaController.railGrindAnim -= GrindOnRail;
         mantaController.exitRail -= ResetGrindOnRail;
+        mantaController.enterWaterfall -= StartWaterfall;
+        mantaController.exitWaterfall -= ExitWaterfall;
     }
+
 
     private void Dash(int dashCount)
     {
@@ -197,6 +204,8 @@ public class MantaVisuals : MonoBehaviour
     {
         UpdateModelRoll();
         UpdateParticles();
+        UpdateAnimatorRatio(Game.Instance.player.HorizontalVelocity.magnitude, Game.Instance.player.controllerData.maxSpeed, horizontalSpeedId);
+        UpdateAnimatorRatio(Mathf.Abs(Game.Instance.player.Velocity.y), Game.Instance.player.controllerData.gravity * Game.Instance.player.controllerData.limitFallingSpeedFactor, verticalSpeedId);
 
         mantaAnimator.SetBool(driftId, mantaController.IsDrifting);
         mantaAnimator.SetFloat(driftDirId, mantaController.DriftDirection);
@@ -475,5 +484,21 @@ public class MantaVisuals : MonoBehaviour
         {
             grindVisual.enabled = false;
         }
+    }
+
+    public void UpdateAnimatorRatio(float value, float ratio, int id)
+    {
+        float newRatio = Mathf.Clamp01(value / ratio);
+        mantaAnimator.SetFloat(id, newRatio);
+    }
+
+    private void StartWaterfall()
+    {
+        print("Enter waterfall");
+    }
+
+    private void ExitWaterfall()
+    {
+        print("Exit waterfall");
     }
 }

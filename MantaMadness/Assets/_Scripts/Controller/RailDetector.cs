@@ -7,6 +7,7 @@ public class RailDetector : MonoBehaviour
 {
     public SimpleController controller;
     private bool onRail;
+    private bool onWaterfall;
 
     public void OnTriggerEnter(Collider other)
     {
@@ -15,6 +16,13 @@ public class RailDetector : MonoBehaviour
             if (controller.EnterRail(rail))
             {
                 onRail = true;
+            }
+        }
+        else if(other.TryGetComponent(out WaterFall waterfall) && onWaterfall is false)
+        {
+            if (controller.EnterWaterfall(waterfall))
+            {
+                onWaterfall = true;
             }
         }
     }
@@ -26,10 +34,17 @@ public class RailDetector : MonoBehaviour
             coroutine = StartCoroutine(Cooldown());
     }
 
+    public void ExitWaterfall()
+    {
+        if(coroutine == null)
+            coroutine = StartCoroutine(Cooldown());
+    }
+
     private IEnumerator Cooldown()
     {
         yield return new WaitForSeconds(0.2f);
         onRail = false;
+        onWaterfall = false;
         coroutine = null;
     }
 }

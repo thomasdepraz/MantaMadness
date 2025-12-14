@@ -67,6 +67,9 @@ public class ControllerData : ScriptableObject
     public float airControlRotationSpeed;
     public float fallingAirControl;
     public float divingAirControl;
+    public float maxAirTime;
+    public float maxAirTimeGravityFactor;
+    public float limitFallingSpeedFactor;
 
     [Header("Drift")]
     public float minSpeedToDrift;
@@ -113,4 +116,7 @@ public class ControllerData : ScriptableObject
 
     [Header("NPC Interaction")]
     public float npcInteractionRadius;
+
+    [Header("Rail")]
+    public float railImpulseForce;
 }
