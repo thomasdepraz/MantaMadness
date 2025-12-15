@@ -82,6 +82,26 @@ MonoBehaviour:
   passIndex: 0
   bindDepthStencilAttachment: 0
   m_Version: 1
+--- !u!114 &-163285243893607231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b00045f12942b46c698459096c89274e, type: 3}
+  m_Name: HorizonFog
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  injectionPoint: 600
+  fetchColorBuffer: 1
+  requirements: 0
+  passMaterial: {fileID: 2100000, guid: 06b49cacbbeeb6d44a3f68d4594ff0e6, type: 2}
+  passIndex: 0
+  bindDepthStencilAttachment: 0
+  m_Version: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,7 +132,8 @@ MonoBehaviour:
   - {fileID: 8251721890429929393}
   - {fileID: 7287349313986986267}
   - {fileID: -8429466968353355745}
-  m_RendererFeatureMap: beaaf728f95e9dabd5dcf14f73a54ca0b1076400570184721b81614e97dd21651fc868197484048b
+  - {fileID: -163285243893607231}
+  m_RendererFeatureMap: beaaf728f95e9dabd5dcf14f73a54ca0b1076400570184721b81614e97dd21651fc868197484048bc194a890efe4bbfd
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}

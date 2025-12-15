@@ -38,7 +38,7 @@ public class GameData
         checkpoints = new SerializableDictionnary<string, bool>();
         abilityAltars = new SerializableDictionnary<string, bool>();
 
-        doubleJump = true;
+        doubleJump = false;
         chargeBoost = false;
         stomp = false;
         lavaResistance = false;
