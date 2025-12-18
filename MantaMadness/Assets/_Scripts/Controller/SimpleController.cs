@@ -244,7 +244,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (IsLocked)
             return;
 
-        if (State == ControllerState.DIVING || State == ControllerState.SWIMMING || State == ControllerState.AIRRIDE || State == ControllerState.STOMP)
+        if (State == ControllerState.DIVING || State == ControllerState.SWIMMING || State == ControllerState.AIRRIDE)
             return;
 
 
@@ -332,7 +332,21 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                     //Default in - air jump
                     if (jumpCount <= 1)
                     {
-                        AirDash();
+                        AirDash(controllerData.doubleJumpForwardForce, controllerData.doubleJumpUpForce);
+                    }
+                }
+            }
+            else if(State == ControllerState.STOMP && stompCancel == true)
+            {
+
+                if (doubleJumpAbility)
+                {
+                    //Default in - air jump
+                    if (jumpCount <= 1)
+                    {   
+                        StopCoroutine(stompRoutine);
+                        stompRoutine = null;
+                        AirDash(controllerData.stompJumpCancelForwardForce, controllerData.stompJumpCancelUpForce);
                     }
                 }
             }
@@ -348,7 +362,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     }
 
     Vector3 targetDashDirection = Vector3.zero;
-    private void AirDash()
+    private void AirDash(float jumpForwardForce, float jumpUpForce)
     {
         jumpCount = 2;
         State = ControllerState.JUMPING;
@@ -430,25 +444,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             triggerAnim.Invoke("TargetJump");
             playTargetJumpParticles.Invoke();
 
-            ////REFACTO POUR EN FAIRE UN DASH ? BRO à LA VISION
-            //if (airControl.x != 0 || airControl.y != 0)
-            //{
-            //    targetDashDirection = moveDir;
-            //}
-            //else
-            //{
-            //    targetDashDirection = Camera.main.transform.forward.normalized;
-            //}
-
-
-            //-transform.forward = new Vector3(targetDashDirection.x, 0, targetDashDirection.z);
-            //rb.linearVelocity = targetDashDirection * HorizontalVelocity.magnitude;
-
-            //rb.AddForce(targetDashDirection * controllerData.doubleJumpForce, ForceMode.Impulse);
-            //rb.AddForce(NormalContainer.up * controllerData.doubleJumpForce, ForceMode.Impulse);
-
             rb.linearVelocity = moveDir * HorizontalVelocity.magnitude;
-            rb.AddForce((NormalContainer.up * controllerData.upwardImpulseForce /* forceMultiplier*/) + (NormalContainer.forward * controllerData.forwardImpulseForce /* forceMultiplier*/), ForceMode.VelocityChange);
+            rb.AddForce((NormalContainer.up * jumpUpForce /* forceMultiplier*/) + (NormalContainer.forward * jumpForwardForce /* forceMultiplier*/), ForceMode.VelocityChange);
             rb.linearDamping = controllerData.jumpDamping;
 
             if (jumpRoutine != null)
@@ -589,13 +586,16 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         }
     }
 
+    private bool stompCancel = false;
     private IEnumerator StompCoroutine(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         State = ControllerState.STOMP;
         rb.linearVelocity = Vector3.zero;
         triggerAnim.Invoke("StompCharge");
         fallTime = 0f;
+        stompCancel = true;
         yield return new WaitForSeconds(controllerData.stompChargeTime);
+        stompCancel = false;
         triggerAnim.Invoke("Stomp");
         afterImageEffect.Invoke(controllerData.stompAfterImageEffectTime);
         //play particle
@@ -1435,7 +1435,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     {
         if (currentRail != null && State == ControllerState.RAIL)
         {
-            railGrindAnim();
+            //railGrindAnim();
             currentRail = null;
             transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
             rb.isKinematic = false;

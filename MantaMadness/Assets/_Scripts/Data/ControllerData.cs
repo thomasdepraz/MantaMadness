@@ -73,12 +73,13 @@ public class ControllerData : ScriptableObject
 
     [Header("Drift")]
     public float minSpeedToDrift;
-    //public float minSpeedToDriftBreak;
     public float driftTurnSpeed;
     public float driftMoveSpeed;
     [Min(1)]public float steeringMult;
-    public float driftingGrip;
+    public float driftDrag;
     public float driftBoostTimer;
+    public float driftDirectionalDecay;
+    public float driftBrakeDecay;
 
     [Header("Boost")]
     public float boostForce;
@@ -105,7 +106,8 @@ public class ControllerData : ScriptableObject
     public float targetBounceForce;
 
     [Header("Double Jump")]
-    public float doubleJumpForce;
+    public float doubleJumpUpForce;
+    public float doubleJumpForwardForce;
     public float doubleJumpDamping;
 
     [Header("Stomp")]
@@ -113,6 +115,8 @@ public class ControllerData : ScriptableObject
     public float stompChargeTime;
     public float stompAfterImageEffectTime;
     public float stompAccelForce;
+    public float stompJumpCancelUpForce;
+    public float stompJumpCancelForwardForce;
 
     [Header("NPC Interaction")]
     public float npcInteractionRadius;

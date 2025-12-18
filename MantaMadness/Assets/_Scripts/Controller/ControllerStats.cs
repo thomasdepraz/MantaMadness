@@ -13,7 +13,7 @@ public class ControllerStats
 
     public float GetGrip()
     {
-        return controller.IsDrifting ? data.driftingGrip : data.grip;
+        return controller.IsDrifting ? data.driftDrag : data.grip;
     }
 
     //turn in -1/1 range

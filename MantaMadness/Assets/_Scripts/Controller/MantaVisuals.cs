@@ -33,7 +33,6 @@ public class MantaVisuals : MonoBehaviour
     public VisualEffect surfBladeEffect;
     public ParticleSystem splashParticles;
     public ParticleSystem styleParticles;
-    public ParticleSystem[] driftParticles = new ParticleSystem[4];
     public ParticleSystem[] boostParticles = new ParticleSystem[3];
     public VisualEffect targetJumpParticles;
     public VisualEffect chargeJumpParticles;
@@ -80,7 +79,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.afterImageEffect += AfterImageEffect;
         mantaController.updateEquipmentVisual += UpdateAbilityVisuals;
         mantaController.enterRail += StartGrindOnRail;
-        mantaController.railGrindAnim += GrindOnRail;
+        //mantaController.railGrindAnim += GrindOnRail;
         mantaController.exitRail += ResetGrindOnRail;
         mantaController.enterWaterfall += StartWaterfall;
         mantaController.exitWaterfall += ExitWaterfall;
@@ -102,7 +101,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.afterImageEffect -= AfterImageEffect;
         mantaController.updateEquipmentVisual -= UpdateAbilityVisuals;
         mantaController.enterRail -= StartGrindOnRail;
-        mantaController.railGrindAnim -= GrindOnRail;
+        //mantaController.railGrindAnim -= GrindOnRail;
         mantaController.exitRail -= ResetGrindOnRail;
         mantaController.enterWaterfall -= StartWaterfall;
         mantaController.exitWaterfall -= ExitWaterfall;
@@ -282,6 +281,14 @@ public class MantaVisuals : MonoBehaviour
 
 
         }
+        else if (mantaController.State == ControllerState.RAIL)
+        {
+            surfParticles.Stop();
+            if (surfBladeEffect.GetInt(surfBladePlayProperty) != 5)
+            {
+                surfBladeEffect.SetInt(surfBladePlayProperty, 5);
+            }
+        }
         else if (mantaController.State == ControllerState.SURFING && mantaController.HorizontalVelocity.magnitude <= mantaController.controllerData.maxSpeed / 4f || mantaController.State != ControllerState.SURFING)
         {
             surfParticles.Stop();
@@ -380,54 +387,52 @@ public class MantaVisuals : MonoBehaviour
     public void StartGrindOnRail()
     {
         railStrafRight = true;
-        driftParticles[0].gameObject.SetActive(true);
-        driftParticles[0].Play();
     }
 
-    public void GrindOnRail()
-    {
-        AfterImageEffect(strafEffectDuration);
-        if (railStrafRight == true)
-        {
-            foreach(ParticleSystem p in driftParticles)
-            {
-                if(p == driftParticles[1])
-                {
-                    p.gameObject.SetActive(true);
-                    p.Play();
-                }
-                else
-                {
-                    p.gameObject.SetActive(false);
-                }
-            }
-            railStrafRight =false;
-        }
-        else 
-        {
-            foreach (ParticleSystem p in driftParticles)
-            {
-                if (p == driftParticles[0])
-                {
-                    p.gameObject.SetActive(true);
-                    p.Play();
-                }
-                else
-                {
-                    p.gameObject.SetActive(false);
-                }
-            }
-            railStrafRight = true;
-        }
-            triggerAnimation("GrindSwitch");
-    }
+    //public void GrindOnRail()
+    //{
+    //    AfterImageEffect(strafEffectDuration);
+    //    if (railStrafRight == true)
+    //    {
+    //        foreach(ParticleSystem p in driftParticles)
+    //        {
+    //            if(p == driftParticles[1])
+    //            {
+    //                p.gameObject.SetActive(true);
+    //                p.Play();
+    //            }
+    //            else
+    //            {
+    //                p.gameObject.SetActive(false);
+    //            }
+    //        }
+    //        railStrafRight =false;
+    //    }
+    //    else 
+    //    {
+    //        foreach (ParticleSystem p in driftParticles)
+    //        {
+    //            if (p == driftParticles[0])
+    //            {
+    //                p.gameObject.SetActive(true);
+    //                p.Play();
+    //            }
+    //            else
+    //            {
+    //                p.gameObject.SetActive(false);
+    //            }
+    //        }
+    //        railStrafRight = true;
+    //    }
+    //        triggerAnimation("GrindSwitch");
+    //}
 
     public void ResetGrindOnRail()
     {
-        foreach (ParticleSystem p in driftParticles)
-        {
-            p.gameObject.SetActive(false);
-        }
+        //foreach (ParticleSystem p in driftParticles)
+        //{
+        //    p.gameObject.SetActive(false);
+        //}
     }
 
     public void AfterImageEffect(float duration)

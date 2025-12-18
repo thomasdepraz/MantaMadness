@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceleration: 60
   maxSpeed: 40
+  rotationTorque: 0
   overSpeedCoeff: 0.5
   baseTurnSpeed: 8
   speedToSteeringRatio:
@@ -111,19 +112,50 @@ MonoBehaviour:
   upwardImpulseForce: 8
   maxFallingSpeed: 150
   perfectLandingForce: 50
+  jumpForceMultiplierMin: 0
+  jumpForceMultiplierMax: 0
+  jumpChargeTime: 0
   minimumFloatingForce: 2
   maximumFloatingForce: 50
   floatingForceMultiplier: 5
   maxAirControl: 20
+  maxAirControlSpeed: 0
   airControlRotationSpeed: 5
   fallingAirControl: 20
   divingAirControl: 5
+  maxAirTime: 0
+  maxAirTimeGravityFactor: 0
+  limitFallingSpeedFactor: 0
   minSpeedToDrift: 25
-  minSpeedToDriftBreak: 10
   driftTurnSpeed: 5
+  driftMoveSpeed: 0
   steeringMult: 1
-  driftingGrip: 0
-  driftBoostForce: 50
+  driftDrag: 3
   driftBoostTimer: 2
+  driftDirectionalDecay: 0
+  driftBrakeDecay: 0
+  boostForce: 0
+  boostAfterImageEffectDuration: 0
+  boostCooldown: 0
+  strafForce: 0
+  strafForwardForce: 0
+  strafCooldown: 0
   airRideVelocityThreshold: 40
   airRideGravityScale: 0.4
+  targetRaycastLength: 2
+  targetRaycastRadius: 5
+  targetJumpSpeed: 0
+  targetObjectsMask:
+    serializedVersion: 2
+    m_Bits: 0
+  targetDetectionRadius: 0
+  targetBoostFactor: 0
+  targetBounceForce: 0
+  doubleJumpForce: 0
+  doubleJumpDamping: 0
+  stompForce: 0
+  stompChargeTime: 0
+  stompAfterImageEffectTime: 0
+  stompAccelForce: 0
+  npcInteractionRadius: 0
+  railImpulseForce: 0
