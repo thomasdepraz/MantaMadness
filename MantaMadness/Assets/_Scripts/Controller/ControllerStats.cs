@@ -11,11 +11,6 @@ public class ControllerStats
         this.data = data;
     }
 
-    public float GetGrip()
-    {
-        return controller.IsDrifting ? data.driftDrag : data.grip;
-    }
-
     //turn in -1/1 range
     public float GetSteering(float speedRatio, float turn, bool drifting = false, int driftDir = 0)
     {

@@ -76,6 +76,7 @@ public class ControllerData : ScriptableObject
     public float driftTurnSpeed;
     public float driftMoveSpeed;
     [Min(1)]public float steeringMult;
+    public float forwardDriftDrag;
     public float driftDrag;
     public float driftBoostTimer;
     public float driftDirectionalDecay;

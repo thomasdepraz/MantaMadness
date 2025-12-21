@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -70,7 +71,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public float CurrentDepth => currentWaterBlock is null ? 0 : currentWaterBlock.GetDepthAtPosition(transform.position, out _);
     // Legacy water block behavior
     public float MaxDepth => currentWaterBlock is null ? 0 : maxDivingDepth;
-    public bool IsDrifting => drifting;
+    public bool IsDrifting => drifting || forwardDrifting;
     public float DriftDirection => driftDir;
     public Vector2 AirControlDirection => airControl;
     public bool InAirRail => currentAirRail != null;
@@ -117,6 +118,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private float maxDepth;
     private int jumpCount;
     private bool drifting;
+    private bool forwardDrifting;
     private float driftDir;
     private bool isCoyote => currentCoyoteTime > 0;
     private float currentCoyoteTime;
@@ -455,14 +457,19 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     }
     private void SetDrift(bool drifting, bool boost = false)
     {
-        this.drifting = drifting;
-
-        if (drifting == false)
+        if(forwardDrifting == false)
         {
-            PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.DRIFT);
-            currentDriftTime = 0;
-            hasDriftBoost = false;
-        }
+            this.drifting = drifting;
+
+            if (drifting == false)
+            {
+                PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.DRIFT);
+                currentDriftTime = 0;
+                hasDriftBoost = false;
+                driftDir = 0;
+            }
+        }    
+
         int xDir = (int)inputs.airControl.action.ReadValue<Vector2>().x;
         updateDrift.Invoke(drifting, boost, xDir);
     }
@@ -485,17 +492,22 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         if (State == ControllerState.SURFING)
         {
-            if (CanDrift == false)//|| turn == 0 || )
-                return;
+            if(turn == 0)
+            {
+                forwardDrifting = true;
+                updateDrift?.Invoke(true, false, 0);
+            }
+            else if (Mathf.Abs(turn) > 0)
+            {
+                if (CanDrift == false)
+                    return;
 
-            SetDrift(true);
+                driftDir = turn > 0 ? 1 : -1;
+                Debug.Log(driftDir);
+
+                SetDrift(true);
+            }
         }
-
-        ////Backflip
-        //if (state == ControllerState.AIRRIDE)
-        //{
-        //    rb.linearVelocity = HorizontalVelocity;
-        //}
     }
 
     private void DriftReleased(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -508,6 +520,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             DriftBoost();
         }
 
+
+        forwardDrifting = false;
         SetDrift(false);
     }
 
@@ -702,11 +716,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             {
                 FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Drift, 0);
             }
-
-            if(IsDrifting == true)
-            {
-                driftDir = inputs.moveDirection.action.ReadValue<Vector2>().x;
-            }
         }
     }
 
@@ -783,14 +792,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             }
             return;
         }
-
-        //Charging a Jump
-        //if (chargesJump)
-        //{
-        //    jumpChargeTimer += Time.deltaTime;
-        //    jumpChargeTimer = Mathf.Clamp(jumpChargeTimer, 0, controllerData.jumpChargeTime);
-        //    print(jumpChargeTimer);
-        //}
 
         //DRIFT
         if (IsDrifting)
@@ -1064,7 +1065,27 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         camForward.Normalize();
         camRight.Normalize();
 
+        //Handle drift change -> if we are forward drifting and we start turning with enough speed
+        if(forwardDrifting && Mathf.Abs(turn) > 0 && CanDrift)
+        {
+            forwardDrifting = false;
+            driftDir = turn > 0 ? 1 : -1;
+            SetDrift(true);
+            //TODO Coco - here maybe you want to trigger a specific visual or gameplay rule.
+        }    
+
+        //Get input and project them in camera reference + project them on avatar plane
         inputDirection = inputs.moveDirection.action.ReadValue<Vector2>();
+
+        if(drifting)
+        {
+            float minSteer = driftDir == 1 ? 0 : -controllerData.steeringMult;
+            float maxSteer = driftDir == 1 ? controllerData.steeringMult : 0;
+            float remappedTurn = math.remap(-1, 1, minSteer, maxSteer, turn);
+
+            inputDirection = new Vector2(remappedTurn, inputDirection.y);
+        }
+
         direction = (camForward * inputDirection.y + camRight * inputDirection.x).normalized;
 
         Vector3 targetDir = Vector3.ProjectOnPlane(direction, hoverBehaviour.normalContainer.up);
@@ -1082,22 +1103,20 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             rb.AddTorque(torque, ForceMode.Acceleration);
         }
 
-        float speedRatio = GetSpeedRatio();
-        float steer = stats.GetSteering(speedRatio, turn, false);
-        float steeringVelocity = Vector3.Dot(transform.right, Velocity);
-        float desiredVelocityChange = -steeringVelocity * stats.GetGrip() * Time.fixedDeltaTime;
+        //final force application
+        rb.AddForce(targetDir.normalized * speed, ForceMode.Acceleration);
 
-        if(IsDrifting == true)
-        {
-            rb.AddForce(targetDir.normalized * controllerData.driftMoveSpeed, ForceMode.Acceleration);
-        }
-        else
-        {
-            rb.AddForce(targetDir.normalized * speed, ForceMode.Acceleration);
-        }
 
-        //Apply drag if braking
-        if (brake > 0.0f)
+        //Apply drag if braking / forward drifting / drifting
+        if (drifting)
+        {
+            rb.linearDamping = Mathf.Lerp(defaultDrag, controllerData.driftDrag, Time.deltaTime);
+        }
+        else if (forwardDrifting)
+        {
+            rb.linearDamping = Mathf.Lerp(defaultDrag, controllerData.forwardDriftDrag, Time.deltaTime);
+        }
+        else if (brake > 0.0f)
         {
             rb.linearDamping = Mathf.Lerp(defaultDrag, controllerData.brakeForce, brake);
         }
