@@ -37,6 +37,9 @@ public class MantaVisuals : MonoBehaviour
     public VisualEffect targetJumpParticles;
     public VisualEffect chargeJumpParticles;
     public VisualEffect chargeDriftParticles;
+    public ParticleSystem chargeDriftParticlesAdditionnal;
+    public VisualEffect railVisualEffect;
+    public ParticleSystem railParticleSystem;
 
     [Header("Visual")]
     public SkinnedMeshRenderer[] mantaAllVisuals;
@@ -44,6 +47,7 @@ public class MantaVisuals : MonoBehaviour
     public SkinnedMeshRenderer alienAntennaVisual;
     public SkinnedMeshRenderer doubleJumpGlassesVisual;
     public SkinnedMeshRenderer grindVisual;
+    public Material[] playerMat;
 
     [Header("After Image")]
     public SkinnedMeshRenderer mantaBodyVisual;
@@ -83,6 +87,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.exitRail += ResetGrindOnRail;
         mantaController.enterWaterfall += StartWaterfall;
         mantaController.exitWaterfall += ExitWaterfall;
+        mantaController.togglePlayerBlinkMat += ToggleBlink;
     }
 
     private void OnDisable()
@@ -105,6 +110,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.exitRail -= ResetGrindOnRail;
         mantaController.enterWaterfall -= StartWaterfall;
         mantaController.exitWaterfall -= ExitWaterfall;
+        mantaController.togglePlayerBlinkMat -= ToggleBlink;
     }
 
 
@@ -257,9 +263,35 @@ public class MantaVisuals : MonoBehaviour
     ExposedProperty surfBladePlayProperty = "State";
     ExposedProperty chargeJumpProperty = "State";
     ExposedProperty chargeDriftProperty = "State";
+    ExposedProperty railVisualEffectProperty = "State";
     private void UpdateParticles()
     {
-        if (mantaController.State == ControllerState.SURFING && mantaController.HorizontalVelocity.magnitude > mantaController.controllerData.maxSpeed / 4f)
+        if(mantaController.State == ControllerState.SURFING && mantaController.IsDrifting)
+        {
+            if(mantaController.DriftDirection == 1)
+            {
+                if (surfBladeEffect.GetInt(surfBladePlayProperty) != 4)
+                {
+                    surfBladeEffect.SetInt(surfBladePlayProperty, 4);
+                }
+            }
+            else  if(mantaController.DriftDirection == -1)
+            {
+                if (surfBladeEffect.GetInt(surfBladePlayProperty) != 3)
+                {
+                    surfBladeEffect.SetInt(surfBladePlayProperty, 3);
+                }
+            }
+            else
+            {
+                surfParticles.Stop();
+                if (surfBladeEffect.GetInt(surfBladePlayProperty) != 0)
+                {
+                    surfBladeEffect.SetInt(surfBladePlayProperty, 0);
+                }
+            }
+        }
+        else if (mantaController.State == ControllerState.SURFING && mantaController.HorizontalVelocity.magnitude > mantaController.controllerData.maxSpeed / 4f)
         {
             if ((!surfParticles.isPlaying))
                 surfParticles.Play();
@@ -281,14 +313,6 @@ public class MantaVisuals : MonoBehaviour
 
 
         }
-        else if (mantaController.State == ControllerState.RAIL)
-        {
-            surfParticles.Stop();
-            if (surfBladeEffect.GetInt(surfBladePlayProperty) != 5)
-            {
-                surfBladeEffect.SetInt(surfBladePlayProperty, 5);
-            }
-        }
         else if (mantaController.State == ControllerState.SURFING && mantaController.HorizontalVelocity.magnitude <= mantaController.controllerData.maxSpeed / 4f || mantaController.State != ControllerState.SURFING)
         {
             surfParticles.Stop();
@@ -297,6 +321,30 @@ public class MantaVisuals : MonoBehaviour
                 surfBladeEffect.SetInt(surfBladePlayProperty, 0);
             }
         }
+        
+        if (mantaController.State == ControllerState.RAIL)
+        {
+            if (railVisualEffect.GetInt(railVisualEffectProperty) != 1)
+            {
+                railVisualEffect.SetInt(railVisualEffectProperty, 1);
+            }
+            if(railParticleSystem.isPlaying == false)
+            {
+                railParticleSystem.Play();
+            }
+        }
+        else
+        {
+            if (railVisualEffect.GetInt(railVisualEffectProperty) != 0)
+            {
+                railVisualEffect.SetInt(railVisualEffectProperty, 0);
+            }
+            if (railParticleSystem.isPlaying == true)
+            {
+                railParticleSystem.Stop();
+            }
+        }
+
     }
 
     private void UpdateDrift(bool drifting, bool boost, int xDir)
@@ -311,10 +359,12 @@ public class MantaVisuals : MonoBehaviour
             {
                 chargeDriftParticles.SetInt(chargeDriftProperty, 1);
             }
+            chargeDriftParticlesAdditionnal.Play();
         }
         else
         {
             chargeDriftParticles.SetInt(chargeDriftProperty, 0);
+            chargeDriftParticlesAdditionnal.Stop();
         }
     }
     private void SplashParticles()
@@ -505,5 +555,24 @@ public class MantaVisuals : MonoBehaviour
     private void ExitWaterfall()
     {
         print("Exit waterfall");
+    }
+
+    private void ToggleBlink(bool toggleValue, float speed = 0f)
+    {
+        if (toggleValue)
+        {
+            foreach(Material mat in playerMat)
+            {
+                mat.SetFloat("_BlinkEnabled", 1f);
+                mat.SetFloat("_BlinkSpeed", speed);
+            }
+        }
+        else
+        {
+            foreach (Material mat in playerMat)
+            {
+                mat.SetFloat("_BlinkEnabled", 0f);
+            }
+        }
     }
 }

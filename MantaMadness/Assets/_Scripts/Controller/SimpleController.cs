@@ -150,6 +150,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public Action straf;
     public Action<float> afterImageEffect;
     public Action updateEquipmentVisual;
+    public Action<bool, float> togglePlayerBlinkMat;
 
     private void Awake()
     {
@@ -807,6 +808,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             {
                 hasDriftBoost = true;
                 SetDrift(true, true);
+                togglePlayerBlinkMat.Invoke(true, 25f);
             }
         }
 
@@ -1165,6 +1167,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         rb.AddForce(direction * force, ForceMode.VelocityChange);
         afterImageEffect.Invoke(controllerData.boostAfterImageEffectDuration);
         boost.Invoke();
+        togglePlayerBlinkMat.Invoke(false,0f);
         triggerAnim.Invoke("Boost");
     }
 
