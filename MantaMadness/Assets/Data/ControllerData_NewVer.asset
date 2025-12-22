@@ -126,12 +126,14 @@ MonoBehaviour:
   maxAirTime: 3
   maxAirTimeGravityFactor: 2
   limitFallingSpeedFactor: 2
-  minSpeedToDrift: 0
+  minSpeedToDrift: 20
   driftTurnSpeed: 5
   driftMoveSpeed: 20
-  steeringMult: 1
+  steeringRemapMax: 1
+  steeringRemapMin: 0.5
+  lateralSpeed: 30
   forwardDriftDrag: 150
-  driftDrag: 25
+  driftDrag: 1
   driftBoostTimer: 2
   driftDirectionalDecay: 5
   driftBrakeDecay: 10

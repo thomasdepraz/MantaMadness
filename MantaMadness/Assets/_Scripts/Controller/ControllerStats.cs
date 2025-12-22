@@ -22,8 +22,8 @@ public class ControllerStats
         }
 
         //remap
-        float minSteer = driftDir == 1 ? 0 : data.steeringMult;
-        float maxSteer = driftDir == 1 ? data.steeringMult : 0;
+        float minSteer = driftDir == 1 ? 0 : data.steeringRemapMax;
+        float maxSteer = driftDir == 1 ? data.steeringRemapMax : 0;
         float remappedTurn = math.remap(-1, 1, minSteer, maxSteer, turn);
 
         return driftDir * remappedTurn * data.driftTurnSpeed;

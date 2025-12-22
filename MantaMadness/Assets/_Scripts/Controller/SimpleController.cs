@@ -1081,11 +1081,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         if(drifting)
         {
-            float minSteer = driftDir == 1 ? 0 : -controllerData.steeringMult;
-            float maxSteer = driftDir == 1 ? controllerData.steeringMult : 0;
+            //0 peut etre mis dans la data pour modifier la valeur de l'input Min / Max dependament de la dir
+            float minSteer = driftDir == 1 ? controllerData.steeringRemapMin : -controllerData.steeringRemapMax;
+            float maxSteer = driftDir == 1 ? controllerData.steeringRemapMax : -controllerData.steeringRemapMin;
             float remappedTurn = math.remap(-1, 1, minSteer, maxSteer, turn);
 
-            inputDirection = new Vector2(remappedTurn, inputDirection.y);
+            inputDirection = new Vector2(remappedTurn, 0);
         }
 
         direction = (camForward * inputDirection.y + camRight * inputDirection.x).normalized;
@@ -1101,12 +1102,16 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             deltaRot.ToAngleAxis(out float angle, out Vector3 axis);
             if (angle > 180f) angle -= 360f;
 
-            Vector3 torque = axis * angle * Mathf.Deg2Rad * controllerData.rotationTorque;
+            Vector3 torque = axis * angle * Mathf.Deg2Rad * (IsDrifting? controllerData.driftTurnSpeed : controllerData.rotationTorque);
             rb.AddTorque(torque, ForceMode.Acceleration);
         }
 
         //final force application
         rb.AddForce(targetDir.normalized * speed, ForceMode.Acceleration);
+        if (drifting)
+        {
+            rb.AddForce(hoverBehaviour.normalContainer.right * driftDir * controllerData.lateralSpeed, ForceMode.Acceleration);
+        }
 
 
         //Apply drag if braking / forward drifting / drifting
