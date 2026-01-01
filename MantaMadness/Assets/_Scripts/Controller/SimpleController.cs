@@ -83,6 +83,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private bool CanDash => (State == ControllerState.SURFING || State == ControllerState.FALLING) && 
                             currentDashTime > controllerData.dashTimer && 
                             (Time.time - lastDashTimestamp) > controllerData.dashCooldown;
+    private bool hasResetCam => (State == ControllerState.SURFING && IsDrifting);
+
     public int ConsecutiveDashCount => consecutiveDashCount;
     private Transform NormalContainer => hoverBehaviour.normalContainer;
 
@@ -480,9 +482,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (IsLocked)
             return;
 
-        if (State == ControllerState.SURFING)
+        if (State == ControllerState.SURFING && IsDrifting)
         {
             PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DRIFT);
+
         }
     }
 
@@ -518,9 +521,14 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         if (IsDrifting && State == ControllerState.SURFING)
         {
-            DriftBoost();
-        }
+            DriftBoost();   
 
+        }
+        //if (State == ControllerState.SURFING)
+        //{
+        //    //Visual Reset
+        //    CameraTargetController.instance.ResetCamPos(context);
+        //}
 
         forwardDrifting = false;
         SetDrift(false);
@@ -606,6 +614,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     {
         State = ControllerState.STOMP;
         rb.linearVelocity = Vector3.zero;
+        rb.AddForce(hoverBehaviour.normalContainer.up * controllerData.stompUpForce, ForceMode.VelocityChange);
         triggerAnim.Invoke("StompCharge");
         fallTime = 0f;
         stompCancel = true;
@@ -614,6 +623,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         triggerAnim.Invoke("Stomp");
         afterImageEffect.Invoke(controllerData.stompAfterImageEffectTime);
         //play particle
+        rb.linearVelocity = Vector3.zero;
         rb.AddForce(-hoverBehaviour.normalContainer.up * controllerData.stompForce, ForceMode.VelocityChange);
         
     }
@@ -645,6 +655,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         yield return new WaitForSeconds(controllerData.boostCooldown);
         boostJumpRoutine = null;
     }
+
+ 
 
     private void Update()
     {
@@ -718,6 +730,16 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Drift, 0);
             }
         }
+
+        if (hasResetCam == true)
+        {
+            CameraTargetController.instance.ResetCamPos(true);
+        }
+        else if (hasResetCam == false)
+        {
+            CameraTargetController.instance.ResetCamPos(false);
+        }
+
     }
 
     bool hasHitWater = false;
@@ -727,6 +749,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     //float xRotation = 0f;
     private void FixedUpdate()
     {
+        print(hasResetCam);
+
         hasHitWater = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit waterInfo, controllerData.hoverRaycastLength, waterRaycastLayer.value);
         hasHitWalls = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit defaultInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
 

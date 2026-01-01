@@ -194051,7 +194051,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1864325497
 Transform:
   m_ObjectHideFlags: 0
@@ -222350,6 +222350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14b73bef19e331a43abf65f26e1d9dfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  securityLookAt: {fileID: 0}
 --- !u!114 &919132147577078044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -230229,6 +230230,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1630504113041504160, guid: dca7f13816397624b95432a30aded4ae, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1819065601580436475, guid: dca7f13816397624b95432a30aded4ae, type: 3}
       propertyPath: Target.TrackingTarget
       value: 

@@ -115,6 +115,7 @@ public class ControllerData : ScriptableObject
 
     [Header("Stomp")]
     public float stompForce;
+    public float stompUpForce;
     public float stompChargeTime;
     public float stompAfterImageEffectTime;
     public float stompAccelForce;

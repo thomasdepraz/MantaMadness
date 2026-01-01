@@ -117,22 +117,44 @@ public class GameInterface : MonoBehaviour, IScreen
         {
             blackBarEffectRoutine = StartCoroutine(DisableBlackBarEffect(duration));
         }
+        else if(enable && blackBarEffectRoutine != null)
+        {
+            ResetBlackBarEffect();
+            blackBarEffectRoutine = null;
+            blackBarEffectRoutine = StartCoroutine(EnableBlackBarEffect(duration));
+        }
+        else if (enable == false && blackBarEffectRoutine != null)
+        {
+            ResetBlackBarEffect();
+            blackBarEffectRoutine = null;
+            blackBarEffectRoutine = StartCoroutine(DisableBlackBarEffect(duration));
+        }
     }
     private Coroutine blackBarEffectRoutine;
+    private Tween topEffectTween;
+    private Tween bottomEffectTween;
     private IEnumerator EnableBlackBarEffect(float duration)
     {
-        topBar.transform.DOMove(topBarStartPosition.transform.position - barOffset, duration / 2f).SetEase(Ease.OutQuad);
-        bottomBar.transform.DOMove(bottomBarStartPosition.position + barOffset, duration / 2f).SetEase(Ease.OutQuad);
+        topEffectTween = topBar.transform.DOMove(topBarStartPosition.transform.position - barOffset, duration / 2f).SetEase(Ease.OutQuad);
+        bottomEffectTween = bottomBar.transform.DOMove(bottomBarStartPosition.position + barOffset, duration / 2f).SetEase(Ease.OutQuad);
         yield return new WaitForSeconds(duration);
         blackBarEffectRoutine = null;
     }
 
     private IEnumerator DisableBlackBarEffect(float duration)
     {
-        topBar.transform.DOMove(topBarStartPosition.transform.position, duration / 2f).SetEase(Ease.OutQuad);
-        bottomBar.transform.DOMove(bottomBarStartPosition.position, duration / 2f).SetEase(Ease.OutQuad);
+        topEffectTween = topBar.transform.DOMove(topBarStartPosition.transform.position, duration / 2f).SetEase(Ease.OutQuad);
+        bottomEffectTween = bottomBar.transform.DOMove(bottomBarStartPosition.position, duration / 2f).SetEase(Ease.OutQuad);
         yield return new WaitForSeconds(duration);
         blackBarEffectRoutine = null;
+    }
+
+    private void ResetBlackBarEffect()
+    {
+        topEffectTween.Kill();
+        bottomEffectTween.Kill();
+        topBar.transform.position = topBarStartPosition.transform.position;
+        bottomBar.transform.position = bottomBarStartPosition.transform.position;
     }
     public void ToggleInterface(bool toggle)
     {

@@ -15,7 +15,7 @@ public class InputManager : MonoBehaviour
             Instance = this;
         }
     }
-
+    [Header("Controller Actions")]
     public InputActionReference moveDirection;
     public InputActionReference thrust;
     public InputActionReference turn;
@@ -33,12 +33,28 @@ public class InputManager : MonoBehaviour
 
     private InputActionMap playerActionsMap;
 
+    [Header("UI / Menu Actions")]
+    private InputActionMap uiActionsMap;
+
+    public InputActionReference uiMoveUp;
+    public InputActionReference uiMoveDown;
+    public InputActionReference uiMoveLeft;
+    public InputActionReference uiMoveRight;
+    public InputActionReference uiSubmit;
+    public InputActionReference uiCancel;
+
     private void OnEnable()
     {
         playerActionsMap = InputSystem.actions.FindActionMap("Player");
         if (playerActionsMap != null)
         {
             playerActionsMap.Enable();
+        }
+
+        uiActionsMap = InputSystem.actions.FindActionMap("UI");
+        if (uiActionsMap != null)
+        {
+            uiActionsMap.Enable();
         }
     }
 
@@ -47,6 +63,11 @@ public class InputManager : MonoBehaviour
         if (playerActionsMap != null)
         {
             playerActionsMap.Disable();
+        }
+
+        if (uiActionsMap != null)
+        {
+            uiActionsMap.Disable();
         }
     }
 }

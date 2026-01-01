@@ -15,6 +15,10 @@ public class DataPersistenceManager : MonoBehaviour
     public static DataPersistenceManager Instance { get; private set; }
     private FileDataHandler dataHandler;
 
+    public bool HasGameData()
+    {
+        return dataHandler.Load() != null;
+    }
 
     private void Awake()
     {
@@ -38,13 +42,17 @@ public class DataPersistenceManager : MonoBehaviour
         SaveGame();
     }
 
-    public void NewGame()
+    public void NewGame(bool forceNewGame = false)
     {
-        //IF SOME GAME DATA ALLREADY
-        //TODO - Ask if player wants to delete it
+        if (HasGameData() && !forceNewGame)
+        {
+            Debug.Log("Save exists, confirmation required.");
+            return;
+        }
 
-        //If no game data already
+        Debug.Log("Creating new game data.");
         this.gameData = new GameData();
+        SaveGame();
     }
 
     public void LoadGame()
@@ -85,5 +93,11 @@ public class DataPersistenceManager : MonoBehaviour
         IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.InstanceID).OfType<IDataPersistence>();
 
         return new List<IDataPersistence>(dataPersistenceObjects);
+    }
+
+    public void DeleteSave()
+    {
+        dataHandler.Delete();
+        gameData = null;
     }
 }

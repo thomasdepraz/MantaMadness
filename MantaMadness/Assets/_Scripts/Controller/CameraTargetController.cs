@@ -86,7 +86,7 @@ public class CameraTargetController : MonoBehaviour
             player = Game.Instance.player;
         playerActionsMap = InputSystem.actions.FindActionMap("Player");
         playerActionsMap.actionTriggered += OnActionPerformed;
-        inputs.resetCamera.action.performed += ResetCamPos;
+        //inputs.resetCamera.action.performed += ResetCamPos;
     }
 
     private void OnEnable()
@@ -97,8 +97,8 @@ public class CameraTargetController : MonoBehaviour
         if(playerActionsMap != null)
         playerActionsMap.actionTriggered += OnActionPerformed;
 
-        if(inputs != null)
-        inputs.resetCamera.action.performed += ResetCamPos;
+        //if(inputs != null)
+        //inputs.resetCamera.action.performed += ResetCamPos;
     }
 
     private void OnDisable()
@@ -107,7 +107,7 @@ public class CameraTargetController : MonoBehaviour
             lookAction.action.Disable();
 
         playerActionsMap.actionTriggered -= OnActionPerformed;
-        inputs.resetCamera.action.performed -= ResetCamPos;
+        //inputs.resetCamera.action.performed -= ResetCamPos;
         StopAllCoroutines();
         ResetCamRoutine = null;
     }
@@ -200,15 +200,14 @@ public class CameraTargetController : MonoBehaviour
         }
     }
 
-    private void ResetCamPos(InputAction.CallbackContext context)
+    public void ResetCamPos(bool toggleValue)
     {
-        if(toggleFixedCam == true && ResetCamRoutine == null)
+        if(toggleFixedCam != toggleValue)
         {
-            ResetCamRoutine = StartCoroutine(ResetCamCoroutine(false));
-        }
-        else if(toggleFixedCam == false && ResetCamRoutine == null)
-        {
-            ResetCamRoutine = StartCoroutine(ResetCamCoroutine(true));
+            if (ResetCamRoutine == null)
+            {
+                ResetCamRoutine = StartCoroutine(ResetCamCoroutine(toggleValue));
+            }
         }
     }
 

@@ -96,4 +96,11 @@ public class FileDataHandler
         }
         return modifiedData;
     }
+
+    public void Delete()
+    {
+        string fullPath = Path.Combine(dataDirPath, dataFileName);
+        if (File.Exists(fullPath))
+            File.Delete(fullPath);
+    }
 }
