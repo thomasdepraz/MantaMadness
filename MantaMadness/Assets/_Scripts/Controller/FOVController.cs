@@ -4,41 +4,80 @@ using UnityEngine;
 public class FOVController : MonoBehaviour
 {
     private CinemachineBrain brain;
+    private CinemachineCamera current;
+
     [Header("Parameters")]
-    public float maxAvatarSpeed;
-    public float maxFOV;
+    public float maxAvatarSpeed = 10f;
+    public float maxFOV = 80f;
     public AnimationCurve FOVProgression;
+
     private float defaultFOV;
-    CinemachineCamera current;
-    float currentFOV;
+    private float currentFOV;
 
     private SimpleController controller;
+    private bool initialized = false;
+
     private void Awake()
     {
         controller = GetComponent<SimpleController>();
+        if (controller == null)
+        {
+            Debug.LogError("SimpleController manquant sur le GameObject");
+        }
     }
 
     void Start()
     {
-        brain = Camera.main.gameObject.GetComponent<CinemachineBrain>();
-        current = brain.ActiveVirtualCamera as CinemachineCamera;
-        defaultFOV = current.Lens.FieldOfView;
-        currentFOV = defaultFOV;
+        StartCoroutine(InitializeCinemachine());
     }
 
-    
+    System.Collections.IEnumerator InitializeCinemachine()
+    {
+        while (Camera.main == null)
+            yield return null;
+
+        brain = Camera.main.GetComponent<CinemachineBrain>();
+        if (brain == null)
+        {
+            Debug.LogError("CinemachineBrain introuvable sur la MainCamera");
+            yield break;
+        }
+
+        while (brain.ActiveVirtualCamera == null)
+            yield return null;
+
+        current = brain.ActiveVirtualCamera as CinemachineCamera;
+        if (current == null)
+        {
+            Debug.LogError("La caméra active n'est pas une CinemachineCamera");
+            yield break;
+        }
+
+        defaultFOV = current.Lens.FieldOfView;
+        currentFOV = defaultFOV;
+        initialized = true;
+    }
+
     void Update()
     {
+        if (!initialized || controller == null)
+            return;
+
         Vector3 horizontalVel = controller.Velocity;
         horizontalVel.y = 0;
 
+        float speed01 = horizontalVel.magnitude / maxAvatarSpeed;
+
         float targetFOV = Mathf.Lerp(
-           defaultFOV,
-           maxFOV,
-           Mathf.Clamp01(FOVProgression.Evaluate(horizontalVel.magnitude / maxAvatarSpeed)));
+            defaultFOV,
+            maxFOV,
+            Mathf.Clamp01(FOVProgression.Evaluate(speed01)));
 
         currentFOV = Mathf.Lerp(currentFOV, targetFOV, Time.deltaTime);
 
-        (brain.ActiveVirtualCamera as CinemachineCamera).Lens.FieldOfView = currentFOV;
+        if (current != null)
+        {
+            current.Lens.FieldOfView = currentFOV;
+        }
     }
 }

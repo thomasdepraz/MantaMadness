@@ -153,6 +153,24 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DriftR"",
+                    ""type"": ""Button"",
+                    ""id"": ""f625e19e-286a-4266-8746-8ef687764bc2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DrifL"",
+                    ""type"": ""Button"",
+                    ""id"": ""232faa54-6060-455e-85b2-227fadb0ed33"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -312,6 +330,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""f4c3d1c1-d348-4092-a295-c7dd76ebf05d"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Drift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""d8bf24bf-3f2f-4160-a97c-38ec1eb520ba"",
                     ""path"": ""<XRController>/trigger"",
                     ""interactions"": """",
@@ -399,17 +428,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""dad72684-6e6f-4d8d-a02c-0c66809ffcee"",
-                    ""path"": ""<Gamepad>/leftStick/x"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Turn"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
                     ""name"": ""1D Axis"",
                     ""id"": ""533c3c8a-ce09-4a12-b5ca-335cc84b2713"",
                     ""path"": ""1DAxis"",
@@ -438,6 +456,39 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
+                    ""action"": ""Turn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""c548aeba-85e7-486d-8f7f-324577776042"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Turn"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""f316e8fc-dc0d-4ac2-88b4-fb17f1385bc9"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Turn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""3ab615f8-f479-4979-87c6-82d2e99563b0"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""Turn"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -604,6 +655,50 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8ea65446-9f92-4fce-8cc2-5c8209ce91ff"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""DriftR"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bdd9e763-595c-4234-ba85-49bcde3312e2"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""DriftR"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e82221e1-d046-4113-be7d-47cde68d0091"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""DrifL"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1a40dca7-1c52-483d-9e00-cdafedd0a577"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""DrifL"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1351,6 +1446,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_ResetCam = m_Player.FindAction("ResetCam", throwIfNotFound: true);
         m_Player_Boost = m_Player.FindAction("Boost", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_DriftR = m_Player.FindAction("DriftR", throwIfNotFound: true);
+        m_Player_DrifL = m_Player.FindAction("DrifL", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1448,6 +1545,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ResetCam;
     private readonly InputAction m_Player_Boost;
     private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_DriftR;
+    private readonly InputAction m_Player_DrifL;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1466,6 +1565,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @ResetCam => m_Wrapper.m_Player_ResetCam;
         public InputAction @Boost => m_Wrapper.m_Player_Boost;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        public InputAction @DriftR => m_Wrapper.m_Player_DriftR;
+        public InputAction @DrifL => m_Wrapper.m_Player_DrifL;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1517,6 +1618,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @DriftR.started += instance.OnDriftR;
+            @DriftR.performed += instance.OnDriftR;
+            @DriftR.canceled += instance.OnDriftR;
+            @DrifL.started += instance.OnDrifL;
+            @DrifL.performed += instance.OnDrifL;
+            @DrifL.canceled += instance.OnDrifL;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1563,6 +1670,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @DriftR.started -= instance.OnDriftR;
+            @DriftR.performed -= instance.OnDriftR;
+            @DriftR.canceled -= instance.OnDriftR;
+            @DrifL.started -= instance.OnDrifL;
+            @DrifL.performed -= instance.OnDrifL;
+            @DrifL.canceled -= instance.OnDrifL;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1791,6 +1904,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnResetCam(InputAction.CallbackContext context);
         void OnBoost(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnDriftR(InputAction.CallbackContext context);
+        void OnDrifL(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

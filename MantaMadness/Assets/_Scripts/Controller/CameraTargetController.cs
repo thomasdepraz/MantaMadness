@@ -157,7 +157,18 @@ public class CameraTargetController : MonoBehaviour
         float mouseY = lookInput.y * sensitivity * Time.deltaTime;
 
         float targetYaw = yaw + mouseX;
-        float targetPitch = pitch - mouseY;
+        float targetPitch = 0f;
+
+        //Invert or not
+        if(PlayerPrefs.GetInt("invertAxis",0) == 0)
+        {
+            targetPitch = pitch - mouseY;
+        }
+        else
+        {
+            targetPitch = pitch + mouseY;
+        }
+
 
         targetPitch = Mathf.Clamp(targetPitch, minPitch, maxPitch);
 

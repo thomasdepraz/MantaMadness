@@ -50,19 +50,29 @@ public class MainMenu : MonoBehaviour
     private MainMenuState previousState;
 
     [SerializeField]private GameObject[] mainMenuButtons;
+    [SerializeField] private GameObject[] mainVisuals;
     private int _defaultStateIndex;
     public int defaultStateIndex
     {
         get => _defaultStateIndex;
         set
         {
-            if(mainMenuButtons.Length <= 0)
+            //Si ce bool n'est pas true, cela signifie que le joueur na même pas commencer l'intro du jeu DONC pas de save
+            if (DataPersistenceManager.Instance.gameData.introCinematic == false)
             {
-                _defaultStateIndex = 0;
-                return;
+                // IF there are no save data, player can't press CONTINUE button
+                _defaultStateIndex = Mathf.Clamp(value, 1, mainMenuButtons.Length - 1);
             }
+            else
+            {
+                if (mainMenuButtons.Length <= 0)
+                {
+                    _defaultStateIndex = 0;
+                    return;
+                }
 
-            _defaultStateIndex = Mathf.Clamp(value, 0, mainMenuButtons.Length - 1);
+                _defaultStateIndex = Mathf.Clamp(value, 0, mainMenuButtons.Length - 1);
+            }
         }
     }
 
@@ -92,7 +102,16 @@ public class MainMenu : MonoBehaviour
         inputs.uiMoveRight.action.performed += OnMoveRight;
         inputs.uiCancel.action.performed += Cancel;
 
-        UpdateMainMenuButtons();
+        if (DataPersistenceManager.Instance.gameData.introCinematic == false)
+        {
+            defaultStateIndex = 1;
+        }
+        else
+        {
+            defaultStateIndex = 0;
+        }
+
+            UpdateMainMenuButtons();
     }
 
     private void OnDisable()
@@ -110,12 +129,12 @@ public class MainMenu : MonoBehaviour
 
     public void UpdateState()
     {
-        EnterState(state);
-
         if(previousState != MainMenuState.NULL)
         {
             ExitState(previousState);
         }
+
+        EnterState(state);
     }
 
     private void EnterState(MainMenuState state)
@@ -129,6 +148,10 @@ public class MainMenu : MonoBehaviour
             case MainMenuState.CONFIRM_NEW_GAME:
                 confirmNewGameMenu.Open();
                 break;
+
+            case MainMenuState.DEFAULT:
+                ToggleMainVisuals(true);
+                break;
         }
     }
 
@@ -136,6 +159,9 @@ public class MainMenu : MonoBehaviour
     {
         if (state == MainMenuState.CONFIRM_NEW_GAME)
             confirmNewGameMenu.Close();
+
+        if(state == MainMenuState.DEFAULT)
+            ToggleMainVisuals(false);
     }
 
     private void IncreaseCurrentIndex(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -172,6 +198,12 @@ public class MainMenu : MonoBehaviour
                 if(mainMenuButtons[i] !=  null)
                     mainMenuButtons[i].GetComponent<MainMenuButton>().ResetButton();
             }
+        }
+
+        if (DataPersistenceManager.Instance.gameData.introCinematic == false)
+        {
+            Debug.Log("HOW?");
+            mainMenuButtons[0].GetComponent<MainMenuButtonContinue>().setMatDisabled();
         }
     }
 
@@ -270,7 +302,7 @@ public class MainMenu : MonoBehaviour
     private void StartNewGame()
     {
         Debug.Log("StartNewGame called");
-        if (DataPersistenceManager.Instance.HasGameData())
+        if (DataPersistenceManager.Instance.gameData.introCinematic == true)
         {
             State = MainMenuState.CONFIRM_NEW_GAME;
             return;
@@ -281,4 +313,11 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("Main");
     }
 
+    private void ToggleMainVisuals(bool toggleValue)
+    {
+        foreach(GameObject visual in mainVisuals)
+        {
+            visual.SetActive(toggleValue);
+        }
+    }
 }

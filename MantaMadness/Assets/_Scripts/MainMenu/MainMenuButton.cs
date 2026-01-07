@@ -14,16 +14,6 @@ public class MainMenuButton : MonoBehaviour
     [SerializeField] private float matSpeed = 12.5f;
     [SerializeField] private float matFrequency = 2.5f;
 
-
-
-    private void Start()
-    {
-        //foreach (GameObject sub in subVisuals)
-        //{
-        //    sub.SetActive(false);
-        //}
-    }
-
     public void EnableButton()
     {
         //Modify visual mat settings

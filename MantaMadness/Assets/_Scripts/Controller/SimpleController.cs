@@ -181,6 +181,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         //Components Setup
         hoverBehaviour.Initialize(controllerData, rb);
         styleBehaviour.Initialize(controllerData);
+        updateEquipmentVisual.Invoke();
     }
 
     private void OnDisable()
@@ -1091,14 +1092,32 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         camForward.Normalize();
         camRight.Normalize();
 
+        float right = inputs.driftR.action.ReadValue<float>();
+        float left = inputs.driftL.action.ReadValue<float>();
+
+        turn = 0f;
+
+        bool rightPressed = right > 0.1f;
+        bool leftPressed = left > 0.1f;
+
+        bool bothPressed = rightPressed && leftPressed;
+        bool onlyOnePressed = rightPressed ^ leftPressed;
+
         //Handle drift change -> if we are forward drifting and we start turning with enough speed
-        if(forwardDrifting && Mathf.Abs(turn) > 0 && CanDrift)
+        if(forwardDrifting && onlyOnePressed && CanDrift)
         {
             forwardDrifting = false;
-            driftDir = turn > 0 ? 1 : -1;
+            driftDir = rightPressed ? 1 : -1;
             SetDrift(true);
             //TODO Coco - here maybe you want to trigger a specific visual or gameplay rule.
-        }    
+        }
+        else if(drifting && bothPressed && CanDrift)
+        {
+            drifting = false;
+            forwardDrifting = true;
+            driftDir = 0;
+            SetDrift(true);
+        }
 
         //Get input and project them in camera reference + project them on avatar plane
         inputDirection = inputs.moveDirection.action.ReadValue<Vector2>();

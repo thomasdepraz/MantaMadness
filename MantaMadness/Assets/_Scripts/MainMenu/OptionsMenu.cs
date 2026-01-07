@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.Audio;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 
 public class OptionsMenu : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class OptionsMenu : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TMP_Dropdown resolutionDropdown;
     [SerializeField] private Toggle fullscreenToggle;
+    [SerializeField] private Toggle invertCamToggle;
 
     [SerializeField] private Slider masterVolumeSlider;
     [SerializeField] private Slider musicVolumeSlider;
@@ -49,6 +51,7 @@ public class OptionsMenu : MonoBehaviour
     {
         InitResolutions();
         InitScreenMode();
+        InitInvertAxis();
         //LoadAudioSettings();
     }
 
@@ -57,8 +60,6 @@ public class OptionsMenu : MonoBehaviour
     {
         ToggleVisuals(false);
     }
-
-    #region Resolution
 
     private bool isInitializing;
 
@@ -124,11 +125,6 @@ public class OptionsMenu : MonoBehaviour
         PlayerPrefs.SetInt("resolutionIndex", index);
     }
 
-
-    #endregion
-
-    #region ScreenMode
-
     private void InitScreenMode()
     {
         bool fullscreen = PlayerPrefs.GetInt("fullscreen", 1) == 1;
@@ -147,50 +143,27 @@ public class OptionsMenu : MonoBehaviour
         PlayerPrefs.SetInt("fullscreen", fullscreen ? 1 : 0);
     }
 
+    public void InitInvertAxis()
+    {
+        bool invert = PlayerPrefs.GetInt("invertAxis", 0) == 1;
+
+        invertCamToggle.isOn = invert;
+
+        invertCamToggle.onValueChanged.RemoveAllListeners();
+        invertCamToggle.onValueChanged.AddListener(SetInvertAxis);
+    }
+
+    public void SetInvertAxis(bool invert)
+    {
+        PlayerPrefs.SetInt("invertAxis", invert ? 1 : 0);
+    }
+
     public void SetFullscreen(bool isFullscreen)
     {
         Screen.fullScreen = isFullscreen;
         PlayerPrefs.SetInt("fullscreen", isFullscreen ? 1 : 0);
     }
 
-    #endregion
-
-    //#region Audio
-
-    //private void LoadAudioSettings()
-    //{
-    //    float master = PlayerPrefs.GetFloat("volume_master", 1f);
-    //    float music = PlayerPrefs.GetFloat("volume_music", 1f);
-    //    float sfx = PlayerPrefs.GetFloat("volume_sfx", 1f);
-
-    //    masterVolumeSlider.value = master;
-    //    musicVolumeSlider.value = music;
-    //    sfxVolumeSlider.value = sfx;
-
-    //    SetMasterVolume(master);
-    //    SetMusicVolume(music);
-    //    SetSFXVolume(sfx);
-    //}
-
-    //public void SetMasterVolume(float value)
-    //{
-    //    audioMixer.SetFloat(MASTER_VOL, Mathf.Log10(Mathf.Clamp(value, 0.0001f, 1f)) * 20);
-    //    PlayerPrefs.SetFloat("volume_master", value);
-    //}
-
-    //public void SetMusicVolume(float value)
-    //{
-    //    audioMixer.SetFloat(MUSIC_VOL, Mathf.Log10(Mathf.Clamp(value, 0.0001f, 1f)) * 20);
-    //    PlayerPrefs.SetFloat("volume_music", value);
-    //}
-
-    //public void SetSFXVolume(float value)
-    //{
-    //    audioMixer.SetFloat(SFX_VOL, Mathf.Log10(Mathf.Clamp(value, 0.0001f, 1f)) * 20);
-    //    PlayerPrefs.SetFloat("volume_sfx", value);
-    //}
-
-    //#endregion
     public void Enable()
     {
         ToggleVisuals(true);

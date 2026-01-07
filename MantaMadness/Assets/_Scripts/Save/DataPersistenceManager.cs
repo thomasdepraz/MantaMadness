@@ -27,14 +27,15 @@ public class DataPersistenceManager : MonoBehaviour
             Debug.LogError("More than one Data persistence in the scene.");
         }
         Instance = this;
-    }
-
-    private void Start()
-    {
         this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
         //Debug.Log(Application.persistentDataPath);
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         LoadGame();
+    }
+
+    private void Start()
+    {
+
     }
 
     private void OnApplicationQuit()

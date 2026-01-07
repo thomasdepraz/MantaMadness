@@ -19,26 +19,43 @@ public class GameInterface : MonoBehaviour, IScreen
     [Header("Area Name Parameters")]
     [SerializeField] private RectTransform startPosition;
     [SerializeField] private RectTransform endPosition;
+    [SerializeField] private RectTransform textRect;
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private TextEffect textEffects;
 
     [Header("Black Bar Effect Parameters")]
-    [SerializeField] private GameObject topBar;
-    [SerializeField] private GameObject bottomBar;
+    [SerializeField] private RectTransform topBar;
+    [SerializeField] private RectTransform bottomBar;
     [SerializeField] private RectTransform topBarStartPosition;
     [SerializeField] private RectTransform bottomBarStartPosition;
-    [SerializeField] private Vector3 barOffset;
+
+    private Vector2 GetBarOffset()
+    {
+        float offsetY = Screen.height * 0.1f;
+        return new Vector2(0, offsetY);
+    }
+    private Vector2 GetScreenRelativePosition(float xPercent, float yPercent)
+    {
+        return new Vector2(
+            (xPercent - 0.5f) * Screen.width,
+            (yPercent - 0.5f) * Screen.height
+        );
+    }
 
 
     public void Start()
     {
         UIManager.Instance.gameInterface = this;
         CameraManager.Instance.AddCameraToStack(uiCamera);
+
         CoinManager.Instance.coinPickedUp += UpdateCoinCount;
         CoinManager.Instance.collectiblePickedUp += UpdateCollectibleCount;
         coinText.text = CoinManager.Instance.PickupCoinCount.ToString();
+
+        textRect = text.GetComponent<RectTransform>();
         textEffects.StartManualEffects();
         text.enabled = false;
+
         if(sunOverlay.IsActive() == true)
         {
             sunOverlay.enabled = false;
@@ -97,14 +114,17 @@ public class GameInterface : MonoBehaviour, IScreen
             text.enabled = true;
         }
         text.DOKill();
+
         text.text = name;
         textEffects.StartManualEffects();
+
         text.transform.localScale = Vector3.one;
-        text.transform.position = startPosition.position;
-        text.transform.DOMove(endPosition.position, 1.5f).SetEase(Ease.OutQuad);
+        textRect.anchoredPosition = startPosition.anchoredPosition;
+
+        textRect.DOAnchorPos(GetScreenRelativePosition(0.5f,0.85f), 1.5f).SetEase(Ease.OutQuad);
 
         yield return new WaitForSeconds(4f);
-        text.transform.DOMove(startPosition.position, 1.5f).SetEase(Ease.InQuad);
+        textRect.DOAnchorPos(GetScreenRelativePosition(0.5f, 1.2f), 1.5f).SetEase(Ease.InQuad);
     }
 
     public void ToggleBlackBarEffect(bool enable, float duration)
@@ -135,26 +155,28 @@ public class GameInterface : MonoBehaviour, IScreen
     private Tween bottomEffectTween;
     private IEnumerator EnableBlackBarEffect(float duration)
     {
-        topEffectTween = topBar.transform.DOMove(topBarStartPosition.transform.position - barOffset, duration / 2f).SetEase(Ease.OutQuad);
-        bottomEffectTween = bottomBar.transform.DOMove(bottomBarStartPosition.position + barOffset, duration / 2f).SetEase(Ease.OutQuad);
+        Vector2 offset = GetBarOffset();
+
+        topEffectTween = topBar.DOAnchorPos(topBarStartPosition.anchoredPosition - offset, duration / 2f).SetEase(Ease.OutQuad);
+        bottomEffectTween = bottomBar.DOAnchorPos(bottomBarStartPosition.anchoredPosition + offset, duration / 2f).SetEase(Ease.OutQuad);
         yield return new WaitForSeconds(duration);
         blackBarEffectRoutine = null;
     }
 
     private IEnumerator DisableBlackBarEffect(float duration)
     {
-        topEffectTween = topBar.transform.DOMove(topBarStartPosition.transform.position, duration / 2f).SetEase(Ease.OutQuad);
-        bottomEffectTween = bottomBar.transform.DOMove(bottomBarStartPosition.position, duration / 2f).SetEase(Ease.OutQuad);
+        topEffectTween = topBar.DOAnchorPos(topBarStartPosition.anchoredPosition, duration / 2f).SetEase(Ease.OutQuad);
+        bottomEffectTween = bottomBar.DOAnchorPos(bottomBarStartPosition.anchoredPosition, duration / 2f).SetEase(Ease.OutQuad);
         yield return new WaitForSeconds(duration);
         blackBarEffectRoutine = null;
     }
 
     private void ResetBlackBarEffect()
     {
-        topEffectTween.Kill();
-        bottomEffectTween.Kill();
-        topBar.transform.position = topBarStartPosition.transform.position;
-        bottomBar.transform.position = bottomBarStartPosition.transform.position;
+        topEffectTween?.Kill();
+        bottomEffectTween?.Kill();
+        topBar.anchoredPosition = topBarStartPosition.anchoredPosition;
+        bottomBar.anchoredPosition = bottomBarStartPosition.anchoredPosition;
     }
     public void ToggleInterface(bool toggle)
     {

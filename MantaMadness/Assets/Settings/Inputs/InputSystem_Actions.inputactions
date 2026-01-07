@@ -130,6 +130,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "DriftR",
+                    "type": "Button",
+                    "id": "f625e19e-286a-4266-8746-8ef687764bc2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DrifL",
+                    "type": "Button",
+                    "id": "232faa54-6060-455e-85b2-227fadb0ed33",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -289,6 +307,17 @@
                 },
                 {
                     "name": "",
+                    "id": "f4c3d1c1-d348-4092-a295-c7dd76ebf05d",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Drift",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "d8bf24bf-3f2f-4160-a97c-38ec1eb520ba",
                     "path": "<XRController>/trigger",
                     "interactions": "",
@@ -376,17 +405,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "dad72684-6e6f-4d8d-a02c-0c66809ffcee",
-                    "path": "<Gamepad>/leftStick/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Turn",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
                     "name": "1D Axis",
                     "id": "533c3c8a-ce09-4a12-b5ca-335cc84b2713",
                     "path": "1DAxis",
@@ -415,6 +433,39 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
+                    "action": "Turn",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "c548aeba-85e7-486d-8f7f-324577776042",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Turn",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "f316e8fc-dc0d-4ac2-88b4-fb17f1385bc9",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Turn",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "3ab615f8-f479-4979-87c6-82d2e99563b0",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
                     "action": "Turn",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -581,6 +632,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8ea65446-9f92-4fce-8cc2-5c8209ce91ff",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "DriftR",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bdd9e763-595c-4234-ba85-49bcde3312e2",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "DriftR",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e82221e1-d046-4113-be7d-47cde68d0091",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "DrifL",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1a40dca7-1c52-483d-9e00-cdafedd0a577",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "DrifL",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

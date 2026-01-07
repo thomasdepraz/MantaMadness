@@ -58,8 +58,6 @@ public class ConfirmNewGameMenu : MonoBehaviour
         foreach (var v in visuals)
         {
             v.gameObject.SetActive(value);
-            Debug.Log("Je la baise en levrette =" + value);
         }
-
     }
 }

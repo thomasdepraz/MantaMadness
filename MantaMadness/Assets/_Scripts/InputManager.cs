@@ -30,6 +30,8 @@ public class InputManager : MonoBehaviour
     public InputActionReference resetCamera;
     public InputActionReference stomp;
     public InputActionReference interact;
+    public InputActionReference driftR;
+    public InputActionReference driftL;
 
     private InputActionMap playerActionsMap;
 
