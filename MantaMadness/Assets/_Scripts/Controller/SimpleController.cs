@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public enum ControllerState
 {
@@ -315,7 +316,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
                 //rb.linearVelocity = hoverBehaviour.normalContainer.forward * HorizontalVelocity.magnitude;
                 rb.linearVelocity = moveDir * HorizontalVelocity.magnitude;
-                rb.AddForce((NormalContainer.up * controllerData.upwardImpulseForce /* forceMultiplier*/) + (NormalContainer.forward * controllerData.railImpulseForce /* forceMultiplier*/), ForceMode.VelocityChange);
+
+                Vector3 projForward = Vector3.ProjectOnPlane(NormalContainer.forward, Vector3.up);
+                rb.AddForce((Vector3.up * controllerData.upwardImpulseForce /* forceMultiplier*/) + (projForward * controllerData.railImpulseForce /* forceMultiplier*/), ForceMode.VelocityChange);
                 rb.linearDamping = controllerData.jumpDamping;
 
 
@@ -461,19 +464,20 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     }
     private void SetDrift(bool drifting, bool boost = false)
     {
+        if (!boost)
+        {
+            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DRIFT);
+            PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
+        }
+        else if (boost)
+        {
+            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGEDBOOST);
+            PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.DRIFT);
+        }
+
         if(forwardDrifting == false)
         {
             this.drifting = drifting;
-            if (!boost)
-            {
-                PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DRIFT);
-                PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
-            }
-            else if (boost)
-            {
-                PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGEDBOOST);
-                PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.DRIFT);
-            }
 
             if (drifting == false)
             {
@@ -854,7 +858,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             currentDriftTime += Time.fixedDeltaTime;
             if (currentDriftTime > controllerData.driftBoostTimer && hasDriftBoost == false)
             {
-                
+                PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
                 hasDriftBoost = true;
                 SetDrift(true, true);
                 togglePlayerBlinkMat.Invoke(true, 25f);
@@ -1083,28 +1087,44 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     private void AirControl()
     {
-
         Vector3 camForward = Camera.main.transform.forward;
         Vector3 camRight = Camera.main.transform.right;
 
         camForward.Normalize();
         camRight.Normalize();
 
-        rb.linearDamping = 0;
+
         Vector3 direction = (camForward * airControl.y + camRight * airControl.x).normalized;
         float coeff = controllerData.fallingAirControl;
 
         //if(State == ControllerState.FALLING && turn != 0)
         //    rb.AddTorque(new Vector3(0,Mathf.Sign(turn) * controllerData.airControlRotationSpeed ,0), ForceMode.Acceleration);
 
+        if (direction.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(direction);
+            Quaternion deltaRot = targetRot * Quaternion.Inverse(rb.rotation);
+
+            deltaRot.ToAngleAxis(out float angle, out Vector3 axis);
+            if (angle > 180f) angle -= 360f;
+
+            
+            Vector3 torque = axis * angle * Mathf.Deg2Rad * controllerData.airControlRotationSpeed;
+            rb.AddTorque(torque, ForceMode.Acceleration);
+        }
+
         var dot = Vector3.Dot(direction, HorizontalVelocity);
         if (dot > 0 && dot > controllerData.maxAirControl)
+        {
+            rb.linearDamping = 1;
             return;
+        }
 
+        rb.linearDamping = 0;
         rb.AddForce(direction * coeff * Time.fixedDeltaTime, ForceMode.VelocityChange);
 
         //hard clamp -  probably there is a better way to do this eg. add inverse force
-        ClampHorizontalVelocity(controllerData.maxAirControlSpeed);
+        //ClampHorizontalVelocity(controllerData.maxAirControlSpeed);
     }
 
     public Vector3 direction;
@@ -1310,6 +1330,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         if(grindAbility == true)
         {
+            ResetJump();
             currentRail = rail;
             rail.EnterRail(transform.position, Velocity);
             rb.isKinematic = true;
