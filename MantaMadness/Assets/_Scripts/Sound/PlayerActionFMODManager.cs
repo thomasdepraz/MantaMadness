@@ -11,7 +11,19 @@ public enum PlayerActionFMOD
     SPLASH,
     STYLE,
     SURF,
-    DRIFT
+    DRIFT,
+    DEATH,
+    CHARGEDBOOST,
+    CHARGINGBOOST,
+    GRINDRAIL,
+}
+
+public enum PlayerRailGrindType
+{
+    LIGHT,
+    CONCRETE,
+    WOOD,
+    METAL
 }
 
 [Serializable]
@@ -60,6 +72,35 @@ public class PlayerActionFMODManager : MonoBehaviour
         loopingSounds[actionName] = eventInstance;
         eventInstance.start();
     }
+
+    public void PlayPlayerActionWithParam(PlayerActionFMOD actionName,string parameterName, float paramValue)
+    {
+        EventReference eventReference = GetEventReference(actionName, out bool isLooping);
+
+
+        if (!isLooping)
+        {
+            EventInstance instance = RuntimeManager.CreateInstance(eventReference);
+            instance.setParameterByName(parameterName, paramValue);
+            instance.set3DAttributes(RuntimeUtils.To3DAttributes(Game.Instance.player.transform.position));
+            instance.start();
+            instance.release();
+            return;
+        }
+
+        if (loopingSounds.ContainsKey(actionName))
+        {
+            loopingSounds[actionName].stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            loopingSounds.Remove(actionName);
+        }
+
+        EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
+        eventInstance.setParameterByName(parameterName, paramValue);
+        eventInstance.start();
+
+        loopingSounds[actionName] = eventInstance;
+    }
+
 
     public bool TryStopLoopingSound(PlayerActionFMOD action)
     {

@@ -168,10 +168,10 @@ public class MantaVisuals : MonoBehaviour
         if(previous == ControllerState.FALLING && newState == ControllerState.SURFING || 
             previous == ControllerState.JUMPING && newState == ControllerState.SURFING ||
             previous == ControllerState.STOMP && newState == ControllerState.SURFING)
-            SplashParticles();
+            SplashParticles(newState);
 
         else if (previous == ControllerState.SURFING && newState == ControllerState.JUMPING)
-            SplashParticles();
+            SplashParticles(newState);
 
         if(newState == ControllerState.SWIMMING)
         {
@@ -367,10 +367,14 @@ public class MantaVisuals : MonoBehaviour
             chargeDriftParticlesAdditionnal.Stop();
         }
     }
-    private void SplashParticles()
+    private void SplashParticles(ControllerState newState)
     {
         splashParticles.Play();
-        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.SPLASH);
+        if(newState == ControllerState.SURFING)
+        {
+            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.SPLASH);
+        }
+
     }
 
     private void BoostParticles()

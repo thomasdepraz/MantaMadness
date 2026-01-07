@@ -464,16 +464,23 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if(forwardDrifting == false)
         {
             this.drifting = drifting;
+            if (!boost)
+            {
+                PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DRIFT);
+                PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
+            }
+            else if (boost)
+            {
+                PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGEDBOOST);
+                PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.DRIFT);
+            }
 
             if (drifting == false)
             {
-                PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.DRIFT);
-                currentDriftTime = 0;
-                hasDriftBoost = false;
-                driftDir = 0;
+                ResetDrift();
             }
-        }    
-
+        }
+        
         int xDir = (int)inputs.airControl.action.ReadValue<Vector2>().x;
         updateDrift.Invoke(drifting, boost, xDir);
     }
@@ -483,11 +490,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (IsLocked)
             return;
 
-        if (State == ControllerState.SURFING && IsDrifting)
-        {
-            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DRIFT);
-
-        }
+        //if (State == ControllerState.SURFING && IsDrifting)
+        //{
+        //    PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DRIFT);
+        //}
     }
 
     private void Drift(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -501,14 +507,14 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             {
                 forwardDrifting = true;
                 updateDrift?.Invoke(true, false, 0);
+                PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGINGBOOST);
             }
             else if (Mathf.Abs(turn) > 0)
             {
                 if (CanDrift == false)
                     return;
-
+                PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
                 driftDir = turn > 0 ? 1 : -1;
-                Debug.Log(driftDir);
 
                 SetDrift(true);
             }
@@ -533,6 +539,19 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         forwardDrifting = false;
         SetDrift(false);
+    }
+
+    private void ResetDrift()
+    {
+        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.DRIFT);
+        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGEDBOOST);
+        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
+        currentDriftTime = 0;
+        hasDriftBoost = false;
+        driftDir = 0;
+        togglePlayerBlinkMat.Invoke(false, 25f);
+        forwardDrifting = false;
+        updateDrift?.Invoke(false, false, 0);
     }
 
     private void Boost(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -732,6 +751,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             }
         }
 
+
+
         if (hasResetCam == true)
         {
             CameraTargetController.instance.ResetCamPos(true);
@@ -755,6 +776,13 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         hasHitWater = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit waterInfo, controllerData.hoverRaycastLength, waterRaycastLayer.value);
         hasHitWalls = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit defaultInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
 
+
+        if (State != ControllerState.SURFING)
+        {
+            //Stop drifting
+            ResetDrift();
+        }
+
         if (OnRail)
         {
             State = ControllerState.RAIL;
@@ -767,6 +795,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 exitRail.Invoke();
                 railDetector.ExitRail();
                 State = ControllerState.SURFING;
+                PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GRINDRAIL);
                 disableBoolAnim("Grind");
             }
             else
@@ -822,20 +851,17 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         //DRIFT
         if (IsDrifting)
         {
-            if (State != ControllerState.SURFING) //|| CanDriftBreak)
-            {
-                //Stop drifting
-                SetDrift(false);
-            }
-
             currentDriftTime += Time.fixedDeltaTime;
             if (currentDriftTime > controllerData.driftBoostTimer && hasDriftBoost == false)
             {
+                
                 hasDriftBoost = true;
                 SetDrift(true, true);
                 togglePlayerBlinkMat.Invoke(true, 25f);
             }
         }
+
+
 
         //Falling to Surfing
         if (State == ControllerState.FALLING)
@@ -1274,6 +1300,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         enterAirRail.Invoke(rail);
         boost.Invoke();
         currentAirRail = rail;
+
     }
 
     public bool EnterRail(Rail rail)
@@ -1290,7 +1317,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             enterRail.Invoke();
             enableBoolAnim.Invoke("Grind");
             triggerAnim("StartGrind");
-            ResetJump();
+            PlayerActionFMODManager.Instance.PlayPlayerActionWithParam(PlayerActionFMOD.GRINDRAIL, "L_Grind_Surface", (float)rail.railType);
             return true;
         }
         return false;
@@ -1496,6 +1523,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             exitRail.Invoke();
             railDetector.ExitRail();
             disableBoolAnim("Grind");
+            PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GRINDRAIL);
             Jump(context);
         }
 
@@ -1510,6 +1538,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
             rb.isKinematic = false;
             exitRail.Invoke();
+            PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GRINDRAIL);
             railDetector.ExitRail();
             disableBoolAnim("Grind");
             State = ControllerState.SURFING;

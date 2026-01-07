@@ -135,6 +135,7 @@ public class Game : MonoBehaviour, IDataPersistence
         //Action before timer
         UIManager.Instance.transitionScreen.TransitionIn();
         FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Life, 1f);
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DEATH);
         yield return new WaitForSeconds(1f);
         //Action After timer
         UIManager.Instance.transitionScreen.TransitionOut();

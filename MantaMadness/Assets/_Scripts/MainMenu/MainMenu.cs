@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Windows;
 using static UnityEngine.CullingGroup;
+using FMODUnity;
 
 public class MainMenu : MonoBehaviour
 {
@@ -22,6 +23,11 @@ public class MainMenu : MonoBehaviour
 
     public InputManager inputs;
     [SerializeField] public OptionsMenu options;
+
+    [Header("Sound parameters")]
+    [SerializeField] public EventReference submitSound;
+    [SerializeField] public EventReference navigateSound;
+    [SerializeField] public EventReference mainMenuTweakSound;
 
     public enum MainMenuState
     {
@@ -171,6 +177,7 @@ public class MainMenu : MonoBehaviour
             defaultStateIndex += 1;
         }
 
+
         UpdateMainMenuButtons();
     }
 
@@ -209,9 +216,12 @@ public class MainMenu : MonoBehaviour
 
     private void Submit(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if(State == MainMenuState.DEFAULT)
+
+        PlaySound(submitSound);
+
+        if (State == MainMenuState.DEFAULT)
         {
-            if(_defaultStateIndex == 0)
+            if (_defaultStateIndex == 0)
             {
                 //Continue
                 //Load scene
@@ -220,7 +230,6 @@ public class MainMenu : MonoBehaviour
             else if (_defaultStateIndex == 1)
             {
                 //New Game
-                
                 StartNewGame();
             }
             else if (_defaultStateIndex == 2)
@@ -249,6 +258,8 @@ public class MainMenu : MonoBehaviour
 
     private void OnMoveUp(InputAction.CallbackContext ctx)
     {
+        PlaySound(navigateSound);
+
         if (State == MainMenuState.OPTIONS)
             options.MoveUp();
 
@@ -258,6 +269,8 @@ public class MainMenu : MonoBehaviour
 
     private void OnMoveDown(InputAction.CallbackContext ctx)
     {
+        PlaySound(navigateSound);
+
         if (State == MainMenuState.OPTIONS)
             options.MoveDown();
 
@@ -267,18 +280,22 @@ public class MainMenu : MonoBehaviour
 
     private void OnMoveLeft(InputAction.CallbackContext ctx)
     {
+
+        PlaySound(mainMenuTweakSound);
         if (State == MainMenuState.OPTIONS)
             options.MoveLeft();
     }
 
     private void OnMoveRight(InputAction.CallbackContext ctx)
     {
+        PlaySound(mainMenuTweakSound);
         if (State == MainMenuState.OPTIONS)
             options.MoveRight();
     }
 
     private void Cancel(InputAction.CallbackContext ctx)
     {
+
         if (State == MainMenuState.OPTIONS)
             options.Cancel();
 
@@ -319,5 +336,9 @@ public class MainMenu : MonoBehaviour
         {
             visual.SetActive(toggleValue);
         }
+    }
+    public void PlaySound(EventReference sound)
+    {
+        RuntimeManager.PlayOneShot(sound);
     }
 }

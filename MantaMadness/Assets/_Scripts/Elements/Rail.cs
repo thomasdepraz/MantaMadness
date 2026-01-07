@@ -13,6 +13,14 @@ public class Rail : MonoBehaviour
         Backward
     }
 
+    public enum RailType
+    {
+        LIGHT,
+        CONCRETE,
+        WOOD,
+        METAL
+    }
+
     private SplineContainer splineContainer;
     private Spline railSpline;
     private float invRailLength;
@@ -27,6 +35,8 @@ public class Rail : MonoBehaviour
     private Vector3 currentPosition;
     private float currentProgress = 0;
     private int dir;
+
+    public RailType railType;
 
     private void Awake()
     {

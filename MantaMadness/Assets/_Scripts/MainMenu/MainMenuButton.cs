@@ -1,6 +1,7 @@
+using FMODUnity;
 using NUnit.Framework;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class MainMenuButton : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class MainMenuButton : MonoBehaviour
     [SerializeField] private float matAmplitude = 0.25f;
     [SerializeField] private float matSpeed = 12.5f;
     [SerializeField] private float matFrequency = 2.5f;
+
 
     public void EnableButton()
     {
@@ -43,4 +45,6 @@ public class MainMenuButton : MonoBehaviour
             sub.SetActive(false);
         }
     }
+
+
 }
