@@ -1,5 +1,6 @@
 using DG.Tweening;
 using FMOD.Studio;
+using FMODUnity;
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class LilyPadManager : MonoBehaviour
     [SerializeField] private CinemachineBlendDefinition blend;
     [SerializeField, Range(1, 100)] private int lilypadsPercentage = 90;
     [SerializeField] private float spawnTime = 2f;
+    [SerializeField] private EventReference ClearSound;
 
     private int count = 0;
 
@@ -57,7 +59,7 @@ public class LilyPadManager : MonoBehaviour
         //activate camera + play sound
         vcam.enabled = true;
         CameraManager.Instance.BlendToCamera(vcam, blend);
-
+        RuntimeManager.PlayOneShot(ClearSound, vcam.transform.position);
         yield return new WaitForSeconds(1f);
 
         UIEffectManager.Instance.GoodAction.Invoke();

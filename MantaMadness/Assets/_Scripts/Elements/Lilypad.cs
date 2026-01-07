@@ -44,7 +44,7 @@ public class Lilypad : MonoBehaviour
         //ENABLE SUB VISUAL
         visual.SetActive(true);
         //TWEEN SSCALE OF MAIN VISUAL
-        transform.DOScale(transform.localScale * scaleModifier,0.15f).SetEase(Ease.OutQuad).SetLoops(2,LoopType.Yoyo);
+        visual.transform.DOScale(visual.transform.localScale * scaleModifier,0.15f).SetEase(Ease.OutQuad).SetLoops(2,LoopType.Yoyo);
     }
 
     public void AlternateBlooming()
@@ -54,7 +54,7 @@ public class Lilypad : MonoBehaviour
             hasBloomed = true;
             bloomParticle.Play();
             visual.SetActive(true);
-            transform.DOScale(transform.localScale * scaleModifier, 0.15f).SetEase(Ease.OutQuad).SetLoops(2, LoopType.Yoyo);
+            visual.transform.DOScale(visual.transform.localScale * scaleModifier, 0.15f).SetEase(Ease.OutQuad).SetLoops(2, LoopType.Yoyo);
         }
     }
 
