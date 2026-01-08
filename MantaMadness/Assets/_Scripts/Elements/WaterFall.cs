@@ -2,6 +2,7 @@
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Splines;
+using FMODUnity;
 
 public class WaterFall : MonoBehaviour
 {
@@ -17,6 +18,14 @@ public class WaterFall : MonoBehaviour
 
     [Header("Camera")]
     public CinemachineCamera waterFallCamera;
+
+
+    [Header("FMOD Sound")]
+    public EventReference enterWaterfallCharge;
+    public EventReference waterFallAppear;
+
+
+    private bool hasStarted = false;
 
     private enum SplinePhase
     {
@@ -40,6 +49,19 @@ public class WaterFall : MonoBehaviour
         SetActiveSpline(splineCurveContainer);
     }
 
+    private void OnEnable()
+    {
+        if (!hasStarted)
+            return;
+
+        WaterFallAppear();
+    }
+
+    private void Start()
+    {
+        hasStarted = true;
+    }
+
     public void EnterWaterFall()
     {
         ToggleWaterFallCamera(true);
@@ -55,6 +77,8 @@ public class WaterFall : MonoBehaviour
 
         if (waterFallCamera != null)
             waterFallCamera.LookAt = Game.Instance.player.transform;
+
+        RuntimeManager.PlayOneShot(enterWaterfallCharge, Game.Instance.player.transform.position);
     }
 
     public bool FollowSpline(
@@ -149,5 +173,10 @@ public class WaterFall : MonoBehaviour
     {
         if (waterFallCamera != null)
             waterFallCamera.enabled = toggleValue;
+    }
+
+    public void WaterFallAppear()
+    {
+        RuntimeManager.PlayOneShot(waterFallAppear, Game.Instance.player.transform.position);
     }
 }

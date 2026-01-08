@@ -208,8 +208,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         lavaResistanceAbility = data.lavaResistance;
         alienAntennasAbility = data.alienAntennas;
         grindAbility = data.grind;
-
-        updateEquipmentVisual.Invoke();
     }
 
     public void SaveData(ref GameData data)
@@ -946,7 +944,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (State == ControllerState.JUMPING ||
             State == ControllerState.AIRRIDE || 
             State == ControllerState.BOOSTJUMP ||
-            State == ControllerState.BUMP)
+            State == ControllerState.BUMP ||
+            State == ControllerState.STOMP)
         {
             float force = controllerData.gravity;
             if (State == ControllerState.AIRRIDE)

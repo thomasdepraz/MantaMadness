@@ -3,6 +3,8 @@ using UnityEngine;
 using System;
 using System.Collections;
 using TMPro;
+using FMOD.Studio;
+using FMODUnity;
 
 public class AbilityAltar : MonoBehaviour, IDataPersistence
 {
@@ -13,6 +15,9 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
     [SerializeField] private string dialogSequenceName;
 
     [SerializeField] private GameObject[] visuals;
+
+    [Header("FMOD Sound")]
+    public EventReference pickupAltarSound;
 
     private bool hasBeenObtained;
 
@@ -57,6 +62,9 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
 
     private void OnPickup(SimpleController player)
     {
+
+        RuntimeManager.PlayOneShot(pickupAltarSound, Game.Instance.player.transform.position);
+
         string[] abilityTypeNames = Enum.GetNames(typeof(ControllerAbility));
 
         for(int i = 0; i < abilityTypeNames.Length; i++)

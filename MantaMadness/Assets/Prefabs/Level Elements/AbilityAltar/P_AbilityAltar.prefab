@@ -148,6 +148,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3881393227329588293}
   - component: {fileID: 9141620730036065059}
+  - component: {fileID: 8134448103025803075}
   m_Layer: 0
   m_Name: P_AbilityAltar
   m_TagString: Untagged
@@ -195,6 +196,44 @@ MonoBehaviour:
   - {fileID: 8851295835159399270}
   - {fileID: 4600767302071452347}
   - {fileID: 2037115441314282429}
+  pickupAltarSound:
+    Guid:
+      Data1: -1517470928
+      Data2: 1193083702
+      Data3: 1195948947
+      Data4: -1623133211
+    Path: event:/Sfx/InGame/Stingers/Stinger_Powerup_Pickup
+--- !u!114 &8134448103025803075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2551050419339556974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -21327909
+      Data2: 1231726559
+      Data3: 2094217658
+      Data4: -625682168
+    Path: event:/Sfx/InGame/World/Enviro/Env_Powerup_Pad
+  Event: 
+  EventPlayTrigger: 1
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 1
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 1
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 65
 --- !u!1 &4600767302071452347
 GameObject:
   m_ObjectHideFlags: 0

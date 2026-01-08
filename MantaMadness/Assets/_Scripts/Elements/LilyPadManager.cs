@@ -16,6 +16,7 @@ public class LilyPadManager : MonoBehaviour
     [SerializeField] private float spawnTime = 2f;
     [SerializeField] private EventReference ClearSound;
 
+    bool endGameStarted = false;
     private int count = 0;
 
     private void Start()
@@ -44,6 +45,9 @@ public class LilyPadManager : MonoBehaviour
 
     public void Collect()
     {
+        if (endGameStarted)
+            return;
+
         count++;
 
         if (count >= (lilypadsPercentage * lilypads.Length) / 100)
