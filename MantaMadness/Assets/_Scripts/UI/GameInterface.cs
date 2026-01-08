@@ -94,14 +94,14 @@ public class GameInterface : MonoBehaviour, IScreen
     public IEnumerator pickupMegaClam()
     {
         toggleSunOverlay(true);
-        UIEffectManager.Instance.SpecificAction?.Invoke("MEGACLAM", "Armature_megaClam");
+        UIEffectManager.Instance.SpecificAction?.Invoke(UiWordsParticles.MEGACLAM, "Armature_megaClam");
         yield return new WaitForSeconds(2f);
         toggleSunOverlay(false);
     }
 
     public void pickupJohnnyParticle()
     {
-        UIEffectManager.Instance.SpecificAction?.Invoke("JOHNNY", "");
+        UIEffectManager.Instance.SpecificAction?.Invoke(UiWordsParticles.JOHNNYFOUND, "");
     }
     public void StartDisplayCoroutine(string name)
     {

@@ -768,6 +768,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     bool hasHitWater = false;
     bool hasHitWalls = false;
+    bool bump = false;
     float fallTime = 0f;
 
     //float xRotation = 0f;
@@ -777,7 +778,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         hasHitWater = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit waterInfo, controllerData.hoverRaycastLength, waterRaycastLayer.value);
         hasHitWalls = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit defaultInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
-
+        bump = Physics.SphereCast(hoverBehaviour.normalContainer.position, controllerData.bumpDetectionRadius, hoverBehaviour.normalContainer.forward,out RaycastHit bumptInfo, controllerData.bumpRaycastLenght, defaultRaycastLayer.value);
 
         if (State != ControllerState.SURFING)
         {
@@ -863,8 +864,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             }
         }
 
-
-
         //Falling to Surfing
         if (State == ControllerState.FALLING)
         {
@@ -878,8 +877,14 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 ResetJump();
                 fallTime = 0f;
             }
-
+            //else if (hasHitWalls)
+            //{
+            //    //Vector3 bumpDirection = (hoverBehaviour.normalContainer.position - defaultInfo.point).normalized;
+            //    Vector3 bumpDirection = bumptInfo.normal;
+            //    Bump(bumpDirection);
+            //}
             fallTime += Time.fixedDeltaTime;
+
         }
 
         //Stomping to Surfing
@@ -1524,14 +1529,28 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     }
 
+    private Coroutine bumpRoutine;
     public void Bump(Vector3 direction)
     {
-        if(state != ControllerState.BUMP)
-        {
-            state = ControllerState.BUMP;
-            rb.AddForce((NormalContainer.up * 30f) + (new Vector3(-Camera.main.transform.forward.x, 0f, -Camera.main.transform.forward.z) * controllerData.forwardImpulseForce), ForceMode.VelocityChange);
-        }
+        if (state == ControllerState.BUMP)
+            return;
+
+        if (bumpRoutine != null)
+            return;
+
+        bumpRoutine = StartCoroutine(BumpCoroutine());
+        state = ControllerState.BUMP;
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.BUMP);
+        Vector3 force = (NormalContainer.up * controllerData.bumpForce) + (direction * controllerData.forwardImpulseForce);
+        rb.AddForce(force, ForceMode.VelocityChange);
     }
+
+    private IEnumerator BumpCoroutine()
+    {
+        yield return new WaitForSeconds(0.5f);
+        bumpRoutine = null;
+    }
+
     public void JumpOutOfRail(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         if(currentRail != null && State == ControllerState.RAIL)

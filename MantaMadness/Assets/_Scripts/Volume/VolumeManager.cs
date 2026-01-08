@@ -34,12 +34,12 @@ public class VolumeManager : MonoBehaviour
         if(toggleValue == false)
         {
             underwatertVolume.SetActive(false);
-            UIParticleManager.Instance.stopSpecificParticle("BUBBLE", "");
+            UIParticleManager.Instance.stopSpecificParticle(UiWordsParticles.BUBBLE, "");
         }
         else
         {
             underwatertVolume.SetActive(true);
-            UIParticleManager.Instance.playtSpecificParticle("BUBBLE", "");
+            UIParticleManager.Instance.playtSpecificParticle(UiWordsParticles.BUBBLE, "");
         }
     }
 }

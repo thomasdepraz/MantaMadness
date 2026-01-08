@@ -1,15 +1,55 @@
-using UnityEngine;
+using FMOD.Studio;
+using FMODUnity;
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using static UnityEngine.ParticleSystem;
+
+public enum UiWordsParticles
+{
+    NULL,
+    SICK,
+    SHEEESH,
+    SEXY,
+    MEGACLAM,
+    JOHNNYFOUND,
+    WOW,
+    BOOM,
+    KABOOM,
+    CHALLENGE,
+    BUBBLE,
+    SPEEDLINE,
+}
+
+public enum WordType
+{
+    WOW,
+    SEXY,
+    SICK,
+}
+
+[Serializable]
+public struct UiWord
+{
+    public UiWordsParticles type;
+    public VFXData data;
+    public EventReference sound;
+    public string param;
+    public WordType paramValue;
+    public bool doesntPlaySound;
+}
 
 public class UIParticleManager : MonoBehaviour
 {
     public static UIParticleManager Instance;
-
-    [SerializeField]private VFXData[] uiParticleList;
-    [SerializeField] private VFXData[] uiParticleGood;
-    [SerializeField] private VFXData[] uiParticleExplosion;
+    [SerializeField] private List<UiWord> uiWordParticleList = new();
+    [SerializeField] private List<UiWord> uiParticleGood;
+    [SerializeField] private List<UiWord> uiParticleExplosion;
 
     private bool explosionInCooldown = false;
+
+
 
     private void Awake()
     {
@@ -26,25 +66,36 @@ public class UIParticleManager : MonoBehaviour
         UIEffectManager.Instance.ExplosionAction += playExplosionParticle;
     }
 
-    public void playtSpecificParticle(string name, string overload)
+    private void OnDisable()
     {
-        for (int i = 0; i < uiParticleList.Length; i++)
+        UIEffectManager.Instance.GoodAction -= playGoodParticle;
+        UIEffectManager.Instance.SpecificAction -= playtSpecificParticle;
+        UIEffectManager.Instance.ExplosionAction -= playExplosionParticle;
+    }
+
+    public void playtSpecificParticle(UiWordsParticles word, string overload)
+    {
+        for (int i = 0; i < uiWordParticleList.Count; i++)
         {
-            if (uiParticleList[i].VfxName == name)
+            if (uiWordParticleList[i].type == word)
             {
-                uiParticleList[i].PlayParticle();
+                uiWordParticleList[i].data.PlayParticle();
+                if(!uiWordParticleList[i].sound.IsNull && !uiWordParticleList[i].doesntPlaySound)
+                    PlayParticleSound(uiWordParticleList[i].sound, uiWordParticleList[i].param, uiWordParticleList[i].paramValue);
+
                 break;
             }
         }
     }
 
-    public void stopSpecificParticle(string name, string overload)
+    public void stopSpecificParticle(UiWordsParticles word, string overload)
     {
-        for (int i = 0; i < uiParticleList.Length; i++)
+        for (int i = 0; i < uiWordParticleList.Count; i++)
         {
-            if (uiParticleList[i].VfxName == name)
+            if (uiWordParticleList[i].type == word)
             {
-                uiParticleList[i].StopParticle();
+                uiWordParticleList[i].data.StopParticle();
+
                 break;
             }
         }
@@ -52,24 +103,49 @@ public class UIParticleManager : MonoBehaviour
 
     public void playGoodParticle()
     {
-        uiParticleGood[Random.Range(0, uiParticleGood.Length)].PlayParticle();
+        UiWord particle = uiParticleGood[UnityEngine.Random.Range(0, uiParticleGood.Count)];
+        particle.data.PlayParticle();
+        if (!particle.sound.IsNull && !particle.doesntPlaySound)
+            PlayParticleSound(particle.sound, particle.param, particle.paramValue);
     }
     
     public void playExplosionParticle(string overload)
     {
-        if(explosionInCooldown == false)
+        StartCoroutine(ExplosionParticleCoroutine());
+    }
+
+    private Coroutine explosionCooldownRoutine;
+
+    private IEnumerator ExplosionCooldownCoroutine()
+    {
+        yield return new WaitForSeconds(3f);
+        explosionCooldownRoutine = null;
+    }
+
+    public IEnumerator ExplosionParticleCoroutine()
+    {
+        if(explosionCooldownRoutine == null)
         {
-            StartCoroutine(explosionParticleCoroutine());
+            explosionCooldownRoutine = StartCoroutine(ExplosionCooldownCoroutine());
+            UiWord particle = uiParticleGood[UnityEngine.Random.Range(0, uiParticleExplosion.Count)];
+            particle.data.PlayParticle();
+            if (!particle.sound.IsNull && !particle.doesntPlaySound)
+                PlayParticleSound(particle.sound, particle.param, particle.paramValue);
+            yield return null;
         }
     }
 
-    public IEnumerator explosionParticleCoroutine()
+    public void PlayParticleSound(EventReference soundToPlay, string fmodParameter, WordType parameterValue)
     {
-        explosionInCooldown = true;
-        uiParticleExplosion[Random.Range(0, uiParticleExplosion.Length)].PlayParticle();
-        yield return new WaitForSeconds(3f);
-        explosionInCooldown = false;
-        yield return null;
-    }
+        EventInstance instance = RuntimeManager.CreateInstance(soundToPlay);
 
+        //IMPORTANT FOR SFX WITH FMOD LOCAL PARAMETER
+        if (fmodParameter != null)
+        {
+            instance.setParameterByName(fmodParameter, (float)parameterValue);
+        }
+        instance.set3DAttributes(RuntimeUtils.To3DAttributes(Game.Instance.player.transform.position));
+        instance.start();
+        instance.release();
+    }
 }

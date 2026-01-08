@@ -8,7 +8,7 @@ public class UIEffectManager : MonoBehaviour
 
     public Action GoodAction;
     public Action BadAction;
-    public Action<string, string> SpecificAction;
+    public Action<UiWordsParticles, string> SpecificAction;
     public Action<string> ExplosionAction;
 
     private void Awake()

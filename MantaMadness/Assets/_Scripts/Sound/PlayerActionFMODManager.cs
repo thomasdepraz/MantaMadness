@@ -16,6 +16,8 @@ public enum PlayerActionFMOD
     CHARGEDBOOST,
     CHARGINGBOOST,
     GRINDRAIL,
+    BUMP,
+    FLY,
 }
 
 public enum PlayerRailGrindType
@@ -40,6 +42,7 @@ public class PlayerActionFMODManager : MonoBehaviour
     [SerializeField] private List<PlayerActionEventReferencePair> playerFmodActionsList = new();
 
     private readonly Dictionary<PlayerActionFMOD, EventInstance> loopingSounds = new();
+    private SimpleController mantaController;
 
 
     public void Awake()
@@ -47,6 +50,30 @@ public class PlayerActionFMODManager : MonoBehaviour
         if(Instance == null)
         {
             Instance = this;
+        }
+    }
+
+    private void Start()
+    {
+        mantaController = Game.Instance.player;
+        mantaController.stateChanged += StateChanged;
+    }
+
+    private void OnDisable()
+    {
+        mantaController.stateChanged -= StateChanged;
+    }
+
+    public void StateChanged(ControllerState previousState, ControllerState newState)
+    {
+        if (newState == ControllerState.FALLING)
+        {
+            PlayPlayerAction(PlayerActionFMOD.FLY);
+        }
+
+        if (previousState == ControllerState.FALLING)
+        {
+            TryStopLoopingSound(PlayerActionFMOD.FLY);
         }
     }
 

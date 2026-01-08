@@ -19,7 +19,7 @@ public class SunHandler : MonoBehaviour
 
     }
 
-    public void playSunAnimation(string overload, string animName)
+    public void playSunAnimation(UiWordsParticles overload, string animName)
     {
         if(animName != null)
         sunAnimator.Play(animName);

@@ -87,7 +87,7 @@ public class CoinHolder : MonoBehaviour, IDataPersistence
         //PART 2 SPAWN IN SUN
         RuntimeManager.PlayOneShot(ClearSound, vcam.transform.position);
         spawnParticle.Play();
-        UIEffectManager.Instance.SpecificAction?.Invoke("CHALLENGE", "Armature_Chad");
+        UIEffectManager.Instance.SpecificAction?.Invoke(UiWordsParticles.CHALLENGE, "Armature_Chad");
         if (hasBeenObtained == false)
         {
             coin.transform.localScale = Vector3.zero;
