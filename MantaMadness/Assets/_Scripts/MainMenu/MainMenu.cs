@@ -209,7 +209,6 @@ public class MainMenu : MonoBehaviour
 
         if (DataPersistenceManager.Instance.gameData.introCinematic == false)
         {
-            Debug.Log("HOW?");
             mainMenuButtons[0].GetComponent<MainMenuButtonContinue>().setMatDisabled();
         }
     }

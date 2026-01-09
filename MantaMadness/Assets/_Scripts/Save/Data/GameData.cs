@@ -27,6 +27,8 @@ public class GameData
     public bool alienAntennas;
     public bool grind;
 
+    public MUSICS gameStartMusic;
+
     // The values defined in this constructor will be the default values
     // Start with this when there's no data to load
     public GameData()
@@ -34,6 +36,7 @@ public class GameData
         introCinematic = false;
 
         this.clamCount = 0;
+        this.gameStartMusic = MUSICS.MUSIC_LEVEL01;
         coinsCollected = new SerializableDictionnary<string, bool>();
         checkpoints = new SerializableDictionnary<string, bool>();
         abilityAltars = new SerializableDictionnary<string, bool>();
@@ -44,5 +47,7 @@ public class GameData
         lavaResistance = false;
         alienAntennas = false;
         grind = false;
+
+
     }
 }

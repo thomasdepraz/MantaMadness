@@ -53,7 +53,6 @@ public class DataPersistenceManager : MonoBehaviour
 
         Debug.Log("Creating new game data.");
         this.gameData = new GameData();
-        SaveGame();
     }
 
     public void LoadGame()
@@ -62,14 +61,16 @@ public class DataPersistenceManager : MonoBehaviour
         this.gameData = dataHandler.Load();
 
         // if no data can be loaded, initialize to a new game
-        if(this.gameData == null)
+        if (this.gameData == null)
         {
             Debug.Log("No data was found, Init to default");
             NewGame();
         }
         //push the data to all scripts that needs it
 
-        foreach(IDataPersistence dataPersistObj in dataPersistenceObjects)
+        dataPersistenceObjects = FindAllDataPersistenceObjects();
+
+        foreach (IDataPersistence dataPersistObj in dataPersistenceObjects)
         {
             dataPersistObj.LoadData(gameData);
         }
@@ -79,19 +80,19 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void SaveGame()
     {
-        //pass the data to other script so they can update it
+        dataPersistenceObjects = FindAllDataPersistenceObjects();
+
         foreach (IDataPersistence dataPersistObj in dataPersistenceObjects)
         {
             dataPersistObj.SaveData(ref gameData);
         }
 
-        //save that data to a file using the data handler
         dataHandler.Save(gameData);
     }
 
     private List<IDataPersistence> FindAllDataPersistenceObjects()
     {
-        IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.InstanceID).OfType<IDataPersistence>();
+        IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include,FindObjectsSortMode.None).OfType<IDataPersistence>();
 
         return new List<IDataPersistence>(dataPersistenceObjects);
     }

@@ -9,6 +9,7 @@ public class Checkpoint : MonoBehaviour
     public int RaceIndex { get => raceIndex; }
     public Transform respawnTransform;
     public GameObject[] outlines;
+    public MUSICS musicToPlay = MUSICS.NULL;
 
     public void Activate(int raceIndex)
     {
@@ -42,6 +43,7 @@ public class Checkpoint : MonoBehaviour
             {
                 checkpointPassed.Invoke(this);
                 Game.Instance.SetRespawnTransform(respawnTransform);
+
                 canBePassed = false;
             }
         }

@@ -9,6 +9,8 @@ public class WorldCheckpoint : MonoBehaviour
     [SerializeField] public string indexName;
     [SerializeField] public bool displayAreaName;
     [SerializeField] public string nameToDisplay;
+    [SerializeField] public MUSICS musicToPlay = MUSICS.NULL;
+
 
     private void Awake()
     {
@@ -31,6 +33,10 @@ public class WorldCheckpoint : MonoBehaviour
         if (other.gameObject.TryGetComponent(out SimpleController controller))
         {
             WorldCheckpointManager.Instance.SetCheckpoint(respawnTransform, indexName, displayAreaName, nameToDisplay);
+            if (musicToPlay != MUSICS.NULL)
+            {
+                MusicManager.Instance.PlayMusic(musicToPlay);
+            }
         }
     }
 }

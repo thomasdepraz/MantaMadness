@@ -17,6 +17,7 @@ public class Portal : MonoBehaviour
     [SerializeField] public string nameToDisplay;
 
     [SerializeField] private bool enterSecretRoom = false;
+    [SerializeField] private MUSICS musicToPlay = MUSICS.NULL;
 
     private void Start()
     {
@@ -47,7 +48,7 @@ public class Portal : MonoBehaviour
     {
         if (other.TryGetComponent(out SimpleController controller))
         {
-            PortalManager.Instance.StartCoroutine(PortalManager.Instance.Teleport(targetIndex, enterSecretRoom));
+            PortalManager.Instance.StartCoroutine(PortalManager.Instance.Teleport(targetIndex, enterSecretRoom, musicToPlay));
             PortalManager.Instance.SetCheckpoint(targetIndex, displayAreaName, nameToDisplay);
         }
     }

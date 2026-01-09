@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7719082527175239044
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4103893495288563080}
+  - component: {fileID: 7510447336355084489}
+  m_Layer: 0
+  m_Name: MusicManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4103893495288563080
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7719082527175239044}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7510447336355084489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7719082527175239044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f18c30e6f8f6fc44965133398ae76a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  music_menu:
+    Guid:
+      Data1: 2063113704
+      Data2: 1231763485
+      Data3: -1691420534
+      Data4: -891283659
+    Path: event:/MUSIC/InGame/Music_Menu
+  music_cave:
+    Guid:
+      Data1: -1734963384
+      Data2: 1234015693
+      Data3: -1754452327
+      Data4: 1293718965
+    Path: event:/MUSIC/InGame/Music_Cave
+  music_level01:
+    Guid:
+      Data1: -750965112
+      Data2: 1261987731
+      Data3: 718435512
+      Data4: -248969867
+    Path: event:/MUSIC/InGame/Music_Level01
+  music_level02:
+    Guid:
+      Data1: -1565673467
+      Data2: 1309214342
+      Data3: -838145887
+      Data4: -1740969166
+    Path: event:/MUSIC/InGame/Music_Level02
+  music_level03:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 

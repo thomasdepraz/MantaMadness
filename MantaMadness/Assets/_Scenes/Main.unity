@@ -5866,6 +5866,38 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 3.8348026, z: 1}
   m_Center: {x: 0, y: 1.4174013, z: 0}
+--- !u!1 &47335493
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 47335494}
+  m_Layer: 0
+  m_Name: Portals
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &47335494
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47335493}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1646435698}
+  m_Father: {fileID: 1024741694}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &47434503 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4611842544960491346, guid: e9e301e1cac721e4e9997f27dff6fb0f, type: 3}
@@ -23275,6 +23307,7 @@ MonoBehaviour:
     lavaResistance: 0
     alienAntennas: 0
     grind: 0
+    gameStartMusic: 0
 --- !u!114 &226208740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36099,6 +36132,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d484202fcffb5459263fe3d3341fde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &328555098
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 328555099}
+  m_Layer: 0
+  m_Name: Portals
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &328555099
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328555098}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1439588080}
+  - {fileID: 424083946}
+  m_Father: {fileID: 447958625}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &329468464
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41694,9 +41760,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3587131}
-  - {fileID: 1646435698}
-  - {fileID: 1439588080}
-  - {fileID: 424083946}
   - {fileID: 71194754}
   - {fileID: 498520726}
   - {fileID: 2092106643}
@@ -57267,6 +57330,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 328555099}
   - {fileID: 456704297}
   - {fileID: 2134470688}
   - {fileID: 1948481483}
@@ -65580,6 +65644,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &545191339
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4103893495288563080, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4103893495288563080, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4103893495288563080, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4103893495288563080, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4103893495288563080, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4103893495288563080, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4103893495288563080, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4103893495288563080, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4103893495288563080, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4103893495288563080, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7719082527175239044, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: m_Name
+      value: MusicManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
 --- !u!1 &546297541 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4611842544960491346, guid: e9e301e1cac721e4e9997f27dff6fb0f, type: 3}
@@ -78793,7 +78914,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 362623430}
+    m_TransformParent: {fileID: 328555099}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 1f306b277d36722469bcae53360254b0, type: 3}
       propertyPath: m_LocalScale.x
@@ -101918,6 +102039,10 @@ PrefabInstance:
       value: START_CHECKPOINT
       objectReference: {fileID: 0}
     - target: {fileID: 886050516184973892, guid: c4638a8148b1ba647a6baaa54755f854, type: 3}
+      propertyPath: musicToPlay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 886050516184973892, guid: c4638a8148b1ba647a6baaa54755f854, type: 3}
       propertyPath: nameToDisplay
       value: Sonki's Lagoon
       objectReference: {fileID: 0}
@@ -116367,6 +116492,86 @@ PrefabInstance:
       propertyPath: introCheckpoint
       value: 
       objectReference: {fileID: 456135187}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_cave.Path
+      value: event:/MUSIC/InGame/Music_Cave
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_menu.Path
+      value: event:/MUSIC/InGame/Music_Menu
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_level01.Path
+      value: event:/MUSIC/InGame/Music_Level01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_level02.Path
+      value: event:/MUSIC/InGame/Music_Level02
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_cave.Guid.Data1
+      value: -1734963384
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_cave.Guid.Data2
+      value: 1234015693
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_cave.Guid.Data3
+      value: -1754452327
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_cave.Guid.Data4
+      value: 1293718965
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_menu.Guid.Data1
+      value: 2063113704
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_menu.Guid.Data2
+      value: 1231763485
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_menu.Guid.Data3
+      value: -1691420534
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_menu.Guid.Data4
+      value: -891283659
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_level01.Guid.Data1
+      value: -750965112
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_level01.Guid.Data2
+      value: 1261987731
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_level01.Guid.Data3
+      value: 718435512
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_level01.Guid.Data4
+      value: -248969867
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_level02.Guid.Data1
+      value: -1565673467
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_level02.Guid.Data2
+      value: 1309214342
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_level02.Guid.Data3
+      value: -838145887
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055552378613368542, guid: 55ac68119155cb34da9475abc2297122, type: 3}
+      propertyPath: music_level02.Guid.Data4
+      value: -1740969166
+      objectReference: {fileID: 0}
     - target: {fileID: 6417920981878387560, guid: 55ac68119155cb34da9475abc2297122, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -127606,6 +127811,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 47335494}
   - {fileID: 2063433053}
   - {fileID: 1293669335}
   - {fileID: 1041453338}
@@ -128106,6 +128312,7 @@ MonoBehaviour:
   displayAreaName: 1
   nameToDisplay: Frutti Tuto
   enterSecretRoom: 1
+  musicToPlay: 5
 --- !u!65 &1033701603
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -133334,6 +133541,7 @@ MonoBehaviour:
   displayAreaName: 1
   nameToDisplay: Volcanino's Core
   enterSecretRoom: 1
+  musicToPlay: 5
 --- !u!65 &1087959932
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -161210,7 +161418,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 362623430}
+    m_TransformParent: {fileID: 47335494}
     m_Modifications:
     - target: {fileID: 1640834496702532231, guid: 3565ebf2a372ce64b8da6d6a08b299aa, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -161271,6 +161479,10 @@ PrefabInstance:
     - target: {fileID: 8886316771174780291, guid: 3565ebf2a372ce64b8da6d6a08b299aa, type: 3}
       propertyPath: index
       value: lagoon_002
+      objectReference: {fileID: 0}
+    - target: {fileID: 8886316771174780291, guid: 3565ebf2a372ce64b8da6d6a08b299aa, type: 3}
+      propertyPath: musicToPlay
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8886316771174780291, guid: 3565ebf2a372ce64b8da6d6a08b299aa, type: 3}
       propertyPath: targetIndex
@@ -174224,7 +174436,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 362623430}
+    m_TransformParent: {fileID: 328555099}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 1f306b277d36722469bcae53360254b0, type: 3}
       propertyPath: m_LocalScale.x
@@ -174349,6 +174561,7 @@ MonoBehaviour:
   displayAreaName: 1
   nameToDisplay: Frutti Tuto
   enterSecretRoom: 1
+  musicToPlay: 1
 --- !u!65 &1439588084
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -232871,6 +233084,7 @@ MonoBehaviour:
   displayAreaName: 1
   nameToDisplay: Volcanino Core
   enterSecretRoom: 1
+  musicToPlay: 1
 --- !u!65 &1789625894
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -307904,6 +308118,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 3520179888112085303}
   - {fileID: 3552278855913534895}
+  - {fileID: 545191339}
   - {fileID: 931981467}
   - {fileID: 1604402786}
   - {fileID: 96352217}

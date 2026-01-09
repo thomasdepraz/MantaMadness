@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 7913848029518680306}
   - component: {fileID: 6940516031190403126}
   - component: {fileID: 7925588284556986215}
-  - component: {fileID: 5055552378613368542}
   - component: {fileID: 1938381613075376899}
   - component: {fileID: 887437798498588529}
   - component: {fileID: 9013187420255892262}
@@ -53,6 +52,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isHitStop: 0
+  introCinematic: 0
+  introCinematicTimeline: {fileID: 0}
+  introCheckpoint: {fileID: 0}
   screenEffectData: {fileID: 11400000, guid: 4b5cffd7e40f85b459610b08b3081e96, type: 2}
   player: {fileID: 0}
   m_SpawnPosition: {x: 0, y: 0, z: 0}
@@ -81,6 +83,16 @@ MonoBehaviour:
   strafLeft: {fileID: -7944096410784951038, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   strafRight: {fileID: 6790945411342083927, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   resetCamera: {fileID: -2297281972354256271, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  stomp: {fileID: 0}
+  interact: {fileID: 0}
+  driftR: {fileID: 0}
+  driftL: {fileID: 0}
+  uiMoveUp: {fileID: 0}
+  uiMoveDown: {fileID: 0}
+  uiMoveLeft: {fileID: 0}
+  uiMoveRight: {fileID: 0}
+  uiSubmit: {fileID: 0}
+  uiCancel: {fileID: 0}
 --- !u!114 &7913848029518680306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,25 +169,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
---- !u!114 &5055552378613368542
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 711859319428096486}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f18c30e6f8f6fc44965133398ae76a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  eventRef:
-    Guid:
-      Data1: -750965112
-      Data2: 1261987731
-      Data3: 718435512
-      Data4: -248969867
-    Path: event:/MUSIC/InGame/Music_Level01
 --- !u!114 &1938381613075376899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,6 +181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd14e4749e23f054ea502b5836e1ffa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkpoints: []
 --- !u!114 &887437798498588529
 MonoBehaviour:
   m_ObjectHideFlags: 0

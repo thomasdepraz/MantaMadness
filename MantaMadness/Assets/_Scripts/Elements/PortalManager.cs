@@ -22,13 +22,15 @@ public class PortalManager : MonoBehaviour
             }
     }
 
-    public IEnumerator Teleport(string targetIndex, bool secretRoomMusic)
+    public IEnumerator Teleport(string targetIndex, bool secretRoomMusic, MUSICS musicToPlay)
     {
         // Set Velocity to 0
         Game.Instance.player?.LockPlayerForDuration(teleportTransitionDuration);
 
         UIManager.Instance.transitionScreen.TransitionInOut();
         FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Warping, 1);
+        MusicManager.Instance.PlayMusic(musicToPlay);
+
         yield return new WaitForSeconds(teleportTransitionDuration/2);
         for(int i = 0; i < portals.Count; i++)
         {
