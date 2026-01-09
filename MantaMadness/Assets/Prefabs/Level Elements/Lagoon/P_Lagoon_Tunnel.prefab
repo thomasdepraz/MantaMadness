@@ -100,11 +100,74 @@ MonoBehaviour:
   index: Lagoon_1
   targetIndex: Lagoon_2
   teleportPoint: {fileID: 7843091450492837395}
-  objectTest: {fileID: 0}
   signText: {fileID: 0}
   displayAreaName: 0
   nameToDisplay: 
   enterSecretRoom: 0
+  musicToPlay: 5
+--- !u!1 &7196981529733364593
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 513098887408028504}
+  - component: {fileID: 309566382566622932}
+  m_Layer: 0
+  m_Name: PortalSFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &513098887408028504
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7196981529733364593}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6010607674428282569}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &309566382566622932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7196981529733364593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 361538724
+      Data2: 1136434555
+      Data3: -691369308
+      Data4: 1602701761
+    Path: event:/Sfx/InGame/World/Enviro/Env_WarpVortex_LP
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 1
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 1
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 60
 --- !u!1 &9171516147284857496
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,6 +201,7 @@ Transform:
   - {fileID: 472392643850449384}
   - {fileID: 4417160595419144894}
   - {fileID: 7843091450492837395}
+  - {fileID: 513098887408028504}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 141.214, z: 20}
 --- !u!114 &3980685275958829399
@@ -154,6 +218,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
+  playOnBeat: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 1

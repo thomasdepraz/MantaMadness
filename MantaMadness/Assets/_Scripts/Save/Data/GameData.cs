@@ -28,6 +28,7 @@ public class GameData
     public bool grind;
 
     public MUSICS gameStartMusic;
+    public AMBIENT gameStartAmbient;
 
     // The values defined in this constructor will be the default values
     // Start with this when there's no data to load
@@ -37,6 +38,7 @@ public class GameData
 
         this.clamCount = 0;
         this.gameStartMusic = MUSICS.MUSIC_LEVEL01;
+        this.gameStartAmbient = AMBIENT.AMB_BEACH;
         coinsCollected = new SerializableDictionnary<string, bool>();
         checkpoints = new SerializableDictionnary<string, bool>();
         abilityAltars = new SerializableDictionnary<string, bool>();

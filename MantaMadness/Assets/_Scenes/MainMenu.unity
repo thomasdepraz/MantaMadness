@@ -978,6 +978,13 @@ MonoBehaviour:
       Data3: -467040371
       Data4: 194399563
     Path: event:/Sfx/MainMenu/UI/UI_MainMenu_Tweak
+  startGameSound:
+    Guid:
+      Data1: -631143297
+      Data2: 1245175846
+      Data3: -929461105
+      Data4: -2011798418
+    Path: event:/Sfx/MainMenu/UI/UI_MainMenu_ButtonPress_StartGame
   mainMenuButtons:
   - {fileID: 157638569}
   - {fileID: 112928491}
@@ -1034,6 +1041,7 @@ MonoBehaviour:
     alienAntennas: 0
     grind: 0
     gameStartMusic: 2
+    gameStartAmbient: 1
 --- !u!1 &379225476
 GameObject:
   m_ObjectHideFlags: 0
@@ -11855,6 +11863,66 @@ PrefabInstance:
     - target: {fileID: 4103893495288563080, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510447336355084489, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: amb_city.Path
+      value: event:/Sfx/InGame/World/Amb/Amb_City_LP
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510447336355084489, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: amb_beach.Path
+      value: event:/Sfx/InGame/World/Amb/Amb_Beach_LP
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510447336355084489, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: amb_secret.Path
+      value: event:/Sfx/InGame/World/Amb/Amb_Secret_LP
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510447336355084489, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: amb_city.Guid.Data1
+      value: -690746113
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510447336355084489, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: amb_city.Guid.Data2
+      value: 1289228976
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510447336355084489, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: amb_city.Guid.Data3
+      value: 1482603708
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510447336355084489, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: amb_city.Guid.Data4
+      value: -610255977
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510447336355084489, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: amb_beach.Guid.Data1
+      value: 1550227893
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510447336355084489, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: amb_beach.Guid.Data2
+      value: 1278968378
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510447336355084489, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: amb_beach.Guid.Data3
+      value: 1810642089
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510447336355084489, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: amb_beach.Guid.Data4
+      value: -562332309
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510447336355084489, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: amb_secret.Guid.Data1
+      value: 1078985856
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510447336355084489, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: amb_secret.Guid.Data2
+      value: 1197558899
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510447336355084489, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: amb_secret.Guid.Data3
+      value: -460656966
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510447336355084489, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
+      propertyPath: amb_secret.Guid.Data4
+      value: -1544753415
       objectReference: {fileID: 0}
     - target: {fileID: 7719082527175239044, guid: 28dcae6aed5e82440b9ab4ac3f4215a8, type: 3}
       propertyPath: m_Name

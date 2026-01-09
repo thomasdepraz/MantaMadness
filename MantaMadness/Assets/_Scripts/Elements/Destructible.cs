@@ -1,4 +1,5 @@
 using DG.Tweening;
+using FMODUnity;
 using System;
 using System.Collections;
 using Unity.VisualScripting;
@@ -14,6 +15,7 @@ public class Destructible : MonoBehaviour
     [SerializeField] private int clamNumber;
     [SerializeField] private GameObject clam;
     [SerializeField] private bool hard = false;
+    [SerializeField] private EventReference destructionSFX;
 
     private bool isBroken = false;
 
@@ -32,34 +34,34 @@ public class Destructible : MonoBehaviour
 
     private void OnEnable()
     {
-        hitbox.HitCollision += StartMoaiDestruction;
+        hitbox.HitCollision += StartDestruction;
     }
 
     private void OnDisable()
     {
-        hitbox.HitCollision -= StartMoaiDestruction;
+        hitbox.HitCollision -= StartDestruction;
     }
 
-    void StartMoaiDestruction(float velocity, Vector3 point)
+    void StartDestruction(float velocity, Vector3 point)
     {
         if (isBroken == false)
         {
             if (!hard)
             {
-                StartCoroutine(MoaiDestructionRoutine(point));
+                StartCoroutine(DestructionRoutine(point));
             }
             else if (hard)
             {
                 if(velocity > Game.Instance.player.controllerData.maxSpeed)
                 {
-                    StartCoroutine(MoaiDestructionRoutine(point));
+                    StartCoroutine(DestructionRoutine(point));
                 }
             }
 
         }
     }
 
-    private IEnumerator MoaiDestructionRoutine(Vector3 point)
+    private IEnumerator DestructionRoutine(Vector3 point)
     {
         //HITSTOP
         ImpactParticle.transform.position = point;
@@ -72,6 +74,9 @@ public class Destructible : MonoBehaviour
         isBroken = true;
         visual.SetActive(false);
         //moaiRemain.SetActive(true);
+
+        //SOUND PLAY
+        RuntimeManager.PlayOneShot(destructionSFX, transform.position);
 
 
         //START SPAWNING CLAMS

@@ -10,6 +10,7 @@ public class WorldCheckpoint : MonoBehaviour
     [SerializeField] public bool displayAreaName;
     [SerializeField] public string nameToDisplay;
     [SerializeField] public MUSICS musicToPlay = MUSICS.NULL;
+    [SerializeField] public AMBIENT ambientToPlay = AMBIENT.NULL;
 
 
     private void Awake()
@@ -36,6 +37,10 @@ public class WorldCheckpoint : MonoBehaviour
             if (musicToPlay != MUSICS.NULL)
             {
                 MusicManager.Instance.PlayMusic(musicToPlay);
+            }
+            if(ambientToPlay != AMBIENT.NULL)
+            {
+                MusicManager.Instance.PlayAmbient(ambientToPlay);
             }
         }
     }

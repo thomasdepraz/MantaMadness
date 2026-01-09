@@ -21,7 +21,8 @@ public class WaterFall : MonoBehaviour
 
 
     [Header("FMOD Sound")]
-    public EventReference enterWaterfallCharge;
+    public EventReference enterWaterfallChargeShot;
+    public EventReference enterWaterfallShot;
     public EventReference waterFallAppear;
 
 
@@ -78,7 +79,7 @@ public class WaterFall : MonoBehaviour
         if (waterFallCamera != null)
             waterFallCamera.LookAt = Game.Instance.player.transform;
 
-        RuntimeManager.PlayOneShot(enterWaterfallCharge, Game.Instance.player.transform.position);
+        RuntimeManager.PlayOneShot(enterWaterfallChargeShot, Game.Instance.player.transform.position);
     }
 
     public bool FollowSpline(
@@ -137,6 +138,7 @@ public class WaterFall : MonoBehaviour
 
         currentSpline.Evaluate(0f, out float3 pos, out _, out _);
         currentPosition = currentSplineTransform.TransformPoint(pos);
+        RuntimeManager.PlayOneShot(enterWaterfallShot, Game.Instance.player.transform.position);
     }
 
     private void SetActiveSpline(SplineContainer container)

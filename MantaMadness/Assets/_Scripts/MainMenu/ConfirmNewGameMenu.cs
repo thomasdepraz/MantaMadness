@@ -15,16 +15,13 @@ public class ConfirmNewGameMenu : MonoBehaviour
 
     public void Open()
     {
-        Debug.Log("Ta mère");
         ToggleVisuals(true);
-        Debug.Log("La pute");
         currentIndex = 0;
         options[currentIndex].Select();
     }
 
     public void Close()
     {
-        Debug.Log("C'est pas vrai");
         ToggleVisuals(false);
     }
 

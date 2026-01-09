@@ -10042,6 +10042,7 @@ GameObject:
   - component: {fileID: 8943604372642784215}
   - component: {fileID: 7640052595281929892}
   - component: {fileID: 4827990520472152608}
+  - component: {fileID: 2060970737321974795}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -10118,3 +10119,34 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2060970737321974795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8256903748812093384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -994485469
+      Data2: 1202069814
+      Data3: -487321202
+      Data4: 1007022003
+    Path: event:/Sfx/InGame/World/Enviro/Env_Lilypad_Bloomed_LP
+  Event: 
+  EventPlayTrigger: 11
+  EventStopTrigger: 12
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20

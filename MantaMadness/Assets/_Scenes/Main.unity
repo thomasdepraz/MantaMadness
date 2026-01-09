@@ -7542,6 +7542,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: --UI--
       objectReference: {fileID: 0}
+    - target: {fileID: 7149877208037157574, guid: 07e6244d34ac07843946995f8d596328, type: 3}
+      propertyPath: dialogActiveReference.Path
+      value: event:/Sfx/InGame/Dialog/Dialog_Activ_LP
+      objectReference: {fileID: 0}
+    - target: {fileID: 7149877208037157574, guid: 07e6244d34ac07843946995f8d596328, type: 3}
+      propertyPath: dialogActiveReference.Guid.Data1
+      value: -930044244
+      objectReference: {fileID: 0}
+    - target: {fileID: 7149877208037157574, guid: 07e6244d34ac07843946995f8d596328, type: 3}
+      propertyPath: dialogActiveReference.Guid.Data2
+      value: 1265574254
+      objectReference: {fileID: 0}
+    - target: {fileID: 7149877208037157574, guid: 07e6244d34ac07843946995f8d596328, type: 3}
+      propertyPath: dialogActiveReference.Guid.Data3
+      value: 1024282244
+      objectReference: {fileID: 0}
+    - target: {fileID: 7149877208037157574, guid: 07e6244d34ac07843946995f8d596328, type: 3}
+      propertyPath: dialogActiveReference.Guid.Data4
+      value: 164522073
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -23308,6 +23328,7 @@ MonoBehaviour:
     alienAntennas: 0
     grind: 0
     gameStartMusic: 0
+    gameStartAmbient: 1
 --- !u!114 &226208740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27074,6 +27095,26 @@ PrefabInstance:
     - target: {fileID: 5297611861359274207, guid: fe516635ea9b02d478a62e379aef5507, type: 3}
       propertyPath: m_Name
       value: P_Frutiger_Cherry (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8460755821874125621, guid: fe516635ea9b02d478a62e379aef5507, type: 3}
+      propertyPath: fruitExplode.Path
+      value: event:/Sfx/InGame/World/Enviro/Env_Fruits_Explode
+      objectReference: {fileID: 0}
+    - target: {fileID: 8460755821874125621, guid: fe516635ea9b02d478a62e379aef5507, type: 3}
+      propertyPath: fruitExplode.Guid.Data1
+      value: -527647033
+      objectReference: {fileID: 0}
+    - target: {fileID: 8460755821874125621, guid: fe516635ea9b02d478a62e379aef5507, type: 3}
+      propertyPath: fruitExplode.Guid.Data2
+      value: 1194878583
+      objectReference: {fileID: 0}
+    - target: {fileID: 8460755821874125621, guid: fe516635ea9b02d478a62e379aef5507, type: 3}
+      propertyPath: fruitExplode.Guid.Data3
+      value: -96297844
+      objectReference: {fileID: 0}
+    - target: {fileID: 8460755821874125621, guid: fe516635ea9b02d478a62e379aef5507, type: 3}
+      propertyPath: fruitExplode.Guid.Data4
+      value: -1152601086
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -60169,6 +60210,14 @@ PrefabInstance:
       value: Check_SonnyLagoon_002
       objectReference: {fileID: 0}
     - target: {fileID: 886050516184973892, guid: c4638a8148b1ba647a6baaa54755f854, type: 3}
+      propertyPath: musicToPlay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 886050516184973892, guid: c4638a8148b1ba647a6baaa54755f854, type: 3}
+      propertyPath: ambientToPlay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 886050516184973892, guid: c4638a8148b1ba647a6baaa54755f854, type: 3}
       propertyPath: nameToDisplay
       value: Sonny's Lagoon
       objectReference: {fileID: 0}
@@ -78994,6 +79043,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -2093772787462966335, guid: 1f306b277d36722469bcae53360254b0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 781651168}
+    - targetCorrespondingSourceObject: {fileID: -2093772787462966335, guid: 1f306b277d36722469bcae53360254b0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1911990604}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1f306b277d36722469bcae53360254b0, type: 3}
       insertIndex: -1
@@ -102041,6 +102093,10 @@ PrefabInstance:
     - target: {fileID: 886050516184973892, guid: c4638a8148b1ba647a6baaa54755f854, type: 3}
       propertyPath: musicToPlay
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 886050516184973892, guid: c4638a8148b1ba647a6baaa54755f854, type: 3}
+      propertyPath: ambientToPlay
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 886050516184973892, guid: c4638a8148b1ba647a6baaa54755f854, type: 3}
       propertyPath: nameToDisplay
@@ -131697,6 +131753,69 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 1861559133563698818, guid: defe3167a0029b845abcc9380a4406c8, type: 3}
+--- !u!1 &1077075292
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1077075293}
+  - component: {fileID: 1077075294}
+  m_Layer: 0
+  m_Name: PortalSFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1077075293
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1077075292}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.050099425, y: 0.9961484, z: 0.07167502, w: -0.0064075324}
+  m_LocalPosition: {x: -0.426, y: -1.598, z: 0.182}
+  m_LocalScale: {x: 0.5000002, y: 0.39999998, z: 0.5000001}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1439588086}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1077075294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1077075292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 361538724
+      Data2: 1136434555
+      Data3: -691369308
+      Data4: 1602701761
+    Path: event:/Sfx/InGame/World/Enviro/Env_WarpVortex_LP
+  Event: 
+  EventPlayTrigger: 11
+  EventStopTrigger: 12
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 1
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 60
 --- !u!4 &1078936583 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8860770917047063654, guid: 95d3dacbe58b6b24a94d37343db3d76b, type: 3}
@@ -161420,6 +161539,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 47335494}
     m_Modifications:
+    - target: {fileID: 309566382566622932, guid: 3565ebf2a372ce64b8da6d6a08b299aa, type: 3}
+      propertyPath: TriggerOnce
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 309566382566622932, guid: 3565ebf2a372ce64b8da6d6a08b299aa, type: 3}
+      propertyPath: EventPlayTrigger
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 309566382566622932, guid: 3565ebf2a372ce64b8da6d6a08b299aa, type: 3}
+      propertyPath: EventStopTrigger
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 309566382566622932, guid: 3565ebf2a372ce64b8da6d6a08b299aa, type: 3}
+      propertyPath: OverrideMaxDistance
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 1640834496702532231, guid: 3565ebf2a372ce64b8da6d6a08b299aa, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -174516,6 +174651,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -2093772787462966335, guid: 1f306b277d36722469bcae53360254b0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 211770993}
+    - targetCorrespondingSourceObject: {fileID: -2093772787462966335, guid: 1f306b277d36722469bcae53360254b0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1077075293}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1f306b277d36722469bcae53360254b0, type: 3}
       insertIndex: -1
@@ -245577,6 +245715,69 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1911763689}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1911990603
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1911990604}
+  - component: {fileID: 1911990605}
+  m_Layer: 0
+  m_Name: PortalSFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1911990604
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1911990603}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.051643807, y: 0.9960528, z: 0.070570394, w: 0.015221935}
+  m_LocalPosition: {x: -0.348, y: -1.949, z: 0.059}
+  m_LocalScale: {x: 0.49999994, y: 0.4, z: 0.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1789625892}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1911990605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1911990603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 361538724
+      Data2: 1136434555
+      Data3: -691369308
+      Data4: 1602701761
+    Path: event:/Sfx/InGame/World/Enviro/Env_WarpVortex_LP
+  Event: 
+  EventPlayTrigger: 11
+  EventStopTrigger: 12
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 1
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 60
 --- !u!1 &1912632861
 GameObject:
   m_ObjectHideFlags: 0

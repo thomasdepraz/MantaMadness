@@ -9899,7 +9899,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8155441494969906007}
-  - {fileID: 701856486751729879}
   - {fileID: 8361522744600349109}
   - {fileID: 7199829047848047524}
   - {fileID: 6139077862515185265}
@@ -9925,6 +9924,13 @@ MonoBehaviour:
   clamNumber: 5
   clam: {fileID: 4611842544960491346, guid: e9e301e1cac721e4e9997f27dff6fb0f, type: 3}
   hard: 0
+  fruitExplode:
+    Guid:
+      Data1: -527647033
+      Data2: 1194878583
+      Data3: -96297844
+      Data4: -1152601086
+    Path: event:/Sfx/InGame/World/Enviro/Env_Fruits_Explode
 --- !u!1 &6028278429968898899
 GameObject:
   m_ObjectHideFlags: 0
@@ -14825,88 +14831,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!1001 &1024507054521229116
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 3967732561352831396}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 82070158759975641916c89a505d2d7a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 82070158759975641916c89a505d2d7a, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 82070158759975641916c89a505d2d7a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 82070158759975641916c89a505d2d7a, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 4.3999863
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 82070158759975641916c89a505d2d7a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -25.679045
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 82070158759975641916c89a505d2d7a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -19.89638
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 82070158759975641916c89a505d2d7a, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.8433917
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 82070158759975641916c89a505d2d7a, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.5372992
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 82070158759975641916c89a505d2d7a, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 82070158759975641916c89a505d2d7a, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 82070158759975641916c89a505d2d7a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -65
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 82070158759975641916c89a505d2d7a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 82070158759975641916c89a505d2d7a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 466608246689542871, guid: 82070158759975641916c89a505d2d7a, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 84df02a3b93e5ff48bb2b340f3f942f2, type: 2}
-    - target: {fileID: 919132149155446097, guid: 82070158759975641916c89a505d2d7a, type: 3}
-      propertyPath: m_Name
-      value: Frutiger_Cherry (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 5008022236170083033, guid: 82070158759975641916c89a505d2d7a, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 94620feb165020b40b517d80ea44cbeb, type: 2}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 82070158759975641916c89a505d2d7a, type: 3}
---- !u!4 &701856486751729879 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 82070158759975641916c89a505d2d7a, type: 3}
-  m_PrefabInstance: {fileID: 1024507054521229116}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2461352736705849928
 PrefabInstance:
   m_ObjectHideFlags: 0

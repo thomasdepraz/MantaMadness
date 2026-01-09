@@ -1,3 +1,4 @@
+using FMODUnity;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -23,6 +24,12 @@ public class PoulpsBehavior : MonoBehaviour
     [SerializeField] private GameObject visual;
     [SerializeField] private Animator animator;
     [SerializeField] private PoulpsRelay relay;
+
+
+    [Header("Sound")]
+    [SerializeField] private EventReference poulpStartled;
+    [SerializeField] private EventReference poulpMoveLoopReference;
+    public FMOD.Studio.EventInstance poulpMoveLoopEvent;
 
     private bool hasActivated =  false;
 
@@ -95,6 +102,8 @@ public class PoulpsBehavior : MonoBehaviour
         visual.SetActive(false);
         smokeInkParticles.Stop();
         smokeInkParticles.gameObject.SetActive(false);
+        poulpMoveLoopEvent.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        poulpMoveLoopEvent.release();
     }
 
     private bool OnAnimationEvent = false;
@@ -104,12 +113,23 @@ public class PoulpsBehavior : MonoBehaviour
         sleepParticles.gameObject.SetActive(false);
         exclamationParticles.Play();
         animator.SetTrigger("Suprised");
+        RuntimeManager.PlayOneShot(poulpStartled, transform.position);
         yield return new WaitUntil(() => OnAnimationEvent);
         animator.SetTrigger("Sprint");
+        poulpMoveLoopEvent = RuntimeManager.CreateInstance(poulpMoveLoopReference);
+        poulpMoveLoopEvent.start();
         smokeInkParticles.Play();
         OnAnimationEvent = false;
         StartCoroutine(spawnCoroutine());
         StartCoroutine(Timer());
+    }
+
+    private void FixedUpdate()
+    {
+        if (poulpMoveLoopEvent.isValid())
+        {
+            poulpMoveLoopEvent.set3DAttributes(RuntimeUtils.To3DAttributes(transform));
+        }
     }
 
     private void AnimationEventTrigger()

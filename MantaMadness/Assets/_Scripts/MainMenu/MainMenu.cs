@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Windows;
 using static UnityEngine.CullingGroup;
 using FMODUnity;
+using System.Collections;
 
 public class MainMenu : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] public EventReference submitSound;
     [SerializeField] public EventReference navigateSound;
     [SerializeField] public EventReference mainMenuTweakSound;
+    [SerializeField] public EventReference startGameSound;
 
     public enum MainMenuState
     {
@@ -215,8 +217,10 @@ public class MainMenu : MonoBehaviour
 
     private void Submit(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-
+        if(_defaultStateIndex != 0)
         PlaySound(submitSound);
+        else if(_defaultStateIndex == 0)
+        PlaySound(startGameSound);
 
         if (State == MainMenuState.DEFAULT)
         {
@@ -224,7 +228,7 @@ public class MainMenu : MonoBehaviour
             {
                 //Continue
                 //Load scene
-                SceneManager.LoadScene("Main");
+                StartCoroutine(LoadMainCoroutine());
             }
             else if (_defaultStateIndex == 1)
             {
@@ -244,7 +248,7 @@ public class MainMenu : MonoBehaviour
             }
         }
 
-        else if(State == MainMenuState.OPTIONS)
+        else if (State == MainMenuState.OPTIONS)
         {
             options.Submit();
         }
@@ -326,6 +330,13 @@ public class MainMenu : MonoBehaviour
 
 
         DataPersistenceManager.Instance.NewGame();
+        StartCoroutine(LoadMainCoroutine());
+    }
+
+    public IEnumerator LoadMainCoroutine()
+    {
+        MusicManager.Instance.StopMusic();
+        yield return new WaitForSeconds(0.75f);
         SceneManager.LoadScene("Main");
     }
 

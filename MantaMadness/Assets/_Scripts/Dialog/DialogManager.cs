@@ -37,6 +37,9 @@ public class DialogManager : MonoBehaviour
     private InputManager inputs;
     private bool interacted = false;
 
+    public EventReference dialogActiveReference;
+    public FMOD.Studio.EventInstance dialogActiveEvent;
+
     private void Awake()
     {
         if(instance == null)
@@ -161,7 +164,9 @@ public class DialogManager : MonoBehaviour
         {
             currentSequenceCount = 0;
         }
-
+        //START DIALOG FMOD EVENT
+        dialogActiveEvent = RuntimeManager.CreateInstance(dialogActiveReference);
+        dialogActiveEvent.start();
         PlayDialog();
     }
     public void PlayDialog()
@@ -265,6 +270,10 @@ public class DialogManager : MonoBehaviour
     private void ResetSequence()
     {
         Debug.Log("Stop sequence");
+
+        //STOP DIALOG FMOD EVENT
+        dialogActiveEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        dialogActiveEvent.release();
 
         currentSequence = null;
         currentSequenceCount = 0;
