@@ -4,11 +4,10 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent (typeof(SphereCollider))]
 public class Lilypad : MonoBehaviour
 {
     [SerializeField] private GameObject visual;
-    [SerializeField] private ParticleSystem bloomParticle;
+    [SerializeField] private ParticleSystem[] bloomParticles;
     private bool hasBloomed = false;
     [SerializeField] private float scaleModifier = 1;
     private LilyPadManager manager;
@@ -36,8 +35,8 @@ public class Lilypad : MonoBehaviour
 
     private void Blooming()
     {
-        //PARTICLE ACTIVATION
-        bloomParticle.Play();
+ 
+
         FMOD.Studio.EventInstance audio = RuntimeManager.CreateInstance(audioEvent);
         RuntimeManager.AttachInstanceToGameObject(audio,gameObject);
         audio.start();
@@ -45,6 +44,12 @@ public class Lilypad : MonoBehaviour
         visual.SetActive(true);
         //TWEEN SSCALE OF MAIN VISUAL
         visual.transform.DOScale(visual.transform.localScale * scaleModifier,0.15f).SetEase(Ease.OutQuad).SetLoops(2,LoopType.Yoyo);
+
+        //PARTICLE ACTIVATION
+        foreach (ParticleSystem particle in bloomParticles)
+        {
+            particle.Play();
+        }
     }
 
     public void AlternateBlooming()
@@ -52,9 +57,14 @@ public class Lilypad : MonoBehaviour
         if(hasBloomed == false)
         {
             hasBloomed = true;
-            bloomParticle.Play();
+
             visual.SetActive(true);
             visual.transform.DOScale(visual.transform.localScale * scaleModifier, 0.15f).SetEase(Ease.OutQuad).SetLoops(2, LoopType.Yoyo);
+
+            foreach (ParticleSystem particle in bloomParticles)
+            {
+                particle.Play();
+            }
         }
     }
 

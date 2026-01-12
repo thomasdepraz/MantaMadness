@@ -79,6 +79,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public bool OnRail => currentRail != null;
     public bool OnWaterFall => currentWaterFall != null;
     public bool IsLocked => OnRail || InAirRail || forceLocked;
+
     private bool CanDrift => HorizontalVelocity.sqrMagnitude > controllerData.minSpeedToDrift * controllerData.minSpeedToDrift;
     //private bool CanDriftBreak => HorizontalVelocity.sqrMagnitude < (controllerData.minSpeedToDriftBreak * controllerData.minSpeedToDriftBreak);
     private bool CanDash => (State == ControllerState.SURFING || State == ControllerState.FALLING) && 
@@ -132,6 +133,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private bool hasDriftBoost;
     private bool forceLocked;
     private bool interact;
+    public bool railLock;
 
     public Action<ControllerState, ControllerState> stateChanged;
     public Action<AirRail> enterAirRail;
@@ -768,7 +770,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     bool hasHitWater = false;
     bool hasHitWalls = false;
-    bool bump = false;
+    bool bumpRail = false;
     float fallTime = 0f;
 
     //float xRotation = 0f;
@@ -778,7 +780,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         hasHitWater = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit waterInfo, controllerData.hoverRaycastLength, waterRaycastLayer.value);
         hasHitWalls = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit defaultInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
-        bump = Physics.SphereCast(hoverBehaviour.normalContainer.position, controllerData.bumpDetectionRadius, hoverBehaviour.normalContainer.forward,out RaycastHit bumptInfo, controllerData.bumpRaycastLenght, defaultRaycastLayer.value);
+        bumpRail = Physics.Raycast(hoverBehaviour.normalContainer.position, hoverBehaviour.normalContainer.forward, out RaycastHit railInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
 
         if (State != ControllerState.SURFING)
         {
@@ -788,8 +790,28 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         if (OnRail)
         {
+
             State = ControllerState.RAIL;
-            if (false == currentRail.Progress(Time.fixedDeltaTime, out Vector3 nextPos, out Vector3 normal, out Vector3 direction))
+
+            if (railLock)
+            {
+                return;
+            }
+
+            if (bumpRail && railInfo.collider.CompareTag("RailCollider"))
+            {
+
+                    currentRail = null;
+                    transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
+                    rb.isKinematic = false;
+                    exitRail.Invoke();
+                    railDetector.ExitRail();
+                    PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GRINDRAIL);
+                    disableBoolAnim("Grind");
+                    Bump((-hoverBehaviour.normalContainer.forward + hoverBehaviour.normalContainer.up));
+            }
+
+            else if (false == currentRail.Progress(Time.fixedDeltaTime, out Vector3 nextPos, out Vector3 normal, out Vector3 direction))
             {
                 currentRail = null;
                 transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
@@ -1332,20 +1354,56 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (State == ControllerState.RAIL)
             return false;
 
-        if(grindAbility == true)
+        if (grindAbility)
         {
             ResetJump();
             currentRail = rail;
-            rail.EnterRail(transform.position, Velocity);
+
+            Vector3 intentDir = GetRailIntentDirection();
+            rail.EnterRail(transform.position, intentDir);
+
             rb.isKinematic = true;
             boost.Invoke();
             enterRail.Invoke();
             enableBoolAnim.Invoke("Grind");
             triggerAnim("StartGrind");
-            PlayerActionFMODManager.Instance.PlayPlayerActionWithParam(PlayerActionFMOD.GRINDRAIL, "L_Grind_Surface", (float)rail.railType);
+
+            PlayerActionFMODManager.Instance.PlayPlayerActionWithParam(PlayerActionFMOD.GRINDRAIL,"L_Grind_Surface",(float)rail.railType);
             return true;
         }
         return false;
+    }
+
+    private Vector3 GetRailIntentDirection()
+    {
+        Transform cam = Camera.main.transform;
+
+        Vector3 camForward = cam.forward;
+        Vector3 camRight = cam.right;
+
+        camForward.y = 0f;
+        camRight.y = 0f;
+
+        camForward.Normalize();
+        camRight.Normalize();
+
+        // Input prioritaire
+        Vector2 move = inputs.moveDirection.action.ReadValue<Vector2>();
+
+        Vector3 intent =
+            camForward * move.y +
+            camRight * move.x;
+
+        // Si pas d'input → fallback velocity
+        if (intent.sqrMagnitude < 0.01f)
+            intent = HorizontalVelocity;
+
+        // Si toujours rien → fallback caméra
+        if (intent.sqrMagnitude < 0.01f)
+            intent = camForward;
+
+        intent.y = 0f;
+        return intent.normalized;
     }
 
     public bool EnterWaterfall(WaterFall waterfall)
@@ -1477,6 +1535,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         rb.isKinematic = lockController;
+    }
+
+    public void RailLock(bool lockValue)
+    {
+        railLock = lockValue;
     }
 
     private void ResetJump() => jumpCount = 0;

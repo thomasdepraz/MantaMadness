@@ -9,6 +9,7 @@ public class JsonSplineImporter : EditorWindow
     public TextAsset jsonFile;
     public GameObject targetParent; // Optional: put your road mesh here
     public float minPointDistance = 0.05f;
+    public GameObject instantiatePrefab;
 
     [MenuItem("Tools/Spline/Import JSON Spline")]
     public static void ShowWindow()
@@ -32,6 +33,13 @@ public class JsonSplineImporter : EditorWindow
         {
             ImportSpline(jsonFile, targetParent);
         }
+
+        if (jsonFile != null && GUILayout.Button("Import Spline (Instantiate Setup)"))
+        {
+            ImportSplineInstantiate(jsonFile, targetParent);
+        }
+
+        instantiatePrefab = (GameObject)EditorGUILayout.ObjectField("Instantiate Prefab",instantiatePrefab,typeof(GameObject),false);
     }
 
     // ===============================================================
@@ -148,8 +156,8 @@ public class JsonSplineImporter : EditorWindow
         go.AddComponent<MeshRenderer>();
 
         SplineExtrude extrude = go.AddComponent<SplineExtrude>();
-        extrude.Radius = 0.06f;
-        extrude.Sides = 12;
+        extrude.Radius = 3f;
+        extrude.Sides = 4;
         extrude.Capped = true;
 
 
@@ -204,5 +212,160 @@ public class JsonSplineImporter : EditorWindow
 
         return result;
     }
+
+    // ===============================================================
+    //  ALTERNATE IMPORT : SPLINE INSTANTIATE SETUP
+    // ===============================================================
+
+    void ImportSplineInstantiate(TextAsset json, GameObject parent)
+    {
+        if (json == null)
+        {
+            Debug.LogError("No JSON file assigned.");
+            return;
+        }
+
+        SplineJson data = JsonUtility.FromJson<SplineJson>(json.text);
+
+        if (data == null || data.points == null || data.points.Count < 2)
+        {
+            Debug.LogError("Invalid JSON format or not enough points (need at least 2).");
+            return;
+        }
+
+        // --------------------------
+        // CREATE GAMEOBJECT
+        // --------------------------
+        GameObject go = new GameObject(string.IsNullOrEmpty(data.name)
+            ? "ImportedSpline_Instantiate"
+            : data.name + "_Instantiate");
+
+        if (parent != null)
+        {
+            go.transform.SetParent(parent.transform, false);
+            go.transform.localPosition = Vector3.zero;
+            go.transform.localRotation = Quaternion.Euler(-90, 0, 180);
+            go.transform.localScale = Vector3.one;
+        }
+
+        // Layer "Rail"
+        int railLayer = LayerMask.NameToLayer("Rail");
+        if (railLayer != -1)
+            go.layer = railLayer;
+
+        // --------------------------
+        // SPLINE CONTAINER + SPLINE
+        // --------------------------
+        SplineContainer container = go.AddComponent<SplineContainer>();
+        Spline spline = new Spline();
+
+        List<Vector3> rawPositions = new List<Vector3>(data.points.Count);
+        foreach (var p in data.points)
+            rawPositions.Add(new Vector3(p.x, p.z, p.y));
+
+        List<Vector3> positions = minPointDistance > 0f
+            ? FilterClosePoints(rawPositions, minPointDistance)
+            : rawPositions;
+
+        if (positions.Count < 2)
+        {
+            Debug.LogError("Need at least 2 points to build a spline.");
+            DestroyImmediate(go);
+            return;
+        }
+
+        for (int i = 0; i < positions.Count; i++)
+            spline.Add(new BezierKnot(positions[i]));
+
+        for (int i = 0; i < spline.Count; i++)
+            spline.SetTangentMode(i, TangentMode.AutoSmooth);
+
+        // Anti-torsion (identique à ton setup principal)
+        Vector3 up = Vector3.up;
+
+        for (int i = 0; i < spline.Count; i++)
+        {
+            Vector3 t;
+            if (i == 0)
+                t = positions[i + 1] - positions[i];
+            else if (i == positions.Count - 1)
+                t = positions[i] - positions[i - 1];
+            else
+                t = positions[i + 1] - positions[i - 1];
+
+            if (t.sqrMagnitude < 1e-10f)
+                t = Vector3.forward;
+
+            t.Normalize();
+
+            if (Mathf.Abs(Vector3.Dot(t, up)) > 0.98f)
+                up = Vector3.right;
+
+            var k = spline[i];
+            k.Rotation = Quaternion.LookRotation(t, up);
+            spline[i] = k;
+        }
+
+        spline.Closed = false;
+        container.Spline = spline;
+
+        // --------------------------
+        // COMPONENTS (EXTRUDE FOR COLLISION)
+        // --------------------------
+        MeshFilter mf = go.AddComponent<MeshFilter>();
+        MeshRenderer mr = go.AddComponent<MeshRenderer>();
+        mr.enabled = false; // Mesh invisible (collision only)
+
+        SplineExtrude extrude = go.AddComponent<SplineExtrude>();
+        extrude.Radius = 0.06f;   // à ajuster si besoin
+        extrude.Sides = 4;
+        extrude.Capped = true;
+
+        MeshCollider mc = go.AddComponent<MeshCollider>();
+        mc.convex = false;
+
+        go.AddComponent<Rail>();
+
+        // --------------------------
+        // SPLINE INSTANTIATE
+        // --------------------------
+        SplineInstantiate instantiate = go.AddComponent<SplineInstantiate>();
+
+        // Axes
+        instantiate.UpAxis = SplineInstantiate.AlignAxis.YAxis;
+        instantiate.ForwardAxis = SplineInstantiate.AlignAxis.ZAxis;
+
+        // World space
+        instantiate.CoordinateSpace = SplineInstantiate.Space.World;
+
+        // Spacing (Spline = 2)
+        instantiate.InstantiateMethod = SplineInstantiate.Method.SpacingDistance;
+        instantiate.MinSpacing = 2f;
+        instantiate.MaxSpacing = 2f;
+
+        instantiate.MinPositionOffset = new Vector3(0f, -1.5f, 0f);
+        instantiate.MaxPositionOffset = new Vector3(0f, -1.5f, 0f);
+
+        instantiate.PositionSpace = SplineInstantiate.OffsetSpace.World;
+
+        // -------------------------------------------------
+        // PREFAB SUPPORT (Items To Instantiate)
+        // -------------------------------------------------
+        if (instantiatePrefab != null)
+        {
+            var item = new SplineInstantiate.InstantiableItem
+            {
+                Prefab = instantiatePrefab,
+                Probability = 1f
+            };
+
+            instantiate.itemsToInstantiate = new[] { item };
+        }
+        else
+        {
+            Debug.LogWarning("No Instantiate Prefab assigned. SplineInstantiate will not spawn anything.");
+        }
+    }
+
 
 }

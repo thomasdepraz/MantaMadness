@@ -59,6 +59,7 @@ public class LilyPadManager : MonoBehaviour
     private IEnumerator EndGame()
     {
         Game.Instance.player.ForceLock(true);
+        Game.Instance.player.RailLock(true);
 
         //activate camera + play sound
         vcam.enabled = true;
@@ -94,6 +95,7 @@ public class LilyPadManager : MonoBehaviour
         }
         //unlock player
         Game.Instance.player.ForceLock(false);
+        Game.Instance.player.RailLock(false);
 
 
         //reset camera

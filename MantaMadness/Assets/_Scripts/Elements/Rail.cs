@@ -27,7 +27,7 @@ public class Rail : MonoBehaviour
     private float worldRailLength;
 
     [Header("Rail parameters")]
-    public float railSpeed = 50f;
+    public float railSpeed = 75f;
     public RailDirection railDirection = RailDirection.None;
 
     public Vector3 Position => currentPosition;
@@ -69,19 +69,39 @@ public class Rail : MonoBehaviour
         return length;
     }
 
-    public void EnterRail(Vector3 contactPosition, Vector3 velocity)
+    public void EnterRail(Vector3 contactPosition, Vector3 intentDirection)
     {
-        Vector3 nextPos = contactPosition + (velocity * Time.fixedDeltaTime);
-        nextPos = transform.InverseTransformPoint(nextPos);
         contactPosition = transform.InverseTransformPoint(contactPosition);
 
-        SplineUtility.GetNearestPoint(railSpline, contactPosition, out float3 nearest, out currentProgress);
-        SplineUtility.GetNearestPoint(railSpline, nextPos, out _, out float nextT);
+        // Nearest spline point
+        SplineUtility.GetNearestPoint(
+            railSpline,
+            contactPosition,
+            out float3 nearest,
+            out currentProgress
+        );
+
+        currentProgress = Mathf.Clamp01(currentProgress);
+
+        // Tangente locale
+        railSpline.Evaluate(currentProgress, out _, out float3 localTangent, out _);
+
+        // Tangente world
+        Vector3 worldTangent =
+            splineContainer.transform.TransformDirection(localTangent).normalized;
+
+        // Sécurité
+        if (intentDirection.sqrMagnitude < 0.001f)
+            intentDirection = worldTangent;
+
+        intentDirection.Normalize();
+
+        float dot = Vector3.Dot(intentDirection, worldTangent);
 
         switch (railDirection)
         {
             case RailDirection.None:
-                dir = nextT > currentProgress ? 1 : -1;
+                dir = dot >= 0f ? 1 : -1;
                 break;
             case RailDirection.Forward:
                 dir = 1;
@@ -91,9 +111,7 @@ public class Rail : MonoBehaviour
                 break;
         }
 
-        //currentPosition = transform.position + new Vector3(nearest.x, nearest.y, nearest.z);
         currentPosition = splineContainer.transform.TransformPoint(nearest);
-        currentProgress = Mathf.Clamp01(currentProgress);
     }
 
     //return false when out
