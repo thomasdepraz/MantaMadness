@@ -314,11 +314,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 State = ControllerState.JUMPING;
                 jumpCount++;
 
-                //rb.linearVelocity = hoverBehaviour.normalContainer.forward * HorizontalVelocity.magnitude;
-                rb.linearVelocity = moveDir * HorizontalVelocity.magnitude;
+                var velocity = HorizontalVelocity.magnitude;
+                rb.linearVelocity = Vector3.zero;
 
                 Vector3 projForward = Vector3.ProjectOnPlane(NormalContainer.forward, Vector3.up);
-                rb.AddForce((Vector3.up * controllerData.upwardImpulseForce /* forceMultiplier*/) + (projForward * controllerData.railImpulseForce /* forceMultiplier*/), ForceMode.VelocityChange);
+                rb.AddForce((Vector3.up * controllerData.upwardImpulseForce /* forceMultiplier*/) + (moveDir * controllerData.railImpulseForce), ForceMode.VelocityChange);
                 rb.linearDamping = controllerData.jumpDamping;
 
 
@@ -776,11 +776,13 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     //float xRotation = 0f;
     private void FixedUpdate()
     {
-        print(hasResetCam);
+        //print(hasResetCam);
 
         hasHitWater = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit waterInfo, controllerData.hoverRaycastLength, waterRaycastLayer.value);
         hasHitWalls = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit defaultInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
         bumpRail = Physics.Raycast(hoverBehaviour.normalContainer.position, hoverBehaviour.normalContainer.forward, out RaycastHit railInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
+
+        Debug.Log(rb.angularVelocity);
 
         if (State != ControllerState.SURFING)
         {
@@ -802,7 +804,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             {
 
                     currentRail = null;
-                    transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
                     rb.isKinematic = false;
                     exitRail.Invoke();
                     railDetector.ExitRail();
@@ -814,7 +815,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             else if (false == currentRail.Progress(Time.fixedDeltaTime, out Vector3 nextPos, out Vector3 normal, out Vector3 direction))
             {
                 currentRail = null;
-                transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
                 rb.isKinematic = false;
                 rb.AddForce(direction * 50, ForceMode.VelocityChange);
                 exitRail.Invoke();
@@ -826,7 +826,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             else
             {
                 transform.position = nextPos + grindOffset;
-                transform.forward = direction;
+                NormalContainer.forward = direction;
             }
 
             return;
@@ -1207,7 +1207,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         direction = (camForward * inputDirection.y + camRight * inputDirection.x).normalized;
 
         Vector3 targetDir = Vector3.ProjectOnPlane(direction, hoverBehaviour.normalContainer.up);
-
+        Debug.DrawRay(transform.position, targetDir * 5, Color.red); 
 
         if (targetDir.sqrMagnitude > 0.01f)
         {
@@ -1619,8 +1619,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if(currentRail != null && State == ControllerState.RAIL)
         {
             currentRail = null;
-            //direction = (camForward * inputDirection.y + camRight * inputDirection.x).normalized;
-            transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
+
+            hoverBehaviour.normalContainer.up = Vector3.up;
+
             rb.isKinematic = false;
             exitRail.Invoke();
             railDetector.ExitRail();
@@ -1637,7 +1638,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         {
             //railGrindAnim();
             currentRail = null;
-            transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
+
+            hoverBehaviour.normalContainer.up = Vector3.up;
+
             rb.isKinematic = false;
             exitRail.Invoke();
             PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GRINDRAIL);
