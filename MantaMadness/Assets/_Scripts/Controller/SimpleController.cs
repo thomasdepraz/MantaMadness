@@ -1639,7 +1639,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             //railGrindAnim();
             currentRail = null;
 
-            hoverBehaviour.normalContainer.up = Vector3.up;
+            //hoverBehaviour.normalContainer.up = Vector3.up;
 
             rb.isKinematic = false;
             exitRail.Invoke();
