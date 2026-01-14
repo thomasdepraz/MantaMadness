@@ -27,10 +27,13 @@ public class UIManager : MonoBehaviour
     public TransitionInterface transitionScreen;
     [HideInInspector]
     public BoostGaugeInterface boostGaugeInterface;
+    [HideInInspector]
+    public DialogInteractDisplay dialogInteractDisplay;
 
     public void ToggleBaseInterface(bool toggle)
     {
         gameInterface.ToggleInterface(toggle);
         boostGaugeInterface.ToggleInterface(toggle);
+        dialogInteractDisplay.ToggleInterface(toggle);
     }
 }

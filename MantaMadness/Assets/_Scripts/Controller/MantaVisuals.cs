@@ -8,6 +8,8 @@ using UnityEngine.VFX.Utility;
 
 public class MantaVisuals : MonoBehaviour
 {
+    public static MantaVisuals instance;
+
     SimpleController mantaController;
 
     public Animator mantaAnimator;
@@ -40,6 +42,7 @@ public class MantaVisuals : MonoBehaviour
     public ParticleSystem chargeDriftParticlesAdditionnal;
     public VisualEffect railVisualEffect;
     public ParticleSystem railParticleSystem;
+    public ParticleSystem pickupParticle;
 
     [Header("Visual")]
     public SkinnedMeshRenderer[] mantaAllVisuals;
@@ -68,6 +71,15 @@ public class MantaVisuals : MonoBehaviour
 
     private void Awake()
     {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+
         mantaController = GetComponent<SimpleController>();
         mantaController.updateDrift += UpdateDrift;
         mantaController.stateChanged += UpdateState;
@@ -411,6 +423,11 @@ public class MantaVisuals : MonoBehaviour
     {
         targetJumpParticles.SetVector3(targetJumpDirection, transform.forward);
         targetJumpParticles.Play();
+    }
+
+    public void PickupParticles()
+    {
+        pickupParticle.Play();
     }
 
     public void enableBoolAnimation(string boolName)

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class CameraTargetDetection : MonoBehaviour
 {
@@ -100,6 +101,11 @@ public class CameraTargetDetection : MonoBehaviour
 
     void DetectNPCTargets()
     {
+        if ((DialogManager.instance.currentSequence != null))
+        {
+            return;
+        }
+
         Collider[] targetsInRange = Physics.OverlapSphere(transform.position, npcDetectionRange, npcTargetMask);
 
         for (int i = validNPCTargets.Count - 1; i >= 0; i--)
@@ -109,10 +115,10 @@ public class CameraTargetDetection : MonoBehaviour
             {
                 validNPCTargets.RemoveAt(i);
                 npc?.GetComponent<InteractableNPC>().DisableVisual();
+                UIManager.Instance.dialogInteractDisplay.ToggleInterface(false);
                 print(npc + "removed (out of range)");
             }
         }
-
 
         foreach (Collider target in targetsInRange)
         {
@@ -121,6 +127,7 @@ public class CameraTargetDetection : MonoBehaviour
 
             // Vérifie si la cible est dans le champ de vision
             float angleToTarget = Vector3.Angle(transform.forward, directionToTarget);
+
 
             if (angleToTarget < viewAngle / 2f) // Si dans le FOV
             {
@@ -133,6 +140,7 @@ public class CameraTargetDetection : MonoBehaviour
                     {
                         validNPCTargets.Add(target);
                         target.GetComponent<InteractableNPC>().EnableVisual();
+                        UIManager.Instance.dialogInteractDisplay.ToggleInterface(true);
                         print(target + "Has been added");
                     }
                 }
@@ -144,6 +152,7 @@ public class CameraTargetDetection : MonoBehaviour
                     {
                         validNPCTargets.Remove(target);
                         target.GetComponent<InteractableNPC>().DisableVisual();
+                        UIManager.Instance.dialogInteractDisplay.ToggleInterface(false);
                         print(target + "Has been removed");
                     }
                 }
@@ -155,6 +164,7 @@ public class CameraTargetDetection : MonoBehaviour
                 {
                     validNPCTargets.Remove(target);
                     target.GetComponent<InteractableNPC>().DisableVisual();
+                    UIManager.Instance.dialogInteractDisplay.ToggleInterface(false);
                     print(target + "Has been removed");
                 }
             }

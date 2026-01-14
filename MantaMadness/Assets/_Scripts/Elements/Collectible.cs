@@ -81,6 +81,9 @@ public class Collectible : MonoBehaviour
                 break;
         }
 
+        //Play particle explosion
+        MantaVisuals.instance.PickupParticles();
+
         //deactivate tween
         Sequence tween = DOTween.Sequence().Append(transform.DOScale(0, 0.1f).SetEase(Ease.OutBounce));
         tween.Append(transform.DOJump(transform.position + transform.up, 1, 1, 0.8f));

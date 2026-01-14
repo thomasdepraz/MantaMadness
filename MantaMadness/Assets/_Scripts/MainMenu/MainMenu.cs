@@ -31,6 +31,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] public EventReference mainMenuTweakSound;
     [SerializeField] public EventReference startGameSound;
 
+    private bool ignoreNextInput = false;
+
     public enum MainMenuState
     {
         DEFAULT,
@@ -135,6 +137,22 @@ public class MainMenu : MonoBehaviour
         inputs.uiCancel.action.performed -= Cancel;
     }
 
+    private void OnApplicationFocus(bool focus)
+    {
+        if (focus)
+        {
+            // On ignore le premier input après le retour dans la fenêtre
+            ignoreNextInput = true;
+            StartCoroutine(EnableInputNextFrame());
+        }
+    }
+
+    private IEnumerator EnableInputNextFrame()
+    {
+        yield return null; // attendre 1 frame
+        ignoreNextInput = false;
+    }
+
     public void UpdateState()
     {
         if(previousState != MainMenuState.NULL)
@@ -217,6 +235,9 @@ public class MainMenu : MonoBehaviour
 
     private void Submit(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
+        if (ignoreNextInput)
+            return;
+
         if(_defaultStateIndex != 0)
         PlaySound(submitSound);
         else if(_defaultStateIndex == 0)
@@ -261,6 +282,9 @@ public class MainMenu : MonoBehaviour
 
     private void OnMoveUp(InputAction.CallbackContext ctx)
     {
+        if (ignoreNextInput)
+            return;
+
         PlaySound(navigateSound);
 
         if (State == MainMenuState.OPTIONS)
@@ -272,6 +296,9 @@ public class MainMenu : MonoBehaviour
 
     private void OnMoveDown(InputAction.CallbackContext ctx)
     {
+        if (ignoreNextInput)
+            return;
+
         PlaySound(navigateSound);
 
         if (State == MainMenuState.OPTIONS)
@@ -283,6 +310,8 @@ public class MainMenu : MonoBehaviour
 
     private void OnMoveLeft(InputAction.CallbackContext ctx)
     {
+        if (ignoreNextInput)
+            return;
 
         PlaySound(mainMenuTweakSound);
         if (State == MainMenuState.OPTIONS)
@@ -291,6 +320,9 @@ public class MainMenu : MonoBehaviour
 
     private void OnMoveRight(InputAction.CallbackContext ctx)
     {
+        if (ignoreNextInput)
+            return;
+
         PlaySound(mainMenuTweakSound);
         if (State == MainMenuState.OPTIONS)
             options.MoveRight();

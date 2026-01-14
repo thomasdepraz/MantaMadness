@@ -19,7 +19,7 @@ public class DialogManager : MonoBehaviour
 
     [SerializeField] private List<DialogSequence> dialogSequences;
 
-    [SerializeField] private DialogSequence currentSequence;
+    [SerializeField] public DialogSequence currentSequence { get; private set; }
 
     [SerializeField] private GameObject[] dialogUIVisuals;
 
