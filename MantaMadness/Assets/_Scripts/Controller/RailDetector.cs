@@ -13,10 +13,22 @@ public class RailDetector : MonoBehaviour
     {
         if(other.TryGetComponent(out Rail rail) && onRail is false)
         {
-            if (controller.EnterRail(rail))
+            if(rail.isRoadBorder == true && controller.strafRoutine != null || rail.isRoadBorder == true && controller.State != ControllerState.SURFING)
             {
-                onRail = true;
+                if (controller.EnterRail(rail))
+                {
+                    onRail = true;
+                }
             }
+
+            else if(rail.isRoadBorder == false)
+            {
+                if (controller.EnterRail(rail))
+                {
+                    onRail = true;
+                }
+            }
+
         }
         else if(other.TryGetComponent(out WaterFall waterfall) && onWaterfall is false)
         {

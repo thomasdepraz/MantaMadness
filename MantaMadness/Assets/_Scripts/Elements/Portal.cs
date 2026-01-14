@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using FMODUnity;
 
 [RequireComponent(typeof(BoxCollider))]
 public class Portal : MonoBehaviour
@@ -17,7 +18,12 @@ public class Portal : MonoBehaviour
     [SerializeField] public string nameToDisplay;
 
     [SerializeField] private bool enterSecretRoom = false;
+
     [SerializeField] private MUSICS musicToPlay = MUSICS.NULL;
+
+
+    [SerializeField] public GameObject[] levelToLoad;
+    [SerializeField] public GameObject[] levelToUnload;
 
     private void Start()
     {
@@ -48,7 +54,7 @@ public class Portal : MonoBehaviour
     {
         if (other.TryGetComponent(out SimpleController controller))
         {
-            PortalManager.Instance.StartCoroutine(PortalManager.Instance.Teleport(targetIndex, enterSecretRoom, musicToPlay));
+            PortalManager.Instance.StartCoroutine(PortalManager.Instance.Teleport(targetIndex, enterSecretRoom, musicToPlay,this));
             PortalManager.Instance.SetCheckpoint(targetIndex, displayAreaName, nameToDisplay);
         }
     }

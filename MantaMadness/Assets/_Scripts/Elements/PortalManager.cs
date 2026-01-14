@@ -1,5 +1,6 @@
 using UnityEngine;
 using Unity.Cinemachine;
+using FMODUnity;
 using System.Collections.Generic;
 using System.Collections;
 
@@ -9,6 +10,8 @@ public class PortalManager : MonoBehaviour
     public List<Portal> portals;
 
     private float teleportTransitionDuration = 1.5f;
+
+    [SerializeField] private EventReference warpInteract;
 
     private void Awake()
     {
@@ -22,17 +25,35 @@ public class PortalManager : MonoBehaviour
             }
     }
 
-    public IEnumerator Teleport(string targetIndex, bool secretRoomMusic, MUSICS musicToPlay)
+    public IEnumerator Teleport(string targetIndex, bool secretRoomMusic, MUSICS musicToPlay, Portal portal)
     {
         // Set Velocity to 0
         Game.Instance.player?.LockPlayerForDuration(teleportTransitionDuration);
+        RuntimeManager.PlayOneShot(warpInteract, Camera.main.transform.position);
+
+        foreach (GameObject level in portal.levelToLoad)
+        {
+            if (level != null)
+            {
+                level.SetActive(true);
+            }
+        }
+
+        foreach(GameObject level in portal.levelToUnload)
+        {
+            if (level != null)
+            {
+                level.SetActive(false);
+            }
+        }
 
         UIManager.Instance.transitionScreen.TransitionInOut();
         FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Warping, 1);
         MusicManager.Instance.PlayMusic(musicToPlay);
 
         yield return new WaitForSeconds(teleportTransitionDuration/2);
-        for(int i = 0; i < portals.Count; i++)
+        RuntimeManager.PlayOneShot(warpInteract, Camera.main.transform.position);
+        for (int i = 0; i < portals.Count; i++)
         {
             if (portals[i].index == targetIndex)
             {

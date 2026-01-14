@@ -577,7 +577,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         }
     }
 
-    private Coroutine strafRoutine = null;
+    public Coroutine strafRoutine {get; private set; } = null;
     private IEnumerator StrafCooldownRoutine()
     {
         yield return new WaitForSeconds(controllerData.strafCooldown);

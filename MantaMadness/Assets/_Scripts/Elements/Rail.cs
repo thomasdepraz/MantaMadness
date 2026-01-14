@@ -21,6 +21,8 @@ public class Rail : MonoBehaviour
         METAL
     }
 
+    public bool isRoadBorder = false;
+
     private SplineContainer splineContainer;
     private Spline railSpline;
     private float invRailLength;
@@ -46,6 +48,22 @@ public class Rail : MonoBehaviour
         worldRailLength = ComputeWorldLength(railSpline, splineContainer.transform);
         invRailLength = 1f / worldRailLength;
         enabled = false;
+    }
+
+    private void OnEnable()
+    {
+        if(GetComponent<SplineContainer>() != null)
+        {
+            GetComponent<SplineContainer>().enabled = true;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (GetComponent<SplineContainer>() != null)
+        {
+            GetComponent<SplineContainer>().enabled = false;
+        }
     }
 
     private float ComputeWorldLength(Spline spline, Transform tf)
@@ -146,6 +164,7 @@ public class Rail : MonoBehaviour
 
         position = worldPos;
         direction = (worldPos - currentPosition);
+        //direction = worldTan.normalized;
         normal = worldUp;
 
         currentPosition = worldPos;

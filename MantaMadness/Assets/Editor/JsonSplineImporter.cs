@@ -165,6 +165,7 @@ public class JsonSplineImporter : EditorWindow
         mc.convex = false;
 
         go.AddComponent<Rail>();
+        go.GetComponent<Rail>().isRoadBorder = true;
 
         // --------------------------
         // SELECT IN HIERARCHY
@@ -325,6 +326,7 @@ public class JsonSplineImporter : EditorWindow
         mc.convex = false;
 
         go.AddComponent<Rail>();
+
 
         // --------------------------
         // SPLINE INSTANTIATE
