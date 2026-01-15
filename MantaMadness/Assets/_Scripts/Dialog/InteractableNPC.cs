@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class InteractableNPC : MonoBehaviour
 {
-    [SerializeField] private GameObject interactionVisual;
-
+    [SerializeField] private GameObject outOfRangeVisual;
+    [SerializeField] private GameObject inRangeVisual;
     [SerializeField] public string dialogKey;
 
     private void Start()
     {
-        if(interactionVisual.activeSelf == true)
+        if(inRangeVisual.activeSelf == true)
         {
             DisableVisual();
         }
@@ -16,11 +16,13 @@ public class InteractableNPC : MonoBehaviour
 
     public void EnableVisual()
     {
-        interactionVisual.SetActive(true);
+        outOfRangeVisual.SetActive(false);
+        inRangeVisual.SetActive(true);
     }
 
     public void DisableVisual()
     {
-        interactionVisual.SetActive(false);
+        outOfRangeVisual.SetActive(true);
+        inRangeVisual.SetActive(false);
     }
 }

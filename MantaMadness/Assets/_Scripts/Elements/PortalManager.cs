@@ -1,8 +1,9 @@
-using UnityEngine;
-using Unity.Cinemachine;
+using FMOD.Studio;
 using FMODUnity;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
+using Unity.Cinemachine;
+using UnityEngine;
 
 public class PortalManager : MonoBehaviour
 {
@@ -29,7 +30,7 @@ public class PortalManager : MonoBehaviour
     {
         // Set Velocity to 0
         Game.Instance.player?.LockPlayerForDuration(teleportTransitionDuration);
-        RuntimeManager.PlayOneShot(warpInteract, Camera.main.transform.position);
+        PlayTeleportSFX("WarpState", 0);
 
         foreach (GameObject level in portal.levelToLoad)
         {
@@ -52,7 +53,7 @@ public class PortalManager : MonoBehaviour
         MusicManager.Instance.PlayMusic(musicToPlay);
 
         yield return new WaitForSeconds(teleportTransitionDuration/2);
-        RuntimeManager.PlayOneShot(warpInteract, Camera.main.transform.position);
+        PlayTeleportSFX("WarpState", 1);
         for (int i = 0; i < portals.Count; i++)
         {
             if (portals[i].index == targetIndex)
@@ -90,6 +91,18 @@ public class PortalManager : MonoBehaviour
         }
 
         WorldCheckpointManager.Instance.SetCheckpoint(respawnPos, index, areaName, nameToDisplay);
+    }
+
+    public void PlayTeleportSFX(string parameterName, float paramValue)
+    {
+        EventReference eventReference = warpInteract;
+
+        EventInstance instance = RuntimeManager.CreateInstance(eventReference);
+        instance.setParameterByName(parameterName, paramValue);
+        instance.set3DAttributes(RuntimeUtils.To3DAttributes(Camera.main.transform.position));
+        instance.start();
+        instance.release();
+        return;
     }
 
 }
