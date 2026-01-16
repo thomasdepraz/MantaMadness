@@ -15,9 +15,11 @@ public class Game : MonoBehaviour, IDataPersistence
     public bool isHitStop = false;
 
     //Cinematic / State Points
-    public bool introCinematic = false;
+    //public bool introCinematic = false;
     public TimelineAsset introCinematicTimeline;
     public WorldCheckpoint introCheckpoint;
+
+    public int gameState { private set; get; }
 
     private void Awake()
     {
@@ -64,34 +66,61 @@ public class Game : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        introCinematic  = data.introCinematic;
+        gameState = data.GameState;
 
-        if(introCinematic == false)
-        {
-            introCinematic = true;
-            //Play intro cinematic
-            if (introCinematicTimeline != null)
-            {
-                CinematicManager.instance.PlayCinematic(introCinematicTimeline);
-                //introCinematic = true;
-            }
-            StartCoroutine(DelayLoad());
-        }
+
+        StartCoroutine(DelayLoad());
+
     }
 
     private IEnumerator DelayLoad()
     {
         yield return new WaitForSeconds(0.1f);
-        WorldCheckpointManager.Instance.SetStartCheckpoint(introCheckpoint.respawnTransform);
-        WorldCheckpointManager.Instance.SetCheckpoint(introCheckpoint.respawnTransform, introCheckpoint.indexName, introCheckpoint.displayAreaName, introCheckpoint.nameToDisplay);
-        Vector3 pos = Vector3.zero;
-        Quaternion rotation;
-        Respawn(out pos, out rotation);
+        StateChange();
+
     }
 
     public void SaveData(ref GameData data)
     {
-        data.introCinematic = introCinematic;
+        data.GameState = gameState;
+    }
+
+    public void StateChange()
+    {
+        switch (gameState)
+        {
+            //Start the game
+            case 0:
+                //Play intro cinematic
+                if (introCinematicTimeline != null)
+                {
+                    CinematicManager.instance.PlayCinematic(introCinematicTimeline);
+                }
+
+
+                //SET POSITION TO FIRST CHECKPOINT POS
+                WorldCheckpointManager.Instance.SetStartCheckpoint(introCheckpoint.respawnTransform);
+                WorldCheckpointManager.Instance.SetCheckpoint(introCheckpoint.respawnTransform, introCheckpoint.indexName, introCheckpoint.displayAreaName, introCheckpoint.nameToDisplay);
+                Vector3 pos = Vector3.zero;
+                Quaternion rotation;
+                Respawn(out pos, out rotation);
+                break;
+
+            //Collect the Frutti wings
+            case 1:
+                //Set Fisherman dialog to new key
+                //Set fruttiger crab dialog to new key
+                //Set moai red dialog to new key
+                //Set Volcanino dialog to new key
+                break;
+
+            //Exit the core caves
+            case 2:
+                break;
+
+            default:
+                break;
+        }
     }
 
     public void Update()

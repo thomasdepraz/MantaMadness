@@ -782,8 +782,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         hasHitWalls = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit defaultInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
         bumpRail = Physics.Raycast(hoverBehaviour.normalContainer.position, hoverBehaviour.normalContainer.forward, out RaycastHit railInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
 
-        Debug.Log(rb.angularVelocity);
-
         if (State != ControllerState.SURFING)
         {
             //Stop drifting

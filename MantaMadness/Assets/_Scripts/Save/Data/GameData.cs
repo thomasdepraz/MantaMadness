@@ -4,10 +4,8 @@ using UnityEngine;
 [System.Serializable]
 public class GameData
 {
-    //Game State
-    public bool introCinematic;
-
-
+    //GAME STATE
+    public int GameState;
 
     //Currencies Counters
     public int clamCount;
@@ -18,6 +16,9 @@ public class GameData
 
     //Altar
     public SerializableDictionnary<string, bool> abilityAltars;
+
+    //NPC Dialogs
+    public SerializableDictionnary<string, NPCDialogData> npcDialogData;
 
     //Player Upgrades Tracking
     public bool doubleJump;
@@ -34,7 +35,7 @@ public class GameData
     // Start with this when there's no data to load
     public GameData()
     {
-        introCinematic = false;
+        GameState = 0;
 
         this.clamCount = 0;
         this.gameStartMusic = MUSICS.MUSIC_LEVEL01;
@@ -42,6 +43,7 @@ public class GameData
         coinsCollected = new SerializableDictionnary<string, bool>();
         checkpoints = new SerializableDictionnary<string, bool>();
         abilityAltars = new SerializableDictionnary<string, bool>();
+        npcDialogData = new SerializableDictionnary<string, NPCDialogData>();
 
         doubleJump = false;
         chargeBoost = false;
@@ -49,7 +51,5 @@ public class GameData
         lavaResistance = false;
         alienAntennas = false;
         grind = false;
-
-
     }
 }

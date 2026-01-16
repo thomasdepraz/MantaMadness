@@ -68,7 +68,7 @@ public class MainMenu : MonoBehaviour
         set
         {
             //Si ce bool n'est pas true, cela signifie que le joueur na même pas commencer l'intro du jeu DONC pas de save
-            if (DataPersistenceManager.Instance.gameData.introCinematic == false)
+            if (DataPersistenceManager.Instance.gameData.GameState == 0)
             {
                 // IF there are no save data, player can't press CONTINUE button
                 _defaultStateIndex = Mathf.Clamp(value, 1, mainMenuButtons.Length - 1);
@@ -112,7 +112,7 @@ public class MainMenu : MonoBehaviour
         inputs.uiMoveRight.action.performed += OnMoveRight;
         inputs.uiCancel.action.performed += Cancel;
 
-        if (DataPersistenceManager.Instance.gameData.introCinematic == false)
+        if (DataPersistenceManager.Instance.gameData.GameState != 0)
         {
             defaultStateIndex = 1;
         }
@@ -227,7 +227,7 @@ public class MainMenu : MonoBehaviour
             }
         }
 
-        if (DataPersistenceManager.Instance.gameData.introCinematic == false)
+        if (DataPersistenceManager.Instance.gameData.GameState != 0)
         {
             mainMenuButtons[0].GetComponent<MainMenuButtonContinue>().setMatDisabled();
         }
@@ -354,7 +354,7 @@ public class MainMenu : MonoBehaviour
     private void StartNewGame()
     {
         Debug.Log("StartNewGame called");
-        if (DataPersistenceManager.Instance.gameData.introCinematic == true)
+        if (DataPersistenceManager.Instance.gameData.GameState == 0)
         {
             State = MainMenuState.CONFIRM_NEW_GAME;
             return;

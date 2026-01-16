@@ -40,6 +40,8 @@ public class DialogManager : MonoBehaviour
     public EventReference dialogActiveReference;
     public FMOD.Studio.EventInstance dialogActiveEvent;
 
+    private InteractableNPC currentNpc;
+
     private void Awake()
     {
         if(instance == null)
@@ -131,7 +133,13 @@ public class DialogManager : MonoBehaviour
 
             if (selectedNpc != null)
             {
-                StartSequence(selectedNpc.dialogKey);
+                string dialogKey = selectedNpc.GetCurrentDialogKey();
+
+                if (!string.IsNullOrEmpty(dialogKey))
+                {
+                    currentNpc = selectedNpc;
+                    StartSequence(dialogKey);
+                }
             }
         }
     }
@@ -255,7 +263,6 @@ public class DialogManager : MonoBehaviour
             print("Current count" + currentSequenceCount);
             print("Sequence length" + currentSequence.sequence.Length);
             ResetSequence();
-            yield return null;
         }
         else
         {
@@ -274,6 +281,12 @@ public class DialogManager : MonoBehaviour
         //STOP DIALOG FMOD EVENT
         dialogActiveEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         dialogActiveEvent.release();
+
+        if (currentNpc != null)
+        {
+            currentNpc.IncrementIndex();
+            currentNpc = null;
+        }
 
         currentSequence = null;
         currentSequenceCount = 0;

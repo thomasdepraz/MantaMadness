@@ -4,6 +4,7 @@ using FMODUnity;
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LilyPadManager : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class LilyPadManager : MonoBehaviour
 
     bool endGameStarted = false;
     private int count = 0;
+
+    public UnityEvent onEnd;
 
     private void Start()
     {
@@ -52,14 +55,22 @@ public class LilyPadManager : MonoBehaviour
 
         if (count >= (lilypadsPercentage * lilypads.Length) / 100)
         {
-            StartCoroutine(EndGame());
+           EndGame();
         }
     }
 
-    private IEnumerator EndGame()
+    public void EndGame()
+    {
+        StartCoroutine(EndGameRoutine());
+    }
+
+    public IEnumerator EndGameRoutine()
     {
         Game.Instance.player.ForceLock(true);
         Game.Instance.player.RailLock(true);
+
+        //Invoke onEnd for other scripts linked to it
+        onEnd?.Invoke();
 
         //activate camera + play sound
         vcam.enabled = true;
