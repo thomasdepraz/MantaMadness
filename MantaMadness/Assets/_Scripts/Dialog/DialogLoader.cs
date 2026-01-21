@@ -1,6 +1,7 @@
-using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
+using UnityEngine;
 
 public class DialogLoader : MonoBehaviour
 {
@@ -13,6 +14,13 @@ public class DialogLoader : MonoBehaviour
     [Header("Language Settings")]
     [SerializeField]private Languages language;
     public static Dictionary<string, DialogueEntry> dialogues = new Dictionary<string, DialogueEntry>();
+
+    public enum InputDeviceType
+    {
+        KeyboardMouse,
+        Xbox,
+        PlayStation,
+    }
 
     void Awake()
     {
@@ -57,6 +65,16 @@ public class DialogLoader : MonoBehaviour
     public static DialogueEntry GetText(string key)
     {
         return dialogues.ContainsKey(key) ? dialogues[key]: new DialogueEntry { key = key, dialog = $"[Missing: {key}]", speaker = "Unknown" };
+    }
+
+
+    public static string ParseInputs(string text)
+    {
+        return Regex.Replace(text, @"\{(.*?)\}", match =>
+        {
+            string inputKey = match.Groups[1].Value;
+            return InputLocalization.GetInput(inputKey);
+        });
     }
 }
 

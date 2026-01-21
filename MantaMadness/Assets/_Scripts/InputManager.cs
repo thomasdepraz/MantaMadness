@@ -1,9 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
+using static DialogLoader;
 
 public class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; }
+    public static InputDeviceType CurrentDevice { get; private set; }
+
+    public static event Action<InputDeviceType> OnDeviceChanged;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -58,6 +64,10 @@ public class InputManager : MonoBehaviour
         {
             uiActionsMap.Enable();
         }
+
+        interact.action.performed += UpdateCurrentDevice;
+        jump.action.performed += UpdateCurrentDevice;
+        dash.action.performed += UpdateCurrentDevice;
     }
 
     private void OnDisable()
@@ -70,6 +80,44 @@ public class InputManager : MonoBehaviour
         if (uiActionsMap != null)
         {
             uiActionsMap.Disable();
+        }
+
+        interact.action.performed -= UpdateCurrentDevice;
+        jump.action.performed -= UpdateCurrentDevice;
+        dash.action.performed -= UpdateCurrentDevice;
+    }
+    private void SetDevice(InputDeviceType newDevice)
+    {
+        if (CurrentDevice == newDevice) return;
+
+        CurrentDevice = newDevice;
+        OnDeviceChanged?.Invoke(CurrentDevice);
+    }
+
+    public void UpdateCurrentDevice(InputAction.CallbackContext context)
+    {
+        var device = context.control?.device;
+        if (device == null) return;
+
+        if (device is Keyboard || device is Mouse)
+        {
+            SetDevice(InputDeviceType.KeyboardMouse);
+            return;
+        }
+
+        if (device is Gamepad)
+        {
+            string product = device.description.product?.ToLowerInvariant() ?? "";
+            string manufacturer = device.description.manufacturer?.ToLowerInvariant() ?? "";
+
+            if (product.Contains("dualshock") || product.Contains("dualsense") ||
+                manufacturer.Contains("sony") || product.Contains("playstation"))
+            {
+                SetDevice(InputDeviceType.PlayStation);
+                return;
+            }
+
+            SetDevice(InputDeviceType.Xbox);
         }
     }
 }

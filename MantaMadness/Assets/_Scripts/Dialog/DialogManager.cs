@@ -215,7 +215,8 @@ public class DialogManager : MonoBehaviour
     private IEnumerator TypeText(DialogAsset dialog)
     {
         isTyping = true;
-        dialogTextBox.text = dialog.dialogText;
+        string parsedText = DialogLoader.ParseInputs(dialog.dialogText);
+        dialogTextBox.text = parsedText;
         RuntimeManager.PlayOneShot(dialog.dialogSound);
         dialogWriter.OnCharacterShown.AddListener(PlaySoundOnCharWritten);
         dialogWriter.StartWriter();
@@ -230,7 +231,7 @@ public class DialogManager : MonoBehaviour
             }
             yield return null;
         }
-        yield return new WaitUntil(() => dialogTextBox.text == dialog.dialogText && dialogWriter.IsWriting == false);
+        yield return new WaitUntil(() => dialogTextBox.text == parsedText && dialogWriter.IsWriting == false);
 
         //Enable indicator visual
         dialogIndicator.DOFade(1, 0.5f).SetLoops(-1,LoopType.Yoyo);

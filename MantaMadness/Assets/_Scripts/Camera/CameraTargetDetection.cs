@@ -31,11 +31,19 @@ public class CameraTargetDetection : MonoBehaviour
         viewAngle = Camera.main.fieldOfView;
     }
 
-    private void Update()
+    //private void Update()
+    //{
+    //    DetectJumpTargets();
+    //    DetectNPCTargets();
+    //}
+    private void LateUpdate()
     {
+        Physics.SyncTransforms();
+
         DetectJumpTargets();
         DetectNPCTargets();
     }
+
 
     void DetectJumpTargets()
     {
@@ -131,8 +139,24 @@ public class CameraTargetDetection : MonoBehaviour
 
             if (angleToTarget < viewAngle / 2f) // Si dans le FOV
             {
+                Debug.Log("NPCs in range: " + targetsInRange.Length);
+
+                RaycastHit hit;
+                bool blocked = Physics.Raycast(
+                    transform.position,
+                    directionToTarget,
+                    out hit,
+                    distanceToTarget,
+                    obstacleMask,
+                    QueryTriggerInteraction.Ignore);
+
+
+                if (blocked)
+                {
+                    Debug.Log("BLOCKED BY: " + hit.collider.name + " | layer: " + hit.collider.gameObject.layer);
+                }
                 // Vérifie qu’aucun obstacle ne bloque la vue
-                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleMask))
+                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleMask, QueryTriggerInteraction.Ignore))
                 {
                     //Add to list
                     //Debug.Log("Objet VISIBLE : " + target.name);
