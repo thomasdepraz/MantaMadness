@@ -178,6 +178,7 @@ public class DialogManager : MonoBehaviour
     }
     public void PlayDialog()
     {
+
         StartCoroutine(Dialog(currentSequence.sequence[currentSequenceCount]));
         //LOCK PLAYER / player inputs (pause et autres)
         Game.Instance.player.ToggleDialogState(true);
@@ -185,8 +186,11 @@ public class DialogManager : MonoBehaviour
 
     public IEnumerator Dialog(DialogAsset dialog)
     {
+        //Si le NPC doit activer quelque chose pendant le dialog comme un objet
+        currentNpc?.OnDialogStepReached(currentSequence.sequenceKey, currentSequenceCount);
+
         //Play Cinematic
-        if(dialog.cinematic != null)
+        if (dialog.cinematic != null)
         CinematicManager.instance.PlayCinematic(dialog.cinematic);
 
         //Disable regular UI

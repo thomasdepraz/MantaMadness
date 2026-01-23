@@ -32,4 +32,16 @@ public class NPCManager : MonoBehaviour
             }
         }
     }
+
+    public int GetNPCSTate(string name)
+    {
+        foreach (InteractableNPC npc in npcList)
+        {
+            if (npc.npcName == name)
+            {
+                return npc.NpcState;
+            }
+        }
+        return 0;
+    }
 }

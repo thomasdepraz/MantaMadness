@@ -1,4 +1,4 @@
-using System.Diagnostics;
+ï»¿using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
 
@@ -11,7 +11,10 @@ public class InteractableNPC : MonoBehaviour, IDataPersistence
     [SerializeField] protected NPCDialogState[] dialogStates;
 
     [SerializeField] protected int npcState = 0;
+    public int NpcState => npcState;
     public int dialogIndex = 0;
+
+    protected bool stateChangedDuringDialog = false;
 
     public virtual void Start()
     {
@@ -34,10 +37,7 @@ public class InteractableNPC : MonoBehaviour, IDataPersistence
         OnDataLoaded();
     }
 
-    public virtual void OnDataLoaded()
-    {
-
-    }
+    public virtual void OnDataLoaded() { }
 
     public void SaveData(ref GameData data)
     {
@@ -72,7 +72,7 @@ public class InteractableNPC : MonoBehaviour, IDataPersistence
             return null;
 
         if (dialogIndex < 0 || dialogIndex >= dialogs.Length)
-            return dialogs[dialogs.Length - 1]; // sécurité
+            return dialogs[dialogs.Length - 1]; // sÃ©curitÃ©
 
         return dialogs[dialogIndex];
     }
@@ -109,6 +109,14 @@ public class InteractableNPC : MonoBehaviour, IDataPersistence
 
     public virtual void OnDialogFinished()
     {
+        if (stateChangedDuringDialog)
+        {
+            stateChangedDuringDialog = false;
+            return;
+        }
+
         IncrementIndex();
     }
+
+    public virtual void OnDialogStepReached(string sequenceKey,int dialogIndex) { }
 }

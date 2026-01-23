@@ -127,7 +127,10 @@ public class Game : MonoBehaviour, IDataPersistence
             //Collect the Missing Hand
             case 2:
                 //Set Cat poster to State 1
-                NPCManager.instance.UpdateNPCState("CATPOSTER", 1);
+                if(NPCManager.instance.GetNPCSTate("CATPOSTER") < 1)
+                {
+                    NPCManager.instance.UpdateNPCState("CATPOSTER", 1);
+                }
                 break;
 
             default:
