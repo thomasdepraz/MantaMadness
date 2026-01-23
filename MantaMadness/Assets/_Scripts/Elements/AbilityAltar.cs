@@ -12,6 +12,7 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
     [SerializeField] private Transform playerPoint;
     [SerializeField] private CinemachineCamera cam;
     [SerializeField] private string abilityName;
+    //[SerializeField] private ControllerAbility abilityName;
     [SerializeField] private string dialogSequenceName;
 
     [SerializeField] private GameObject[] visuals;
@@ -20,6 +21,8 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
     public EventReference pickupAltarSound;
 
     private bool hasBeenObtained;
+
+    [SerializeField] private int updateGameStateValue;
 
     private void Start()
     {
@@ -48,7 +51,6 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
     public void LoadData(GameData data)
     {
         data.abilityAltars.TryGetValue(abilityName, out hasBeenObtained);
-
     }
 
     public void SaveData(ref GameData data)
@@ -66,6 +68,11 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
         RuntimeManager.PlayOneShot(pickupAltarSound, Game.Instance.player.transform.position);
 
         string[] abilityTypeNames = Enum.GetNames(typeof(ControllerAbility));
+
+        if(updateGameStateValue > 0)
+        {
+            Game.Instance.SetGameState(updateGameStateValue);
+        }
 
         for(int i = 0; i < abilityTypeNames.Length; i++)
         {

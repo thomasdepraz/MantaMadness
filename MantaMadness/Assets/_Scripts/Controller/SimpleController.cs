@@ -31,6 +31,7 @@ public enum ControllerAbility
     LAVARESIST,
     ALIEN,
     GRIND,
+    CAT,
 }
 
 public class SimpleController : MonoBehaviour, IDataPersistence
@@ -60,6 +61,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     [SerializeField] public bool lavaResistanceAbility { get; private set; }
     [SerializeField] public bool alienAntennasAbility { get; private set; }
     [SerializeField] public bool grindAbility { get; private set; }
+    [SerializeField] public bool catAbility { get; private set; }
 
 
     //PLayer velocity
@@ -210,6 +212,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         lavaResistanceAbility = data.lavaResistance;
         alienAntennasAbility = data.alienAntennas;
         grindAbility = data.grind;
+        catAbility = data.cat;
     }
 
     public void SaveData(ref GameData data)
@@ -220,6 +223,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         data.lavaResistance = lavaResistanceAbility;
         data.alienAntennas = alienAntennasAbility;
         data.grind = grindAbility;
+        data.cat = catAbility;
     }
 
     private void StyleDash(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -1566,6 +1570,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                     break;
                 case ControllerAbility.GRIND:
                     grindAbility = true;
+                    break;
+                case ControllerAbility.CAT:
+                    catAbility = true;
                     break;
                 default:
                     break;

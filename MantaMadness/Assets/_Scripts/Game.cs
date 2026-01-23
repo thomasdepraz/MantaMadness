@@ -85,6 +85,12 @@ public class Game : MonoBehaviour, IDataPersistence
         data.GameState = gameState;
     }
 
+    public void SetGameState(int stateIndex)
+    {
+        gameState = stateIndex;
+        StateChange();
+    }
+
     public void StateChange()
     {
         switch (gameState)
@@ -108,14 +114,20 @@ public class Game : MonoBehaviour, IDataPersistence
 
             //Collect the Frutti wings
             case 1:
-                //Set Fisherman dialog to new key
-                //Set fruttiger crab dialog to new key
-                //Set moai red dialog to new key
-                //Set Volcanino dialog to new key
+                Debug.Log("Ca marche pas ou quoi ? also le state = " + gameState);
+                //Set Fisherman to state 1
+                NPCManager.instance.UpdateNPCState("FISHERMAN", 1);
+                //Set Red moai to state 1
+                NPCManager.instance.UpdateNPCState("REDMOAI", 1);
+                //Set Pink crab to state 1
+                NPCManager.instance.UpdateNPCState("PINKCRAB", 1);
+
                 break;
 
-            //Exit the core caves
+            //Collect the Missing Hand
             case 2:
+                //Set Cat poster to State 1
+                NPCManager.instance.UpdateNPCState("CATPOSTER", 1);
                 break;
 
             default:

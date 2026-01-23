@@ -17,6 +17,9 @@ public class GameData
     //Altar
     public SerializableDictionnary<string, bool> abilityAltars;
 
+    //Special Pickups
+    public SerializableDictionnary<string, bool> specialPickups;
+
     //NPC Dialogs
     public SerializableDictionnary<string, NPCDialogData> npcDialogData;
 
@@ -27,6 +30,7 @@ public class GameData
     public bool lavaResistance;
     public bool alienAntennas;
     public bool grind;
+    public bool cat;
 
     public MUSICS gameStartMusic;
     public AMBIENT gameStartAmbient;
@@ -44,6 +48,7 @@ public class GameData
         checkpoints = new SerializableDictionnary<string, bool>();
         abilityAltars = new SerializableDictionnary<string, bool>();
         npcDialogData = new SerializableDictionnary<string, NPCDialogData>();
+        specialPickups = new SerializableDictionnary<string, bool>();
 
         doubleJump = false;
         chargeBoost = false;
@@ -51,5 +56,6 @@ public class GameData
         lavaResistance = false;
         alienAntennas = false;
         grind = false;
+        cat = false;
     }
 }

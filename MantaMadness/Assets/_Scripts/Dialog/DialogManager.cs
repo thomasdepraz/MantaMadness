@@ -90,7 +90,6 @@ public class DialogManager : MonoBehaviour
     private void Interacts(InputAction.CallbackContext context)
     {
         interacted = true;
-        print("Has interacted");
     }
 
     private void StartNPCInteraction(InputAction.CallbackContext context)
@@ -285,7 +284,7 @@ public class DialogManager : MonoBehaviour
 
         if (currentNpc != null)
         {
-            currentNpc.IncrementIndex();
+            currentNpc.OnDialogFinished();
             currentNpc = null;
         }
 

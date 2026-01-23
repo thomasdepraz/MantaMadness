@@ -122,7 +122,7 @@ public class FlyMode : MonoBehaviour
             Game.Instance.player.transform.position = flyCam.transform.position;
             Game.Instance.player.ForceLock(false);
             isEnabled = false;
-            UnityEngine.Cursor.lockState = CursorLockMode.None;
+            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
             UnityEngine.Cursor.visible = true;
             flyCam.enabled = false;
             smoothMode = false;
@@ -132,7 +132,7 @@ public class FlyMode : MonoBehaviour
             flyCam.transform.position = Game.Instance.player.transform.position;
             Game.Instance.player.ForceLock(true);
             isEnabled = true;
-            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
             UnityEngine.Cursor.visible = false;
             flyCam.enabled = true;
             targetPosition = transform.position;

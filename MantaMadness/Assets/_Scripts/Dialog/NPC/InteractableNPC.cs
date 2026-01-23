@@ -4,21 +4,23 @@ using UnityEngine.InputSystem.LowLevel;
 
 public class InteractableNPC : MonoBehaviour, IDataPersistence
 {
-    [SerializeField] private GameObject outOfRangeVisual;
-    [SerializeField] private GameObject inRangeVisual;
+    [SerializeField] protected GameObject outOfRangeVisual;
+    [SerializeField] protected GameObject inRangeVisual;
     [SerializeField] public string npcName;
 
-    [SerializeField] private NPCDialogState[] dialogStates;
+    [SerializeField] protected NPCDialogState[] dialogStates;
 
-    [SerializeField] private int npcState = 0;
+    [SerializeField] protected int npcState = 0;
     public int dialogIndex = 0;
 
-    private void Start()
+    public virtual void Start()
     {
         if(inRangeVisual.activeSelf == true)
         {
             DisableVisual();
         }
+
+        print(npcName);
     }
 
     public void LoadData(GameData data)
@@ -28,6 +30,13 @@ public class InteractableNPC : MonoBehaviour, IDataPersistence
             npcState = dialogData.npcState;
             dialogIndex = dialogData.dialogIndex;
         }
+
+        OnDataLoaded();
+    }
+
+    public virtual void OnDataLoaded()
+    {
+
     }
 
     public void SaveData(ref GameData data)
@@ -43,11 +52,6 @@ public class InteractableNPC : MonoBehaviour, IDataPersistence
         else
             data.npcDialogData.Add(npcName, dialogData);
 
-        //if (data.npcDialogState.ContainsKey(npcName))
-        //{
-        //    data.npcDialogState.Remove(npcName);
-        //}
-        //data.npcDialogState.Add(npcName, dialogIndex);
     }
 
     public string[] GetCurrentDialogKeys()
@@ -101,5 +105,10 @@ public class InteractableNPC : MonoBehaviour, IDataPersistence
     {
         outOfRangeVisual.SetActive(true);
         inRangeVisual.SetActive(false);
+    }
+
+    public virtual void OnDialogFinished()
+    {
+        IncrementIndex();
     }
 }

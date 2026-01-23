@@ -50,6 +50,7 @@ public class MantaVisuals : MonoBehaviour
     public SkinnedMeshRenderer alienAntennaVisual;
     public SkinnedMeshRenderer doubleJumpGlassesVisual;
     public SkinnedMeshRenderer grindVisual;
+    public SkinnedMeshRenderer[] catVisual;
     public Material[] playerMat;
 
     [Header("After Image")]
@@ -559,6 +560,24 @@ public class MantaVisuals : MonoBehaviour
         else
         {
             grindVisual.enabled = false;
+        }
+
+        //CAT ABILITY VISUAL
+        if(Game.Instance.player.catAbility == true)
+        {
+            print("ALLO LE CHAT");
+            foreach(var visual in catVisual)
+            {
+                visual.enabled = true;
+            }
+        }
+        else
+        {
+            print("HOLA LE CHAT");
+            foreach (var visual in catVisual)
+            {
+                visual.enabled = false;
+            }
         }
     }
 
