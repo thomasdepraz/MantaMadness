@@ -20,6 +20,7 @@ public enum UiWordsParticles
     CHALLENGE,
     BUBBLE,
     SPEEDLINE,
+    MISSINGHAND,
 }
 
 public enum WordType

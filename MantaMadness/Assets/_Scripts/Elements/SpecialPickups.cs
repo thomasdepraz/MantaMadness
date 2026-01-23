@@ -16,6 +16,9 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
     [Header("FMOD Sound")]
     public EventReference pickupSound;
 
+    [Header("Particle")]
+    public UiWordsParticles particle;
+
     private bool hasBeenObtained;
 
     private void Start()
@@ -76,6 +79,7 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
     private IEnumerator VFXSequence()
     {
         //VFX SEQUENCE
+        UIManager.Instance.gameInterface.pickupSpecialItem(particle);
         yield return null;
     }
     private void DisablePickup()

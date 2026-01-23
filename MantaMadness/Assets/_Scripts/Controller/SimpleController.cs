@@ -178,7 +178,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         inputs.stomp.action.performed += Stomp;
         inputs.jump.action.performed += Jump;
         inputs.jump.action.canceled += Jump;
-        inputs.dash.action.performed += StyleDash;
+        //inputs.dash.action.performed += StyleDash;
+        inputs.dash.action.performed += CatTimeAbility;
         inputs.strafLeft.action.performed += Straf;
         inputs.strafRight.action.performed += Straf;
         inputs.jump.action.performed += JumpOutOfRail;
@@ -198,7 +199,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         inputs.drift.action.canceled -= DriftReleased;
         inputs.jump.action.performed -= Jump;
         inputs.jump.action.canceled -= Jump;
-        inputs.dash.action.performed -= StyleDash;
+        //inputs.dash.action.performed -= StyleDash;
+        inputs.dash.action.performed -= CatTimeAbility;
         inputs.strafLeft.action.performed -= Straf;
         inputs.strafRight.action.performed -= Straf;
         inputs.jump.action.performed -= JumpOutOfRail;
@@ -245,6 +247,31 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             styleBehaviour.StyleTrigger(hoverBehaviour.normalContainer.position, consecutiveDashCount);
             boostBehaviour.IncrementGauge(BoostAction.Dash);
             dash.Invoke(consecutiveDashCount);
+        }
+    }
+
+
+    public Coroutine catRoutine = null;
+    private void CatTimeAbility(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if (IsLocked)
+            return;
+
+        if (State != ControllerState.SURFING)
+            return;
+
+        if (IsDrifting)
+            return;
+
+        if (CameraTargetDetection.Instance.validNPCTargets.Count != 0)
+            return;
+
+        if (catAbility)
+        {
+            if(catRoutine == null)
+            {
+                catRoutine = StartCoroutine(UIManager.Instance.gameInterface.CatVideoCoroutine());
+            }
         }
     }
 

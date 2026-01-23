@@ -1,9 +1,11 @@
 using DG.Tweening;
 using EasyTextEffects;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class GameInterface : MonoBehaviour, IScreen
 {
@@ -11,10 +13,18 @@ public class GameInterface : MonoBehaviour, IScreen
     public GameObject m_Container;
 
     public Camera uiCamera;
+    [Header("UI Ressources Parameters")]
     public TextMeshProUGUI coinText;
     public TextMeshProUGUI clamText;
+
+    [Header("Sun Overlay Parameters")]
     public Image sunImage;
     public Image sunOverlay;
+
+    [Header("Cat Ability Parameters")]
+    public Image catOverlay;
+    public VideoPlayer catVideoPlayer;
+    public ParticleSystem[] catParticles;
 
     [Header("Area Name Parameters")]
     [SerializeField] private RectTransform startPosition;
@@ -60,6 +70,11 @@ public class GameInterface : MonoBehaviour, IScreen
         {
             sunOverlay.enabled = false;
         }
+
+        if(catOverlay.IsActive() == true)
+        {
+            catOverlay.enabled = false;
+        }
     }
 
     private void OnDestroy()
@@ -91,6 +106,43 @@ public class GameInterface : MonoBehaviour, IScreen
         }
     }
 
+    public void playCatVideo()
+    {
+        StartCoroutine(CatVideoCoroutine());
+    }
+
+    public IEnumerator CatVideoCoroutine()
+    {
+        if (!catVideoPlayer.isPrepared)
+            catVideoPlayer.Prepare();
+
+        yield return new WaitUntil(() => catVideoPlayer.isPrepared);
+
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CAT);
+
+        catOverlay.enabled = true;
+
+        //Get la duréé de la vid
+        double duration = (double)catVideoPlayer.frameCount / catVideoPlayer.frameRate;
+        catVideoPlayer.time = 0;
+        catVideoPlayer.Play();
+
+        foreach(ParticleSystem vfx in catParticles)
+        {
+            vfx.Play();
+        }
+        yield return new WaitForSeconds((float)duration);
+
+        foreach (ParticleSystem vfx in catParticles)
+        {
+            vfx.Stop();
+        }
+
+        catVideoPlayer.Stop();
+        catOverlay.enabled = false;
+        Game.Instance.player.catRoutine = null;
+    }
+
     public IEnumerator pickupMegaClam()
     {
         toggleSunOverlay(true);
@@ -102,6 +154,11 @@ public class GameInterface : MonoBehaviour, IScreen
     public void pickupJohnnyParticle()
     {
         UIEffectManager.Instance.SpecificAction?.Invoke(UiWordsParticles.JOHNNYFOUND, "");
+    }
+
+    public void pickupSpecialItem(UiWordsParticles name)
+    {
+        UIEffectManager.Instance.SpecificAction?.Invoke(name, "Armature_Chad");
     }
     public void StartDisplayCoroutine(string name)
     {

@@ -18,6 +18,7 @@ public enum PlayerActionFMOD
     GRINDRAIL,
     BUMP,
     FLY,
+    CAT,
 }
 
 public enum PlayerRailGrindType
