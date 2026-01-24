@@ -107,6 +107,11 @@ public class InteractableNPC : MonoBehaviour, IDataPersistence
         inRangeVisual.SetActive(false);
     }
 
+    public virtual void OnDialogStarted()
+    {
+        DisableVisual();
+    }
+
     public virtual void OnDialogFinished()
     {
         if (stateChangedDuringDialog)

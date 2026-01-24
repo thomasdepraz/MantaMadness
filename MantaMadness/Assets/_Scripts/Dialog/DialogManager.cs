@@ -167,6 +167,9 @@ public class DialogManager : MonoBehaviour
     int currentSequenceCount = 0;
     public void StartDialog()
     {
+        currentNpc?.OnDialogStarted();
+        CameraTargetDetection.Instance.ClearNPCTargets();
+
         if (currentSequenceCount != 0)
         {
             currentSequenceCount = 0;
@@ -195,6 +198,7 @@ public class DialogManager : MonoBehaviour
 
         //Disable regular UI
         UIManager.Instance.ToggleBaseInterface(false);
+        UIManager.Instance.dialogInteractDisplay.ToggleInterface(false);
         yield return new WaitForSeconds(dialog.delayBeforeTextBox);
 
         foreach(GameObject visual in dialogUIVisuals)

@@ -168,7 +168,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         defaultDrag = rb.linearDamping;
         State = ControllerState.FALLING;
 
-        inputs.boost.action.performed += Boost;
+        //inputs.boost.action.performed += Boost;
         inputs.drift.action.started += DrifStart;
         inputs.drift.action.performed += Drift;
         inputs.drift.action.canceled += DriftReleased;
@@ -189,7 +189,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     private void OnDisable()
     {
-        inputs.boost.action.performed -= Boost;
+        //inputs.boost.action.performed -= Boost;
         inputs.stomp.action.performed -= Stomp;
         inputs.drift.action.started -= DrifStart;
         inputs.drift.action.performed -= Drift;
@@ -1527,6 +1527,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         transform.position = position;
         transform.rotation = rotation;
         transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
+        ResetJump();
     }
 
     private float GetSpeedRatio()

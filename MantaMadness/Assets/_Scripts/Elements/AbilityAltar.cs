@@ -64,6 +64,8 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
 
     private void OnPickup(SimpleController player)
     {
+        //if (Game.Instance.player.State != ControllerState.SURFING)
+        //    return;
 
         RuntimeManager.PlayOneShot(pickupAltarSound, Game.Instance.player.transform.position);
 
@@ -83,11 +85,11 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
         }
         hasBeenObtained = true;
 
+        //player.transform.position = playerPoint.transform.position;
+        player.ForcePosition(playerPoint.position,playerPoint.rotation,resetVelocity: true,forcedState: ControllerState.SURFING);
         DisablePickup();
 
-        player.transform.position = playerPoint.transform.position;
-
-        if(dialogSequenceName != null)
+        if (dialogSequenceName != null)
         DialogManager.instance.StartSequence(dialogSequenceName);
 
 

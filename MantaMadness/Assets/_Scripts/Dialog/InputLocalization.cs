@@ -13,6 +13,9 @@ public static class InputLocalization
                     { "JUMP", "Space" },
                     { "STRAF_LEFT", "A" },
                     { "STRAF_RIGHT", "E" },
+                    { "STOMP", "RMB" },
+                    {"CAT", "Z" },
+
                 }
             },
             {
@@ -22,15 +25,19 @@ public static class InputLocalization
                     { "JUMP", "A" },
                     { "STRAF_LEFT", "LB" },
                     { "STRAF_RIGHT", "RB" },
+                    { "STOMP", "RT" },
+                    {"CAT", "X" },
                 }
             },
             {
                 InputDeviceType.PlayStation, new Dictionary<string, string>
                 {
                     { "INTERACT", "Square" },
-                    { "JUMP", "✕" },
+                    { "JUMP", "X" },
                     { "STRAF_LEFT", "L1" },
                     { "STRAF_RIGHT", "R1" },
+                    { "STOMP", "R2" },
+                    {"CAT", "Square" },
                 }
             },
         };

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class CameraTargetDetection : MonoBehaviour
 {
@@ -111,6 +112,7 @@ public class CameraTargetDetection : MonoBehaviour
     {
         if ((DialogManager.instance.currentSequence != null))
         {
+            ClearNPCTargets();
             return;
         }
 
@@ -119,7 +121,7 @@ public class CameraTargetDetection : MonoBehaviour
         for (int i = validNPCTargets.Count - 1; i >= 0; i--)
         {
             Collider npc = validNPCTargets[i];
-            if(npc == null || Vector3.Distance(transform.position, npc.transform.position) > npcDetectionRange)
+            if(npc == null || Vector3.Distance(transform.position, npc.transform.position) > npcDetectionRange || !npc.TryGetComponent<InteractableNPC>(out _))
             {
                 validNPCTargets.RemoveAt(i);
                 npc?.GetComponent<InteractableNPC>().DisableVisual();
@@ -193,6 +195,22 @@ public class CameraTargetDetection : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void ClearNPCTargets()
+    {
+        for (int i = validNPCTargets.Count - 1; i >= 0; i--)
+        {
+            Collider col = validNPCTargets[i];
+            if (col != null && col.TryGetComponent(out InteractableNPC npc))
+            {
+                npc.DisableVisual();
+            }
+        }
+
+        validNPCTargets.Clear();
+
+        UIManager.Instance.dialogInteractDisplay.ToggleInterface(false);
     }
 
     private void OnDrawGizmosSelected()

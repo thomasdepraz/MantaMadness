@@ -565,7 +565,6 @@ public class MantaVisuals : MonoBehaviour
         //CAT ABILITY VISUAL
         if(Game.Instance.player.catAbility == true)
         {
-            print("ALLO LE CHAT");
             foreach(var visual in catVisual)
             {
                 visual.enabled = true;
@@ -573,7 +572,6 @@ public class MantaVisuals : MonoBehaviour
         }
         else
         {
-            print("HOLA LE CHAT");
             foreach (var visual in catVisual)
             {
                 visual.enabled = false;
