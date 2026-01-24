@@ -1,11 +1,8 @@
-﻿using DG.Tweening;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public enum ControllerState
 {
@@ -323,7 +320,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 jumpCount++;
 
                 //rb.linearVelocity = hoverBehaviour.normalContainer.forward * HorizontalVelocity.magnitude;
-                rb.linearVelocity = moveDir * HorizontalVelocity.magnitude;
+                rb.linearVelocity = Vector3.ProjectOnPlane(moveDir * HorizontalVelocity.magnitude, NormalContainer.up);
                 rb.AddForce((NormalContainer.up * controllerData.upwardImpulseForce /* forceMultiplier*/) + (NormalContainer.forward * controllerData.forwardImpulseForce /* forceMultiplier*/), ForceMode.VelocityChange);
                 rb.linearDamping = controllerData.jumpDamping;
 
@@ -1150,6 +1147,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
 
         Vector3 direction = (camForward * airControl.y + camRight * airControl.x).normalized;
+        direction = Vector3.ProjectOnPlane(direction, Vector3.up);
         float coeff = controllerData.fallingAirControl;
 
         //if(State == ControllerState.FALLING && turn != 0)
