@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using static DialogLoader;
 
 public class InputManager : MonoBehaviour
@@ -65,9 +66,12 @@ public class InputManager : MonoBehaviour
             uiActionsMap.Enable();
         }
 
-        interact.action.performed += UpdateCurrentDevice;
-        jump.action.performed += UpdateCurrentDevice;
-        dash.action.performed += UpdateCurrentDevice;
+        if (SceneManager.GetActiveScene().name != "MainMenu")
+        {
+            interact.action.performed += UpdateCurrentDevice;
+            jump.action.performed += UpdateCurrentDevice;
+            dash.action.performed += UpdateCurrentDevice;
+        }
     }
 
     private void OnDisable()
@@ -82,9 +86,12 @@ public class InputManager : MonoBehaviour
             uiActionsMap.Disable();
         }
 
-        interact.action.performed -= UpdateCurrentDevice;
-        jump.action.performed -= UpdateCurrentDevice;
-        dash.action.performed -= UpdateCurrentDevice;
+        if (SceneManager.GetActiveScene().name != "MainMenu")
+        {
+            interact.action.performed -= UpdateCurrentDevice;
+            jump.action.performed -= UpdateCurrentDevice;
+            dash.action.performed -= UpdateCurrentDevice;
+        }
     }
     private void SetDevice(InputDeviceType newDevice)
     {

@@ -66,7 +66,7 @@ public class Button : MonoBehaviour
         CameraManager.Instance.BlendToCamera(vcam, blend);
 
         //increase boost gauge
-        Game.Instance.player.boostBehaviour.IncrementGauge(BoostAction.CoolSun);
+        //Game.Instance.player.boostBehaviour.IncrementGauge(BoostAction.CoolSun);
 
         //animation
 

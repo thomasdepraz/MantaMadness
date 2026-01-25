@@ -143,6 +143,17 @@ public class DialogManager : MonoBehaviour
         }
     }
 
+    public void StartCinematicInteraction(InteractableNPC npc)
+    {
+        string dialogKey = npc.GetCurrentDialogKey();
+
+        if (!string.IsNullOrEmpty(dialogKey))
+        {
+            currentNpc = npc;
+            StartSequence(dialogKey);
+        }
+    }
+
     public void StartSequence(string sequenceKey)
     {
         foreach (DialogSequence dialogSequence in dialogSequences)
@@ -179,6 +190,9 @@ public class DialogManager : MonoBehaviour
         dialogActiveEvent.start();
         PlayDialog();
     }
+
+
+
     public void PlayDialog()
     {
 

@@ -114,11 +114,11 @@ public class MainMenu : MonoBehaviour
 
         if (DataPersistenceManager.Instance.gameData.GameState != 0)
         {
-            defaultStateIndex = 1;
+            defaultStateIndex = 0;
         }
         else
         {
-            defaultStateIndex = 0;
+            defaultStateIndex = 1;
         }
 
             UpdateMainMenuButtons();
@@ -227,7 +227,7 @@ public class MainMenu : MonoBehaviour
             }
         }
 
-        if (DataPersistenceManager.Instance.gameData.GameState != 0)
+        if (DataPersistenceManager.Instance.gameData.GameState == 0)
         {
             mainMenuButtons[0].GetComponent<MainMenuButtonContinue>().setMatDisabled();
         }
@@ -354,7 +354,7 @@ public class MainMenu : MonoBehaviour
     private void StartNewGame()
     {
         Debug.Log("StartNewGame called");
-        if (DataPersistenceManager.Instance.gameData.GameState == 0)
+        if (DataPersistenceManager.Instance.gameData.GameState != 0)
         {
             State = MainMenuState.CONFIRM_NEW_GAME;
             return;

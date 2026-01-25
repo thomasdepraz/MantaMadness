@@ -12,6 +12,10 @@ public class CameraControllerData : ScriptableObject
     public float maxPitch = 45f;
     public float smooth = 10f;
 
+    [Header("Falling Camera Parameters")]
+    public float fall_minPitch = -45f;
+    public float fall_maxPitch = 90f;
+
     [Header("Stomp Camera Parameters")]
     public float stomp_minPitch = 90f;
     public float stomp_maxPitch = 95f;

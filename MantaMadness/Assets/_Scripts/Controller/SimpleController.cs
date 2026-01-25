@@ -93,6 +93,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     public Vector3 grindOffset = new Vector3(0, 2f, 0);
 
+    [Header("Rail")]
+    [SerializeField] private float railReenterCooldown = 0.25f;
+    private float lastRailExitTime = -999f;
+
+
     public ControllerState State {
         get
         { 
@@ -816,6 +821,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             ResetDrift();
         }
 
+
         if (OnRail)
         {
 
@@ -840,9 +846,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
             else if (false == currentRail.Progress(Time.fixedDeltaTime, out Vector3 nextPos, out Vector3 normal, out Vector3 direction))
             {
+                lastRailExitTime = Time.time;
+
                 currentRail = null;
                 rb.isKinematic = false;
                 rb.AddForce(direction * 50, ForceMode.VelocityChange);
+
                 exitRail.Invoke();
                 railDetector.ExitRail();
                 State = ControllerState.SURFING;
@@ -986,11 +995,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         //Jumping to AirRide
         if (State == ControllerState.JUMPING)
         {
-            if(Velocity.y > controllerData.airRideVelocityThreshold)
-            {
-                State = ControllerState.AIRRIDE;
-                rb.linearDamping = defaultDrag;
-            }
+            //if(Velocity.y > controllerData.airRideVelocityThreshold)
+            //{
+            //    State = ControllerState.AIRRIDE;
+            //    rb.linearDamping = defaultDrag;
+            //}
         }
 
         //Apply gravity
@@ -1361,9 +1370,14 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     {
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        rb.AddForce((hoverBehaviour.normalContainer.forward * propulsionForce) + (hoverBehaviour.normalContainer.up * propulsionForce / 1.5f), ForceMode.VelocityChange);
+        rb.AddForce((hoverBehaviour.normalContainer.forward * propulsionForce / 2f) + (hoverBehaviour.normalContainer.up * propulsionForce / 1.5f), ForceMode.VelocityChange);
         ResetJump();
     }
+    public bool CanEnterRail()
+    {
+        return Time.time - lastRailExitTime > railReenterCooldown;
+    }
+
 
     public void EnterAirRail(AirRail rail)
     {
@@ -1381,6 +1395,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (State == ControllerState.RAIL)
             return false;
 
+        if (!CanEnterRail())
+            return false;
+
         if (grindAbility)
         {
             ResetJump();
@@ -1395,7 +1412,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             enableBoolAnim.Invoke("Grind");
             triggerAnim("StartGrind");
 
-            PlayerActionFMODManager.Instance.PlayPlayerActionWithParam(PlayerActionFMOD.GRINDRAIL,"L_Grind_Surface",(float)rail.railType);
+            PlayerActionFMODManager.Instance.PlayPlayerActionWithParam(
+                PlayerActionFMOD.GRINDRAIL,
+                "L_Grind_Surface",
+                (float)rail.railType
+            );
+
             return true;
         }
         return false;
@@ -1647,10 +1669,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     public void JumpOutOfRail(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if(currentRail != null && State == ControllerState.RAIL)
+        if (currentRail != null && State == ControllerState.RAIL)
         {
-            currentRail = null;
+            lastRailExitTime = Time.time; // 👈 IMPORTANT
 
+            currentRail = null;
             hoverBehaviour.normalContainer.up = Vector3.up;
 
             rb.isKinematic = false;
@@ -1658,37 +1681,45 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             railDetector.ExitRail();
             disableBoolAnim("Grind");
             PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GRINDRAIL);
+
             Jump(context);
         }
-
     }
 
     public void StrafOutOfRail(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         if (currentRail != null && State == ControllerState.RAIL)
         {
-            //railGrindAnim();
+            lastRailExitTime = Time.time;
+
             currentRail = null;
-
-            //hoverBehaviour.normalContainer.up = Vector3.up;
-
             rb.isKinematic = false;
+
             exitRail.Invoke();
             PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GRINDRAIL);
             railDetector.ExitRail();
             disableBoolAnim("Grind");
+
             State = ControllerState.SURFING;
-            //Rail jump behavior
+
             if (context.action.name == InputManager.Instance.strafLeft.action.name)
             {
                 rb.linearVelocity = Vector3.zero;
-                rb.AddForce(-NormalContainer.transform.right * controllerData.strafForce + NormalContainer.transform.forward * controllerData.strafForwardForce, ForceMode.VelocityChange);
+                rb.AddForce(
+                    -NormalContainer.right * controllerData.strafForce +
+                     NormalContainer.forward * controllerData.strafForwardForce,
+                    ForceMode.VelocityChange
+                );
                 straf.Invoke();
             }
             else if (context.action.name == InputManager.Instance.strafRight.action.name)
             {
                 rb.linearVelocity = Vector3.zero;
-                rb.AddForce(NormalContainer.transform.right * controllerData.strafForce + NormalContainer.transform.forward * controllerData.strafForwardForce, ForceMode.VelocityChange);
+                rb.AddForce(
+                    NormalContainer.right * controllerData.strafForce +
+                    NormalContainer.forward * controllerData.strafForwardForce,
+                    ForceMode.VelocityChange
+                );
                 straf.Invoke();
             }
         }

@@ -18,6 +18,7 @@ public class Game : MonoBehaviour, IDataPersistence
     //public bool introCinematic = false;
     public TimelineAsset introCinematicTimeline;
     public WorldCheckpoint introCheckpoint;
+    public InteractableNPC introNpc;
 
     public int gameState { private set; get; }
 
@@ -103,6 +104,8 @@ public class Game : MonoBehaviour, IDataPersistence
                     CinematicManager.instance.PlayCinematic(introCinematicTimeline);
                 }
 
+                //PLAY LE DIALOG DU VIEUX
+                DialogManager.instance.StartCinematicInteraction(introNpc);
 
                 //SET POSITION TO FIRST CHECKPOINT POS
                 WorldCheckpointManager.Instance.SetStartCheckpoint(introCheckpoint.respawnTransform);
@@ -110,10 +113,14 @@ public class Game : MonoBehaviour, IDataPersistence
                 Vector3 pos = Vector3.zero;
                 Quaternion rotation;
                 Respawn(out pos, out rotation);
+                SetGameState(1);
+                break;
+
+            case 1:
                 break;
 
             //Collect the Frutti wings
-            case 1:
+            case 2:
                 Debug.Log("Ca marche pas ou quoi ? also le state = " + gameState);
                 //Set Fisherman to state 1
                 NPCManager.instance.UpdateNPCState("FISHERMAN", 1);
@@ -125,7 +132,7 @@ public class Game : MonoBehaviour, IDataPersistence
                 break;
 
             //Collect the Missing Hand
-            case 2:
+            case 3:
                 //Set Cat poster to State 1
                 if(NPCManager.instance.GetNPCSTate("CATPOSTER") < 1)
                 {

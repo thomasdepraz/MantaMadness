@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
@@ -14,7 +15,12 @@ public class JumpTarget : MonoBehaviour
     [Header("Parameters")]
     [SerializeField] protected float respawnCooldown = 1f;
 
+    public event Action<SimpleController, Vector3> OnPlayerHit;
 
+    protected virtual void NotifyPlayerHit(SimpleController p, Vector3 contactPoint)
+    {
+        OnPlayerHit?.Invoke(p, contactPoint);
+    }
 
 
     protected virtual void Start()

@@ -40,7 +40,7 @@ public class Rail : MonoBehaviour
 
     public RailType railType;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         splineContainer = GetComponent<SplineContainer>();
         railSpline = splineContainer.Spline;

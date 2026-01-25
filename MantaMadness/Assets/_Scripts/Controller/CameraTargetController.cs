@@ -147,6 +147,11 @@ public class CameraTargetController : MonoBehaviour
             minPitch = _data.stomp_minPitch;
             maxPitch = _data.stomp_maxPitch;
         }
+        else if (Game.Instance.player.State == ControllerState.FALLING)
+        {
+            minPitch = _data.fall_minPitch;
+            maxPitch = _data.fall_maxPitch;
+        }
         else
         {
             minPitch = _data.minPitch;
@@ -202,7 +207,6 @@ public class CameraTargetController : MonoBehaviour
         }
         else
         {
-
             //Quaternion rotation = Quaternion.Euler(player.transform.rotation.eulerAngles);
             //target.rotation = rotation;
             target.Rotate(player.transform.rotation.eulerAngles);
@@ -256,7 +260,6 @@ public class CameraTargetController : MonoBehaviour
         }
         else
         {
-            // === VERSION MANETTE (déjà fonctionnelle) ===
             if (lookInput.sqrMagnitude < 0.01f)
             {
                 targetOffset = Vector2.zero;
@@ -270,7 +273,6 @@ public class CameraTargetController : MonoBehaviour
 
                 targetOffset = new Vector2(xOffset, yOffset);
 
-                // Lissage exponentiel "stretchy"
                 stretchyYaw = Mathf.Lerp(stretchyYaw, targetOffset.x,
                     1f - Mathf.Exp(-stretchyReturnSpeed * Time.deltaTime));
                 stretchyPitch = Mathf.Lerp(stretchyPitch, -targetOffset.y,
