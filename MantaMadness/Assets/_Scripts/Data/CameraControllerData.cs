@@ -19,4 +19,8 @@ public class CameraControllerData : ScriptableObject
     [Header("Stomp Camera Parameters")]
     public float stomp_minPitch = 90f;
     public float stomp_maxPitch = 95f;
+
+    [Header("Stomp Camera Parameters")]
+    public float rail_minYew = -30f;
+    public float rail_maxYew = 30f;
 }

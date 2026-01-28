@@ -9,7 +9,7 @@ public class BuoyGame : MonoBehaviour, ITimer
     
     private float timer;
     private int count = 0;
-    private bool hasStarted;
+    public bool hasStarted;
 
     public bool Completed { get => completed;}
     private bool completed = false;
@@ -26,6 +26,11 @@ public class BuoyGame : MonoBehaviour, ITimer
         for (int i = 0; i < buoys.Count; i++)
         {
             buoys[i].Initialize(this);
+        }
+
+        if (!ChallengeManager.instance.buoyGamesList.Contains(this))
+        {
+            ChallengeManager.instance.buoyGamesList.Add(this);
         }
     }
 

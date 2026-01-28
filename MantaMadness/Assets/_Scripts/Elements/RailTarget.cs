@@ -4,6 +4,8 @@ public class RailTarget : Rail
 {
     private JumpTarget[] targets;
 
+
+
     protected override void Awake()
     {
         base.Awake();

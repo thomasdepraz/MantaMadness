@@ -16,8 +16,10 @@ public class OptionBack : IOptionItem
 
     public override void Submit()
     {
-        MainMenu.instance.State = MainMenu.MainMenuState.DEFAULT;
-        MainMenu.instance.options.Close();
+        //MainMenu.instance.State = MainMenu.MainMenuState.DEFAULT;
+        //MainMenu.instance.options.CloseFromMainMenu();
+        //Deselect();
+        OptionsMenu.instance.RequestClose();
         Deselect();
     }
 

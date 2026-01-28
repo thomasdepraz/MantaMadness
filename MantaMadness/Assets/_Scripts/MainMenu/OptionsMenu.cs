@@ -7,6 +7,8 @@ using UnityEditor;
 
 public class OptionsMenu : MonoBehaviour
 {
+    public static OptionsMenu instance;
+
     [Header("All visuals")]
     [SerializeField] private GameObject[] visuals;
 
@@ -24,6 +26,28 @@ public class OptionsMenu : MonoBehaviour
 
     [Header("Navigation")]
     [SerializeField] public IOptionItem[] optionItems;
+
+
+    public enum OptionsContext
+    {
+        MainMenu,
+        PauseMenu
+    }
+
+    private OptionsContext currentContext;
+
+    public void OpenFromMainMenu()
+    {
+        currentContext = OptionsContext.MainMenu;
+        Open();
+    }
+
+    public void OpenFromPauseMenu()
+    {
+        currentContext = OptionsContext.PauseMenu;
+        Open();
+    }
+
     public bool HandleCancel()
     {
         if (optionItems[currentIndex].IsEditing)
@@ -49,6 +73,15 @@ public class OptionsMenu : MonoBehaviour
 
     private void Awake()
     {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+
         InitResolutions();
         InitScreenMode();
         InitInvertAxis();
@@ -168,11 +201,23 @@ public class OptionsMenu : MonoBehaviour
     {
         ToggleVisuals(true);
     }
-    public void Close()
+
+    public void CloseFromPause()
     {
         PlayerPrefs.Save();
-        MainMenu.instance.State = MainMenu.MainMenuState.DEFAULT;
         ToggleVisuals(false);
+        gameObject.SetActive(false);
+
+        PauseMenu.instance.ReturnFromOptions();
+    }
+
+    public void CloseFromMainMenu()
+    {
+        PlayerPrefs.Save();
+        ToggleVisuals(false);
+        gameObject.SetActive(false);
+
+        MainMenu.instance.State = MainMenu.MainMenuState.DEFAULT;
     }
 
     public void ToggleVisuals(bool toggleValue)
@@ -195,6 +240,8 @@ public class OptionsMenu : MonoBehaviour
 
     public void Open()
     {
+        gameObject.SetActive(true);
+
         Enable();
         currentIndex = 0;
 
@@ -258,7 +305,18 @@ public class OptionsMenu : MonoBehaviour
 
     public void Cancel()
     {
-        optionItems[currentIndex].Cancel();
+        if (HandleCancel())
+            return;
+
+        RequestClose();
+    }
+
+    public void RequestClose()
+    {
+        if (currentContext == OptionsContext.MainMenu)
+            CloseFromMainMenu();
+        else
+            CloseFromPause();
     }
 
 }

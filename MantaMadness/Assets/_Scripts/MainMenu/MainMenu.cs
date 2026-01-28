@@ -348,7 +348,7 @@ public class MainMenu : MonoBehaviour
             return;
 
         // Sinon : vrai back du menu
-        options.Close();
+        options.CloseFromMainMenu();
         State = MainMenuState.DEFAULT;
     }
     private void StartNewGame()

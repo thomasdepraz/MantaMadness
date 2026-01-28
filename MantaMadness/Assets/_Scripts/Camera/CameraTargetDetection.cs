@@ -1,13 +1,16 @@
-﻿using UnityEngine;
+﻿using FMOD.Studio;
+using FMODUnity;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEngine;
 
 public class CameraTargetDetection : MonoBehaviour
 {
     public static CameraTargetDetection Instance;
 
     [SerializeField] private float jumpDetectionRange;
+    [SerializeField] float jumpRangeBuffer =  0.75f;
     [SerializeField] private float npcDetectionRange;
     [SerializeField] private float viewAngle;
     [SerializeField] private LayerMask obstacleMask;
@@ -16,6 +19,8 @@ public class CameraTargetDetection : MonoBehaviour
 
     [SerializeField] public List<Collider> validJumpTargets = new List<Collider>();
     [SerializeField] public List<Collider> validNPCTargets = new List<Collider>();
+
+    [SerializeField] private EventReference addTargetSound;
 
 
     private void Awake()
@@ -48,23 +53,38 @@ public class CameraTargetDetection : MonoBehaviour
 
     void DetectJumpTargets()
     {
+        float addRange = jumpDetectionRange - jumpRangeBuffer;
+        float removeRange = jumpDetectionRange + jumpRangeBuffer;
+
         Collider[] targetsInRange = Physics.OverlapSphere(transform.position, jumpDetectionRange, jumpargetMask);
 
         for (int i = validJumpTargets.Count - 1; i >= 0; i--)
         {
             Collider npc = validJumpTargets[i];
-            if (npc == null || Vector3.Distance(transform.position, npc.transform.position) > jumpDetectionRange)
+            if (npc == null)
+            {
+                validJumpTargets.RemoveAt(i);
+                continue;
+            }
+
+            float dist = Vector3.Distance(transform.position, npc.transform.position);
+
+            if (dist > removeRange)
             {
                 validJumpTargets.RemoveAt(i);
                 npc?.GetComponent<JumpTarget>().SwitchIndicatorVisibility(false);
-                print(npc + "removed (out of range)");
+                print(npc + " removed (out of range hysteresis)");
             }
         }
+
 
         foreach (Collider target in targetsInRange)
         {
             Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
             float distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
+
+            if (distanceToTarget > addRange)
+                continue;
 
             // Vérifie si la cible est dans le champ de vision
             float angleToTarget = Vector3.Angle(transform.forward, directionToTarget);
@@ -79,6 +99,7 @@ public class CameraTargetDetection : MonoBehaviour
                     if (!validJumpTargets.Contains(target))
                     {
                         validJumpTargets.Add(target);
+                        RuntimeManager.PlayOneShot(addTargetSound, Camera.main.transform.position);
                         target.GetComponent<JumpTarget>().SwitchIndicatorVisibility(true);
                         print(target + "Has been added");
                     }

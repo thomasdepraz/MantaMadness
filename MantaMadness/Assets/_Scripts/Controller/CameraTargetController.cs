@@ -58,6 +58,7 @@ public class CameraTargetController : MonoBehaviour
 
     private bool toggleFixedCam;
 
+    private float railYawOffset = 0f;
 
     private InputManager inputs;
 
@@ -177,8 +178,8 @@ public class CameraTargetController : MonoBehaviour
 
         targetPitch = Mathf.Clamp(targetPitch, minPitch, maxPitch);
 
-        yaw = Mathf.SmoothDamp(yaw, targetYaw, ref yawVelocity, smoothValue);
-        pitch = Mathf.SmoothDamp(pitch, targetPitch, ref pitchVelocity, smoothValue);
+        yaw = Mathf.SmoothDampAngle(yaw, targetYaw, ref yawVelocity, smoothValue);
+        pitch = Mathf.SmoothDampAngle(pitch, targetPitch, ref pitchVelocity, smoothValue);
         // Apply rotation
         if(ResetCamRoutine == null)
         {
@@ -190,7 +191,6 @@ public class CameraTargetController : MonoBehaviour
         //    Vector3 targetUp = player.transform.rotation.eulerAngles;
         //    currentUp = Vector3.Slerp(currentUp, targetUp, Time.deltaTime * 50f);
         //}
-
 
     }
 

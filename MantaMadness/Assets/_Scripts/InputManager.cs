@@ -20,6 +20,7 @@ public class InputManager : MonoBehaviour
         else
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
     }
     [Header("Controller Actions")]
@@ -39,6 +40,7 @@ public class InputManager : MonoBehaviour
     public InputActionReference interact;
     public InputActionReference driftR;
     public InputActionReference driftL;
+    public InputActionReference pause;
 
     private InputActionMap playerActionsMap;
 
@@ -51,26 +53,32 @@ public class InputManager : MonoBehaviour
     public InputActionReference uiMoveRight;
     public InputActionReference uiSubmit;
     public InputActionReference uiCancel;
+    public InputActionReference uiPause;
 
     private void OnEnable()
     {
         playerActionsMap = InputSystem.actions.FindActionMap("Player");
         if (playerActionsMap != null)
         {
-            playerActionsMap.Enable();
+            //playerActionsMap.Enable();
         }
 
         uiActionsMap = InputSystem.actions.FindActionMap("UI");
         if (uiActionsMap != null)
         {
-            uiActionsMap.Enable();
+            //uiActionsMap.Enable();
         }
 
         if (SceneManager.GetActiveScene().name != "MainMenu")
         {
+            EnableGameplay();
             interact.action.performed += UpdateCurrentDevice;
             jump.action.performed += UpdateCurrentDevice;
             dash.action.performed += UpdateCurrentDevice;
+        }
+        else if(SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            EnableUI();
         }
     }
 
@@ -126,5 +134,21 @@ public class InputManager : MonoBehaviour
 
             SetDevice(InputDeviceType.Xbox);
         }
+    }
+
+    public void EnableGameplay()
+    {
+        if (playerActionsMap.enabled) return;
+
+        playerActionsMap.Enable();
+        uiActionsMap.Disable();
+    }
+
+    public void EnableUI()
+    {
+        if (uiActionsMap.enabled) return;
+
+        playerActionsMap.Disable();
+        uiActionsMap.Enable();
     }
 }

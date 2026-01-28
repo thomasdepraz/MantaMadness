@@ -15,7 +15,7 @@ public class JumpTarget : MonoBehaviour
     [Header("Parameters")]
     [SerializeField] protected float respawnCooldown = 1f;
 
-    public event Action<SimpleController, Vector3> OnPlayerHit;
+    public virtual event Action<SimpleController, Vector3> OnPlayerHit;
 
     protected virtual void NotifyPlayerHit(SimpleController p, Vector3 contactPoint)
     {

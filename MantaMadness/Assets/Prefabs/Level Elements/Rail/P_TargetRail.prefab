@@ -141,6 +141,7 @@ MonoBehaviour:
     m_Bits: 128
   indicator: {fileID: 9009313521671044797}
   respawnCooldown: 1
+  dir: 0
 --- !u!135 &3203699559699232112
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -5355,7 +5356,7 @@ GameObject:
   - component: {fileID: 3837514829926167021}
   - component: {fileID: 3679685000051261077}
   - component: {fileID: 4080309029104005137}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: P_TargetRail
   m_TagString: Untagged
   m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}
@@ -5588,7 +5589,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isRoadBorder: 0
-  railSpeed: 75
+  railSpeed: 60
   railDirection: 0
   railType: 0
 --- !u!114 &4080309029104005137
@@ -5610,7 +5611,7 @@ MonoBehaviour:
     probability: 0
     Probability: 0
   m_Method: 1
-  m_Space: 0
+  m_Space: 2
   m_Spacing: {x: 2, y: 2}
   m_Up: 1
   m_Forward: 2
@@ -10595,6 +10596,7 @@ MonoBehaviour:
     m_Bits: 128
   indicator: {fileID: 6692216016868318454}
   respawnCooldown: 1
+  dir: 0
 --- !u!135 &1746507498380085879
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -172,6 +172,8 @@ public class Game : MonoBehaviour, IDataPersistence
             return;
         }
 
+        ChallengeManager.instance.Reset();
+
         position = m_SpawnPosition;
         rotation = m_SpawnRotation;
         if(isRespawning == false)

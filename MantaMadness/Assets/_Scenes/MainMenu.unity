@@ -905,7 +905,6 @@ GameObject:
   m_Component:
   - component: {fileID: 367081926}
   - component: {fileID: 367081925}
-  - component: {fileID: 367081924}
   - component: {fileID: 367081928}
   m_Layer: 0
   m_Name: MainMenuManager
@@ -914,40 +913,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &367081924
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 367081923}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f419ac5dd5ca384bbd47a40e122c2cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveDirection: {fileID: 0}
-  thrust: {fileID: 0}
-  turn: {fileID: 0}
-  brake: {fileID: 0}
-  boost: {fileID: 0}
-  jump: {fileID: 0}
-  airControl: {fileID: 0}
-  dash: {fileID: 0}
-  drift: {fileID: 0}
-  strafLeft: {fileID: 0}
-  strafRight: {fileID: 0}
-  resetCamera: {fileID: 0}
-  stomp: {fileID: 0}
-  interact: {fileID: -9010536866456799584, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  driftR: {fileID: 0}
-  driftL: {fileID: 0}
-  uiMoveUp: {fileID: -3806844272786521480, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  uiMoveDown: {fileID: -4592543683697107442, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  uiMoveLeft: {fileID: -3711457852136429572, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  uiMoveRight: {fileID: -3951134256879511380, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  uiSubmit: {fileID: 392368643174621059, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  uiCancel: {fileID: 7727032971491509709, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!114 &367081925
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1144,6 +1109,74 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 0
+--- !u!1 &395583741
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 395583743}
+  - component: {fileID: 395583744}
+  m_Layer: 0
+  m_Name: InputManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &395583743
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395583741}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &395583744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395583741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f419ac5dd5ca384bbd47a40e122c2cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveDirection: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  thrust: {fileID: -593101127290015902, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  turn: {fileID: 9211691509310632545, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  brake: {fileID: 5445423009074504303, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  boost: {fileID: -9118067123014759839, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  jump: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  airControl: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  dash: {fileID: -6787516137552756796, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  drift: {fileID: -7471211009204490832, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  strafLeft: {fileID: -7944096410784951038, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  strafRight: {fileID: 6790945411342083927, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  resetCamera: {fileID: -2297281972354256271, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  stomp: {fileID: 7040659881675835329, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  interact: {fileID: -9010536866456799584, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  driftR: {fileID: -2206828191447994284, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  driftL: {fileID: -3182737733355197892, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  pause: {fileID: -3948907003194319076, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  uiMoveUp: {fileID: -3806844272786521480, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  uiMoveDown: {fileID: -4592543683697107442, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  uiMoveLeft: {fileID: -3711457852136429572, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  uiMoveRight: {fileID: -3951134256879511380, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  uiSubmit: {fileID: 392368643174621059, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  uiCancel: {fileID: 7727032971491509709, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  uiPause: {fileID: 4394820575689898309, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!1001 &407039511
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7882,7 +7915,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playOnStart: 1
-  playOnEnable: 0
+  playOnEnable: 1
   playOnBeat: 0
   animateRotation: 1
   loopRotationAmount: -1
@@ -12076,3 +12109,4 @@ SceneRoots:
   - {fileID: 1410530382}
   - {fileID: 367081926}
   - {fileID: 1586068277760064641}
+  - {fileID: 395583743}

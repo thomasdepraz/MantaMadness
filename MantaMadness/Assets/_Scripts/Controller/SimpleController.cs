@@ -174,9 +174,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         State = ControllerState.FALLING;
 
         //inputs.boost.action.performed += Boost;
-        inputs.drift.action.started += DrifStart;
-        inputs.drift.action.performed += Drift;
-        inputs.drift.action.canceled += DriftReleased;
+        //inputs.drift.action.started += DrifStart;
+        //inputs.drift.action.performed += Drift;
+        //inputs.drift.action.canceled += DriftReleased;
         inputs.stomp.action.performed += Stomp;
         inputs.jump.action.performed += Jump;
         inputs.jump.action.canceled += Jump;
@@ -196,9 +196,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     {
         //inputs.boost.action.performed -= Boost;
         inputs.stomp.action.performed -= Stomp;
-        inputs.drift.action.started -= DrifStart;
-        inputs.drift.action.performed -= Drift;
-        inputs.drift.action.canceled -= DriftReleased;
+        //inputs.drift.action.started -= DrifStart;
+        //inputs.drift.action.performed -= Drift;
+        //inputs.drift.action.canceled -= DriftReleased;
         inputs.jump.action.performed -= Jump;
         inputs.jump.action.canceled -= Jump;
         //inputs.dash.action.performed -= StyleDash;
