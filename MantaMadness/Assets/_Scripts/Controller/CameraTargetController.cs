@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,6 +30,9 @@ public class CameraTargetController : MonoBehaviour
 
     private float pitch;
     private float yaw;
+
+    private float minYaw;
+    private float maxYaw;
 
     static float yawVelocity = 0f;
     static float pitchVelocity = 0f;
@@ -85,9 +88,9 @@ public class CameraTargetController : MonoBehaviour
 
         if (player == null)
             player = Game.Instance.player;
+
         playerActionsMap = InputSystem.actions.FindActionMap("Player");
         playerActionsMap.actionTriggered += OnActionPerformed;
-        //inputs.resetCamera.action.performed += ResetCamPos;
     }
 
     private void OnEnable()
@@ -97,9 +100,6 @@ public class CameraTargetController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         if(playerActionsMap != null)
         playerActionsMap.actionTriggered += OnActionPerformed;
-
-        //if(inputs != null)
-        //inputs.resetCamera.action.performed += ResetCamPos;
     }
 
     private void OnDisable()
@@ -108,10 +108,10 @@ public class CameraTargetController : MonoBehaviour
             lookAction.action.Disable();
 
         playerActionsMap.actionTriggered -= OnActionPerformed;
-        //inputs.resetCamera.action.performed -= ResetCamPos;
         StopAllCoroutines();
         ResetCamRoutine = null;
     }
+
     private void OnActionPerformed(InputAction.CallbackContext context)
     {
         InputDevice device = context.control.device;
@@ -126,6 +126,7 @@ public class CameraTargetController : MonoBehaviour
         }
     }
 
+    private ControllerState currentState = ControllerState.FALLING;
     private void Update()
     {
         if (lookAction == null) return;
@@ -142,21 +143,44 @@ public class CameraTargetController : MonoBehaviour
         }
 
         smoothValue = _data.smooth;
+        ControllerState state = Game.Instance.player.State;
+        if(currentState != state)
+        {
+            currentState = state;
+            if (state == ControllerState.RAIL)
+                yaw = WrapAngle(player.hoverBehaviour.normalContainer.eulerAngles.y);
+        }
 
-        if(Game.Instance.player.State == ControllerState.STOMP)
+
+        if (state == ControllerState.STOMP)
         {
             minPitch = _data.stomp_minPitch;
             maxPitch = _data.stomp_maxPitch;
+            minYaw = 0;
+            maxYaw = 0;
         }
-        else if (Game.Instance.player.State == ControllerState.FALLING)
+        else if (state == ControllerState.FALLING)
         {
             minPitch = _data.fall_minPitch;
             maxPitch = _data.fall_maxPitch;
+            minYaw = 0;
+            maxYaw = 0;
+        }
+        else if(state == ControllerState.RAIL)
+        {
+            minPitch = _data.minPitch;
+            maxPitch = _data.maxPitch;
+
+            var y = player.hoverBehaviour.normalContainer.eulerAngles.y;
+            minYaw = y + _data.rail_minYew;
+            maxYaw = y + _data.rail_maxYew;   
         }
         else
         {
             minPitch = _data.minPitch;
             maxPitch = _data.maxPitch;
+            minYaw = 0;
+            maxYaw = 0;
         }
         // Apply sensitivity and deltaTime
         float mouseX = lookInput.x * sensitivity * Time.deltaTime;
@@ -175,8 +199,17 @@ public class CameraTargetController : MonoBehaviour
             targetPitch = pitch + mouseY;
         }
 
-
         targetPitch = Mathf.Clamp(targetPitch, minPitch, maxPitch);
+
+        if(state == ControllerState.RAIL)
+        {
+            var centerYaw = WrapAngle(player.hoverBehaviour.normalContainer.eulerAngles.y);
+            var deltaYaw = Mathf.DeltaAngle(centerYaw, targetYaw);
+            deltaYaw = Mathf.Clamp(deltaYaw, _data.rail_minYew, _data.rail_maxYew);
+            targetYaw = WrapAngle(centerYaw + deltaYaw);
+
+            //yaw = targetYaw;
+        }
 
         yaw = Mathf.SmoothDampAngle(yaw, targetYaw, ref yawVelocity, smoothValue);
         pitch = Mathf.SmoothDampAngle(pitch, targetPitch, ref pitchVelocity, smoothValue);
@@ -186,13 +219,16 @@ public class CameraTargetController : MonoBehaviour
             Vector3 targetUp = player.hoverBehaviour.normalContainer.up;
             currentUp = Vector3.Slerp(currentUp, targetUp, Time.deltaTime * 5f);
         }
-        //else
-        //{
-        //    Vector3 targetUp = player.transform.rotation.eulerAngles;
-        //    currentUp = Vector3.Slerp(currentUp, targetUp, Time.deltaTime * 50f);
-        //}
-
     }
+
+    private float WrapAngle(float angle)
+    {
+        if (angle > 180) return angle - 360;
+        else if (angle < -180) return angle + 360;
+
+        return angle;
+    }
+   
 
     private void FixedUpdate()
     {
@@ -201,16 +237,11 @@ public class CameraTargetController : MonoBehaviour
 
         if (toggleFixedCam == false)
         {
-            //Quaternion rotation = Quaternion.Euler(currentUp.x + pitch, currentUp.y + yaw, currentUp.z);
-            //target.rotation = rotation;
             target.Rotate(new Vector3(currentUp.x + pitch, currentUp.y + yaw, currentUp.z));
         }
         else
         {
-            //Quaternion rotation = Quaternion.Euler(player.transform.rotation.eulerAngles);
-            //target.rotation = rotation;
             target.Rotate(player.transform.rotation.eulerAngles);
-            // ---- On ajoute seulement cette ligne ----
             StretchyCamBehavior(lookAction.action.ReadValue<Vector2>());
         }
     }

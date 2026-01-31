@@ -63,10 +63,27 @@ public class FOVController : MonoBehaviour
         if (!initialized || controller == null)
             return;
 
+        var cam = brain.ActiveVirtualCamera as CinemachineCamera;
+        if (cam == null) return;
+        
+        if(cam != current)
+        {
+            var currentFOV = current.Lens.FieldOfView;
+            current.Lens.FieldOfView = defaultFOV;
+
+            cam.Lens.FieldOfView = currentFOV;
+            current = cam;
+        }
+
         Vector3 horizontalVel = controller.Velocity;
         horizontalVel.y = 0;
 
-        float speed01 = horizontalVel.magnitude / maxAvatarSpeed;
+        var magnitude = horizontalVel.magnitude;
+
+        if (controller.OnRail)
+            magnitude = 75f;
+
+        float speed01 = magnitude / maxAvatarSpeed;
 
         float targetFOV = Mathf.Lerp(
             defaultFOV,
