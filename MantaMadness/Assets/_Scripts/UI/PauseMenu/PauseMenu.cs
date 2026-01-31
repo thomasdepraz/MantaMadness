@@ -270,6 +270,7 @@ public class PauseMenu : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
+        DataPersistenceManager.Instance.SaveGame();
     }
 
     private void QuitGame()

@@ -8,6 +8,7 @@ public class BuoyGame : MonoBehaviour, ITimer
     public string coinName;
     
     private float timer;
+    public float addTime = 0;
     private int count = 0;
     public bool hasStarted;
 
@@ -60,6 +61,7 @@ public class BuoyGame : MonoBehaviour, ITimer
         if (hasStarted == false)
             StartGame();
 
+        Addtime(addTime);
         count++;
         if (count >= buoys.Count)
         {
@@ -99,5 +101,13 @@ public class BuoyGame : MonoBehaviour, ITimer
     public override int GetHashCode()
     {
         return gameObject.name.GetHashCode();
+    }
+
+    public void Addtime(float time)
+    {
+        if(time != 0)
+        {
+            timer += time;
+        }
     }
 }

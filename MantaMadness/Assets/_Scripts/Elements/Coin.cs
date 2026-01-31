@@ -37,7 +37,7 @@ public class Coin : MonoBehaviour
         RuntimeManager.PlayOneShot(pickupSound, transform.position);
 
         //increase boost gauge
-        Game.Instance.player.boostBehaviour.IncrementGauge(BoostAction.CoolSun);
+        //Game.Instance.player.boostBehaviour.IncrementGauge(BoostAction.CoolSun);
 
         //animation
 

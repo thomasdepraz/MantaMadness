@@ -1,8 +1,12 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.DualShock;
+using UnityEngine.InputSystem.Utilities;
+using UnityEngine.InputSystem.XInput;
 using UnityEngine.SceneManagement;
 using static DialogLoader;
+using static Unity.Burst.Intrinsics.X86.Avx;
 
 public class InputManager : MonoBehaviour
 {
@@ -10,6 +14,8 @@ public class InputManager : MonoBehaviour
     public static InputDeviceType CurrentDevice { get; private set; }
 
     public static event Action<InputDeviceType> OnDeviceChanged;
+
+    [SerializeField] private InputActionAsset inputActions;
 
     private void Awake()
     {
@@ -57,13 +63,18 @@ public class InputManager : MonoBehaviour
 
     private void OnEnable()
     {
-        playerActionsMap = InputSystem.actions.FindActionMap("Player");
+        InputSystem.onAnyButtonPress.CallOnce(ctrl =>
+        {
+            UpdateDeviceFromControl(ctrl);
+        });
+
+        playerActionsMap = inputActions.FindActionMap("Player", true);
         if (playerActionsMap != null)
         {
             //playerActionsMap.Enable();
         }
 
-        uiActionsMap = InputSystem.actions.FindActionMap("UI");
+        uiActionsMap = inputActions.FindActionMap("UI", true);
         if (uiActionsMap != null)
         {
             //uiActionsMap.Enable();
@@ -72,9 +83,14 @@ public class InputManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name != "MainMenu")
         {
             EnableGameplay();
+            interact.action.Enable();
+            jump.action.Enable();
+            dash.action.Enable();
+            moveDirection.action.Enable();
             interact.action.performed += UpdateCurrentDevice;
             jump.action.performed += UpdateCurrentDevice;
             dash.action.performed += UpdateCurrentDevice;
+            moveDirection.action.performed += UpdateCurrentDevice;
         }
         else if(SceneManager.GetActiveScene().name == "MainMenu")
         {
@@ -99,8 +115,25 @@ public class InputManager : MonoBehaviour
             interact.action.performed -= UpdateCurrentDevice;
             jump.action.performed -= UpdateCurrentDevice;
             dash.action.performed -= UpdateCurrentDevice;
+            moveDirection.action.performed -= UpdateCurrentDevice;
         }
     }
+
+    private void UpdateDeviceFromControl(InputControl control)
+    {
+        var device = control.device;
+        if (device == null) return;
+
+        if (device is Keyboard || device is Mouse)
+            SetDevice(InputDeviceType.KeyboardMouse);
+        else if (device is XInputController)
+            SetDevice(InputDeviceType.Xbox);
+        else if (device is DualShockGamepad || device is DualSenseGamepadHID)
+            SetDevice(InputDeviceType.PlayStation);
+        else if (device is Gamepad)
+            SetDevice(InputDeviceType.Xbox);
+    }
+
     private void SetDevice(InputDeviceType newDevice)
     {
         if (CurrentDevice == newDevice) return;
@@ -114,25 +147,33 @@ public class InputManager : MonoBehaviour
         var device = context.control?.device;
         if (device == null) return;
 
+        // Keyboard / Mouse
         if (device is Keyboard || device is Mouse)
         {
             SetDevice(InputDeviceType.KeyboardMouse);
             return;
         }
 
+        // Xbox (XInput)
+        if (device is XInputController)
+        {
+            SetDevice(InputDeviceType.Xbox);
+            return;
+        }
+
+        // PlayStation (native)
+        if (device is DualShockGamepad || device is DualSenseGamepadHID)
+        {
+            SetDevice(InputDeviceType.PlayStation);
+            return;
+        }
+
+        // Generic Gamepad (Steam Input, 8BitDo, autres)
         if (device is Gamepad)
         {
-            string product = device.description.product?.ToLowerInvariant() ?? "";
-            string manufacturer = device.description.manufacturer?.ToLowerInvariant() ?? "";
-
-            if (product.Contains("dualshock") || product.Contains("dualsense") ||
-                manufacturer.Contains("sony") || product.Contains("playstation"))
-            {
-                SetDevice(InputDeviceType.PlayStation);
-                return;
-            }
-
+            // Steam Input = Xbox virtuel → on assume Xbox
             SetDevice(InputDeviceType.Xbox);
+            return;
         }
     }
 

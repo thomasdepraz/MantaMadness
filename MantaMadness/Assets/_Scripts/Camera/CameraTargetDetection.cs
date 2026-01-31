@@ -32,7 +32,7 @@ public class CameraTargetDetection : MonoBehaviour
     }
     private void Start()
     {
-        jumpDetectionRange = Game.Instance.player.controllerData.targetDetectionRadius + 5f;
+        jumpDetectionRange = Game.Instance.player.controllerData.targetDetectionRadius;
         npcDetectionRange = Game.Instance.player.controllerData.npcInteractionRadius;
         viewAngle = Camera.main.fieldOfView;
     }

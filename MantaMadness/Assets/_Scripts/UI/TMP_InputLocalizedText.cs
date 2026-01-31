@@ -25,7 +25,10 @@ public class TMP_InputLocalizedText : MonoBehaviour
     private void OnEnable()
     {
         Refresh();
-        InputManager.OnDeviceChanged += OnDeviceChanged;
+        InputManager.OnDeviceChanged += OnDeviceChanged; 
+
+        if (string.IsNullOrEmpty(rawText))
+            rawText = tmp.text;
     }
 
     private void OnDisable()
