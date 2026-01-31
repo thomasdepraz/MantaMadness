@@ -24,6 +24,8 @@ public class MainMenu : MonoBehaviour
 
     public InputManager inputs;
     [SerializeField] public OptionsMenu options;
+    [SerializeField] private ConfirmNewGameMenu confirmNewGameMenu;
+    [SerializeField] private Credits credits;
 
     [Header("Sound parameters")]
     [SerializeField] public EventReference submitSound;
@@ -39,6 +41,7 @@ public class MainMenu : MonoBehaviour
         OPTIONS,
         CONTINUE,
         CONFIRM_NEW_GAME,
+        CREDITS,
         NULL
     }
 
@@ -86,7 +89,7 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    [SerializeField] private ConfirmNewGameMenu confirmNewGameMenu;
+
 
     private void Awake()
     {
@@ -178,6 +181,11 @@ public class MainMenu : MonoBehaviour
             case MainMenuState.DEFAULT:
                 ToggleMainVisuals(true);
                 break;
+
+            case MainMenuState.CREDITS:
+                credits.Open();
+                break;
+             
         }
     }
 
@@ -264,6 +272,12 @@ public class MainMenu : MonoBehaviour
             }
             else if (_defaultStateIndex == 3)
             {
+                //Credits
+                State = MainMenuState.CREDITS;
+                credits.Enable();
+            }
+            else if (_defaultStateIndex == 4)
+            {
                 //Quit Game
                 Application.Quit();
             }
@@ -277,6 +291,11 @@ public class MainMenu : MonoBehaviour
         else if (State == MainMenuState.CONFIRM_NEW_GAME)
         {
             confirmNewGameMenu.Submit();
+        }
+
+        else if (State == MainMenuState.CREDITS)
+        {
+            credits.Submit();
         }
     }
 

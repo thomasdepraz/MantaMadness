@@ -63,10 +63,7 @@ public class InputManager : MonoBehaviour
 
     private void OnEnable()
     {
-        InputSystem.onAnyButtonPress.CallOnce(ctrl =>
-        {
-            UpdateDeviceFromControl(ctrl);
-        });
+        SceneManager.sceneLoaded += OnSceneLoaded;
 
         playerActionsMap = inputActions.FindActionMap("Player", true);
         if (playerActionsMap != null)
@@ -87,9 +84,13 @@ public class InputManager : MonoBehaviour
             jump.action.Enable();
             dash.action.Enable();
             moveDirection.action.Enable();
+            interact.action.started += UpdateCurrentDevice;
             interact.action.performed += UpdateCurrentDevice;
+            jump.action.started += UpdateCurrentDevice;
             jump.action.performed += UpdateCurrentDevice;
+            dash.action.started += UpdateCurrentDevice;
             dash.action.performed += UpdateCurrentDevice;
+            moveDirection.action.started+= UpdateCurrentDevice;
             moveDirection.action.performed += UpdateCurrentDevice;
         }
         else if(SceneManager.GetActiveScene().name == "MainMenu")
@@ -100,6 +101,8 @@ public class InputManager : MonoBehaviour
 
     private void OnDisable()
     {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+
         if (playerActionsMap != null)
         {
             playerActionsMap.Disable();
@@ -113,30 +116,63 @@ public class InputManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name != "MainMenu")
         {
             interact.action.performed -= UpdateCurrentDevice;
+            interact.action.started -= UpdateCurrentDevice;
             jump.action.performed -= UpdateCurrentDevice;
+            jump.action.started -= UpdateCurrentDevice;
             dash.action.performed -= UpdateCurrentDevice;
+            dash.action.started -= UpdateCurrentDevice;
             moveDirection.action.performed -= UpdateCurrentDevice;
+            moveDirection.action.started -= UpdateCurrentDevice;
         }
     }
 
-    private void UpdateDeviceFromControl(InputControl control)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        var device = control.device;
-        if (device == null) return;
+        SetupForScene(scene.name);
+    }
 
-        if (device is Keyboard || device is Mouse)
-            SetDevice(InputDeviceType.KeyboardMouse);
-        else if (device is XInputController)
-            SetDevice(InputDeviceType.Xbox);
-        else if (device is DualShockGamepad || device is DualSenseGamepadHID)
-            SetDevice(InputDeviceType.PlayStation);
-        else if (device is Gamepad)
-            SetDevice(InputDeviceType.Xbox);
+    private void SetupForScene(string sceneName)
+    {
+        // Clean d'abord (sécurité)
+        UnsubscribeGameplayInputs();
+
+        if (sceneName == "MainMenu")
+        {
+            EnableUI();
+        }
+        else
+        {
+            EnableGameplay();
+            SubscribeGameplayInputs();
+        }
+    }
+
+    private void SubscribeGameplayInputs()
+    {
+        interact.action.Enable();
+        jump.action.Enable();
+        dash.action.Enable();
+        moveDirection.action.Enable();
+
+        interact.action.started += UpdateCurrentDevice;
+        jump.action.started += UpdateCurrentDevice;
+        dash.action.started += UpdateCurrentDevice;
+        moveDirection.action.started += UpdateCurrentDevice;
+    }
+
+    private void UnsubscribeGameplayInputs()
+    {
+        interact.action.started -= UpdateCurrentDevice;
+        jump.action.started -= UpdateCurrentDevice;
+        dash.action.started -= UpdateCurrentDevice;
+        moveDirection.action.started -= UpdateCurrentDevice;
     }
 
     private void SetDevice(InputDeviceType newDevice)
     {
         if (CurrentDevice == newDevice) return;
+
+        Debug.Log("DEVICE CHANGED → " + newDevice);
 
         CurrentDevice = newDevice;
         OnDeviceChanged?.Invoke(CurrentDevice);
