@@ -21,6 +21,7 @@ public enum UiWordsParticles
     BUBBLE,
     SPEEDLINE,
     MISSINGHAND,
+    CHECKPOINT,
 }
 
 public enum WordType

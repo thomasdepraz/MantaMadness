@@ -147,8 +147,8 @@ public class CameraTargetController : MonoBehaviour
         if(currentState != state)
         {
             currentState = state;
-            if (state == ControllerState.RAIL)
-                yaw = WrapAngle(player.hoverBehaviour.normalContainer.eulerAngles.y);
+            //if (state == ControllerState.RAIL)
+            //    yaw = WrapAngle(player.hoverBehaviour.normalContainer.eulerAngles.y);
         }
 
 

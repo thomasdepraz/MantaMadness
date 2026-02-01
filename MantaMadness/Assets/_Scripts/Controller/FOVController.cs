@@ -9,6 +9,7 @@ public class FOVController : MonoBehaviour
     [Header("Parameters")]
     public float maxAvatarSpeed = 10f;
     public float maxFOV = 80f;
+    public float speedOnRail = 75f;
     public AnimationCurve FOVProgression;
 
     private float defaultFOV;
@@ -81,7 +82,7 @@ public class FOVController : MonoBehaviour
         var magnitude = horizontalVel.magnitude;
 
         if (controller.OnRail)
-            magnitude = 75f;
+            magnitude = speedOnRail;
 
         float speed01 = magnitude / maxAvatarSpeed;
 

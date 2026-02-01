@@ -2,6 +2,7 @@ using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using FMODUnity;
 
 public class WorldCheckpoint : MonoBehaviour
 {
@@ -12,13 +13,20 @@ public class WorldCheckpoint : MonoBehaviour
     [SerializeField] public MUSICS musicToPlay = MUSICS.NULL;
     [SerializeField] public AMBIENT ambientToPlay = AMBIENT.NULL;
 
+    [SerializeField] private MeshRenderer[] visuals;
+    [SerializeField] private GameObject flag;
+    [SerializeField] private Material enableMat;
+    [SerializeField] private Material disableMat;
+    [SerializeField] private ParticleSystem particle;
+    [SerializeField] private EventReference soundToPlay;
+
 
     private void Awake()
     {
-        if(gameObject.GetComponent<MeshRenderer>().enabled == true)
-        {
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
-        }
+        //if(gameObject.GetComponent<MeshRenderer>().enabled == true)
+        //{
+        //    gameObject.GetComponent<MeshRenderer>().enabled = false;
+        //}
     }
 
     private void Start()
@@ -42,6 +50,36 @@ public class WorldCheckpoint : MonoBehaviour
             {
                 MusicManager.Instance.PlayAmbient(ambientToPlay);
             }
+        }
+    }
+
+    public void EnableMat()
+    {
+        //Enable Flag
+        flag.SetActive(true);
+        //Change mat to enablemat
+        foreach(MeshRenderer renderer in visuals)
+        {
+            renderer.material = enableMat;
+        }
+        //Play SFX
+        particle.Play();
+        //Play Particle
+        RuntimeManager.PlayOneShot(soundToPlay, transform.position);
+        //Play Checkpoint UI particle
+
+        UIParticleManager.Instance.playtSpecificParticle(UiWordsParticles.CHECKPOINT, "");
+
+    }
+    
+    public void DisableMat()
+    {
+        //Disable Flag
+        flag.SetActive(false);
+        //Change Mat to disableMat
+        foreach (MeshRenderer renderer in visuals)
+        {
+            renderer.material = disableMat;
         }
     }
 }

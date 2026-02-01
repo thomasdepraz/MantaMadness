@@ -56,6 +56,11 @@ public class WorldCheckpointManager : MonoBehaviour, IDataPersistence
                 Vector3 pos = Vector3.zero;
                 Quaternion rotation;
                 Game.Instance.Respawn(out pos, out rotation);
+                check.EnableMat();
+            }
+            else
+            {
+                check.DisableMat();
             }
         }
     }
@@ -90,7 +95,25 @@ public class WorldCheckpointManager : MonoBehaviour, IDataPersistence
     {
         if(checkpointIndexName != currentCheckpoint)
         {
+            //Reset visual of all checkpoint
+            foreach (WorldCheckpoint worldPoint in checkpoints)
+            {
+                if(worldPoint.indexName == currentCheckpoint)
+                {
+                    worldPoint.DisableMat();
+                }
+            }
+
+            //Set New checkpoint
             currentCheckpoint = checkpointIndexName;
+
+            foreach (WorldCheckpoint worldPoint in checkpoints)
+            {
+                if (worldPoint.indexName == currentCheckpoint)
+                {
+                    worldPoint.EnableMat();
+                }
+            }
 
             GameData data = DataPersistenceManager.Instance.gameData;
 

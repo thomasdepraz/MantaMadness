@@ -717,10 +717,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.R))
-        {
-            Game.Instance.Respawn(out Vector3 position, out Quaternion rotation);
-        }
+        //if (Input.GetKeyUp(KeyCode.R))
+        //{
+        //    Game.Instance.Respawn(out Vector3 position, out Quaternion rotation);
+        //}
 
         thrust = inputs.thrust.action.ReadValue<float>();
         turn = inputs.turn.action.ReadValue<float>();
