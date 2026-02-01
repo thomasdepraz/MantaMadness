@@ -56,6 +56,8 @@ public class Button : MonoBehaviour
         isActivated = true;
         buttonMesh.material = activatedMaterial;
 
+        yield return new WaitForSeconds(0.75f);
+
         // PART 1 LOCK PLAYER ACTIVATE CAM
         //lock player
         controller.ForceLock(true);

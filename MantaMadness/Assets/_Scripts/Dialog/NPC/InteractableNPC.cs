@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
 
@@ -15,6 +16,8 @@ public class InteractableNPC : MonoBehaviour, IDataPersistence
     public int dialogIndex = 0;
 
     protected bool stateChangedDuringDialog = false;
+
+    public Action<int> QuestMarker;
 
     public virtual void Start()
     {
@@ -33,6 +36,8 @@ public class InteractableNPC : MonoBehaviour, IDataPersistence
             npcState = dialogData.npcState;
             dialogIndex = dialogData.dialogIndex;
         }
+
+        //QuestMarker?.Invoke(npcState);
 
         OnDataLoaded();
     }
@@ -81,11 +86,13 @@ public class InteractableNPC : MonoBehaviour, IDataPersistence
     {
         npcState = newState;
         dialogIndex = 0; // reset quand on change de state
+        //QuestMarker?.Invoke(npcState);
     }
 
     public void IncrementIndex()
     {
         var dialogs = GetCurrentDialogKeys();
+        QuestMarker?.Invoke(npcState);
         if (dialogs == null) return;
 
         if (dialogIndex < dialogs.Length - 1)
