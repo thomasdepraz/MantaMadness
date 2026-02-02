@@ -42,23 +42,34 @@ public class JumpTarget : MonoBehaviour
             indicator.Play();
         }
     }
+    public bool isAvailable = true;
 
     public void DeactivateTarget()
     {
+        if (!isAvailable) return;
+
+        isAvailable = false;
+
+        var col = GetComponent<Collider>();
+        if (CameraTargetDetection.Instance != null && col != null)
+            CameraTargetDetection.Instance.validJumpTargets.Remove(col);
+
+        ToggleFunctionElements(false);
+
         StartCoroutine(DisableCoroutine());
     }
 
     protected IEnumerator DisableCoroutine()
     {
-        if (CameraTargetDetection.Instance.validJumpTargets.Contains(gameObject.GetComponent<Collider>()))
-            {
-                CameraTargetDetection.Instance.validJumpTargets.Remove(gameObject.GetComponent<Collider>());
-                print(gameObject.GetComponent<Collider>() + "Has been removed");
-            }
-        ToggleFunctionElements(false);
+        //if (CameraTargetDetection.Instance.validJumpTargets.Contains(gameObject.GetComponent<Collider>()))
+        //    {
+        //        CameraTargetDetection.Instance.validJumpTargets.Remove(gameObject.GetComponent<Collider>());
+        //        print(gameObject.GetComponent<Collider>() + "Has been removed");
+        //    }
+        //ToggleFunctionElements(false);
+
         yield return new WaitForSeconds(respawnCooldown);
         ToggleFunctionElements(true);
-        yield return null;
     }
 
     protected virtual void ToggleFunctionElements(bool toggleValue)
@@ -68,31 +79,37 @@ public class JumpTarget : MonoBehaviour
             //SET ANIMATION TO IDLE
             gameObject.GetComponent<Collider>().enabled = true;
             indicator.gameObject.SetActive(true);
+            isAvailable = true;
         }
         else if (!toggleValue)
         {
             //SET ANIMATION TO DISABLE
             gameObject.GetComponent<Collider>().enabled = false;
             indicator.gameObject.SetActive(false);
+            isAvailable = false;
         }
     }
 
     public void StartLaunchCoroutine()
     {
-        StartCoroutine(LaunchCoroutine());
+        if (launchRoutine != null || !isAvailable) return;
+        launchRoutine = StartCoroutine(LaunchCoroutine());
     }
 
     protected bool OnAnimationEvent = false;
+
+    public Coroutine launchRoutine;
     protected virtual IEnumerator LaunchCoroutine()
     {
         yield return null;
+        launchRoutine = null;
     }
 
     protected virtual void OnTriggerEnter(Collider other)
     {
         if(other.GetComponent<SimpleController>() != null)
         {
-            DeactivateTarget();
+            //DeactivateTarget();
         }
     }
 }

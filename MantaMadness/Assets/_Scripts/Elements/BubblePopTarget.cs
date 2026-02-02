@@ -23,6 +23,7 @@ public class BubblePopTarget : JumpTarget
         visual.transform.localScale = Vector3.zero;
         visual.transform.DOScale(Vector3.one, 0.75f).SetEase(Ease.OutElastic);
         burstParticle.Play();
+        launchRoutine = null;
 
     }
 
@@ -31,6 +32,7 @@ public class BubblePopTarget : JumpTarget
         if (other.GetComponent<SimpleController>() != null)
         {
             StartLaunchCoroutine();
+            DeactivateTarget();
         }
     }
 }

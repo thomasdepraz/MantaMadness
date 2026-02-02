@@ -98,10 +98,24 @@ public class CameraTargetDetection : MonoBehaviour
                     //Debug.Log("Objet VISIBLE : " + target.name);
                     if (!validJumpTargets.Contains(target))
                     {
-                        validJumpTargets.Add(target);
-                        RuntimeManager.PlayOneShot(addTargetSound, Camera.main.transform.position);
-                        target.GetComponent<JumpTarget>().SwitchIndicatorVisibility(true);
-                        print(target + "Has been added");
+                        if(target.GetComponent<JumpTarget>() != null)
+                        {
+                            JumpTarget jumpTar = target.GetComponent<JumpTarget>();
+                            if (jumpTar != null && jumpTar.isAvailable && jumpTar.launchRoutine == null)
+                            {
+                                validJumpTargets.Add(target);
+                                RuntimeManager.PlayOneShot(addTargetSound, Camera.main.transform.position);
+                                jumpTar.SwitchIndicatorVisibility(true);
+                            }
+                        }
+
+                        //else
+                        //{
+                        //    validJumpTargets.Add(target);
+                        //    RuntimeManager.PlayOneShot(addTargetSound, Camera.main.transform.position);
+                        //    target.GetComponent<JumpTarget>().SwitchIndicatorVisibility(true);
+                        //    print(target + "Has been added");
+                        //}
                     }
                 }
                 else

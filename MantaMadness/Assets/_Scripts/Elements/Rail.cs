@@ -40,6 +40,8 @@ public class Rail : MonoBehaviour
 
     public RailType railType;
 
+    public int CurrenDirection => dir;
+
     protected virtual void Awake()
     {
         splineContainer = GetComponent<SplineContainer>();
@@ -170,5 +172,10 @@ public class Rail : MonoBehaviour
         currentPosition = worldPos;
 
         return isIn;
+    }
+
+    public void Reverse()
+    {
+        dir *= -1;
     }
 }

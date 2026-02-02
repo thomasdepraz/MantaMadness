@@ -121,6 +121,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private WaterBlock currentWaterBlock;
     private AirRail currentAirRail;
     private Rail currentRail;
+    private Rail lastRail;
     private WaterFall currentWaterFall;
     private float maxDivingDepth;
     private float maxDepth;
@@ -138,6 +139,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private bool forceLocked;
     private bool interact;
     public bool railLock;
+
+    [SerializeField] private float railReverseCooldown = 0.25f;
+    [SerializeField] private float railReversePauseTime = 0.15f;
+
+    private Coroutine railReverseRoutine;
 
     public Action<ControllerState, ControllerState> stateChanged;
     public Action<AirRail> enterAirRail;
@@ -182,6 +188,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         inputs.jump.action.canceled += Jump;
         //inputs.dash.action.performed += StyleDash;
         inputs.dash.action.performed += CatTimeAbility;
+        inputs.dash.action.performed += ReverseRailDirection;
         inputs.strafLeft.action.performed += Straf;
         inputs.strafRight.action.performed += Straf;
         inputs.jump.action.performed += JumpOutOfRail;
@@ -203,6 +210,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         inputs.jump.action.canceled -= Jump;
         //inputs.dash.action.performed -= StyleDash;
         inputs.dash.action.performed -= CatTimeAbility;
+        inputs.dash.action.performed -= ReverseRailDirection;
         inputs.strafLeft.action.performed -= Straf;
         inputs.strafRight.action.performed -= Straf;
         inputs.jump.action.performed -= JumpOutOfRail;
@@ -627,6 +635,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 strafRoutine = StartCoroutine(StrafCooldownRoutine());
                 if (State == ControllerState.SURFING)
                 {
+                        //ENABLE strafHitbox
+                        
                         if (context.action.name == InputManager.Instance.strafLeft.action.name)
                         {
                             rb.linearVelocity = Vector3.zero;
@@ -846,7 +856,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
             else if (false == currentRail.Progress(Time.fixedDeltaTime, out Vector3 nextPos, out Vector3 normal, out Vector3 direction))
             {
-                lastRailExitTime = Time.time;
+                OnRailExit(currentRail);
 
                 currentRail = null;
                 rb.isKinematic = false;
@@ -1395,7 +1405,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (State == ControllerState.RAIL)
             return false;
 
-        if (!CanEnterRail())
+        if (rail == lastRail && Time.time - lastRailExitTime < railReenterCooldown)
             return false;
 
         if (grindAbility)
@@ -1453,6 +1463,43 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         intent.y = 0f;
         return intent.normalized;
+    }
+
+    private void ReverseRailDirection(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        Debug.Log("!= state rail");
+        if (State != ControllerState.RAIL)
+            return;
+        Debug.Log("rail == null");
+        if (currentRail == null)
+            return;
+        Debug.Log("rail reverse routine");
+        if (railReverseRoutine != null)
+            return;
+
+        Debug.Log("REVERSE RAIL");
+        railReverseRoutine = StartCoroutine(ReverseRailRoutine());
+    }
+
+    private IEnumerator ReverseRailRoutine()
+    {
+        RailLock(true);
+
+        //ANIMATION
+
+        yield return new WaitForSeconds(railReversePauseTime);
+
+        currentRail.Reverse();
+
+        NormalContainer.forward = -NormalContainer.forward;
+
+
+        RailLock(false);
+
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.GRINDRAIL);
+
+        yield return new WaitForSeconds(railReverseCooldown);
+        railReverseRoutine = null;
     }
 
     public bool EnterWaterfall(WaterFall waterfall)
@@ -1671,7 +1718,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     {
         if (currentRail != null && State == ControllerState.RAIL)
         {
-            lastRailExitTime = Time.time; // 👈 IMPORTANT
+            OnRailExit(currentRail);
 
             currentRail = null;
             hoverBehaviour.normalContainer.up = Vector3.up;
@@ -1686,11 +1733,17 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         }
     }
 
+    public void OnRailExit(Rail rail)
+    {
+        lastRail = rail;
+        lastRailExitTime = Time.time;
+    }
+
     public void StrafOutOfRail(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         if (currentRail != null && State == ControllerState.RAIL)
         {
-            lastRailExitTime = Time.time;
+            OnRailExit(currentRail);
 
             currentRail = null;
             rb.isKinematic = false;
