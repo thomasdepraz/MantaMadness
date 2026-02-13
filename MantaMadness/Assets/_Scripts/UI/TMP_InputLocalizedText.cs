@@ -9,26 +9,19 @@ public class TMP_InputLocalizedText : MonoBehaviour
     private TextMeshProUGUI tmp;
 
     [TextArea]
-    [SerializeField]
-    private string rawText; // "Press {INTERACT}"
+    [SerializeField] private string sourceText;
 
     private static readonly Regex inputRegex = new(@"\{(.*?)\}");
 
     private void Awake()
     {
         tmp = GetComponent<TextMeshProUGUI>();
-
-        if (string.IsNullOrEmpty(rawText))
-            rawText = tmp.text; // capturé UNE FOIS
     }
 
     private void OnEnable()
     {
+        InputManager.OnDeviceChanged += OnDeviceChanged;
         Refresh();
-        InputManager.OnDeviceChanged += OnDeviceChanged; 
-
-        if (string.IsNullOrEmpty(rawText))
-            rawText = tmp.text;
     }
 
     private void OnDisable()
@@ -41,25 +34,22 @@ public class TMP_InputLocalizedText : MonoBehaviour
         Refresh();
     }
 
+    public void SetSourceText(string localizedText)
+    {
+        sourceText = localizedText;
+        Refresh();
+    }
+
     public void Refresh()
     {
-        if (string.IsNullOrEmpty(rawText)) return;
+        if (string.IsNullOrEmpty(sourceText))
+            return;
 
-        tmp.text = inputRegex.Replace(rawText, match =>
+        tmp.text = inputRegex.Replace(sourceText, match =>
         {
             string key = match.Groups[1].Value.Trim();
             return InputLocalization.GetInput(key);
         });
     }
-
-#if UNITY_EDITOR
-    private void OnValidate()
-    {
-        if (tmp == null)
-            tmp = GetComponent<TextMeshProUGUI>();
-
-        Refresh();
-    }
-#endif
 }
 

@@ -24,7 +24,7 @@ public class OptionDropdown : IOptionItem
             // Entrer en édition
             isEditing = true;
             dropdown.interactable = true;
-            dropdown.Show(); // 🔥 OBLIGATOIRE
+            dropdown.Show();
         }
         else
         {
@@ -44,7 +44,7 @@ public class OptionDropdown : IOptionItem
     private void ExitEdit()
     {
         isEditing = false;
-        dropdown.Hide();           // 🔥 TRÈS IMPORTANT
+        dropdown.Hide();          
         dropdown.interactable = false;
     }
 

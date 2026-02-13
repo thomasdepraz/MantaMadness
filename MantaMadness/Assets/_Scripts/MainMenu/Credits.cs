@@ -72,7 +72,6 @@ public class Credits : MonoBehaviour
 
     public void Submit()
     {
-        Debug.Log("ALLO PUNAISE");
         if (blockSubmit) return;
         creditItems.Submit();
     }

@@ -15,6 +15,7 @@ public static class InputLocalization
                     { "STRAF_RIGHT", "E" },
                     { "STOMP", "RMB" },
                     {"CAT", "Z" },
+                    {"REVERSE_GRIND", "Z" },
 
                 }
             },
@@ -27,6 +28,7 @@ public static class InputLocalization
                     { "STRAF_RIGHT", "RB" },
                     { "STOMP", "RT" },
                     {"CAT", "X" },
+                    {"REVERSE_GRIND", "X" },
                 }
             },
             {
@@ -38,6 +40,8 @@ public static class InputLocalization
                     { "STRAF_RIGHT", "R1" },
                     { "STOMP", "R2" },
                     {"CAT", "Square" },
+                    {"REVERSE_GRIND", "Square" +
+                        "" },
                 }
             },
         };

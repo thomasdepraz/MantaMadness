@@ -141,7 +141,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public bool railLock;
 
     [SerializeField] private float railReverseCooldown = 0.25f;
-    [SerializeField] private float railReversePauseTime = 0.15f;
+    [SerializeField] public float railReversePauseTime = 0.15f;
 
     private Coroutine railReverseRoutine;
 
@@ -166,6 +166,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public Action<float> afterImageEffect;
     public Action updateEquipmentVisual;
     public Action<bool, float> togglePlayerBlinkMat;
+    public Action reverseGrinding;
 
     private void Awake()
     {
@@ -844,14 +845,14 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
             if (bumpRail && railInfo.collider.CompareTag("RailCollider"))
             {
-
-                    currentRail = null;
-                    rb.isKinematic = false;
-                    exitRail.Invoke();
-                    railDetector.ExitRail();
-                    PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GRINDRAIL);
-                    disableBoolAnim("Grind");
-                    Bump((-hoverBehaviour.normalContainer.forward + hoverBehaviour.normalContainer.up));
+                    ReverseRailDirectionNoContext();
+                    //currentRail = null;
+                    //rb.isKinematic = false;
+                    //exitRail.Invoke();
+                    //railDetector.ExitRail();
+                    //PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GRINDRAIL);
+                    //disableBoolAnim("Grind");
+                    //Bump((-hoverBehaviour.normalContainer.forward + hoverBehaviour.normalContainer.up));
             }
 
             else if (false == currentRail.Progress(Time.fixedDeltaTime, out Vector3 nextPos, out Vector3 normal, out Vector3 direction))
@@ -1467,32 +1468,38 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     private void ReverseRailDirection(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        Debug.Log("!= state rail");
         if (State != ControllerState.RAIL)
             return;
-        Debug.Log("rail == null");
+
         if (currentRail == null)
             return;
-        Debug.Log("rail reverse routine");
+
         if (railReverseRoutine != null)
             return;
 
-        Debug.Log("REVERSE RAIL");
         railReverseRoutine = StartCoroutine(ReverseRailRoutine());
     }
 
+    private void ReverseRailDirectionNoContext()
+    {
+        railReverseRoutine = StartCoroutine(ReverseRailRoutine());
+    }
+
+    private bool isReverseRouting = false;
     private IEnumerator ReverseRailRoutine()
     {
         RailLock(true);
 
         //ANIMATION
+        reverseGrinding?.Invoke();
 
+        isReverseRouting = true;
         yield return new WaitForSeconds(railReversePauseTime);
 
+        isReverseRouting = false;
         currentRail.Reverse();
 
         NormalContainer.forward = -NormalContainer.forward;
-
 
         RailLock(false);
 
@@ -1716,7 +1723,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     public void JumpOutOfRail(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if (currentRail != null && State == ControllerState.RAIL)
+        if (currentRail != null && State == ControllerState.RAIL && !isReverseRouting)
         {
             OnRailExit(currentRail);
 
@@ -1727,7 +1734,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             exitRail.Invoke();
             railDetector.ExitRail();
             disableBoolAnim("Grind");
-            PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GRINDRAIL);
+            PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GRINDRAIL );
 
             Jump(context);
         }
@@ -1741,7 +1748,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     public void StrafOutOfRail(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if (currentRail != null && State == ControllerState.RAIL)
+        if (currentRail != null && State == ControllerState.RAIL && !isReverseRouting)
         {
             OnRailExit(currentRail);
 

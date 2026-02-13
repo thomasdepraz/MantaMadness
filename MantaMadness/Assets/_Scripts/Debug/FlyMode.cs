@@ -6,9 +6,11 @@ using UnityEngine.UIElements;
 public class FlyMode : MonoBehaviour
 {
    public static FlyMode instance;
-   [Header("Vitesse de déplacement")]
-   public float moveSpeed = 50f;
-   public float boostMultiplier = 15f;
+
+    public bool disableFlyMode = false;
+    [Header("Vitesse de déplacement")]
+    public float moveSpeed = 50f;
+    public float boostMultiplier = 15f;
     public float smoothSpeed = 10f;
     public float smoothFactor = 10f;
 
@@ -41,70 +43,73 @@ public class FlyMode : MonoBehaviour
 
     void Update()
     {
-        if (isEnabled == true)
+        if(disableFlyMode == false)
         {
-            // --- Rotation de la caméra avec la souris ---
-            rotationX += Input.GetAxis("Mouse X") * mouseSensitivity;
-            rotationY -= Input.GetAxis("Mouse Y") * mouseSensitivity;
-            rotationY = Mathf.Clamp(rotationY, -90f, 90f); // Empêche la caméra de se retourner
-
-            targetRotation = Quaternion.Euler(rotationY, rotationX, 0f);
-            //transform.rotation = Quaternion.Euler(rotationY, rotationX, 0f);
-
-            // --- Déplacement avec ZQSD ---
-            float speed = moveSpeed;
-            if (Input.GetKey(KeyCode.LeftShift)) speed *= boostMultiplier;
-            if (Input.GetKey(KeyCode.LeftShift)) smoothSpeed *= boostMultiplier;
-
-
-            Vector3 direction = new Vector3(
-                Input.GetAxisRaw("Horizontal"), // Q/D
-                0,
-                Input.GetAxisRaw("Vertical")    // Z/S
-            );
-
-            if (smoothMode == true)
+            if (isEnabled == true)
             {
-                Vector3 move = (transform.TransformDirection(direction).normalized) * smoothSpeed * Time.deltaTime;
+                // --- Rotation de la caméra avec la souris ---
+                rotationX += Input.GetAxis("Mouse X") * mouseSensitivity;
+                rotationY -= Input.GetAxis("Mouse Y") * mouseSensitivity;
+                rotationY = Mathf.Clamp(rotationY, -90f, 90f); // Empêche la caméra de se retourner
 
-                if (Input.GetKey(KeyCode.E))
-                    move += Vector3.up * smoothSpeed * Time.deltaTime;
-                if (Input.GetKey(KeyCode.LeftControl))
-                    move -= Vector3.up * smoothSpeed * Time.deltaTime;
+                targetRotation = Quaternion.Euler(rotationY, rotationX, 0f);
+                //transform.rotation = Quaternion.Euler(rotationY, rotationX, 0f);
 
-                targetPosition += move;
+                // --- Déplacement avec ZQSD ---
+                float speed = moveSpeed;
+                if (Input.GetKey(KeyCode.LeftShift)) speed *= boostMultiplier;
+                if (Input.GetKey(KeyCode.LeftShift)) smoothSpeed *= boostMultiplier;
 
-                // --- Appliquer le lissage ---
-                transform.position = Vector3.SmoothDamp(transform.localPosition, targetPosition, ref currentVelocity, 1f / smoothFactor);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSmoothSpeed * Time.deltaTime);
+
+                Vector3 direction = new Vector3(
+                    Input.GetAxisRaw("Horizontal"), // Q/D
+                    0,
+                    Input.GetAxisRaw("Vertical")    // Z/S
+                );
+
+                if (smoothMode == true)
+                {
+                    Vector3 move = (transform.TransformDirection(direction).normalized) * smoothSpeed * Time.deltaTime;
+
+                    if (Input.GetKey(KeyCode.E))
+                        move += Vector3.up * smoothSpeed * Time.deltaTime;
+                    if (Input.GetKey(KeyCode.LeftControl))
+                        move -= Vector3.up * smoothSpeed * Time.deltaTime;
+
+                    targetPosition += move;
+
+                    // --- Appliquer le lissage ---
+                    transform.position = Vector3.SmoothDamp(transform.localPosition, targetPosition, ref currentVelocity, 1f / smoothFactor);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSmoothSpeed * Time.deltaTime);
+                }
+
+                else
+                {
+                    transform.rotation = Quaternion.Euler(rotationY, rotationX, 0f);
+                    Vector3 move = transform.TransformDirection(direction).normalized * speed * Time.deltaTime;
+                    transform.position += move;
+
+                    if (Input.GetKey(KeyCode.E)) transform.position += Vector3.up * speed * Time.deltaTime;
+                    if (Input.GetKey(KeyCode.LeftControl)) transform.position += Vector3.down * speed * Time.deltaTime;
+                }
+
+                // Quitter le mode "fly" en débloquant la souris avec ESC
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+
+                    UnityEngine.Cursor.lockState = CursorLockMode.None;
+                    UnityEngine.Cursor.visible = true;
+                }
+
             }
-
-            else
+            else if (isEnabled == false)
             {
-                transform.rotation = Quaternion.Euler(rotationY, rotationX, 0f);
-                Vector3 move = transform.TransformDirection(direction).normalized * speed * Time.deltaTime; 
-                transform.position += move;
-
-                if (Input.GetKey(KeyCode.E)) transform.position += Vector3.up * speed * Time.deltaTime;
-                if (Input.GetKey(KeyCode.LeftControl)) transform.position += Vector3.down * speed * Time.deltaTime;
+                flyCam.transform.position = Game.Instance.player.transform.position;
             }
-
-            // Quitter le mode "fly" en débloquant la souris avec ESC
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.G))
             {
-
-                UnityEngine.Cursor.lockState = CursorLockMode.None;
-                UnityEngine.Cursor.visible = true;
+                SwitchCamMode();
             }
-
-        }
-        else if (isEnabled == false)
-        {
-            flyCam.transform.position = Game.Instance.player.transform.position;
-        }
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            SwitchCamMode();
         }
     }
 

@@ -14,6 +14,7 @@ public class OptionsMenu : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private TMP_Dropdown resolutionDropdown;
+    [SerializeField] private TMP_Dropdown languageDropdown;
     [SerializeField] private Toggle fullscreenToggle;
     [SerializeField] private Toggle invertCamToggle;
 
@@ -85,6 +86,7 @@ public class OptionsMenu : MonoBehaviour
         InitResolutions();
         InitScreenMode();
         InitInvertAxis();
+        InitLanguage();
         //LoadAudioSettings();
     }
 
@@ -140,8 +142,6 @@ public class OptionsMenu : MonoBehaviour
 
         isInitializing = false;
     }
-
-
     public void SetResolution(int index)
     {
         if (isInitializing)
@@ -156,6 +156,37 @@ public class OptionsMenu : MonoBehaviour
         );
 
         PlayerPrefs.SetInt("resolutionIndex", index);
+    }
+
+    private void InitLanguage()
+    {
+        isInitializing = true;
+
+        languageDropdown.ClearOptions();
+
+        var options = new List<string>();
+
+        options.Add("English");
+        options.Add("Français");
+
+        languageDropdown.AddOptions(options);
+
+        languageDropdown.value = (int)DialogLoader.CurrentLanguage;
+        languageDropdown.RefreshShownValue();
+
+        languageDropdown.onValueChanged.RemoveAllListeners();
+        languageDropdown.onValueChanged.AddListener(SetLanguage);
+
+        isInitializing = false;
+    }
+
+    public void SetLanguage(int index)
+    {
+        if (isInitializing) return;
+
+        var lang = (DialogLoader.Languages)index;
+        DialogLoader.LoadLanguage(lang);
+        PlayerPrefs.Save();
     }
 
     private void InitScreenMode()

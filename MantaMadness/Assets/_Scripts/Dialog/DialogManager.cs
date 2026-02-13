@@ -81,10 +81,43 @@ public class DialogManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        DialogLoader.OnLanguageChanged += OnLanguageChanged;
+    }
     private void OnDisable()
     {
+        DialogLoader.OnLanguageChanged -= OnLanguageChanged;
         inputs.interact.action.performed -= Interacts;
         inputs.interact.action.performed -= StartNPCInteraction;
+    }
+
+    private void OnLanguageChanged(DialogLoader.Languages lang)
+    {
+        ReloadDialogTexts();
+    }
+
+    private void ReloadDialogTexts()
+    {
+
+        foreach (DialogSequence asset in dialogSequences)
+        {
+            for (int i = 0; i < asset.sequence.Length; i++)
+            {
+                var entry = DialogLoader.GetText(asset.sequence[i].key);
+
+                asset.sequence[i].dialogText = entry.dialog;
+                asset.sequence[i].speakerName = entry.speaker;
+            }
+        }
+
+        if (currentSequence != null && currentSequenceCount < currentSequence.sequence.Length)
+        {
+            var dialog = currentSequence.sequence[currentSequenceCount];
+
+            speakerTextBox.text = dialog.speakerName;
+            dialogTextBox.text = DialogLoader.ParseInputs(dialog.dialogText);
+        }
     }
 
     private void Interacts(InputAction.CallbackContext context)

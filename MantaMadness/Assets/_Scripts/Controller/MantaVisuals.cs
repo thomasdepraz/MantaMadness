@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using System.Collections;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
@@ -15,6 +16,7 @@ public class MantaVisuals : MonoBehaviour
     public Animator mantaAnimator;
     [Header("Animation parameters")]
     public int dashBlendTreeAnimationCount;
+
 
     [Header("Direction Arrow")]
     public Transform arrow;
@@ -37,6 +39,7 @@ public class MantaVisuals : MonoBehaviour
     public ParticleSystem styleParticles;
     public ParticleSystem[] boostParticles = new ParticleSystem[3];
     public VisualEffect targetJumpParticles;
+    public VisualEffect reverseGrindParticles;
     public VisualEffect chargeJumpParticles;
     public VisualEffect chargeDriftParticles;
     public ParticleSystem chargeDriftParticlesAdditionnal;
@@ -52,6 +55,7 @@ public class MantaVisuals : MonoBehaviour
     public SkinnedMeshRenderer grindVisual;
     public SkinnedMeshRenderer[] catVisual;
     public Material[] playerMat;
+    public GameObject playerMantaTrueBody;
 
     [Header("After Image")]
     public SkinnedMeshRenderer mantaBodyVisual;
@@ -101,6 +105,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.enterWaterfall += StartWaterfall;
         mantaController.exitWaterfall += ExitWaterfall;
         mantaController.togglePlayerBlinkMat += ToggleBlink;
+        mantaController.reverseGrinding += ReverseGrindOnRail;
     }
 
     private void OnDisable()
@@ -124,6 +129,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.enterWaterfall -= StartWaterfall;
         mantaController.exitWaterfall -= ExitWaterfall;
         mantaController.togglePlayerBlinkMat -= ToggleBlink;
+        mantaController.reverseGrinding -= ReverseGrindOnRail;
     }
 
 
@@ -420,6 +426,8 @@ public class MantaVisuals : MonoBehaviour
     }
 
     ExposedProperty targetJumpDirection = "Direction";
+    ExposedProperty ReverseGrindOffset = "Offset";
+    ExposedProperty ReverseGrindLifeTime = "Lifetime";
     public void JumpTargetParticles()
     {
         targetJumpParticles.SetVector3(targetJumpDirection, transform.forward);
@@ -459,6 +467,16 @@ public class MantaVisuals : MonoBehaviour
     public void StartGrindOnRail()
     {
         railStrafRight = true;
+    }
+
+    public void ReverseGrindOnRail()
+    {
+        triggerAnimation("ReverseGrind");
+        reverseGrindParticles.SetVector3(targetJumpDirection, new Vector3(0,0,90));
+        reverseGrindParticles.SetVector3(ReverseGrindOffset, new Vector3(0,2,0));
+        reverseGrindParticles.SetFloat(ReverseGrindLifeTime, mantaController.railReversePauseTime);
+        reverseGrindParticles.Play();
+        playerMantaTrueBody.transform.DOLocalRotate(new Vector3(0f,3240f,0f),mantaController.railReversePauseTime, RotateMode.FastBeyond360);
     }
 
     //public void GrindOnRail()
