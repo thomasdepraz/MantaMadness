@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using FMODUnity;
 using System;
 using System.Collections;
 using System.Runtime.CompilerServices;
@@ -39,6 +40,7 @@ public class MantaVisuals : MonoBehaviour
     public ParticleSystem styleParticles;
     public ParticleSystem[] boostParticles = new ParticleSystem[3];
     public VisualEffect targetJumpParticles;
+    public ParticleSystem playerExplosionParticles;
     public VisualEffect reverseGrindParticles;
     public VisualEffect chargeJumpParticles;
     public VisualEffect chargeDriftParticles;
@@ -106,6 +108,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.exitWaterfall += ExitWaterfall;
         mantaController.togglePlayerBlinkMat += ToggleBlink;
         mantaController.reverseGrinding += ReverseGrindOnRail;
+        mantaController.stomplanding += StompLanding;
     }
 
     private void OnDisable()
@@ -130,6 +133,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.exitWaterfall -= ExitWaterfall;
         mantaController.togglePlayerBlinkMat -= ToggleBlink;
         mantaController.reverseGrinding -= ReverseGrindOnRail;
+        mantaController.stomplanding -= StompLanding;
     }
 
 
@@ -432,6 +436,10 @@ public class MantaVisuals : MonoBehaviour
     {
         targetJumpParticles.SetVector3(targetJumpDirection, transform.forward);
         targetJumpParticles.Play();
+        playerExplosionParticles.Play();
+
+        //PLAY SOUND
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.EXPLOSION);
     }
 
     public void PickupParticles()
@@ -630,5 +638,13 @@ public class MantaVisuals : MonoBehaviour
                 mat.SetFloat("_BlinkEnabled", 0f);
             }
         }
+    }
+
+    private void StompLanding()
+    {
+        playerExplosionParticles.Play();
+
+        //PLAY SOUND
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.EXPLOSION);
     }
 }

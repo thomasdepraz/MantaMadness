@@ -1,8 +1,23 @@
+using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
+using DG.Tweening;
 
 public class FOVController : MonoBehaviour
-{
+{   
+    public static FOVController instance;
+
+
+    public enum FovEffectType
+    {
+        EXPLOSIF,
+        FAST,
+        MEDIUM,
+        SLOW,
+        STOMP,
+    }
+
+
     private CinemachineBrain brain;
     private CinemachineCamera current;
 
@@ -20,7 +35,16 @@ public class FOVController : MonoBehaviour
 
     private void Awake()
     {
-        controller = GetComponent<SimpleController>();
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+
+            controller = GetComponent<SimpleController>();
         if (controller == null)
         {
             Debug.LogError("SimpleController manquant sur le GameObject");
@@ -76,26 +100,83 @@ public class FOVController : MonoBehaviour
             current = cam;
         }
 
-        Vector3 horizontalVel = controller.Velocity;
-        horizontalVel.y = 0;
-
-        var magnitude = horizontalVel.magnitude;
-
-        if (controller.OnRail)
-            magnitude = speedOnRail;
-
-        float speed01 = magnitude / maxAvatarSpeed;
-
-        float targetFOV = Mathf.Lerp(
-            defaultFOV,
-            maxFOV,
-            Mathf.Clamp01(FOVProgression.Evaluate(speed01)));
-
-        currentFOV = Mathf.Lerp(currentFOV, targetFOV, Time.deltaTime);
-
-        if (current != null)
+        if(FovEffectRoutine == null)
         {
-            current.Lens.FieldOfView = currentFOV;
+
+            Vector3 horizontalVel = controller.Velocity;
+            horizontalVel.y = 0;
+
+            var magnitude = horizontalVel.magnitude;
+
+            if (controller.OnRail)
+                magnitude = speedOnRail;
+
+            float speed01 = magnitude / maxAvatarSpeed;
+
+            float targetFOV = Mathf.Lerp(
+                defaultFOV,
+                maxFOV,
+                Mathf.Clamp01(FOVProgression.Evaluate(speed01)));
+
+            currentFOV = Mathf.Lerp(currentFOV, targetFOV, Time.deltaTime);
+
+            if (current != null)
+            {
+                current.Lens.FieldOfView = currentFOV;
+            }
         }
+    }
+
+    public void FOVEffect(FovEffectType type)
+    {
+        Debug.Log("FOV EFFECT PASSED");
+        if(FovEffectRoutine == null)
+        {
+            switch (type)
+            {
+                case FovEffectType.EXPLOSIF:
+                    FovEffectRoutine = StartCoroutine(FovEffectCoroutine(120, 1.2f));
+                    break;
+                case FovEffectType.STOMP:
+                    FovEffectRoutine = StartCoroutine(FovEffectCoroutine(90, 0.5f));
+                    break;
+
+            }
+        }
+    }
+
+    private Coroutine FovEffectRoutine;
+    private Tween activeTween;
+    private IEnumerator FovEffectCoroutine(float targetFov, float duration)
+    {
+        float upDuration = duration * 0.2f;
+        float downDuration = duration * 0.8f;
+
+        // Sécurité si un tween existe déjà
+        if (activeTween != null && activeTween.IsActive())
+            activeTween.Kill();
+
+        // PHASE 1 — montée explosive
+        activeTween = DOTween.To(
+            () => current.Lens.FieldOfView,
+            x => current.Lens.FieldOfView = x,
+            targetFov,
+            upDuration
+        ).SetEase(Ease.OutQuad);
+
+        yield return activeTween.WaitForCompletion();
+
+        // PHASE 2 — retour vers le FOV dynamique actuel
+        activeTween = DOTween.To(
+            () => current.Lens.FieldOfView,
+            x => current.Lens.FieldOfView = x,
+            currentFOV,
+            downDuration
+        ).SetEase(Ease.InOutQuad);
+
+        yield return activeTween.WaitForCompletion();
+
+        activeTween = null;
+        FovEffectRoutine = null;
     }
 }

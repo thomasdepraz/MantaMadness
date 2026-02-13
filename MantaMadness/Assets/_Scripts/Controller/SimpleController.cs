@@ -167,6 +167,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public Action updateEquipmentVisual;
     public Action<bool, float> togglePlayerBlinkMat;
     public Action reverseGrinding;
+    public Action stomplanding;
 
     private void Awake()
     {
@@ -451,6 +452,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             //Play anim
             triggerAnim.Invoke("TargetJump");
             playTargetJumpParticles.Invoke();
+            FOVController.instance.FOVEffect(FOVController.FovEffectType.EXPLOSIF);
             if (validColliders.Count == 1)
             {
                     target = validColliders[0].transform;
@@ -494,6 +496,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             rb.linearDamping = controllerData.doubleJumpDamping;
             triggerAnim.Invoke("TargetJump");
             playTargetJumpParticles.Invoke();
+            FOVController.instance.FOVEffect(FOVController.FovEffectType.EXPLOSIF);
 
             rb.linearVelocity = moveDir * HorizontalVelocity.magnitude;
             rb.AddForce((NormalContainer.up * jumpUpForce /* forceMultiplier*/) + (NormalContainer.forward * jumpForwardForce /* forceMultiplier*/), ForceMode.VelocityChange);
@@ -687,6 +690,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         fallTime = 0f;
         stompCancel = true;
         yield return new WaitForSeconds(controllerData.stompChargeTime);
+        FOVController.instance.FOVEffect(FOVController.FovEffectType.STOMP);
         stompCancel = false;
         triggerAnim.Invoke("Stomp");
         afterImageEffect.Invoke(controllerData.stompAfterImageEffectTime);
@@ -967,6 +971,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 Vector3 camForward = Camera.main.transform.forward;
                 Vector3 direction = Vector3.ProjectOnPlane(camForward, waterInfo.normal);
                 Boost(controllerData.boostForce, direction);
+                stomplanding?.Invoke();
                 stompRoutine = null;
                 ResetJump();
                 fallTime = 0f;
@@ -974,6 +979,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             else if (hasHitWalls)
             {
                 State = ControllerState.FALLING;
+                stomplanding?.Invoke();
                 rb.AddForce(hoverBehaviour.normalContainer.up * rb.linearVelocity.magnitude / 2f, ForceMode.Acceleration);
             }
         }
