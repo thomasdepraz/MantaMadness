@@ -13,7 +13,9 @@ public class RailDetector : MonoBehaviour
     {
         if(other.TryGetComponent(out Rail rail) && onRail is false)
         {
-            if(rail.isRoadBorder == true && controller.strafRoutine != null || rail.isRoadBorder == true && controller.State != ControllerState.SURFING)
+            if(rail.isRoadBorder == true && controller.strafRoutine != null || 
+                rail.isRoadBorder == true && controller.boostRoutine != null || 
+                rail.isRoadBorder == true && controller.State != ControllerState.SURFING)
             {
                 if (controller.EnterRail(rail))
                 {

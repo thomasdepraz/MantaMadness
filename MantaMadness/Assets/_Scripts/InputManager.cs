@@ -47,6 +47,7 @@ public class InputManager : MonoBehaviour
     public InputActionReference driftR;
     public InputActionReference driftL;
     public InputActionReference pause;
+    public InputActionReference spin;
 
     private InputActionMap playerActionsMap;
 
@@ -153,11 +154,13 @@ public class InputManager : MonoBehaviour
         jump.action.Enable();
         dash.action.Enable();
         moveDirection.action.Enable();
+        spin.action.Enable();
 
         interact.action.started += UpdateCurrentDevice;
         jump.action.started += UpdateCurrentDevice;
         dash.action.started += UpdateCurrentDevice;
         moveDirection.action.started += UpdateCurrentDevice;
+        spin.action.started += UpdateCurrentDevice;
     }
 
     private void UnsubscribeGameplayInputs()
@@ -166,6 +169,7 @@ public class InputManager : MonoBehaviour
         jump.action.started -= UpdateCurrentDevice;
         dash.action.started -= UpdateCurrentDevice;
         moveDirection.action.started -= UpdateCurrentDevice;
+        spin.action.started -= UpdateCurrentDevice;
     }
 
     private void SetDevice(InputDeviceType newDevice)

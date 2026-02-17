@@ -54,7 +54,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4731402484916884206
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26125,7 +26125,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4053294812931277496
 RectTransform:
   m_ObjectHideFlags: 0
@@ -120785,6 +120785,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f3e1ae216870c3245a909e1fe0814959, type: 2}
   - {fileID: 11400000, guid: fd88bf174d1738b4a983b2893a78b43d, type: 2}
   - {fileID: 11400000, guid: 2be7ad8175ee32b4698a8ee38322f6be, type: 2}
+  - {fileID: 11400000, guid: dbc16ed5fcd041948b48f14253ce7667, type: 2}
+  - {fileID: 11400000, guid: 8b54f1e64f96cd8498530bd0880ebf40, type: 2}
   - {fileID: 11400000, guid: 94b7cb71eb6d1cd4bb23eca1d9e2a644, type: 2}
   - {fileID: 11400000, guid: eb180c94ba4810e46834f6ebfb0877fd, type: 2}
   - {fileID: 11400000, guid: b5374facabc4b0f4d8209ce3a64d907f, type: 2}
@@ -126048,7 +126050,7 @@ MonoBehaviour:
     paramValue: 0
     doesntPlaySound: 1
   - type: 12
-    data: {fileID: 3917350740407611872}
+    data: {fileID: 2409517667287513160}
     sound:
       Guid:
         Data1: -1725105774
@@ -126060,7 +126062,7 @@ MonoBehaviour:
     paramValue: 0
     doesntPlaySound: 0
   - type: 13
-    data: {fileID: 2409517667287513160}
+    data: {fileID: 7302724363811116681}
     sound:
       Guid:
         Data1: -2077364741
@@ -126071,6 +126073,18 @@ MonoBehaviour:
     param: 
     paramValue: 0
     doesntPlaySound: 1
+  - type: 11
+    data: {fileID: 3917350740407611872}
+    sound:
+      Guid:
+        Data1: -1517470928
+        Data2: 1193083702
+        Data3: 1195948947
+        Data4: -1623133211
+      Path: event:/Sfx/InGame/Stingers/Stinger_Powerup_Pickup
+    param: 
+    paramValue: 0
+    doesntPlaySound: 0
   uiParticleGood:
   - type: 1
     data: {fileID: 2850378968480543505}
@@ -136314,7 +136328,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1875989868732492905, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.95
+      value: 8.95
       objectReference: {fileID: 0}
     - target: {fileID: 1875989868732492905, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -136346,14 +136360,90 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: looping
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: prewarm
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: lengthInSec
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: ShapeModule.angle
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: ShapeModule.m_Rotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: TrailModule.widthOverTrail.minMaxState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: TrailModule.colorOverLifetime.maxGradient.ctime2
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: TrailModule.colorOverLifetime.maxGradient.key2.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: TrailModule.colorOverLifetime.maxGradient.key2.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: TrailModule.colorOverLifetime.maxGradient.key2.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: TrailModule.colorOverLifetime.maxGradient.key3.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: TrailModule.colorOverLifetime.maxGradient.key4.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[1].time
+      value: 0.9831543
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: TrailModule.widthOverTrail.minCurve.m_Curve.Array.data[0].time
+      value: 0.0028076172
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: TrailModule.widthOverTrail.minCurve.m_Curve.Array.data[1].time
+      value: 0.7191162
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[0].value
+      value: 0.16923185
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: TrailModule.widthOverTrail.minCurve.m_Curve.Array.data[0].value
+      value: 0.40000153
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: TrailModule.widthOverTrail.minCurve.m_Curve.Array.data[1].value
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4523273951427350409, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
@@ -136375,9 +136465,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4523273951427350409, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       insertIndex: 1
       addedObject: {fileID: 7302724363811116681}
-    - targetCorrespondingSourceObject: {fileID: 4523273951427350409, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
-      insertIndex: 2
-      addedObject: {fileID: 716841087409148694}
   m_SourcePrefab: {fileID: 100100000, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
 --- !u!4 &1521878096448937134 stripped
 Transform:
@@ -136390,18 +136477,6 @@ GameObject:
   m_PrefabInstance: {fileID: 1087081409954279623}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &7302724363811116681
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3590481032901279566}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 714c5df8b65f8494fa8f961738139123, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &716841087409148694
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

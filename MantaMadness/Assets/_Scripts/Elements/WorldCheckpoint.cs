@@ -67,7 +67,7 @@ public class WorldCheckpoint : MonoBehaviour
         //Play Particle
         RuntimeManager.PlayOneShot(soundToPlay, transform.position);
         //Play Checkpoint UI particle
-        UIParticleManager.Instance.playtSpecificParticle(UiWordsParticles.CHECKPOINT, "");
+        UIParticleManager.Instance.playSpecificUIParticle(UiParticles.CHECKPOINT, "");
     }
     
     public void DisableMat()

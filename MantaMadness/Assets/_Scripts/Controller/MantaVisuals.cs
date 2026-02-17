@@ -32,6 +32,11 @@ public class MantaVisuals : MonoBehaviour
     public float divingAngle;
     public float airRideAngle;
     public float rotationSpeed;
+    public float spinRotationAccel = 200f;
+    public float minSpinSpeed = 50f;
+    public float maxSpinSpeed = 500f;
+
+    private float currentSpinSpeed;
 
     [Header("Particles")]
     public ParticleSystem surfParticles;
@@ -109,6 +114,8 @@ public class MantaVisuals : MonoBehaviour
         mantaController.togglePlayerBlinkMat += ToggleBlink;
         mantaController.reverseGrinding += ReverseGrindOnRail;
         mantaController.stomplanding += StompLanding;
+        mantaController.spinStart += SpinStart;
+        mantaController.spinCancel += SpinCancel;
     }
 
     private void OnDisable()
@@ -134,6 +141,8 @@ public class MantaVisuals : MonoBehaviour
         mantaController.togglePlayerBlinkMat -= ToggleBlink;
         mantaController.reverseGrinding -= ReverseGrindOnRail;
         mantaController.stomplanding -= StompLanding;
+        mantaController.spinStart -= SpinStart;
+        mantaController.spinCancel -= SpinCancel;
     }
 
 
@@ -230,10 +239,16 @@ public class MantaVisuals : MonoBehaviour
 
     private void Update()
     {
-        UpdateModelRoll();
+
         UpdateParticles();
         UpdateAnimatorRatio(Game.Instance.player.HorizontalVelocity.magnitude, Game.Instance.player.controllerData.maxSpeed, horizontalSpeedId);
         UpdateAnimatorRatio(Mathf.Abs(Game.Instance.player.Velocity.y), Game.Instance.player.controllerData.gravity * Game.Instance.player.controllerData.limitFallingSpeedFactor, verticalSpeedId);
+        UpdateSpeedline();
+        if (!spinning)
+        {
+            UpdateModelRoll();
+        }
+        UpdateSpin();
 
         mantaAnimator.SetBool(driftId, mantaController.IsDrifting);
         mantaAnimator.SetFloat(driftDirId, mantaController.DriftDirection);
@@ -390,6 +405,25 @@ public class MantaVisuals : MonoBehaviour
             chargeDriftParticlesAdditionnal.Stop();
         }
     }
+
+    private void UpdateSpeedline()
+    {
+        if(mantaController.State == ControllerState.RAIL)
+        {
+            UIParticleManager.Instance.playSpecificUIParticle(UiParticles.SPEEDLINE, "");
+        }
+        
+        else if (mantaController.Velocity.magnitude >= mantaController.controllerData.maxSpeed)
+        {
+            UIParticleManager.Instance.playSpecificUIParticle(UiParticles.SPEEDLINE, "");
+        }
+
+        else
+        {
+            UIParticleManager.Instance.stopSpecificUIParticle(UiParticles.SPEEDLINE, "");
+        }
+    }
+
     private void SplashParticles(ControllerState newState)
     {
         splashParticles.Play();
@@ -409,7 +443,10 @@ public class MantaVisuals : MonoBehaviour
             boostParticles[i].Play();
         }
 
-        UIParticleManager.Instance.playtSpecificParticle(UiWordsParticles.SPEEDLINE, "");
+        if(speedlineEffectRoutine == null)
+        {
+            speedlineEffectRoutine = StartCoroutine(SpeedLineEffectCoroutine(1.2f));
+        }
 
         //play UI Sun Animation
         //UIManager.Instance.sunInterface.playGoodAnimation();
@@ -646,5 +683,64 @@ public class MantaVisuals : MonoBehaviour
 
         //PLAY SOUND
         PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.EXPLOSION);
+    }
+
+    private Coroutine speedlineEffectRoutine = null;
+    private IEnumerator SpeedLineEffectCoroutine(float duration)
+    {
+        UIParticleManager.Instance.playSpecificUIParticle(UiParticles.SPEEDLINE,"");
+        yield return new WaitForSeconds(duration);
+        UIParticleManager.Instance.stopSpecificUIParticle(UiParticles.SPEEDLINE, "");
+        speedlineEffectRoutine = null;
+    }
+
+    bool spinning = false;
+    private void SpinStart()
+    {
+        if (!spinning)
+        {
+            spinning = true;
+        }
+    }
+
+    private void SpinCancel()
+    {
+        if (spinning)
+        {
+            AlignToCamForward();
+            spinning = false;
+            currentSpinSpeed = 0f;
+        }
+    }
+
+    private void UpdateSpin()
+    {
+        if (spinning)
+        {
+
+            if (currentSpinSpeed < minSpinSpeed)
+                currentSpinSpeed = minSpinSpeed;
+
+            currentSpinSpeed += spinRotationAccel * Time.deltaTime;
+
+            currentSpinSpeed = Mathf.Clamp(currentSpinSpeed, minSpinSpeed, maxSpinSpeed);
+
+            transform.Rotate(Vector3.up * currentSpinSpeed * Time.deltaTime);
+        }
+    }
+
+    private void AlignToCamForward()
+    {
+        Vector3 camForward = Camera.main.transform.forward;
+
+        Vector3 projectedForward = Vector3.ProjectOnPlane(camForward, Vector3.up).normalized;
+
+        if (projectedForward.sqrMagnitude < 0.001f)
+            return;
+
+        Quaternion targetRotation = Quaternion.LookRotation(projectedForward, Vector3.up);
+
+        Vector3 euler = targetRotation.eulerAngles;
+        transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
     }
 }

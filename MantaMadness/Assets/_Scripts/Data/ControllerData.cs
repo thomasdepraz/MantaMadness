@@ -128,8 +128,11 @@ public class ControllerData : ScriptableObject
     [Header("Rail")]
     public float railImpulseForce;
 
-    [Header("BumpParameters")]
+    [Header("Bump Parameters")]
     public float bumpDetectionRadius;
     public float bumpRaycastLenght;
     public float bumpForce;
+
+    [Header("Spin Paramaters")]
+    public float spinBoostTimer = 1f;
 }

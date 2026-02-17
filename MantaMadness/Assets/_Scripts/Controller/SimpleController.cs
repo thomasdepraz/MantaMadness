@@ -41,6 +41,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public BoostBehaviour boostBehaviour;
     [SerializeField]
     public StyleBehaviour styleBehaviour;
+    [SerializeField]
+    public SpinBehavior spinBehaviour;
 
     private ControllerStats stats;
     private RailDetector railDetector;
@@ -78,6 +80,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public bool OnRail => currentRail != null;
     public bool OnWaterFall => currentWaterFall != null;
     public bool IsLocked => OnRail || InAirRail || forceLocked;
+    public bool IsSpinning => isSpinning || isRailSpinning;
 
     private bool CanDrift => HorizontalVelocity.sqrMagnitude > controllerData.minSpeedToDrift * controllerData.minSpeedToDrift;
     //private bool CanDriftBreak => HorizontalVelocity.sqrMagnitude < (controllerData.minSpeedToDriftBreak * controllerData.minSpeedToDriftBreak);
@@ -133,12 +136,16 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private float currentCoyoteTime;
     private float currentDriftTime;
     private float currentDashTime;
+    private float currentSpinTime;
     private float lastDashTimestamp = 0f;
     private int consecutiveDashCount;
     private bool hasDriftBoost;
+    private bool hasSpinBoost;
     private bool forceLocked;
     private bool interact;
     public bool railLock;
+    private bool isSpinning;
+    private bool isRailSpinning;
 
     [SerializeField] private float railReverseCooldown = 0.25f;
     [SerializeField] public float railReversePauseTime = 0.15f;
@@ -168,6 +175,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public Action<bool, float> togglePlayerBlinkMat;
     public Action reverseGrinding;
     public Action stomplanding;
+    public Action spinStart;
+    public Action spinCancel;
 
     private void Awake()
     {
@@ -194,6 +203,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         inputs.strafLeft.action.performed += Straf;
         inputs.strafRight.action.performed += Straf;
         inputs.jump.action.performed += JumpOutOfRail;
+        inputs.spin.action.started += Spin;
+        inputs.spin.action.canceled += InputSpinRelease;
+
 
         //Components Setup
         hoverBehaviour.Initialize(controllerData, rb);
@@ -216,6 +228,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         inputs.strafLeft.action.performed -= Straf;
         inputs.strafRight.action.performed -= Straf;
         inputs.jump.action.performed -= JumpOutOfRail;
+        inputs.spin.action.started -= Spin;
+        inputs.spin.action.canceled -= InputSpinRelease;
     }
 
     public void LoadData(GameData data)
@@ -297,6 +311,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (State == ControllerState.DIVING || State == ControllerState.SWIMMING || State == ControllerState.AIRRIDE)
             return;
 
+        if (actionDelayRoutine != null)
+            return;
 
         if (isCoyote)
         {
@@ -395,9 +411,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 {
                     //Default in - air jump
                     if (jumpCount <= 1)
-                    {   
-                        StopCoroutine(stompRoutine);
-                        stompRoutine = null;
+                    {
+                        CancelStomp();
                         AirDash(controllerData.stompJumpCancelForwardForce, controllerData.stompJumpCancelUpForce);
                     }
                 }
@@ -442,6 +457,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         camRight.Normalize();
 
         Vector3 moveDir = (camForward * airControl.y + camRight * airControl.x).normalized;
+
+        if (isSpinning)
+        {
+            ActionResetSpin();
+        }
 
         // TARGET JUMP
         if (validColliders.Count > 0)
@@ -506,6 +526,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 StopCoroutine(jumpRoutine);
             jumpRoutine = StartCoroutine(JumpRoutine());
         }
+
+
     }
     private void SetDrift(bool drifting, bool boost = false)
     {
@@ -598,7 +620,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         currentDriftTime = 0;
         hasDriftBoost = false;
         driftDir = 0;
-        togglePlayerBlinkMat.Invoke(false, 25f);
+        //togglePlayerBlinkMat.Invoke(false, 25f);
         forwardDrifting = false;
         updateDrift?.Invoke(false, false, 0);
     }
@@ -936,13 +958,35 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             }
         }
 
+        if (isSpinning)
+        {
+            if (!canceledByAction)
+            {
+                currentSpinTime += Time.fixedDeltaTime;
+                if (currentSpinTime > controllerData.spinBoostTimer && hasSpinBoost == false)
+                {
+                    hasSpinBoost = true;
+                    togglePlayerBlinkMat.Invoke(true, 25f);
+                }
+            }
+        }
+        else if (isRailSpinning)
+        {
+
+        }
+
+        if (spinBehaviour.spinColEnabled != IsSpinning)
+        {
+            spinBehaviour.ToggleCollision(IsSpinning);
+        }
+
         //Falling to Surfing
         if (State == ControllerState.FALLING)
         {
             if (hasHitWater)
             {
                 State = ControllerState.SURFING;
-                if(stompRoutine != null)
+                if (stompRoutine != null)
                 {
                     stompRoutine = null;
                 }
@@ -1179,17 +1223,22 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         //if(State == ControllerState.FALLING && turn != 0)
         //    rb.AddTorque(new Vector3(0,Mathf.Sign(turn) * controllerData.airControlRotationSpeed ,0), ForceMode.Acceleration);
 
-        if (direction.sqrMagnitude > 0.01f)
+
+        //ROTATION CONTROL
+        if (!isSpinning)
         {
-            Quaternion targetRot = Quaternion.LookRotation(direction);
-            Quaternion deltaRot = targetRot * Quaternion.Inverse(rb.rotation);
+            if (direction.sqrMagnitude > 0.01f)
+            {
+                Quaternion targetRot = Quaternion.LookRotation(direction);
+                Quaternion deltaRot = targetRot * Quaternion.Inverse(rb.rotation);
 
-            deltaRot.ToAngleAxis(out float angle, out Vector3 axis);
-            if (angle > 180f) angle -= 360f;
+                deltaRot.ToAngleAxis(out float angle, out Vector3 axis);
+                if (angle > 180f) angle -= 360f;
 
-            
-            Vector3 torque = axis * angle * Mathf.Deg2Rad * controllerData.airControlRotationSpeed;
-            rb.AddTorque(torque, ForceMode.Acceleration);
+
+                Vector3 torque = axis * angle * Mathf.Deg2Rad * controllerData.airControlRotationSpeed;
+                rb.AddTorque(torque, ForceMode.Acceleration);
+            }
         }
 
         var dot = Vector3.Dot(direction, HorizontalVelocity);
@@ -1323,10 +1372,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         jumpCount++;
     }
 
-    private Coroutine boostRoutine;
+    public Coroutine boostRoutine;
     private IEnumerator BoostCoroutine()
     {
+        spinBehaviour.ToggleBoostCollision(true);
         yield return new WaitForSeconds(controllerData.boostCooldown);
+        spinBehaviour.ToggleBoostCollision(false);
         boostRoutine = null;
     }
 
@@ -1340,7 +1391,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         rb.AddForce(direction * force, ForceMode.VelocityChange);
         afterImageEffect.Invoke(controllerData.boostAfterImageEffectDuration);
         boost.Invoke();
-        togglePlayerBlinkMat.Invoke(false,0f);
+        //togglePlayerBlinkMat.Invoke(false,0f);
         triggerAnim.Invoke("Boost");
     }
 
@@ -1418,6 +1469,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (grindAbility)
         {
             ResetJump();
+            ActionResetSpin();
+
+
             currentRail = rail;
 
             Vector3 intentDir = GetRailIntentDirection();
@@ -1434,6 +1488,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 "L_Grind_Surface",
                 (float)rail.railType
             );
+
+            CancelStomp();
 
             return true;
         }
@@ -1789,5 +1845,118 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 straf.Invoke();
             }
         }
+    }
+
+    private void CancelStomp()
+    {
+        //Reset du Stomp
+        if(stompRoutine != null)
+        {
+            StopCoroutine(stompRoutine);
+            stompRoutine = null;
+        }
+    }
+
+    private Coroutine actionDelayRoutine;
+
+    private IEnumerator ActionDelay()
+    {
+        yield return new WaitForSeconds(0.15f);
+        actionDelayRoutine = null;
+    }
+
+    public void Spin(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if(state == ControllerState.SURFING || state == ControllerState.FALLING)
+        {
+            if(isSpinning == false)
+            {
+                actionDelayRoutine = StartCoroutine(ActionDelay());
+                isSpinning = true;
+                spinStart?.Invoke();
+            }
+        }
+        //else if (state == ControllerState.RAIL)
+        //{
+        //    if (isRailSpinning == false)
+        //    {
+        //        isRailSpinning = true;
+        //        spinStart?.Invoke();
+        //    }
+        //}
+
+
+        //IF PLAYER STate = surfing || falling
+        // Action de spin surfing
+        // Start le spin (set un bool) / empecher d'effectuer d'autre action pour 0.3sec
+        // Cancelable par : Jump / Rentrer dans un rail / Dash
+
+        // Player visuals rotate progressively starting from "minRotationSpeed" until reaching a max rotationSpeed  of "maxRotationSpeed" at a speed of "progressiveRotationSpeed"
+        // UI gauge fills to indicate when to release
+        // Releasing upon full charge BOOST player in move direction
+        // Augment combo by 1 but doesn't keep it if repeated combo action
+        // Perfect release (with timing) increments combo / keep it
+
+        // Check in update if player isHolding input. IF not does SpinRelease
+
+        //Else if player state = rail
+        //Action de spin Rail
+        //Start le RailSpin (set un bool) + empecher d'effectuer d'autre action pour 0.3 sec
+        //Cancelable par : Jump / Dash out of rail
+        // Spin at a high speed directly that doest augment.
+        //New gauge = rail spin gauge
+        //If release in red part = reset combo + wack sun interaction
+        //If release in green part (sweetspot) = increase/keep combo + player does an animation + cool sun interaction
+    }
+
+    private bool canceledByAction;
+    public void InputSpinRelease(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        SpinRelease();
+    }
+
+    public void SpinRelease()
+    {
+        if (canceledByAction == false)
+        {
+            if (state == ControllerState.SURFING)
+            {
+                //BOOST if charged
+                if (hasSpinBoost == true)
+                    Boost(controllerData.boostForce, Camera.main.transform.forward);
+
+            }
+            else if (state == ControllerState.FALLING || state == ControllerState.JUMPING)
+            {
+                if (hasSpinBoost == true)
+                    Boost(controllerData.boostForce, Camera.main.transform.forward);
+            }
+
+            else if (state == ControllerState.RAIL)
+            {
+
+            }
+        }
+        ResetSpin();
+    }
+
+    private void ActionResetSpin()
+    {
+        canceledByAction = true;
+        SpinRelease();
+    }
+
+    private void ResetSpin()
+    {
+        //PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.DRIFT);
+        //PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGEDBOOST);
+        //PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
+        spinCancel?.Invoke();
+        canceledByAction = false;
+        currentSpinTime = 0;
+        hasSpinBoost = false;
+        isSpinning = false;
+        isRailSpinning = false;
+        togglePlayerBlinkMat.Invoke(false, 25f);
     }
 }

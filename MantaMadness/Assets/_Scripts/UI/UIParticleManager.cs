@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.ParticleSystem;
 
-public enum UiWordsParticles
+public enum UiParticles
 {
     NULL,
     SICK,
@@ -19,9 +19,9 @@ public enum UiWordsParticles
     KABOOM,
     CHALLENGE,
     BUBBLE,
-    SPEEDLINE,
     MISSINGHAND,
     CHECKPOINT,
+    SPEEDLINE,
 }
 
 public enum WordType
@@ -32,9 +32,9 @@ public enum WordType
 }
 
 [Serializable]
-public struct UiWord
+public struct UiParticleStruct
 {
-    public UiWordsParticles type;
+    public UiParticles type;
     public VFXData data;
     public EventReference sound;
     public string param;
@@ -45,13 +45,11 @@ public struct UiWord
 public class UIParticleManager : MonoBehaviour
 {
     public static UIParticleManager Instance;
-    [SerializeField] private List<UiWord> uiWordParticleList = new();
-    [SerializeField] private List<UiWord> uiParticleGood;
-    [SerializeField] private List<UiWord> uiParticleExplosion;
+    [SerializeField] private List<UiParticleStruct> uiWordParticleList = new();
+    [SerializeField] private List<UiParticleStruct> uiParticleGood;
+    [SerializeField] private List<UiParticleStruct> uiParticleExplosion;
 
     private bool explosionInCooldown = false;
-
-
 
     private void Awake()
     {
@@ -64,18 +62,18 @@ public class UIParticleManager : MonoBehaviour
     private void Start()
     {
         UIEffectManager.Instance.GoodAction += playGoodParticle;
-        UIEffectManager.Instance.SpecificAction += playtSpecificParticle;
+        UIEffectManager.Instance.SpecificAction += playSpecificUIParticle;
         UIEffectManager.Instance.ExplosionAction += playExplosionParticle;
     }
 
     private void OnDisable()
     {
         UIEffectManager.Instance.GoodAction -= playGoodParticle;
-        UIEffectManager.Instance.SpecificAction -= playtSpecificParticle;
+        UIEffectManager.Instance.SpecificAction -= playSpecificUIParticle;
         UIEffectManager.Instance.ExplosionAction -= playExplosionParticle;
     }
 
-    public void playtSpecificParticle(UiWordsParticles word, string overload)
+    public void playSpecificUIParticle(UiParticles word, string overload)
     {
         for (int i = 0; i < uiWordParticleList.Count; i++)
         {
@@ -90,7 +88,7 @@ public class UIParticleManager : MonoBehaviour
         }
     }
 
-    public void stopSpecificParticle(UiWordsParticles word, string overload)
+    public void stopSpecificUIParticle(UiParticles word, string overload)
     {
         for (int i = 0; i < uiWordParticleList.Count; i++)
         {
@@ -105,7 +103,7 @@ public class UIParticleManager : MonoBehaviour
 
     public void playGoodParticle()
     {
-        UiWord particle = uiParticleGood[UnityEngine.Random.Range(0, uiParticleGood.Count)];
+        UiParticleStruct particle = uiParticleGood[UnityEngine.Random.Range(0, uiParticleGood.Count)];
         particle.data.PlayParticle();
         if (!particle.sound.IsNull && !particle.doesntPlaySound)
             PlayParticleSound(particle.sound, particle.param, particle.paramValue);
@@ -129,7 +127,7 @@ public class UIParticleManager : MonoBehaviour
         if(explosionCooldownRoutine == null)
         {
             explosionCooldownRoutine = StartCoroutine(ExplosionCooldownCoroutine());
-            UiWord particle = uiParticleGood[UnityEngine.Random.Range(0, uiParticleExplosion.Count)];
+            UiParticleStruct particle = uiParticleGood[UnityEngine.Random.Range(0, uiParticleExplosion.Count)];
             particle.data.PlayParticle();
             if (!particle.sound.IsNull && !particle.doesntPlaySound)
                 PlayParticleSound(particle.sound, particle.param, particle.paramValue);

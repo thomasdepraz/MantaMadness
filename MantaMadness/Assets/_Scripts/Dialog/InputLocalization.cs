@@ -13,9 +13,10 @@ public static class InputLocalization
                     { "JUMP", "Space" },
                     { "STRAF_LEFT", "A" },
                     { "STRAF_RIGHT", "E" },
-                    { "STOMP", "RMB" },
+                    { "STOMP", "SHIFT" },
                     {"CAT", "Z" },
                     {"REVERSE_GRIND", "Z" },
+                    {"SPIN", "RMB" },
 
                 }
             },
@@ -26,9 +27,10 @@ public static class InputLocalization
                     { "JUMP", "A" },
                     { "STRAF_LEFT", "LB" },
                     { "STRAF_RIGHT", "RB" },
-                    { "STOMP", "RT" },
-                    {"CAT", "X" },
-                    {"REVERSE_GRIND", "X" },
+                    { "STOMP", "X" },
+                    {"CAT", "B" },
+                    {"REVERSE_GRIND", "B" },
+                    {"SPIN", "RT" },
                 }
             },
             {
@@ -40,8 +42,8 @@ public static class InputLocalization
                     { "STRAF_RIGHT", "R1" },
                     { "STOMP", "R2" },
                     {"CAT", "Square" },
-                    {"REVERSE_GRIND", "Square" +
-                        "" },
+                    {"REVERSE_GRIND", "Square" + "" },
+                    {"SPIN", "R2" },
                 }
             },
         };

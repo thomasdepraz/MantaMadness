@@ -180,6 +180,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spin"",
+                    ""type"": ""Button"",
+                    ""id"": ""d166aef7-12a3-46c7-8371-4c552bcdf6cd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -417,7 +426,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""4f4649ac-64a8-4a73-af11-b3faef356a4d"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad;Keyboard&Mouse"",
@@ -428,7 +437,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""36e52cba-0905-478e-a818-f4bfcb9f3b9a"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -538,7 +547,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""c849e54a-2908-4ac7-9721-9219f373b184"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
@@ -730,6 +739,28 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""DrifL"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a8d04a0a-9cc6-482b-b703-ee05cc5331f3"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Spin"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c1a1f283-0e9a-4d67-9153-62470e5a20b5"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Spin"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1566,6 +1597,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_DriftR = m_Player.FindAction("DriftR", throwIfNotFound: true);
         m_Player_DrifL = m_Player.FindAction("DrifL", throwIfNotFound: true);
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
+        m_Player_Spin = m_Player.FindAction("Spin", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1667,6 +1699,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_DriftR;
     private readonly InputAction m_Player_DrifL;
     private readonly InputAction m_Player_Pause;
+    private readonly InputAction m_Player_Spin;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1688,6 +1721,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @DriftR => m_Wrapper.m_Player_DriftR;
         public InputAction @DrifL => m_Wrapper.m_Player_DrifL;
         public InputAction @Pause => m_Wrapper.m_Player_Pause;
+        public InputAction @Spin => m_Wrapper.m_Player_Spin;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1748,6 +1782,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @Spin.started += instance.OnSpin;
+            @Spin.performed += instance.OnSpin;
+            @Spin.canceled += instance.OnSpin;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1803,6 +1840,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @Spin.started -= instance.OnSpin;
+            @Spin.performed -= instance.OnSpin;
+            @Spin.canceled -= instance.OnSpin;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -2042,6 +2082,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnDriftR(InputAction.CallbackContext context);
         void OnDrifL(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnSpin(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

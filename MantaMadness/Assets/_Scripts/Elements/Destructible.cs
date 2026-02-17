@@ -42,22 +42,11 @@ public class Destructible : MonoBehaviour
         hitbox.HitCollision -= StartDestruction;
     }
 
-    void StartDestruction(float velocity, Vector3 point)
+    void StartDestruction(Vector3 point)
     {
         if (isBroken == false)
         {
-            if (!hard)
-            {
-                StartCoroutine(DestructionRoutine(point));
-            }
-            else if (hard)
-            {
-                if(velocity > Game.Instance.player.controllerData.maxSpeed)
-                {
-                    StartCoroutine(DestructionRoutine(point));
-                }
-            }
-
+            StartCoroutine(DestructionRoutine(point));
         }
     }
 

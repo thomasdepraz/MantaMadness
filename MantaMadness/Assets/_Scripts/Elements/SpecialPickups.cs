@@ -17,7 +17,7 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
     public EventReference pickupSound;
 
     [Header("Particle")]
-    public UiWordsParticles particle;
+    public UiParticles particle;
 
     private bool hasBeenObtained;
 
