@@ -119,7 +119,7 @@ MonoBehaviour:
   maximumFloatingForce: 50
   floatingForceMultiplier: 5
   maxAirControl: 20
-  maxAirControlSpeed: 0
+  airControlDrag: 0
   airControlRotationSpeed: 5
   fallingAirControl: 20
   divingAirControl: 5
@@ -129,7 +129,10 @@ MonoBehaviour:
   minSpeedToDrift: 25
   driftTurnSpeed: 5
   driftMoveSpeed: 0
-  steeringMult: 1
+  steeringRemapMax: 0
+  steeringRemapMin: 0
+  lateralSpeed: 0
+  forwardDriftDrag: 0
   driftDrag: 3
   driftBoostTimer: 2
   driftDirectionalDecay: 0
@@ -151,11 +154,21 @@ MonoBehaviour:
   targetDetectionRadius: 0
   targetBoostFactor: 0
   targetBounceForce: 0
-  doubleJumpForce: 0
+  doubleJumpUpForce: 0
+  doubleJumpForwardForce: 0
   doubleJumpDamping: 0
   stompForce: 0
+  stompUpForce: 0
   stompChargeTime: 0
   stompAfterImageEffectTime: 0
   stompAccelForce: 0
+  stompJumpCancelUpForce: 0
+  stompJumpCancelForwardForce: 0
   npcInteractionRadius: 0
   railImpulseForce: 0
+  bumpDetectionRadius: 0
+  bumpRaycastLenght: 0
+  bumpForce: 0
+  spinBoostTimer: 1
+  spinBounceTimer: 0.75
+  spinForce: 25

@@ -841,6 +841,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     bool hasHitWater = false;
     bool hasHitWalls = false;
     bool bumpRail = false;
+    bool stompSweetSpot = false;
     float fallTime = 0f;
 
     //float xRotation = 0f;
@@ -851,6 +852,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         hasHitWater = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit waterInfo, controllerData.hoverRaycastLength, waterRaycastLayer.value);
         hasHitWalls = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit defaultInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
         bumpRail = Physics.Raycast(hoverBehaviour.normalContainer.position, hoverBehaviour.normalContainer.forward, out RaycastHit railInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
+        stompSweetSpot = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit stompInfo, controllerData.stompCancelRange, defaultRaycastLayer.value);
 
         if (State != ControllerState.SURFING)
         {
@@ -1025,6 +1027,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 State = ControllerState.FALLING;
                 stomplanding?.Invoke();
                 rb.AddForce(hoverBehaviour.normalContainer.up * rb.linearVelocity.magnitude / 2f, ForceMode.Acceleration);
+            }
+
+            if (stompSweetSpot)
+            {
+
             }
         }
 
@@ -1958,5 +1965,42 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         isSpinning = false;
         isRailSpinning = false;
         togglePlayerBlinkMat.Invoke(false, 25f);
+    }
+
+    public Coroutine spinBounceRoutine;
+
+    public IEnumerator SpinBounceCoroutine()
+    {
+        yield return new WaitForSeconds(controllerData.spinBounceTimer);
+        spinBounceRoutine = null;
+    }
+
+    public void SpinBounce(Vector3 hitNormal)
+    {
+        if (spinBounceRoutine != null)
+            return;
+
+        spinBounceRoutine = StartCoroutine(SpinBounceCoroutine());
+
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.BUMP);
+
+        rb.angularVelocity = Vector3.zero;
+
+        Vector3 incomingVelocity = rb.linearVelocity;
+
+        float spinBaseForce = controllerData.spinForce;
+
+        Vector3 spinImpulse = Vector3.ProjectOnPlane(transform.forward, hitNormal).normalized * spinBaseForce;
+
+        Vector3 combinedVelocity = incomingVelocity + spinImpulse;
+
+        Vector3 reflectedVelocity = Vector3.Reflect(combinedVelocity, hitNormal);
+        reflectedVelocity += NormalContainer.up * (spinBaseForce * 0.2f);
+
+        float restitution = 0.9f;
+        reflectedVelocity *= restitution;
+
+        rb.linearVelocity = Vector3.zero;
+        rb.AddForce(reflectedVelocity, ForceMode.VelocityChange);
     }
 }

@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[RequireComponent (typeof(BoxCollider))]
 public class SpinBehavior : MonoBehaviour
 {
 
@@ -40,13 +39,27 @@ public class SpinBehavior : MonoBehaviour
         OnCollisionWithObject(other);
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        OnCollisionWithObject(other);
+    }
+
     private void OnCollisionWithObject(Collider other)
     {
-        if (spinColEnabled)
-        {
-            Debug.Log("Ca detecte bien");
-            //Si de type DESTRUCTIBLE OBJECT
-            //ACTIVé un behavior spécifique
-        }
+        if (!spinColEnabled)
+            return;
+
+
+        if (other.GetComponent<DestructibleCollisionRelay>() != null)
+            return;
+
+        if (other.gameObject.layer != LayerMask.NameToLayer("Wall"))
+            return;
+
+        Debug.Log("Frere");
+        Vector3 closestPoint = other.ClosestPoint(transform.position);
+        Vector3 normal = (transform.position - closestPoint).normalized;
+        MantaVisuals.instance.SpawnSpinImpactParticles(closestPoint);
+        Game.Instance.player.SpinBounce(normal);
     }
 }

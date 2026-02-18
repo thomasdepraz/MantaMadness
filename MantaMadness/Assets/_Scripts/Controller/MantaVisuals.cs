@@ -53,6 +53,7 @@ public class MantaVisuals : MonoBehaviour
     public VisualEffect railVisualEffect;
     public ParticleSystem railParticleSystem;
     public ParticleSystem pickupParticle;
+    public ParticleSystem spinImpactParticle;
 
     [Header("Visual")]
     public SkinnedMeshRenderer[] mantaAllVisuals;
@@ -742,5 +743,13 @@ public class MantaVisuals : MonoBehaviour
 
         Vector3 euler = targetRotation.eulerAngles;
         transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
+    }
+
+    public void SpawnSpinImpactParticles(Vector3 SpawnPointPosition)
+    {
+        if(mantaController.spinBounceRoutine == null)
+        {
+            Instantiate(spinImpactParticle, SpawnPointPosition, Quaternion.identity);
+        }
     }
 }
