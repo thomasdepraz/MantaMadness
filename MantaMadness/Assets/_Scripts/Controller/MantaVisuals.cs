@@ -54,6 +54,9 @@ public class MantaVisuals : MonoBehaviour
     public ParticleSystem railParticleSystem;
     public ParticleSystem pickupParticle;
     public ParticleSystem spinImpactParticle;
+    public ParticleSystem stompActionWindowParticle;
+    public ParticleSystem spinChargedParticle;
+    public ParticleSystem stompJumpParticle;
 
     [Header("Visual")]
     public SkinnedMeshRenderer[] mantaAllVisuals;
@@ -117,6 +120,9 @@ public class MantaVisuals : MonoBehaviour
         mantaController.stomplanding += StompLanding;
         mantaController.spinStart += SpinStart;
         mantaController.spinCancel += SpinCancel;
+        mantaController.actionWindowActive += ActionWindowParticles;
+        mantaController.spinCharged += ToggleSpinChargedParticles;
+        mantaController.stompJump += StompJumpParticle;
     }
 
     private void OnDisable()
@@ -144,6 +150,9 @@ public class MantaVisuals : MonoBehaviour
         mantaController.stomplanding -= StompLanding;
         mantaController.spinStart -= SpinStart;
         mantaController.spinCancel -= SpinCancel;
+        mantaController.actionWindowActive -= ActionWindowParticles;
+        mantaController.spinCharged -= ToggleSpinChargedParticles;
+        mantaController.stompJump-= StompJumpParticle;
     }
 
 
@@ -680,10 +689,10 @@ public class MantaVisuals : MonoBehaviour
 
     private void StompLanding()
     {
-        playerExplosionParticles.Play();
+        //playerExplosionParticles.Play();
 
-        //PLAY SOUND
-        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.EXPLOSION);
+        ////PLAY SOUND
+        //PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.EXPLOSION);
     }
 
     private Coroutine speedlineEffectRoutine = null;
@@ -751,5 +760,38 @@ public class MantaVisuals : MonoBehaviour
         {
             Instantiate(spinImpactParticle, SpawnPointPosition, Quaternion.identity);
         }
+    }
+
+    public void ActionWindowParticles(ActionWindowType actionWindow)
+    {
+        switch (actionWindow)
+        {
+            case ActionWindowType.StompLand:
+                //PLAY VFX
+                stompActionWindowParticle.Play();
+                break;
+            case ActionWindowType.StompBuildup:
+                //PLAY VFX
+                stompActionWindowParticle.Play();
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void ToggleSpinChargedParticles(bool toggleValue)
+    {
+        if(toggleValue)
+        spinChargedParticle.Play();
+
+        else
+        {
+            spinChargedParticle.Stop();
+        }
+    }
+
+    public void StompJumpParticle()
+    {
+        Instantiate(stompJumpParticle, transform.position, Quaternion.identity);
     }
 }

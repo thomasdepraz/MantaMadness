@@ -15855,9 +15855,9 @@ Transform:
   m_GameObject: {fileID: 1604513654809972440}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.026176924, w: 0.99965733}
-  m_LocalPosition: {x: 2997.95, y: -1, z: 2.84}
-  m_LocalScale: {x: 0.4688078, y: 0.46880773, z: 0.4688078}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 2994.53, y: -2.59, z: 7.39}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6075439116892337072}
   - {fileID: 616388897912857169}
@@ -120548,9 +120548,9 @@ RectTransform:
   - {fileID: 7616546296467638429}
   - {fileID: 5139048909040540103}
   - {fileID: 6332716648914833732}
+  - {fileID: 7711693093261010808}
   - {fileID: 3921238894284931357}
   - {fileID: 5809630449178435744}
-  - {fileID: 7711693093261010808}
   - {fileID: 2228249283947068685}
   - {fileID: 3623818220783285571}
   - {fileID: 7743765069541645112}
@@ -136328,7 +136328,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1875989868732492905, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 8.95
+      value: 9.16
       objectReference: {fileID: 0}
     - target: {fileID: 1875989868732492905, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -136376,7 +136376,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: ShapeModule.angle
-      value: 5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: ShapeModule.m_Rotation.y
@@ -136384,7 +136384,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: ShapeModule.radius.value
-      value: 1.2
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3598866162052090500, guid: b12f7ca7c86ca4046b679cee429991c4, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar

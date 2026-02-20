@@ -122,6 +122,11 @@ public class ControllerData : ScriptableObject
     public float stompJumpCancelUpForce;
     public float stompJumpCancelForwardForce;
     public float stompCancelRange = 2.5f;
+    public float StompActionWindowTime = 0.35f;
+    public float StompJumpBonusUpForceMult = 1.2f;
+    public float StompJumpBonusForwardForceMult = 0.5f;
+    public float StompHitStopDuration = 0.1f;
+    public float StompActionBuildupWindowTime = 0.5f;
 
     [Header("NPC Interaction")]
     public float npcInteractionRadius;
@@ -138,5 +143,5 @@ public class ControllerData : ScriptableObject
     public float spinBoostTimer = 1f;
     public float spinBounceTimer = 0.75f;
     public float spinForce = 50f;
-
+    public float spinPerfectBonusForce = 70f;
 }

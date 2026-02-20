@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TreeEditor;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public enum ControllerState
 {
@@ -29,6 +31,81 @@ public enum ControllerAbility
     ALIEN,
     GRIND,
     CAT,
+}
+
+public enum ActionWindowType
+{
+    None,
+    StompLand,
+    StompBuildup,
+    PerfectSpin,
+    PerfectRail,
+}
+
+public class ActionWindow
+{
+    public ActionWindowType Type;
+
+    private float endTime;
+    private bool isConsumed;
+
+    public System.Action OnStart;
+    public System.Action OnEnd;
+    public System.Action OnSuccess;
+    public System.Action OnFail;
+    public System.Action OnCancel;
+
+    public bool IsActive => !isConsumed && Time.time <= endTime;
+
+    public void Start(float duration)
+    {
+        endTime = Time.time + duration;
+        isConsumed = false;
+        OnStart?.Invoke();
+    }
+
+    public void Update()
+    {
+        if (isConsumed)
+            return;
+
+        if (Time.time > endTime)
+        {
+            Fail();
+        }
+    }
+
+    public void Success()
+    {
+        if (isConsumed)
+            return;
+
+        isConsumed = true;
+        OnSuccess?.Invoke();
+        OnEnd?.Invoke();
+    }
+
+    public void Fail()
+    {
+        if (isConsumed)
+            return;
+
+        isConsumed = true;
+        OnFail?.Invoke();
+        OnEnd?.Invoke();
+    }
+
+    public void Cancel()
+    {
+        if (isConsumed)
+            return;
+
+        isConsumed = true;
+        OnCancel?.Invoke();
+        OnEnd?.Invoke();
+    }
+
+    public bool IsFinished => isConsumed;
 }
 
 public class SimpleController : MonoBehaviour, IDataPersistence
@@ -142,15 +219,19 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private bool hasDriftBoost;
     private bool hasSpinBoost;
     private bool forceLocked;
+    private bool actionWindowLocked;
     private bool interact;
     public bool railLock;
     private bool isSpinning;
     private bool isRailSpinning;
+    private bool stompBuildupWindowEnded;
 
     [SerializeField] private float railReverseCooldown = 0.25f;
     [SerializeField] public float railReversePauseTime = 0.15f;
 
     private Coroutine railReverseRoutine;
+
+    private ActionWindow currentActionWindow;
 
     public Action<ControllerState, ControllerState> stateChanged;
     public Action<AirRail> enterAirRail;
@@ -175,8 +256,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public Action<bool, float> togglePlayerBlinkMat;
     public Action reverseGrinding;
     public Action stomplanding;
+    public Action stompJump;
+    public Action<ActionWindowType> actionWindowActive;
     public Action spinStart;
     public Action spinCancel;
+    public Action<bool> spinCharged;
+
 
     private void Awake()
     {
@@ -314,6 +399,13 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (actionDelayRoutine != null)
             return;
 
+        if (currentActionWindow != null && currentActionWindow.Type == ActionWindowType.StompLand && currentActionWindow.IsActive)
+        {
+            currentActionWindow.Success();
+            currentActionWindow = null;
+            return;
+        }
+
         if (isCoyote)
         {
             //reset coyote
@@ -404,16 +496,21 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                     }
                 }
             }
-            else if(State == ControllerState.STOMP && stompCancel == true)
+            else if(State == ControllerState.STOMP )
             {
-
-                if (doubleJumpAbility)
+                if (currentActionWindow != null && currentActionWindow.Type == ActionWindowType.StompBuildup && currentActionWindow.IsActive)
                 {
-                    //Default in - air jump
-                    if (jumpCount <= 1)
+                    if (doubleJumpAbility)
                     {
-                        CancelStomp();
-                        AirDash(controllerData.stompJumpCancelForwardForce, controllerData.stompJumpCancelUpForce);
+                        //Default in - air jump
+                        if (jumpCount <= 1)
+                        {
+                            {
+                                currentActionWindow.Success();
+                                currentActionWindow = null;
+                                return;
+                            }
+                        }
                     }
                 }
             }
@@ -529,6 +626,35 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
 
     }
+    private void StompLandJump()
+    { 
+        State = ControllerState.JUMPING;
+        jumpCount++;
+
+
+        rb.linearVelocity = Vector3.zero;
+
+        rb.AddForce((hoverBehaviour.normalContainer.up * controllerData.upwardImpulseForce * controllerData.StompJumpBonusUpForceMult)
+            + hoverBehaviour.normalContainer.forward * controllerData.forwardImpulseForce * controllerData.StompJumpBonusForwardForceMult, 
+            ForceMode.VelocityChange);
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.STOMPJUMP);
+
+        //Play anim
+        triggerAnim.Invoke("StyleTrigger");
+        stompJump?.Invoke();
+        boost?.Invoke();
+
+        if (jumpRoutine != null)
+            StopCoroutine(jumpRoutine);
+        jumpRoutine = StartCoroutine(JumpRoutine());
+
+        if (isSpinning)
+        {
+            // Bonus si spinning pendant stomp
+            Boost(controllerData.spinPerfectBonusForce, transform.forward);
+        }
+    }
+
     private void SetDrift(bool drifting, bool boost = false)
     {
         if (!boost)
@@ -614,9 +740,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     private void ResetDrift()
     {
-        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.DRIFT);
-        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGEDBOOST);
-        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
+        //PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.DRIFT);
+        //PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGEDBOOST);
+        //PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
         currentDriftTime = 0;
         hasDriftBoost = false;
         driftDir = 0;
@@ -702,7 +828,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         }
     }
 
-    private bool stompCancel = false;
     private IEnumerator StompCoroutine(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         State = ControllerState.STOMP;
@@ -710,13 +835,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         rb.AddForce(hoverBehaviour.normalContainer.up * controllerData.stompUpForce, ForceMode.VelocityChange);
         triggerAnim.Invoke("StompCharge");
         fallTime = 0f;
-        stompCancel = true;
-        yield return new WaitForSeconds(controllerData.stompChargeTime);
+        StartStompBuildup();
+        yield return new WaitUntil(() => stompBuildupWindowEnded);
         FOVController.instance.FOVEffect(FOVController.FovEffectType.STOMP);
-        stompCancel = false;
         triggerAnim.Invoke("Stomp");
-        afterImageEffect.Invoke(controllerData.stompAfterImageEffectTime);
-        //play particle
+        //afterImageEffect.Invoke(controllerData.stompAfterImageEffectTime);
         rb.linearVelocity = Vector3.zero;
         rb.AddForce(-hoverBehaviour.normalContainer.up * controllerData.stompForce, ForceMode.VelocityChange);
         
@@ -834,6 +957,16 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         else if (hasResetCam == false)
         {
             CameraTargetController.instance.ResetCamPos(false);
+        }
+
+        if(currentActionWindow != null)
+        {
+            currentActionWindow.Update();
+
+            if (currentActionWindow.IsFinished)
+            {
+                currentActionWindow = null;
+            }
         }
 
     }
@@ -968,7 +1101,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 if (currentSpinTime > controllerData.spinBoostTimer && hasSpinBoost == false)
                 {
                     hasSpinBoost = true;
+                    spinCharged?.Invoke(true);
                     togglePlayerBlinkMat.Invoke(true, 25f);
+                    PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
+                    PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGEDBOOST);
                 }
             }
         }
@@ -1014,10 +1150,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             if (hasHitWater)
             {
                 State = ControllerState.SURFING;
-                Vector3 camForward = Camera.main.transform.forward;
-                Vector3 direction = Vector3.ProjectOnPlane(camForward, waterInfo.normal);
-                Boost(controllerData.boostForce, direction);
-                stomplanding?.Invoke();
+
+                StartStompLandWindow();
+
                 stompRoutine = null;
                 ResetJump();
                 fallTime = 0f;
@@ -1025,13 +1160,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             else if (hasHitWalls)
             {
                 State = ControllerState.FALLING;
-                stomplanding?.Invoke();
                 rb.AddForce(hoverBehaviour.normalContainer.up * rb.linearVelocity.magnitude / 2f, ForceMode.Acceleration);
-            }
-
-            if (stompSweetSpot)
-            {
-
             }
         }
 
@@ -1315,6 +1444,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         direction = (camForward * inputDirection.y + camRight * inputDirection.x).normalized;
 
+        //If Locked because of ActionWindow => Can't move anymore / Set rotation
+        if (actionWindowLocked) return;
+
         Vector3 targetDir = Vector3.ProjectOnPlane(direction, hoverBehaviour.normalContainer.up);
         Debug.DrawRay(transform.position, targetDir * 5, Color.red); 
 
@@ -1399,6 +1531,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         afterImageEffect.Invoke(controllerData.boostAfterImageEffectDuration);
         boost.Invoke();
         //togglePlayerBlinkMat.Invoke(false,0f);
+        FOVController.instance.FOVEffect(FOVController.FovEffectType.BOOST);
         triggerAnim.Invoke("Boost");
     }
 
@@ -1477,6 +1610,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         {
             ResetJump();
             ActionResetSpin();
+            CancelActionWindow();
 
 
             currentRail = rail;
@@ -1582,6 +1716,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     {
         if(State == ControllerState.SWIMMING)
             return false;
+
+        CancelActionWindow();
 
         currentWaterFall = waterfall;
         waterfall.EnterWaterFall();
@@ -1705,6 +1841,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     {
         forceLocked = lockController;
 
+        if (lockController)
+            CancelActionWindow();
+
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         rb.isKinematic = lockController;
@@ -1757,13 +1896,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         {
             state = ControllerState.DIALOG;
             ForceLock(true);
-            //togglePlayerBodyVisual(false);
         }
         else
         {
             state = ControllerState.SURFING;
             ForceLock(false);
-            //togglePlayerBodyVisual(true);
         }
 
     }
@@ -1881,6 +2018,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 actionDelayRoutine = StartCoroutine(ActionDelay());
                 isSpinning = true;
                 spinStart?.Invoke();
+                PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGINGBOOST);
             }
         }
         //else if (state == ControllerState.RAIL)
@@ -1964,6 +2102,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         hasSpinBoost = false;
         isSpinning = false;
         isRailSpinning = false;
+        spinCharged?.Invoke(false);
+        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGEDBOOST);
+        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
         togglePlayerBlinkMat.Invoke(false, 25f);
     }
 
@@ -2003,4 +2144,129 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         rb.linearVelocity = Vector3.zero;
         rb.AddForce(reflectedVelocity, ForceMode.VelocityChange);
     }
+    #region ActionWindows
+    private void StartActionWindow(ActionWindow window, float duration)
+    {
+        CancelActionWindow();
+
+        currentActionWindow = window;
+        currentActionWindow.Start(duration);
+    }
+
+    private void CancelActionWindow()
+    {
+        if(currentActionWindow != null)
+        {
+            currentActionWindow.OnFail?.Invoke();
+            currentActionWindow.OnEnd?.Invoke();
+            currentActionWindow = null;
+        }
+    }
+
+    #region StompLandWindow
+
+    private void StartStompLandWindow()
+    {
+        StartActionWindow(CreateStompLandWindow(), controllerData.StompActionWindowTime);
+    }
+
+    private ActionWindow CreateStompLandWindow()
+    {
+        ActionWindow stompWindow = new ActionWindow();
+        stompWindow.Type = ActionWindowType.StompLand;
+
+        stompWindow.OnStart = () =>
+        {
+
+            //VFX dans manta visual
+            actionWindowActive?.Invoke(stompWindow.Type);
+
+            HitStopManager.instance.Stop(controllerData.StompHitStopDuration);
+
+            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.BUMP);
+
+            actionWindowLocked = true;
+        };
+
+        stompWindow.OnSuccess = () =>
+        {
+            StompLandJump();
+        };
+
+        stompWindow.OnFail = () =>
+        {
+            if(direction.magnitude > 0.1f)
+            {
+                Boost(controllerData.boostForce, direction);
+            }
+            else
+            {
+                Boost(controllerData.boostForce, NormalContainer.forward);
+            }
+
+                Debug.Log("Perfect stomp failed");
+        };
+
+        stompWindow.OnCancel = () =>
+        {
+            Debug.Log("Stomp Window has been canceled");
+        };
+
+        stompWindow.OnEnd = () =>
+        {
+            actionWindowLocked = false;
+        };
+
+        return stompWindow;
+    }
+    #endregion
+
+    #region StompBuildup
+
+    private void StartStompBuildup()
+    {
+        StartActionWindow(CreateStompBuildupWindow(), controllerData.StompActionBuildupWindowTime);
+    }
+
+    private ActionWindow CreateStompBuildupWindow()
+    {
+        ActionWindow stompWindow = new ActionWindow();
+        stompWindow.Type = ActionWindowType.StompBuildup;
+
+        stompWindow.OnStart = () =>
+        {
+
+            //VFX dans manta visual
+            actionWindowActive?.Invoke(stompWindow.Type);
+
+            actionWindowLocked = true;
+            stompBuildupWindowEnded = false;
+        };
+
+        stompWindow.OnSuccess = () =>
+        {
+            CancelStomp();
+            AirDash(controllerData.stompJumpCancelForwardForce, controllerData.stompJumpCancelUpForce);
+        };
+
+        stompWindow.OnFail = () =>
+        {
+
+        };
+
+        stompWindow.OnCancel = () =>
+        {
+
+        };
+
+        stompWindow.OnEnd = () =>
+        {
+            actionWindowLocked = false;
+            stompBuildupWindowEnded = true;
+        };
+
+        return stompWindow;
+    }
+    #endregion
+    #endregion
 }

@@ -1,3 +1,5 @@
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class SpinBehavior : MonoBehaviour
@@ -56,7 +58,8 @@ public class SpinBehavior : MonoBehaviour
         if (other.gameObject.layer != LayerMask.NameToLayer("Wall"))
             return;
 
-        Debug.Log("Frere");
+        float distance = Vector3.Distance(transform.position, other.ClosestPoint(transform.position));
+
         Vector3 closestPoint = other.ClosestPoint(transform.position);
         Vector3 normal = (transform.position - closestPoint).normalized;
         MantaVisuals.instance.SpawnSpinImpactParticles(closestPoint);

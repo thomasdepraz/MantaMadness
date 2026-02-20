@@ -15,6 +15,7 @@ public class FOVController : MonoBehaviour
         MEDIUM,
         SLOW,
         STOMP,
+        BOOST,
     }
 
 
@@ -139,6 +140,9 @@ public class FOVController : MonoBehaviour
                     break;
                 case FovEffectType.STOMP:
                     FovEffectRoutine = StartCoroutine(FovEffectCoroutine(90, 0.5f));
+                    break;
+                case FovEffectType.BOOST:
+                    FovEffectRoutine = StartCoroutine(FovEffectCoroutine(120, 1.5f));
                     break;
 
             }

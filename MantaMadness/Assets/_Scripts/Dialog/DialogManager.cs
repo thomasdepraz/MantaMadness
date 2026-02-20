@@ -127,6 +127,9 @@ public class DialogManager : MonoBehaviour
 
     private void StartNPCInteraction(InputAction.CallbackContext context)
     {
+        if (Game.Instance.player.State != ControllerState.SURFING)
+            return;
+
         if(currentSequence == null)
         {
             List<Collider> npc = CameraTargetDetection.Instance.validNPCTargets;
