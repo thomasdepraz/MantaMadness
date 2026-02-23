@@ -40,8 +40,8 @@ public static class InputLocalization
                     { "JUMP", "X" },
                     { "STRAF_LEFT", "L1" },
                     { "STRAF_RIGHT", "R1" },
-                    { "STOMP", "R2" },
-                    {"CAT", "Square" },
+                    { "STOMP", "Square" },
+                    {"CAT", "Circle" },
                     {"REVERSE_GRIND", "Square" + "" },
                     {"SPIN", "R2" },
                 }
