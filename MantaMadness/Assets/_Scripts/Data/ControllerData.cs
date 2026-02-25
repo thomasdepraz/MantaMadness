@@ -86,6 +86,8 @@ public class ControllerData : ScriptableObject
 
     [Header("Boost")]
     public float boostForce;
+    public float superBoostForce;
+    public float superBoostAfterImageEffectDuration;
     public float boostAfterImageEffectDuration;
     public float boostCooldown;
 

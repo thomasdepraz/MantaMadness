@@ -44,6 +44,7 @@ public class MantaVisuals : MonoBehaviour
     public ParticleSystem splashParticles;
     public ParticleSystem styleParticles;
     public ParticleSystem[] boostParticles = new ParticleSystem[3];
+    public ParticleSystem[] superBoostParticles = new ParticleSystem[3];
     public VisualEffect targetJumpParticles;
     public ParticleSystem playerExplosionParticles;
     public VisualEffect reverseGrindParticles;
@@ -56,6 +57,8 @@ public class MantaVisuals : MonoBehaviour
     public ParticleSystem spinImpactParticle;
     public ParticleSystem stompActionWindowParticle;
     public ParticleSystem spinChargedParticle;
+    public ParticleSystem superSpinParticle;
+    public ParticleSystem spinParticle;
     public ParticleSystem stompJumpParticle;
 
     [Header("Visual")]
@@ -71,6 +74,7 @@ public class MantaVisuals : MonoBehaviour
     [Header("After Image")]
     public SkinnedMeshRenderer mantaBodyVisual;
     public Material afterImageMat;
+    public Material superAfterImageMat;
     public float fadeDuration= 1f;
     public float interval = 0.05f;
     public float strafEffectDuration = 0.75f;
@@ -100,6 +104,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.updateDrift += UpdateDrift;
         mantaController.stateChanged += UpdateState;
         mantaController.boost += BoostParticles;
+        mantaController.superBoost += SuperBoostParticles;
         mantaController.updateRaceTarget += SetArrowTarget;
         mantaController.dash += Dash;
         mantaController.triggerAnim += triggerAnimation;
@@ -109,6 +114,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.togglePlayerBodyVisual += ToggleMantaVisual;
         mantaController.straf += strafEffectsAndVisual;
         mantaController.afterImageEffect += AfterImageEffect;
+        mantaController.superAfterImageEffect += SuperAfterImageEffect;
         mantaController.updateEquipmentVisual += UpdateAbilityVisuals;
         mantaController.enterRail += StartGrindOnRail;
         //mantaController.railGrindAnim += GrindOnRail;
@@ -120,6 +126,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.stomplanding += StompLanding;
         mantaController.spinStart += SpinStart;
         mantaController.spinCancel += SpinCancel;
+        mantaController.superSpinStart += SuperSpinStart;
         mantaController.actionWindowActive += ActionWindowParticles;
         mantaController.spinCharged += ToggleSpinChargedParticles;
         mantaController.stompJump += StompJumpParticle;
@@ -129,6 +136,7 @@ public class MantaVisuals : MonoBehaviour
     {
         mantaController.stateChanged -= UpdateState;
         mantaController.boost -= BoostParticles;
+        mantaController.superBoost -= SuperBoostParticles;
         mantaController.updateDrift -= UpdateDrift;
         mantaController.updateRaceTarget -= SetArrowTarget;
         mantaController.dash -= Dash;
@@ -139,6 +147,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.togglePlayerBodyVisual -= ToggleMantaVisual;
         mantaController.straf -= strafEffectsAndVisual;
         mantaController.afterImageEffect -= AfterImageEffect;
+        mantaController.superAfterImageEffect -= SuperAfterImageEffect;
         mantaController.updateEquipmentVisual -= UpdateAbilityVisuals;
         mantaController.enterRail -= StartGrindOnRail;
         //mantaController.railGrindAnim -= GrindOnRail;
@@ -150,6 +159,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.stomplanding -= StompLanding;
         mantaController.spinStart -= SpinStart;
         mantaController.spinCancel -= SpinCancel;
+        mantaController.superSpinStart -= SuperSpinStart;
         mantaController.actionWindowActive -= ActionWindowParticles;
         mantaController.spinCharged -= ToggleSpinChargedParticles;
         mantaController.stompJump-= StompJumpParticle;
@@ -192,6 +202,18 @@ public class MantaVisuals : MonoBehaviour
         }
     }
 
+    private IEnumerator SpawnSuperAfterImageForDuration(float duration)
+    {
+        float timer = 0f;
+
+        while (timer < duration)
+        {
+            SpawnSuperAfterImage();
+            yield return new WaitForSeconds(interval);
+            timer += interval;
+        }
+    }
+
     void SpawnAfterImage()
     {
         Mesh mesh = new Mesh();
@@ -201,6 +223,19 @@ public class MantaVisuals : MonoBehaviour
 
         var ghost = AfterImagePool.Instance.GetGhost();
         ghost.Initialize(afterImageMat, fadeDuration);
+        ghost.SetMesh(snapshot);
+        ghost.Show(transform.position, Game.Instance.player.hoverBehaviour.normalContainer.transform.rotation, transform.localScale);
+    }
+
+    void SpawnSuperAfterImage()
+    {
+        Mesh mesh = new Mesh();
+        mantaBodyVisual.BakeMesh(mesh);
+
+        Mesh snapshot = Instantiate(mesh);
+
+        var ghost = AfterImagePool.Instance.GetGhost();
+        ghost.Initialize(superAfterImageMat, fadeDuration);
         ghost.SetMesh(snapshot);
         ghost.Show(transform.position, Game.Instance.player.hoverBehaviour.normalContainer.transform.rotation, transform.localScale);
     }
@@ -462,6 +497,20 @@ public class MantaVisuals : MonoBehaviour
         //UIManager.Instance.sunInterface.playGoodAnimation();
     }
 
+
+    private void SuperBoostParticles()
+    {
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.BOOST);
+        for (int i = 0; i < superBoostParticles.Length; i++)
+        {
+            superBoostParticles[i].Play();
+        }
+
+        if (speedlineEffectRoutine == null)
+        {
+            speedlineEffectRoutine = StartCoroutine(SpeedLineEffectCoroutine(1.2f));
+        }
+    }
     private void SetArrowTarget(Transform target)
     {
         arrowTarget = target;
@@ -584,13 +633,20 @@ public class MantaVisuals : MonoBehaviour
     {
         if(afterImageRoutine != null)
         {
+            StopCoroutine(afterImageRoutine);
             afterImageRoutine = null;
-            afterImageRoutine = StartCoroutine(SpawnAfterImageForDuration(duration));
         }
-        else
+        afterImageRoutine = StartCoroutine(SpawnAfterImageForDuration(duration));
+    }
+
+    public void SuperAfterImageEffect(float duration)
+    {
+        if (afterImageRoutine != null)
         {
-            afterImageRoutine = StartCoroutine(SpawnAfterImageForDuration(duration));
+            StopCoroutine(afterImageRoutine);
+            afterImageRoutine = null;
         }
+        afterImageRoutine = StartCoroutine(SpawnSuperAfterImageForDuration(duration));
     }
 
     public void UpdateAbilityVisuals()
@@ -705,6 +761,7 @@ public class MantaVisuals : MonoBehaviour
     }
 
     bool spinning = false;
+    bool superSpinning = false;
     private void SpinStart()
     {
         if (!spinning)
@@ -713,13 +770,35 @@ public class MantaVisuals : MonoBehaviour
         }
     }
 
-    private void SpinCancel()
+    private void SuperSpinStart()
     {
         if (spinning)
         {
+            spinning = false;
+            ToggleSpinParticle(false, false);
+            currentSpinSpeed = 0f;
+        }
+
+        if (!superSpinning)
+        {
+            superSpinning = true;
+
+            // Reset vitesse pour éviter transition molle
+            currentSpinSpeed = 0f;
+
+            ToggleSpinParticle(true, true);
+        }
+    }
+
+    private void SpinCancel()
+    {
+        if (spinning || superSpinning)
+        {
             AlignToCamForward();
             spinning = false;
+            superSpinning = false;
             currentSpinSpeed = 0f;
+            ToggleSpinParticle(false, false);
         }
     }
 
@@ -727,6 +806,10 @@ public class MantaVisuals : MonoBehaviour
     {
         if (spinning)
         {
+            if(spinParticle.isPlaying != true)
+            {
+                ToggleSpinParticle(true, false);
+            }
 
             if (currentSpinSpeed < minSpinSpeed)
                 currentSpinSpeed = minSpinSpeed;
@@ -736,6 +819,22 @@ public class MantaVisuals : MonoBehaviour
             currentSpinSpeed = Mathf.Clamp(currentSpinSpeed, minSpinSpeed, maxSpinSpeed);
 
             transform.Rotate(Vector3.up * currentSpinSpeed * Time.deltaTime);
+        }
+        else if (superSpinning)
+        {
+            if (superSpinParticle.isPlaying != true)
+            {
+                ToggleSpinParticle(true, true);
+            }
+
+            if (currentSpinSpeed < minSpinSpeed)
+                currentSpinSpeed = minSpinSpeed;
+
+            currentSpinSpeed += spinRotationAccel * Time.deltaTime;
+
+            currentSpinSpeed = Mathf.Clamp(currentSpinSpeed, minSpinSpeed, maxSpinSpeed);
+
+            transform.Rotate(Vector3.up * currentSpinSpeed * 2f * Time.deltaTime);
         }
     }
 
@@ -793,5 +892,30 @@ public class MantaVisuals : MonoBehaviour
     public void StompJumpParticle()
     {
         Instantiate(stompJumpParticle, transform.position, Quaternion.identity);
+    }
+
+    public void ToggleSpinParticle(bool toggleValue, bool superSpin)
+    {
+        if (toggleValue)
+        {
+            if (superSpin)
+            {
+                superSpinParticle.gameObject.SetActive(true);
+                superSpinParticle.Play();
+            }
+            else
+            {
+                spinParticle.gameObject.SetActive(true);
+                spinParticle.Play();
+            }
+        }
+        else
+        {
+            superSpinParticle.Stop();
+            superSpinParticle.gameObject.SetActive(false);
+
+            spinParticle.Stop();
+            spinParticle.gameObject.SetActive(false);
+        }
     }
 }

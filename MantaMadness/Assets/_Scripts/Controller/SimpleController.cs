@@ -45,7 +45,8 @@ public enum ActionWindowResult
 {
     Default,
     Jump,
-    Spin
+    Spin,
+    SuperSpin,
 }
 
 public class ActionWindow
@@ -163,7 +164,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public bool OnRail => currentRail != null;
     public bool OnWaterFall => currentWaterFall != null;
     public bool IsLocked => OnRail || InAirRail || forceLocked;
-    public bool IsSpinning => isSpinning || isRailSpinning;
+    public bool IsSpinning => isSpinning || isRailSpinning || isSuperSpinning;
 
     private bool CanDrift => HorizontalVelocity.sqrMagnitude > controllerData.minSpeedToDrift * controllerData.minSpeedToDrift;
     //private bool CanDriftBreak => HorizontalVelocity.sqrMagnitude < (controllerData.minSpeedToDriftBreak * controllerData.minSpeedToDriftBreak);
@@ -229,6 +230,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private bool interact;
     public bool railLock;
     private bool isSpinning;
+    private bool isSuperSpinning;
     private bool hasAirSpin;
     private bool spinBufferedFromJump;
     private bool spinBufferedFromStompBuildup;
@@ -247,6 +249,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public Action<AirRail> exitAirRail;
     public Action<bool, bool, int> updateDrift;
     public Action boost;
+    public Action superBoost;
     public Action<Transform> updateRaceTarget;
     public Action enterRail;
     public Action exitRail;
@@ -261,6 +264,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public Action<bool> togglePlayerBodyVisual;
     public Action straf;
     public Action<float> afterImageEffect;
+    public Action<float> superAfterImageEffect;
     public Action updateEquipmentVisual;
     public Action<bool, float> togglePlayerBlinkMat;
     public Action reverseGrinding;
@@ -268,6 +272,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public Action stompJump;
     public Action<ActionWindowType> actionWindowActive;
     public Action spinStart;
+    public Action superSpinStart;
     public Action spinCancel;
     public Action<bool> spinCharged;
 
@@ -829,6 +834,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 if (jumpRoutine != null)
                     StopCoroutine(jumpRoutine);
 
+                if (isSpinning)
+                {
+                    SuperSpin();
+                }
+
                 if (stompRoutine == null)
                 {
                     stompRoutine = StartCoroutine(StompCoroutine(context));
@@ -1127,6 +1137,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             spinBehaviour.ToggleCollision(IsSpinning);
         }
 
+
         //Falling to Surfing
         if (State == ControllerState.FALLING)
         {
@@ -1142,9 +1153,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 fallTime = 0f;
             }
 
-            if(spinBufferedFromJump && inputs.spin.action.IsPressed())
+            if (inputs.spin.action.IsPressed())
             {
-                spinBufferedFromJump = false;
                 Spin(default);
             }
             //else if (hasHitWalls)
@@ -1177,6 +1187,14 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             {
                 State = ControllerState.FALLING;
                 rb.AddForce(hoverBehaviour.normalContainer.up * rb.linearVelocity.magnitude / 2f, ForceMode.Acceleration);
+            }
+
+            if (currentActionWindow != null && currentActionWindow.Type == ActionWindowType.StompBuildup && currentActionWindow.IsActive && inputs.spin.action.IsPressed() && isSpinning == true)
+            {
+                Debug.Log("Super spin");
+                currentActionWindow.Success(ActionWindowResult.SuperSpin);
+                currentActionWindow = null;
+                return;
             }
         }
 
@@ -1548,6 +1566,19 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         boost.Invoke();
         //togglePlayerBlinkMat.Invoke(false,0f);
         FOVController.instance.FOVEffect(FOVController.FovEffectType.BOOST);
+        triggerAnim.Invoke("Boost");
+    }
+
+    private void SuperBoost(float force, Vector3 direction)
+    {
+        if (boostRoutine == null)
+        {
+            boostRoutine = StartCoroutine(BoostCoroutine());
+        }
+        rb.AddForce(direction * force, ForceMode.VelocityChange);
+        superAfterImageEffect?.Invoke(controllerData.superBoostAfterImageEffectDuration);
+        superBoost?.Invoke();
+        FOVController.instance.FOVEffect(FOVController.FovEffectType.SUPERBOOST);
         triggerAnim.Invoke("Boost");
     }
 
@@ -2027,11 +2058,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     public void Spin(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if(state == ControllerState.STOMP && (currentActionWindow == null || currentActionWindow.Type != ActionWindowType.StompBuildup))
-        {
-            spinBufferedFromStompBuildup = true;
-            return;
-        }
+        //if(state == ControllerState.STOMP && (currentActionWindow == null || currentActionWindow.Type != ActionWindowType.StompBuildup))
+        //{
+
+        //    return;
+        //}
 
         if(state == ControllerState.SURFING)
         {
@@ -2059,14 +2090,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 rb.AddForce(force, ForceMode.VelocityChange);
             }
         }
-        else if(state == ControllerState.JUMPING)
-        {
-            spinBufferedFromJump = true;
-        }
 
         else if (state == ControllerState.STOMP)
         {
-            if (currentActionWindow != null && currentActionWindow.Type == ActionWindowType.StompBuildup && currentActionWindow.IsActive)
+            if (currentActionWindow != null && currentActionWindow.Type == ActionWindowType.StompBuildup && currentActionWindow.IsActive && inputs.spin.action.IsPressed() && isSpinning == false)
             {
                 currentActionWindow.Success(ActionWindowResult.Spin);
                 currentActionWindow = null;
@@ -2083,14 +2110,28 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         //}
     }
 
+    public void SuperSpin()
+    {
+        isSuperSpinning = true;
+        isSpinning = false;
+        superSpinStart?.Invoke();
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGINGBOOST);
+    }
+
     private bool canceledByAction;
     public void InputSpinRelease(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
+        if (state == ControllerState.STOMP && isSuperSpinning)
+            return;
+
         SpinRelease();
     }
 
     public void SpinRelease()
     {
+        if (state == ControllerState.STOMP && isSuperSpinning)
+            return;
+
         if (canceledByAction == false)
         {
             if (state == ControllerState.SURFING)
@@ -2114,10 +2155,14 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         ResetSpin();
     }
 
+    public void SuperSpinBoost()
+    {
+        Boost(controllerData.superBoostForce, Camera.main.transform.forward);
+    }
     private void ActionResetSpin()
     {
         canceledByAction = true;
-        SpinRelease();
+        ResetSpin();
     }
 
     private void ResetSpin()
@@ -2136,6 +2181,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGEDBOOST);
         PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
         togglePlayerBlinkMat.Invoke(false, 25f);
+        isSuperSpinning = false;
     }
 
     private void ResetAirSpin()
@@ -2205,6 +2251,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         StartActionWindow(CreateStompLandWindow(), controllerData.stompActionWindowTime);
     }
 
+    private bool superSpinOnLand;
     private ActionWindow CreateStompLandWindow()
     {
         ActionWindow stompWindow = new ActionWindow();
@@ -2216,30 +2263,55 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             //VFX dans manta visual
             actionWindowActive?.Invoke(stompWindow.Type);
 
-            HitStopManager.instance.Stop(controllerData.stompHitStopDuration);
-
             PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.BUMP);
 
             actionWindowLocked = true;
+
+            superSpinOnLand = isSuperSpinning;
+
+            FOVController.instance.FOVEffect(FOVController.FovEffectType.STOMPLAND);
+
+            if (isSuperSpinning)
+            {
+                ResetSpin();
+            }
         };
 
         stompWindow.OnSuccess = (result) =>
         {
-            StompLandJump();
+            switch (result)
+            {
+                case ActionWindowResult.Jump:
+                    StompLandJump();
+                    break;
+            }
+
         };
 
         stompWindow.OnFail = () =>
         {
-            if(direction.magnitude > 0.1f)
+            if (superSpinOnLand)
             {
-                Boost(controllerData.boostForce, direction);
+                if (direction.magnitude > 0.1f)
+                {
+                    SuperBoost(controllerData.superBoostForce, direction);
+                }
+                else
+                {
+                    SuperBoost(controllerData.superBoostForce, NormalContainer.forward);
+                }
             }
             else
             {
-                Boost(controllerData.boostForce, NormalContainer.forward);
+                if (direction.magnitude > 0.1f)
+                {
+                    Boost(controllerData.boostForce, direction);
+                }
+                else
+                {
+                    Boost(controllerData.boostForce, NormalContainer.forward);
+                }
             }
-
-                Debug.Log("Perfect stomp failed");
         };
 
         stompWindow.OnCancel = () =>
@@ -2258,10 +2330,13 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     #region StompBuildup
 
+
     private void StartStompBuildup()
     {
         StartActionWindow(CreateStompBuildupWindow(), controllerData.stompActionBuildupWindowTime);
     }
+
+
 
     private ActionWindow CreateStompBuildupWindow()
     {
@@ -2293,37 +2368,44 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             switch (result)
             {
                 case ActionWindowResult.Jump:
-
+                    ActionResetSpin();
                     if (jumpCount <= 1)
                     {
                         AirDash(controllerData.stompJumpCancelForwardForce, controllerData.stompJumpCancelUpForce);
                     }
                     break;
                 case ActionWindowResult.Spin:
-                    if (hasAirSpin)
-                        return;
+                    if (hasAirSpin == false)
+                    {
+                        State = ControllerState.FALLING;
 
-                    State = ControllerState.FALLING;
+                        hasAirSpin = true;
+                        isSpinning = true;
+                        spinStart?.Invoke();
+                        triggerAnim.Invoke("Spin");
+                        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGINGBOOST);
 
-                    hasAirSpin = true;
-                    isSpinning = true;
-                    spinStart?.Invoke();
-                    triggerAnim.Invoke("Spin");
-                    PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGINGBOOST);
+                        rb.linearVelocity = new Vector3(rb.linearVelocity.x / 2, 0, rb.linearVelocity.z / 2);
 
-                    rb.linearVelocity = new Vector3(rb.linearVelocity.x /2, 0, rb.linearVelocity.z /2);
+                        Vector3 force = (NormalContainer.up * controllerData.stompSpinCancelUpForce);
 
-                    Vector3 force = (NormalContainer.up * controllerData.stompSpinCancelUpForce);
-
-                    rb.AddForce(force, ForceMode.VelocityChange);
+                        rb.AddForce(force, ForceMode.VelocityChange);
+                    }
                     break;
+                case ActionWindowResult.SuperSpin:
+                    SuperSpin();
+                    triggerAnim.Invoke("Spin");
+                    break;
+                
             }
-
         };
 
         stompWindow.OnFail = () =>
         {
+            if(isSpinning == true)
+            {
 
+            }
         };
 
         stompWindow.OnCancel = () =>

@@ -16,6 +16,8 @@ public class FOVController : MonoBehaviour
         SLOW,
         STOMP,
         BOOST,
+        SUPERBOOST,
+        STOMPLAND,
     }
 
 
@@ -143,6 +145,12 @@ public class FOVController : MonoBehaviour
                     break;
                 case FovEffectType.BOOST:
                     FovEffectRoutine = StartCoroutine(FovEffectCoroutine(120, 1.5f));
+                    break;
+                case FovEffectType.SUPERBOOST:
+                    FovEffectRoutine = StartCoroutine(FovEffectCoroutine(150, 1.5f));
+                    break;
+                case FovEffectType.STOMPLAND:
+                    FovEffectRoutine = StartCoroutine(FovEffectCoroutine(30, 0.5f));
                     break;
 
             }

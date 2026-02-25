@@ -5,6 +5,13 @@ using Unity.Cinemachine;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
+public enum JumpTargetVisualState
+{
+    OutOfRange,
+    Approaching,
+    InRange
+}
+
 public class JumpTarget : MonoBehaviour
 {
     protected SimpleController player;
