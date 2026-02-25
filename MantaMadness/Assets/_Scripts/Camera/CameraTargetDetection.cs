@@ -10,6 +10,8 @@ public class CameraTargetDetection : MonoBehaviour
     public static CameraTargetDetection Instance;
 
     [SerializeField] private float jumpDetectionRange;
+    [SerializeField] private float activationRangeMultiplier = 1.8f;
+    [SerializeField] private float approachingRange = 3f;
     [SerializeField] float jumpRangeBuffer =  0.75f;
     [SerializeField] private float npcDetectionRange;
     [SerializeField] private float viewAngle;
@@ -55,89 +57,112 @@ public class CameraTargetDetection : MonoBehaviour
     {
         float addRange = jumpDetectionRange - jumpRangeBuffer;
         float removeRange = jumpDetectionRange + jumpRangeBuffer;
+        float activationRange = jumpDetectionRange * activationRangeMultiplier;
 
-        Collider[] targetsInRange = Physics.OverlapSphere(transform.position, jumpDetectionRange, jumpargetMask);
+        Collider[] targetsInActivationRange = Physics.OverlapSphere(
+            transform.position,
+            activationRange,
+            jumpargetMask);
 
+        // --- CLEAN VALID LIST (hysteresis remove) ---
         for (int i = validJumpTargets.Count - 1; i >= 0; i--)
         {
-            Collider npc = validJumpTargets[i];
-            if (npc == null)
+            Collider col = validJumpTargets[i];
+            if (col == null)
             {
                 validJumpTargets.RemoveAt(i);
                 continue;
             }
 
-            float dist = Vector3.Distance(transform.position, npc.transform.position);
+            float dist = Vector3.Distance(transform.position, col.transform.position);
 
             if (dist > removeRange)
             {
                 validJumpTargets.RemoveAt(i);
-                npc?.GetComponent<JumpTarget>().SwitchIndicatorVisibility(false);
-                print(npc + " removed (out of range hysteresis)");
+
+                JumpTarget jt = col.GetComponent<JumpTarget>();
+                if (jt != null)
+                    jt.SetVisualState(JumpTargetVisualState.OutOfRange, 0f);
             }
         }
 
-
-        foreach (Collider target in targetsInRange)
+        // --- MAIN LOOP ---
+        foreach (Collider target in targetsInActivationRange)
         {
-            Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
-            float distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
-
-            if (distanceToTarget > addRange)
+            JumpTarget jumpTar = target.GetComponent<JumpTarget>();
+            if (jumpTar == null)
                 continue;
 
-            // Vérifie si la cible est dans le champ de vision
-            float angleToTarget = Vector3.Angle(transform.forward, directionToTarget);
-
-            if (angleToTarget < viewAngle / 2f) // Si dans le FOV
+            if (!jumpTar.isAvailable)
             {
-                // Vérifie qu’aucun obstacle ne bloque la vue
-                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleMask))
-                {
-                    //Add to list
-                    //Debug.Log("Objet VISIBLE : " + target.name);
-                    if (!validJumpTargets.Contains(target))
-                    {
-                        if(target.GetComponent<JumpTarget>() != null)
-                        {
-                            JumpTarget jumpTar = target.GetComponent<JumpTarget>();
-                            if (jumpTar != null && jumpTar.isAvailable && jumpTar.launchRoutine == null)
-                            {
-                                validJumpTargets.Add(target);
-                                RuntimeManager.PlayOneShot(addTargetSound, Camera.main.transform.position);
-                                jumpTar.SwitchIndicatorVisibility(true);
-                            }
-                        }
+                jumpTar.SetVisualState(JumpTargetVisualState.Inactive);
+                continue;
+            }
 
-                        //else
-                        //{
-                        //    validJumpTargets.Add(target);
-                        //    RuntimeManager.PlayOneShot(addTargetSound, Camera.main.transform.position);
-                        //    target.GetComponent<JumpTarget>().SwitchIndicatorVisibility(true);
-                        //    print(target + "Has been added");
-                        //}
-                    }
-                }
-                else
+            float distanceToTarget =
+                Vector3.Distance(transform.position, target.transform.position);
+
+            // ----------------------------
+            // 1️⃣ Hors activation range
+            // ----------------------------
+            if (distanceToTarget > activationRange)
+            {
+                jumpTar.SetVisualState(JumpTargetVisualState.OutOfRange, 0f);
+                continue;
+            }
+
+            // ----------------------------
+            // 2️⃣ Dans activation range
+            // ----------------------------
+            Vector3 directionToTarget =
+                (target.transform.position - transform.position).normalized;
+
+            float angleToTarget =
+                Vector3.Angle(transform.forward, directionToTarget);
+
+            bool inFOV = angleToTarget < viewAngle / 2f;
+            bool blocked =
+                Physics.Raycast(transform.position,
+                                directionToTarget,
+                                distanceToTarget,
+                                obstacleMask);
+
+
+            bool inAddRange = distanceToTarget <= addRange;
+
+            // ----------------------------
+            // 3️⃣ VALID
+            // ----------------------------
+            if (inAddRange && inFOV && !blocked)
+            {
+                if (!validJumpTargets.Contains(target))
                 {
-                    //Remove from list
-                    //Debug.Log("Objet CACHÉ : " + target.name);
-                    if (validJumpTargets.Contains(target))
-                    {
-                        validJumpTargets.Remove(target);
-                        target.GetComponent<JumpTarget>().SwitchIndicatorVisibility(false);
-                        print(target + "Has been removed");
-                    }
+                    validJumpTargets.Add(target);
+                    RuntimeManager.PlayOneShot(addTargetSound, Camera.main.transform.position);
                 }
+
+                jumpTar.SetVisualState(JumpTargetVisualState.InRange, 1f);
             }
             else
             {
-                //Debug.Log(target.name + "is in range but not in view");
                 if (validJumpTargets.Contains(target))
-                {
                     validJumpTargets.Remove(target);
-                    target.GetComponent<JumpTarget>().SwitchIndicatorVisibility(false);
-                    print(target + "Has been removed");
+
+                // ----------------------------
+                // 4️⃣ APPROACHING
+                // ----------------------------
+                if (distanceToTarget <= jumpDetectionRange + approachingRange)
+                {
+                    float approachingStart = jumpDetectionRange + approachingRange;
+                    float t = Mathf.InverseLerp(approachingStart, addRange, distanceToTarget);
+                    jumpTar.SetVisualState(JumpTargetVisualState.Approaching, t);
+                }
+                else
+                {
+                    // ----------------------------
+                    // 5️⃣ OUT OF RANGE (but activated)
+                    // ----------------------------
+                    jumpTar.SetVisualState(JumpTargetVisualState.OutOfRange, 0f);
                 }
             }
         }

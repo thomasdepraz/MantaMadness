@@ -16243,6 +16243,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 75338522}
     m_Modifications:
+    - target: {fileID: 2846101753453123438, guid: d57d14a9b049fb9498611749aca3903f, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3463094338924864105, guid: d57d14a9b049fb9498611749aca3903f, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4039189692699361961, guid: d57d14a9b049fb9498611749aca3903f, type: 3}
       propertyPath: propulsionForce
       value: 40
@@ -16285,6 +16293,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4277818326514746691, guid: d57d14a9b049fb9498611749aca3903f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8045333343302863243, guid: d57d14a9b049fb9498611749aca3903f, type: 3}
+      propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8445690695432249583, guid: d57d14a9b049fb9498611749aca3903f, type: 3}
@@ -184708,6 +184720,13 @@ MonoBehaviour:
     m_Bits: 128
   indicator: {fileID: 1282557436}
   respawnCooldown: 1
+  greyIndicator: {fileID: 0}
+  approachingIndicator: {fileID: 0}
+  readyIndicator: {fileID: 0}
+  approachingTransform: {fileID: 0}
+  approachingScaleFar: {x: 2, y: 2, z: 2}
+  approachingScaleNear: {x: 1, y: 1, z: 1}
+  approachSmooth: 10
   isAvailable: 1
   dir: 0
 --- !u!1001 &1190228261

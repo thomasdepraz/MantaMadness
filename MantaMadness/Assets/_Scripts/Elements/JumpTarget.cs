@@ -9,7 +9,8 @@ public enum JumpTargetVisualState
 {
     OutOfRange,
     Approaching,
-    InRange
+    InRange,
+    Inactive
 }
 
 public class JumpTarget : MonoBehaviour
@@ -24,6 +25,19 @@ public class JumpTarget : MonoBehaviour
 
     public virtual event Action<SimpleController, Vector3> OnPlayerHit;
 
+    [Header("Advanced Indicators (Optional)")]
+    [SerializeField] private ParticleSystem greyIndicator;
+    [SerializeField] private ParticleSystem approachingIndicator;
+    [SerializeField] private ParticleSystem readyIndicator;
+
+    [SerializeField] private Transform approachingTransform;
+    [SerializeField] private Vector3 approachingScaleFar = new Vector3(2f, 2f, 2f);
+    [SerializeField] private Vector3 approachingScaleNear = Vector3.one;
+    [SerializeField] private float approachSmooth = 10f;
+
+    private JumpTargetVisualState currentState = (JumpTargetVisualState)(-1);
+    private float approachT;
+
     protected virtual void NotifyPlayerHit(SimpleController p, Vector3 contactPoint)
     {
         OnPlayerHit?.Invoke(p, contactPoint);
@@ -37,17 +51,10 @@ public class JumpTarget : MonoBehaviour
     
     public void SwitchIndicatorVisibility(bool validTarget)
     {
-        if (!validTarget)
-        {
-            indicator.Stop();
-            indicator.gameObject.SetActive(false);
-
-        }
-        else if (validTarget)
-        {
-            indicator.gameObject.SetActive(true);
-            indicator.Play();
-        }
+        if (validTarget)
+            SetVisualState(JumpTargetVisualState.InRange, 1f);
+        else
+            SetVisualState(JumpTargetVisualState.OutOfRange, 0f);
     }
     public bool isAvailable = true;
 
@@ -56,6 +63,9 @@ public class JumpTarget : MonoBehaviour
         if (!isAvailable) return;
 
         isAvailable = false;
+
+        SetVisualState(JumpTargetVisualState.Inactive);
+        currentState = JumpTargetVisualState.Inactive;
 
         var col = GetComponent<Collider>();
         if (CameraTargetDetection.Instance != null && col != null)
@@ -76,6 +86,7 @@ public class JumpTarget : MonoBehaviour
         //ToggleFunctionElements(false);
 
         yield return new WaitForSeconds(respawnCooldown);
+        SetVisualState(JumpTargetVisualState.OutOfRange);
         ToggleFunctionElements(true);
     }
 
@@ -84,15 +95,14 @@ public class JumpTarget : MonoBehaviour
         if (toggleValue)
         {
             //SET ANIMATION TO IDLE
+            SetVisualState(JumpTargetVisualState.OutOfRange);
             gameObject.GetComponent<Collider>().enabled = true;
-            indicator.gameObject.SetActive(true);
             isAvailable = true;
         }
         else if (!toggleValue)
         {
             //SET ANIMATION TO DISABLE
             gameObject.GetComponent<Collider>().enabled = false;
-            indicator.gameObject.SetActive(false);
             isAvailable = false;
         }
     }
@@ -118,5 +128,62 @@ public class JumpTarget : MonoBehaviour
         {
             //DeactivateTarget();
         }
+    }
+
+    public void SetVisualState(JumpTargetVisualState state, float proximity01 = 0f)
+    {
+        proximity01 = Mathf.Clamp01(proximity01);
+
+        if (currentState != state)
+        {
+            StopAllIndicators();
+
+            currentState = state;
+
+            switch (state)
+            {
+                case JumpTargetVisualState.Inactive:
+                    break;
+
+                case JumpTargetVisualState.OutOfRange:
+                    if (greyIndicator != null)
+                        greyIndicator.Play();
+                    break;
+
+                case JumpTargetVisualState.Approaching:
+                    if (approachingIndicator != null)
+                        approachingIndicator.Play();
+                    break;
+
+                case JumpTargetVisualState.InRange:
+                    if (readyIndicator != null)
+                        readyIndicator.Play();
+                    break;
+
+            }
+        }
+
+        if (state == JumpTargetVisualState.Approaching && approachingTransform != null)
+        {
+            approachT = Mathf.Lerp(
+                approachT,
+                proximity01,
+                1f - Mathf.Exp(-approachSmooth * Time.deltaTime));
+
+            approachingTransform.localScale =
+                Vector3.Lerp(approachingScaleFar, approachingScaleNear, approachT);
+        }
+    }
+
+    private void StopAllIndicators()
+    {
+        if (greyIndicator != null)
+            greyIndicator.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
+        if (approachingIndicator != null)
+            approachingIndicator.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
+        if (readyIndicator != null)
+            readyIndicator.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
     }
 }
