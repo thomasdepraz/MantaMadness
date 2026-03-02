@@ -9,20 +9,6 @@ public enum ComboType
     GalaxySpin,
 }
 
-public struct ComboAction
-{
-    public string Name;
-    public int Value;
-    public ComboType Type;
-
-    public ComboAction(string name, int value, ComboType type = ComboType.Default)
-    {
-        Name = name;
-        Value = value;
-        Type = type;
-    }
-}
-
 public enum ComboState
 {
     Inactive,
@@ -52,7 +38,9 @@ public class ComboManager : MonoBehaviour
     bool isBonusPhase;
     int currentComboValue;
 
-    ComboAction? lastAction;
+    [SerializeField] private ComboDatabase database;
+
+    ComboActionSO lastAction;
 
     ComboState currentState = ComboState.Inactive;
 
@@ -74,7 +62,7 @@ public class ComboManager : MonoBehaviour
         }
     }
 
-    public List<ComboAction> comboMemory = new List<ComboAction>(5);
+    public List<ComboActionSO> comboMemory = new List<ComboActionSO>(5);
     [SerializeField] private int memorySize = 5;
     [SerializeField] private float freezeDuration = 1f;
     [SerializeField] private float timerBonusDuration = 1.5f;
@@ -86,7 +74,7 @@ public class ComboManager : MonoBehaviour
     [SerializeField] private float feverComboDuration = 6f; // durée plus longue
     [SerializeField] private bool useSeparateFeverDuration = true;
 
-    public event Action<ComboAction> OnActionAdded;
+    public event Action<ComboActionSO> OnActionAdded;
     public event Action<int> OnComboValueChanged;
     public event Action OnComboStarted;
     public event Action OnComboEnded;
@@ -137,7 +125,19 @@ public class ComboManager : MonoBehaviour
         bonusTimer = bonusDuration;
     }
 
-    public void AddComboAction(ComboAction action)
+    public void AddComboAction(ComboID id)
+    {
+        var action = database.Get(id);
+
+        if (action == null)
+        {
+            Debug.LogWarning($"Combo action {id} not found in database.");
+            return;
+        }
+        AddComboAction(action);
+    }
+
+    public void AddComboAction(ComboActionSO action)
     {
         if (currentState == ComboState.Inactive)
             StartCombo();
@@ -159,7 +159,7 @@ public class ComboManager : MonoBehaviour
             isBonusPhase = true;
             ResetBonusTimerHalf();
 
-            valueToAdd = action.Value / 4;
+            valueToAdd = action.value / 4;
         }
         else if (index == 3 || index == 4)
         {
@@ -168,7 +168,7 @@ public class ComboManager : MonoBehaviour
             ResetBonusTimerFull();
             AddHalfMainTimer();
 
-            valueToAdd = action.Value / 2;
+            valueToAdd = action.value / 2;
         }
         else
         {
@@ -177,7 +177,7 @@ public class ComboManager : MonoBehaviour
             bonusTimer = bonusDuration;      
             isBonusPhase = true;             
 
-            valueToAdd = action.Value;
+            valueToAdd = action.value;
         }
 
         currentComboValue += valueToAdd;
@@ -301,18 +301,18 @@ public class ComboManager : MonoBehaviour
         OnStateChanged?.Invoke(newState);
     }
 
-    private int GetMemoryIndex(ComboAction action)
+    private int GetMemoryIndex(ComboActionSO action)
     {
         for (int i = 0; i < comboMemory.Count; i++)
         {
-            if (comboMemory[i].Name == action.Name)
+            if (comboMemory[i] == action)
                 return i;
         }
 
         return -1;
     }
 
-    private void AddToMemory(ComboAction action)
+    private void AddToMemory(ComboActionSO action)
     {
         comboMemory.Add(action);
 
