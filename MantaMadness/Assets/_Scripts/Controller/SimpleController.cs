@@ -468,6 +468,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 //Play anim
                 triggerAnim.Invoke("Spin");
 
+                //COMBO
+                ComboManager.Instance.AddComboAction(new ComboAction("Jump", 10));
+
                 if (jumpRoutine != null)
                     StopCoroutine(jumpRoutine);
                 jumpRoutine = StartCoroutine(JumpRoutine());
@@ -584,6 +587,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             triggerAnim.Invoke("TargetJump");
             playTargetJumpParticles.Invoke();
             FOVController.instance.FOVEffect(FOVController.FovEffectType.EXPLOSIF);
+
+            //COMBO
+            ComboManager.Instance.AddComboAction(new ComboAction("Target Jump", 15));
+
+
             if (validColliders.Count == 1)
             {
                     target = validColliders[0].transform;
@@ -625,9 +633,14 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         else
         {
             rb.linearDamping = controllerData.doubleJumpDamping;
+
+            //Visual
             triggerAnim.Invoke("TargetJump");
             playTargetJumpParticles.Invoke();
             FOVController.instance.FOVEffect(FOVController.FovEffectType.EXPLOSIF);
+
+            //COMBO
+            ComboManager.Instance.AddComboAction(new ComboAction("Double Jump", 10));
 
             rb.linearVelocity = moveDir * HorizontalVelocity.magnitude;
             rb.AddForce((NormalContainer.up * jumpUpForce /* forceMultiplier*/) + (NormalContainer.forward * jumpForwardForce /* forceMultiplier*/), ForceMode.VelocityChange);
@@ -2136,15 +2149,25 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         {
             if (state == ControllerState.SURFING)
             {
-                //BOOST if charged
                 if (hasSpinBoost == true)
+                {
+                    //COMBO
+                    ComboManager.Instance.AddComboAction(new ComboAction("Spin Boost", 20));
+
                     Boost(controllerData.boostForce, Camera.main.transform.forward);
+                }
+
 
             }
             else if (state == ControllerState.FALLING || state == ControllerState.JUMPING)
             {
                 if (hasSpinBoost == true)
+                {
+                    //COMBO
+                    ComboManager.Instance.AddComboAction(new ComboAction("Spin Air Boost", 20));
+
                     Boost(controllerData.boostForce, Camera.main.transform.forward);
+                }
             }
 
             else if (state == ControllerState.RAIL)
@@ -2282,6 +2305,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             switch (result)
             {
                 case ActionWindowResult.Jump:
+                    ComboManager.Instance.AddComboAction(new ComboAction("Tornado Jump", 30));
                     StompLandJump();
                     break;
             }
@@ -2292,6 +2316,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         {
             if (superSpinOnLand)
             {
+                ComboManager.Instance.AddComboAction(new ComboAction("Galaxy Boost", 50));
                 if (direction.magnitude > 0.1f)
                 {
                     SuperBoost(controllerData.superBoostForce, direction);
@@ -2303,6 +2328,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             }
             else
             {
+                ComboManager.Instance.AddComboAction(new ComboAction("Stomp Boost", 10));
                 if (direction.magnitude > 0.1f)
                 {
                     Boost(controllerData.boostForce, direction);

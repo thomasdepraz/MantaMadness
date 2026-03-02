@@ -1,0 +1,362 @@
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+public enum ComboType
+{
+    Default,
+    GalaxySpin,
+}
+
+public struct ComboAction
+{
+    public string Name;
+    public int Value;
+    public ComboType Type;
+
+    public ComboAction(string name, int value, ComboType type = ComboType.Default)
+    {
+        Name = name;
+        Value = value;
+        Type = type;
+    }
+}
+
+public enum ComboState
+{
+    Inactive,
+    Active,
+    Fever,
+    Cinematic,
+}
+
+public interface IFeverReactive
+{
+    void OnFeverActivated();
+}
+
+public class ComboManager : MonoBehaviour
+{
+    public static ComboManager Instance;
+
+    [Header("Combo Settings")]
+    [SerializeField] float mainDuration = 5f;
+    [SerializeField] float bonusDuration = 2f;
+    [SerializeField] float bonusStartThreshold = 0.25f;
+
+    float mainTimer;
+    float bonusTimer;
+    float frozenMainTimer;
+
+    bool isBonusPhase;
+    int currentComboValue;
+
+    ComboAction? lastAction;
+
+    ComboState currentState = ComboState.Inactive;
+
+    public ComboState State => currentState;
+    public int CurrentValue => currentComboValue;
+    public float FrozenMainTimer => frozenMainTimer;
+
+    public float TimerNormalized
+    {
+        get
+        {
+            float max = (currentState == ComboState.Fever && useSeparateFeverDuration)
+                ? feverComboDuration
+                : mainDuration;
+
+            if (max <= 0f) return 0f;
+
+            return Mathf.Clamp01(mainTimer / max);
+        }
+    }
+
+    public List<ComboAction> comboMemory = new List<ComboAction>(5);
+    [SerializeField] private int memorySize = 5;
+    [SerializeField] private float freezeDuration = 1f;
+    [SerializeField] private float timerBonusDuration = 1.5f;
+
+    float freezeTimer;
+
+    [Header("Fever Settings")]
+    public int feverRequirement = 100;
+    [SerializeField] private float feverComboDuration = 6f; // durée plus longue
+    [SerializeField] private bool useSeparateFeverDuration = true;
+
+    public event Action<ComboAction> OnActionAdded;
+    public event Action<int> OnComboValueChanged;
+    public event Action OnComboStarted;
+    public event Action OnComboEnded;
+    public event Action OnFeverStarted;
+    public event Action OnFeverEnded;
+    public event Action<ComboState> OnStateChanged;
+
+    void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
+
+    void Update()
+    {
+        if (currentState != ComboState.Active &&
+        currentState != ComboState.Fever)
+            return;
+
+        // BONUS PHASE d'abord : main timer est gelé => UI freeze
+        if (isBonusPhase)
+        {
+            bonusTimer -= Time.deltaTime;
+
+            if (bonusTimer <= 0f)
+            {
+                bonusTimer = 0f;
+                isBonusPhase = false; // main timer peut recommencer à descendre
+            }
+
+            return; // IMPORTANT: main timer ne descend pas pendant bonus
+        }
+
+        // MAIN PHASE ensuite
+        mainTimer -= Time.deltaTime;
+
+        if (mainTimer <= 0f)
+        {
+            mainTimer = 0f;
+            EndCombo();
+        }
+    }
+    void StartBonusPhase()
+    {
+        isBonusPhase = true;
+        bonusTimer = bonusDuration;
+    }
+
+    public void AddComboAction(ComboAction action)
+    {
+        if (currentState == ComboState.Inactive)
+            StartCombo();
+
+        int index = GetMemoryIndex(action);
+
+        int valueToAdd = 0;
+
+        if (index == 0)
+        {
+            // update text only, no timer changes
+            OnActionAdded?.Invoke(action);
+            AddToMemory(action);
+            return;
+        }
+        else if (index == 1 || index == 2)
+        {
+            // bonus half, main unchanged
+            isBonusPhase = true;
+            ResetBonusTimerHalf();
+
+            valueToAdd = action.Value / 4;
+        }
+        else if (index == 3 || index == 4)
+        {
+            // bonus full + main +50%
+            isBonusPhase = true;
+            ResetBonusTimerFull();
+            AddHalfMainTimer();
+
+            valueToAdd = action.Value / 2;
+        }
+        else
+        {
+            ResetMainTimer();
+            mainTimer = mainDuration;        
+            bonusTimer = bonusDuration;      
+            isBonusPhase = true;             
+
+            valueToAdd = action.Value;
+        }
+
+        currentComboValue += valueToAdd;
+
+        AddToMemory(action);
+        lastAction = action;
+
+        OnActionAdded?.Invoke(action);
+        OnComboValueChanged?.Invoke(currentComboValue);
+
+        CheckFever();
+    }
+
+    void StartCombo()
+    {
+        currentComboValue = 0;
+
+        mainTimer = mainDuration;
+        bonusTimer = bonusDuration;
+
+        isBonusPhase = true;
+
+        ChangeState(ComboState.Active);
+
+        OnComboStarted?.Invoke();
+    }
+
+    void EndCombo()
+    {
+        if (currentState == ComboState.Fever)
+        {
+            OnFeverEnded?.Invoke();
+        }
+
+        currentComboValue = 0;
+        comboMemory.Clear();
+
+        isBonusPhase = false;
+        frozenMainTimer = 0f;
+
+        isBonusPhase = false;
+
+        ChangeState(ComboState.Inactive);
+
+        OnComboEnded?.Invoke();
+    }
+
+    void CheckFever()
+    {
+        if (currentState == ComboState.Fever)
+            return;
+
+        if (currentComboValue >= feverRequirement)
+            StartFever();
+    }
+
+    void StartFever()
+    {
+        ChangeState(ComboState.Fever);
+
+        if (useSeparateFeverDuration)
+        {
+            mainTimer = feverComboDuration;
+        }
+        else
+        {
+            mainTimer += feverComboDuration;
+        }
+
+        ActivateFeverGameplay();
+
+        OnFeverStarted?.Invoke();
+    }
+
+    [SerializeField] float feverRadius = 10f;
+    [SerializeField] LayerMask feverLayer;
+
+    void ActivateFeverGameplay()
+    {
+        Collider[] hits = Physics.OverlapSphere(
+            transform.position,
+            feverRadius,
+            feverLayer);
+
+        foreach (var hit in hits)
+        {
+            IFeverReactive reactive =
+                hit.GetComponent<IFeverReactive>();
+
+            reactive?.OnFeverActivated();
+        }
+    }
+
+    public void EnterCinematic()
+    {
+        if (currentState == ComboState.Inactive)
+            return;
+
+        ChangeState(ComboState.Cinematic);
+    }
+
+    public void ExitCinematic()
+    {
+        if (currentState != ComboState.Cinematic)
+            return;
+
+        // Return to correct state depending on combo value
+        if (currentComboValue >= feverRequirement)
+            ChangeState(ComboState.Fever);
+        else
+            ChangeState(ComboState.Active);
+    }
+
+    void ChangeState(ComboState newState)
+    {
+        if (currentState == newState)
+            return;
+
+        currentState = newState;
+
+        OnStateChanged?.Invoke(newState);
+    }
+
+    private int GetMemoryIndex(ComboAction action)
+    {
+        for (int i = 0; i < comboMemory.Count; i++)
+        {
+            if (comboMemory[i].Name == action.Name)
+                return i;
+        }
+
+        return -1;
+    }
+
+    private void AddToMemory(ComboAction action)
+    {
+        comboMemory.Add(action);
+
+        if(comboMemory.Count > memorySize)
+        {
+            comboMemory.RemoveAt(0);
+        }
+    }
+
+    private void FreezeTimer(float duration)
+    {
+        freezeTimer = duration;
+    }
+
+    private void AddTimer(float duration)
+    {
+        mainTimer += duration;
+
+        if(mainTimer > mainDuration)
+        {
+            mainTimer = mainDuration;
+        }
+    }
+
+    void ResetMainTimer()
+    {
+        mainTimer = mainDuration;
+    }
+
+    void ResetBonusTimerFull()
+    {
+        bonusTimer = bonusDuration;
+    }
+
+    void ResetBonusTimerHalf()
+    {
+        bonusTimer = bonusDuration * 0.5f;
+    }
+
+    void AddHalfMainTimer()
+    {
+        mainTimer += mainDuration * 0.5f;
+
+        if (mainTimer > mainDuration)
+            mainTimer = mainDuration;
+    }
+}

@@ -23,6 +23,7 @@ public class PufferFishTarget : JumpTarget
 
     protected override IEnumerator LaunchCoroutine()
     {
+        Debug.Log("PUFFERS");
         animator.SetTrigger("Trigger");
         targetCam.enabled = true;
         yield return new WaitUntil(() => OnAnimationEvent);
@@ -31,6 +32,7 @@ public class PufferFishTarget : JumpTarget
         player.togglePlayerBodyVisual(true);
         player.PropelledByTarget(transform, propulsionForce);
         burstParticle.Play();
+        launchRoutine = null;
     }
     public void AnimationEventTrigger()
     {
@@ -41,6 +43,7 @@ public class PufferFishTarget : JumpTarget
     {
         if (other.GetComponent<SimpleController>() != null)
         {
+            StartLaunchCoroutine();
             DeactivateTarget();
             other.GetComponent<SimpleController>().StopByTargetImpact(gameObject);
         }
