@@ -53,6 +53,13 @@ public class MusicManager : MonoBehaviour, IDataPersistence
     private FMOD.Studio.EVENT_CALLBACK beatCallback;
 
     public static event Action<int, int, float> OnBeat;
+    public static event Action<int, int, float> OnBeat2;
+    public static event Action<int, int, float> OnBeat4;
+    public static event Action<int, int, float> OnBeat8;
+
+    private int globalBeatCount = 0;
+
+
     private MUSICS currentMusic;
     private AMBIENT currentAmb;
 
@@ -126,6 +133,9 @@ public class MusicManager : MonoBehaviour, IDataPersistence
             musicAudioEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             musicAudioEvent.release();
         }
+
+        //Reset Beat Count
+        globalBeatCount = 0;
 
         //STOP AMBIENT
         if (ambientAudioEvent.isValid())
@@ -238,6 +248,27 @@ public class MusicManager : MonoBehaviour, IDataPersistence
 
                 // Notifie les listeners Unity
                 OnBeat?.Invoke(beat.bar, beat.beat, beat.tempo);
+
+                // Incrémente compteur global
+                manager.globalBeatCount++;
+
+                // Tous les 2 beats
+                if (manager.globalBeatCount % 2 == 0)
+                {
+                    OnBeat2?.Invoke(beat.bar, beat.beat, beat.tempo);
+                }
+
+                // Tous les 4 beats
+                if (manager.globalBeatCount % 4 == 0)
+                {
+                    OnBeat4?.Invoke(beat.bar, beat.beat, beat.tempo);
+                }
+
+                // Tous les 8 beats
+                if (manager.globalBeatCount % 8 == 0)
+                {
+                    OnBeat8?.Invoke(beat.bar, beat.beat, beat.tempo);
+                }
             }
         }
 
@@ -287,6 +318,9 @@ public class MusicManager : MonoBehaviour, IDataPersistence
 
         // 2. Attente
         yield return new WaitForSeconds(delay);
+
+        //Reset Beat Count
+        globalBeatCount = 0;
 
         // 3. Mise à jour de la musique courante
         currentMusic = newMusic;

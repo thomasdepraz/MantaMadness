@@ -20,6 +20,14 @@ public class GameInterface : MonoBehaviour, IScreen
     [Header("Sun Overlay Parameters")]
     public Image sunImage;
     public Image sunOverlay;
+    [SerializeField] private Vector3[] sunScales =
+    {
+        Vector3.one * 0.5f,
+        Vector3.one * 0.6f,
+        Vector3.one * 0.7f,
+        Vector3.one * 0.8f,
+        Vector3.one, //FEVER
+    };
 
     [Header("Cat Ability Parameters")]
     public Image catOverlay;
@@ -61,6 +69,9 @@ public class GameInterface : MonoBehaviour, IScreen
         CoinManager.Instance.coinPickedUp += UpdateCoinCount;
         CoinManager.Instance.collectiblePickedUp += UpdateCollectibleCount;
         coinText.text = CoinManager.Instance.PickupCoinCount.ToString();
+        ComboManager.Instance.OnComboLevelChanged += SunComboBehavior;
+        MusicManager.OnBeat += SunOnBeatFever;
+        MusicManager.OnBeat2 += SunOnBeat;
 
         textRect = text.GetComponent<RectTransform>();
         textEffects.StartManualEffects();
@@ -75,12 +86,18 @@ public class GameInterface : MonoBehaviour, IScreen
         {
             catOverlay.enabled = false;
         }
+
+        sunImage.transform.localScale = sunScales[0];
     }
 
     private void OnDestroy()
     {
         CoinManager.Instance.coinPickedUp -= UpdateCoinCount;
         CoinManager.Instance.collectiblePickedUp -= UpdateCollectibleCount;
+        ComboManager.Instance.OnComboLevelChanged -= SunComboBehavior;
+        MusicManager.OnBeat -= SunOnBeatFever;
+        MusicManager.OnBeat2 -= SunOnBeat;
+        Debug.Log("GameInterface destroyed");
     }
 
     public void UpdateCoinCount(int coinCount)
@@ -238,5 +255,50 @@ public class GameInterface : MonoBehaviour, IScreen
     public void ToggleInterface(bool toggle)
     {
         m_Container.SetActive(toggle);
+    }
+
+    public void SunComboBehavior(int level)
+    {
+        if (sunImage == null) return;
+
+        if (level == 0)
+        {
+            sunImage.transform.DOScale(sunScales[0], 0.3f).SetEase(Ease.InBack);
+            return;
+        }
+
+        Debug.Log("Sun Combo Level: " + level);
+
+        if (!sunImage.gameObject.activeSelf)
+            sunImage.gameObject.SetActive(true);
+
+        Vector3 targetScale = sunScales[Mathf.Clamp(level, 0, sunScales.Length - 1)];
+
+        sunImage.transform
+            .DOScale(targetScale, 0.35f)
+            .SetEase(Ease.OutBack);
+
+        sunImage.transform
+            .DOPunchScale(Vector3.one * 0.2f, 0.3f, 4, 0.5f);
+    }
+
+    void SunOnBeatFever(int bar, int beat, float tempo)
+    {
+        if (sunImage == null) return;
+
+        if (ComboManager.Instance.ComboLevel >= 4)
+        {
+            sunImage.transform.DOPunchScale(Vector3.one * 0.15f, 0.2f);
+        }
+    }
+
+    void SunOnBeat(int bar, int beat, float tempo)
+    {
+        if (sunImage == null) return;
+
+        if (ComboManager.Instance.ComboLevel < 4)
+        {
+            sunImage.transform.DOPunchScale(Vector3.one * 0.15f, 0.2f);
+        }
     }
 }

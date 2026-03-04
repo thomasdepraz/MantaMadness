@@ -36,6 +36,8 @@ public class ComboManager : MonoBehaviour
     float frozenMainTimer;
 
     bool isBonusPhase;
+
+    public int ComboLevel => Mathf.Clamp(currentComboValue, 0, 4);
     int currentComboValue;
 
     [SerializeField] private ComboDatabase database;
@@ -70,7 +72,6 @@ public class ComboManager : MonoBehaviour
     float freezeTimer;
 
     [Header("Fever Settings")]
-    public int feverRequirement = 100;
     [SerializeField] private float feverComboDuration = 6f; // durée plus longue
     [SerializeField] private bool useSeparateFeverDuration = true;
 
@@ -81,6 +82,9 @@ public class ComboManager : MonoBehaviour
     public event Action OnFeverStarted;
     public event Action OnFeverEnded;
     public event Action<ComboState> OnStateChanged;
+    public event Action<int> OnComboLevelChanged;
+
+    private int lastComboLevel = 0;
 
     void Awake()
     {
@@ -118,11 +122,6 @@ public class ComboManager : MonoBehaviour
             mainTimer = 0f;
             EndCombo();
         }
-    }
-    void StartBonusPhase()
-    {
-        isBonusPhase = true;
-        bonusTimer = bonusDuration;
     }
 
     public void AddComboAction(ComboID id)
@@ -182,6 +181,16 @@ public class ComboManager : MonoBehaviour
 
         currentComboValue += valueToAdd;
 
+        int newLevel = ComboLevel;
+
+        if (newLevel != lastComboLevel)
+        {
+            lastComboLevel = newLevel;
+            OnComboLevelChanged?.Invoke(newLevel);
+        }
+
+        Debug.Log("Combo Level: " + ComboLevel);
+
         AddToMemory(action);
         lastAction = action;
 
@@ -212,6 +221,9 @@ public class ComboManager : MonoBehaviour
             OnFeverEnded?.Invoke();
         }
 
+        lastComboLevel = 0;
+        OnComboLevelChanged?.Invoke(0);
+
         currentComboValue = 0;
         comboMemory.Clear();
 
@@ -230,7 +242,7 @@ public class ComboManager : MonoBehaviour
         if (currentState == ComboState.Fever)
             return;
 
-        if (currentComboValue >= feverRequirement)
+        if (ComboLevel >= 4)
             StartFever();
     }
 
@@ -285,7 +297,7 @@ public class ComboManager : MonoBehaviour
             return;
 
         // Return to correct state depending on combo value
-        if (currentComboValue >= feverRequirement)
+        if (ComboLevel >= 4)
             ChangeState(ComboState.Fever);
         else
             ChangeState(ComboState.Active);
@@ -319,21 +331,6 @@ public class ComboManager : MonoBehaviour
         if(comboMemory.Count > memorySize)
         {
             comboMemory.RemoveAt(0);
-        }
-    }
-
-    private void FreezeTimer(float duration)
-    {
-        freezeTimer = duration;
-    }
-
-    private void AddTimer(float duration)
-    {
-        mainTimer += duration;
-
-        if(mainTimer > mainDuration)
-        {
-            mainTimer = mainDuration;
         }
     }
 

@@ -1,20 +1,27 @@
 using TMPEffects.Components;
 using TMPro;
 using UnityEngine;
+using System.Collections;
 
 public class ComboUIController : MonoBehaviour
 {
-    [SerializeField] TMP_Text comboValueText;
+    //[SerializeField] TMP_Text comboValueText;
 
     [SerializeField] GameObject Root;
-    [SerializeField] GameObject comboContainer;
-    [SerializeField] GameObject feverContainer;
+    [SerializeField] GameObject feverBorder;
+    [SerializeField] GameObject feverRoot;
     [SerializeField] GameObject timerVisualContainer;
     [SerializeField] Transform timerScaleObject;
 
+    [SerializeField] private ParticleSystem feverOverlayParticle;
+    [SerializeField] private GameObject[] feverMainVisualEffect;
+
     [SerializeField] private TMPAnimator tmpAnimator;
     [SerializeField] TMP_Text comboNameText;
+    [SerializeField] private float stepDuration = 0.5f;
+    [SerializeField, Range(0f, 0.9f)] private float overlapPercent = 0.4f;
 
+    private Coroutine feverRoutine;
     private Vector3 timerObjectInitialScale;
 
     private TMP_FontAsset defaultFont;
@@ -44,13 +51,6 @@ public class ComboUIController : MonoBehaviour
 
     void Start()
     {
-        ComboManager.Instance.OnComboStarted += Show;
-        ComboManager.Instance.OnComboEnded += Hide;
-        ComboManager.Instance.OnComboValueChanged += UpdateValue;
-        ComboManager.Instance.OnActionAdded += UpdateActionName;
-        ComboManager.Instance.OnStateChanged += OnStateChanged;
-
-
         //Setup
         if (ComboManager.Instance.State == ComboState.Inactive)
         {
@@ -70,12 +70,20 @@ public class ComboUIController : MonoBehaviour
 
     private void OnEnable()
     {
+        StartCoroutine(DelaySetup());
+    }
+
+    private IEnumerator DelaySetup()
+    {
+        yield return new WaitForSeconds(0.1f);
         ComboManager.Instance.OnComboStarted += Show;
         ComboManager.Instance.OnComboEnded += Hide;
         ComboManager.Instance.OnComboValueChanged += UpdateValue;
         ComboManager.Instance.OnActionAdded += UpdateActionName;
         ComboManager.Instance.OnStateChanged += OnStateChanged;
 
+        MusicManager.OnBeat += OnBeatEnableFever;
+        MusicManager.OnBeat8 += OnBeatPlayParticle;
 
         //Setup
         if (ComboManager.Instance.State == ComboState.Inactive)
@@ -88,6 +96,19 @@ public class ComboUIController : MonoBehaviour
         }
 
         Sync();
+        StopFeverSequence();
+    }
+
+    private void OnDisable()
+    {
+        ComboManager.Instance.OnComboStarted -= Show;
+        ComboManager.Instance.OnComboEnded -= Hide;
+        ComboManager.Instance.OnComboValueChanged -= UpdateValue;
+        ComboManager.Instance.OnActionAdded -= UpdateActionName;
+        ComboManager.Instance.OnStateChanged -= OnStateChanged;
+
+        MusicManager.OnBeat -= OnBeatEnableFever;
+        MusicManager.OnBeat8 -= OnBeatPlayParticle;
     }
 
     private void Update()
@@ -105,6 +126,9 @@ public class ComboUIController : MonoBehaviour
         ComboManager.Instance.OnComboValueChanged -= UpdateValue;
         ComboManager.Instance.OnActionAdded -= UpdateActionName;
         ComboManager.Instance.OnStateChanged -= OnStateChanged;
+
+        MusicManager.OnBeat -= OnBeatEnableFever;
+        MusicManager.OnBeat8 -= OnBeatPlayParticle;
     }
 
     void Show()
@@ -121,7 +145,7 @@ public class ComboUIController : MonoBehaviour
 
     void UpdateValue(int value)
     {
-        comboValueText.text = value.ToString();
+        //comboValueText.text = value.ToString();
     }
 
     void UpdateActionName(ComboActionSO action)
@@ -143,20 +167,111 @@ public class ComboUIController : MonoBehaviour
         {
             case ComboState.Inactive:
                 Root.SetActive(false);
+                feverRoot.SetActive(false);
+                feverBorder.SetActive(false);
                 break;
 
             case ComboState.Active:
                 Root.SetActive(true);
-                comboContainer.SetActive(true);
-                feverContainer.SetActive(false);
+                StopFeverSequence();
+                feverRoot.SetActive(false);
+                feverBorder.SetActive(false);
                 break;
 
             case ComboState.Fever:
                 Root.SetActive(true);
-                comboContainer.SetActive(false);
-                feverContainer.SetActive(true);
                 break;
         }
+    }
+
+    void OnBeatEnableFever(int bar, int beat, float tempo)
+    {
+        if(ComboManager.Instance.State == ComboState.Fever && feverRoot.activeSelf != true)
+        {
+            feverRoot.SetActive(true);
+            feverBorder.SetActive(true);
+            FeverParticlesAndEffects();
+        }
+    }
+
+    void OnBeatPlayParticle(int bar, int beat, float tempo)
+    {
+        if (ComboManager.Instance.State == ComboState.Fever && feverRoot.activeSelf == true)
+        {
+            FeverParticlesAndEffects();
+        }
+    }
+
+    void FeverParticlesAndEffects()
+    {
+        feverOverlayParticle.Play();
+
+        if(feverRoutine == null)
+        {
+            feverRoutine = StartCoroutine(FeverSequentialOverlap());
+        }
+
+    }
+
+    private IEnumerator FeverSequentialOverlap()
+    {
+        if (feverMainVisualEffect == null || feverMainVisualEffect.Length == 0)
+            yield break;
+
+        float nextDelay = stepDuration * (1f - overlapPercent);
+
+        int length = feverMainVisualEffect.Length;
+
+        for (int i = 0; i < length; i++)
+        {
+            int currentIndex = i;
+            int previousIndex = i - 1;
+
+            // Active objet courant
+            feverMainVisualEffect[currentIndex].SetActive(true);
+
+            // Désactive l'objet précédent après le temps total
+            if (previousIndex >= 0)
+            {
+                StartCoroutine(DisableAfterDelay(feverMainVisualEffect[previousIndex],stepDuration));
+            }
+
+            yield return new WaitForSeconds(nextDelay);
+        }
+
+        yield return new WaitForSeconds(stepDuration);
+
+        ResetFeverVisuals();
+    }
+
+    private IEnumerator DisableAfterDelay(GameObject obj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        obj.SetActive(false);
+    }
+
+    private void ResetFeverVisuals()
+    {
+        if (feverMainVisualEffect == null)
+            return;
+
+        foreach(var obj in feverMainVisualEffect)
+        {
+            if (obj != null)
+                obj.SetActive(false);
+        }
+        feverRoutine = null;
+    }
+
+    void StopFeverSequence()
+    {
+        if (feverRoutine != null)
+        {
+            StopCoroutine(feverRoutine);
+            feverRoutine = null;
+        }
+
+        ResetFeverVisuals();
     }
 
     void Sync()

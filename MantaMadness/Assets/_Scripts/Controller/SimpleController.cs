@@ -19,6 +19,7 @@ public enum ControllerState
     DIALOG,
     BUMP,
     RAIL,
+    LEDGEGRAB,
 }
 
 public enum ControllerAbility
@@ -145,6 +146,20 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     [SerializeField] public bool alienAntennasAbility { get; private set; }
     [SerializeField] public bool grindAbility { get; private set; }
     [SerializeField] public bool catAbility { get; private set; }
+
+    [Header("Ledge Grab")]
+    [SerializeField] private float ledgeCheckDistance = 0.6f;
+    [SerializeField] private float ledgeHeight = 1.5f;
+    [SerializeField] private float ledgeForwardOffset = 0.3f;
+    [SerializeField] private LayerMask wallLayer;
+    [SerializeField] private LayerMask waterLayer;
+
+
+    private Vector3 ledgePoint;
+    private Vector3 ledgeNormal;
+
+    float lastLedgeGrabTime;
+    [SerializeField] float ledgeCooldown = 0.3f;
 
 
     //PLayer velocity
@@ -426,12 +441,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             currentCoyoteTime = 0;
             //boostBehaviour.IncrementGauge(BoostAction.PerfectJump);
         }
-        //CHARGE JUMP
-        //if (context.performed)
-        //{
-        //    chargesJump = true;
-        //    print(chargesJump);
-        //}
+
+        if(state == ControllerState.LEDGEGRAB)
+        {
+            ExitLedgeJump();
+            return;
+        }
 
         //DEFINE DIRECTION
         Transform cam = Camera.main.transform;
@@ -1180,6 +1195,13 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         }
 
+        //LEDGEGRAB
+        if (State == ControllerState.LEDGEGRAB)
+        {
+            rb.linearVelocity = Vector3.zero;
+            return;
+        }
+
         //Stomping to Surfing
         if (State == ControllerState.STOMP)
         {
@@ -1371,7 +1393,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             AirControl();
         }
 
-        if(State == ControllerState.FALLING || State == ControllerState.JUMPING)
+        if (State == ControllerState.FALLING || State == ControllerState.JUMPING)
         {
             if (hasHitWater)
                 return;
@@ -1379,7 +1401,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             Vector2 direction = this.airControl.normalized;
             Vector3 airControl = transform.TransformDirection(new Vector3(direction.x, 0, direction.y));
 
-            if(hoverBehaviour.CanLockToSurface(airControl, out Vector3 surfaceNormal, out Vector3 hitPoint))
+            if (hoverBehaviour.CanLockToSurface(airControl, out Vector3 surfaceNormal, out Vector3 hitPoint))
             {
                 NormalContainer.up = surfaceNormal;
                 NormalContainer.Rotate(0, transform.eulerAngles.y, 0);
@@ -1388,6 +1410,13 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             }
         }
 
+        if(State == ControllerState.FALLING && rb.linearVelocity.y < 0 || State == ControllerState.JUMPING){
+            if (TryDetectLedge(out Vector3 point, out Vector3 normal))
+            {
+                EnterLedgeGrab(point, normal);
+                return;
+            }
+        }
     }
 
     private void AirControl()
@@ -2248,6 +2277,89 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         rb.linearVelocity = Vector3.zero;
         rb.AddForce(reflectedVelocity, ForceMode.VelocityChange);
     }
+
+    private bool TryDetectLedge(out Vector3 ledgePoint, out Vector3 ledgeNormal)
+    {
+        ledgePoint = Vector3.zero;
+        ledgeNormal = Vector3.zero;
+
+        Vector3 chest = transform.position + Vector3.up * 1.2f;
+
+        // 1️⃣ detect wall
+        if (!Physics.Raycast(chest, transform.forward, out RaycastHit wallHit, ledgeCheckDistance, wallLayer))
+            return false;
+
+        // position au dessus du mur
+        Vector3 topOrigin = wallHit.point + Vector3.up * ledgeHeight + transform.forward * 0.05f;
+
+        // 2️⃣ detect top surface (water layer)
+        if (!Physics.Raycast(topOrigin, Vector3.down, out RaycastHit topHit, ledgeHeight + 0.5f, waterLayer))
+            return false;
+
+        // 3️⃣ vérifier que c'est un vrai rebord
+        float heightDifference = topHit.point.y - transform.position.y;
+
+        if (heightDifference < 0.5f || heightDifference > ledgeHeight + 0.3f)
+            return false;
+
+        ledgePoint = topHit.point;
+        ledgeNormal = wallHit.normal;
+
+        Debug.DrawRay(chest, transform.forward * ledgeCheckDistance, Color.red);
+        Debug.DrawRay(topOrigin, Vector3.down * (ledgeHeight + 0.5f), Color.blue);
+
+        return true;
+    }
+
+    private void EnterLedgeGrab(Vector3 point, Vector3 normal)
+    {
+        State = ControllerState.LEDGEGRAB;
+
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.isKinematic = true;
+
+        ledgePoint = point;
+        ledgeNormal = normal;
+
+        Vector3 hangPos = point - normal * ledgeForwardOffset;
+        hangPos.y -= 0.5f;
+
+        transform.position = hangPos;
+        transform.forward = -normal;
+
+        triggerAnim?.Invoke("LedgeGrab");
+    }
+
+    private void ExitLedgeJump()
+    {
+        rb.isKinematic = false;
+
+        State = ControllerState.JUMPING;
+
+        rb.AddForce(
+            Vector3.up * controllerData.upwardImpulseForce +
+            transform.forward * controllerData.forwardImpulseForce,
+            ForceMode.VelocityChange
+        );
+    }
+    private void ClimbLedge()
+    {
+        rb.isKinematic = false;
+
+        Vector3 climbPos = ledgePoint + Vector3.up * 1.2f;
+
+        transform.position = climbPos;
+
+        State = ControllerState.SURFING;
+    }
+
+    private void DropLedge()
+    {
+        rb.isKinematic = false;
+        State = ControllerState.FALLING;
+    }
+
     #region ActionWindows
     private void StartActionWindow(ActionWindow window, float duration)
     {
