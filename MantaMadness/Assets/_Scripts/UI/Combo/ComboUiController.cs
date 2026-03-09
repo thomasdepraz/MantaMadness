@@ -12,6 +12,7 @@ public class ComboUIController : MonoBehaviour
     [SerializeField] GameObject feverRoot;
     [SerializeField] GameObject timerVisualContainer;
     [SerializeField] Transform timerScaleObject;
+    [SerializeField] private ParticleSystem timerParticle;
 
     [SerializeField] private ParticleSystem feverOverlayParticle;
     [SerializeField] private GameObject[] feverMainVisualEffect;
@@ -186,7 +187,7 @@ public class ComboUIController : MonoBehaviour
 
     void OnBeatEnableFever(int bar, int beat, float tempo)
     {
-        if(ComboManager.Instance.State == ComboState.Fever && feverRoot.activeSelf != true)
+        if (ComboManager.Instance.State == ComboState.Fever && feverRoot.activeSelf != true)
         {
             feverRoot.SetActive(true);
             feverBorder.SetActive(true);
@@ -206,11 +207,10 @@ public class ComboUIController : MonoBehaviour
     {
         feverOverlayParticle.Play();
 
-        if(feverRoutine == null)
+        if (feverRoutine == null)
         {
             feverRoutine = StartCoroutine(FeverSequentialOverlap());
         }
-
     }
 
     private IEnumerator FeverSequentialOverlap()
@@ -292,12 +292,36 @@ public class ComboUIController : MonoBehaviour
         if (state == ComboState.Inactive)
         {
             SetScaleY(0f);
+            StopTimerParticle();
+            return;
+        }
+
+        if (ComboManager.Instance.IsBonusPhase)
+        {
+            SetScaleY(0f);
+            StopTimerParticle();
             return;
         }
 
         float normalized = ComboManager.Instance.TimerNormalized;
 
         SetScaleY(normalized);
+        PlayTimerParticle();
+    }
+    void PlayTimerParticle()
+    {
+        if (timerParticle != null && !timerParticle.isPlaying)
+        {
+            timerParticle.Play();
+        }
+    }
+
+    void StopTimerParticle()
+    {
+        if (timerParticle != null && timerParticle.isPlaying)
+        {
+            timerParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
     }
 
     void SetScaleY(float normalized)

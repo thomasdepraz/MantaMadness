@@ -26530,6 +26530,7 @@ GameObject:
   - component: {fileID: 1860818694954644299}
   - component: {fileID: 2285651547325755083}
   - component: {fileID: 6198342475002881786}
+  - component: {fileID: 7238294165745281951}
   - component: {fileID: 8910374353824600262}
   - component: {fileID: 3961356260046509805}
   m_Layer: 7
@@ -26641,6 +26642,8 @@ MonoBehaviour:
   grindOffset: {x: 0, y: 0.1, z: 0}
   railReenterCooldown: 0.25
   railLock: 0
+  railSpinCooldown: 0.35
+  railSpinChargeTime: 0.75
   railReverseCooldown: 0.25
   railReversePauseTime: 0.33
   direction: {x: 0, y: 0, z: 0}
@@ -26883,6 +26886,23 @@ MonoBehaviour:
     value: 100
   - action: 11
     value: 2
+--- !u!114 &7238294165745281951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5536948242547424017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c349ae9947dc4147a11cd706688697d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 30
+  feverLayer:
+    serializedVersion: 2
+    m_Bits: 2097152
+  maxColliders: 50
 --- !u!114 &8910374353824600262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28006,7 +28026,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 20
+      scalar: 25
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -33669,7 +33689,7 @@ ParticleSystem:
         m_RotationOrder: 4
     orbitalX:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -33722,9 +33742,9 @@ ParticleSystem:
         m_RotationOrder: 4
     orbitalY:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 5
-      minScalar: 0
+      minMaxState: 3
+      scalar: 15
+      minScalar: 25
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -33775,7 +33795,7 @@ ParticleSystem:
         m_RotationOrder: 4
     orbitalZ:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -62144,7 +62164,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8505890745870183489}
   serializedVersion: 8
-  lengthInSec: 5
+  lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -63810,7 +63830,7 @@ ParticleSystem:
     orbitalY:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 20
       minScalar: 0
       maxCurve:
         serializedVersion: 2

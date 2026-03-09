@@ -168,6 +168,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     [SerializeField] float ledgeCooldown = 0.3f;
 
 
+
     //PLayer velocity
     public Vector3 Velocity => this.rb.linearVelocity;
     // Vector world space en local space par rapport a l'objet: permet de recup la vélocité horizontal peut importe la rotation
@@ -191,7 +192,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     //private bool CanDriftBreak => HorizontalVelocity.sqrMagnitude < (controllerData.minSpeedToDriftBreak * controllerData.minSpeedToDriftBreak);
     private bool CanDash => (State == ControllerState.SURFING || State == ControllerState.FALLING) && 
                             currentDashTime > controllerData.dashTimer && 
-                            (Time.time - lastDashTimestamp) > controllerData.dashCooldown;
+                            (Time.time - lastDashTimestamp) > controllerData.styleCooldown;
     private bool hasResetCam => (State == ControllerState.SURFING && IsDrifting);
 
     public int ConsecutiveDashCount => consecutiveDashCount;
@@ -258,6 +259,14 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private bool isRailSpinning;
     private bool stompBuildupWindowEnded;
 
+    private float currentRailSpinTime;
+    private bool hasRailSpinBoost;
+    private float lastRailSpinTime;
+
+    [SerializeField] private float railSpinCooldown = 1.0f;
+    [SerializeField] private float railSpinChargeTime = 0.75f;
+
+
     [SerializeField] private float railReverseCooldown = 0.25f;
     [SerializeField] public float railReversePauseTime = 0.15f;
 
@@ -296,6 +305,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public Action superSpinStart;
     public Action spinCancel;
     public Action<bool> spinCharged;
+    public Action style;
 
 
     private void Awake()
@@ -396,6 +406,17 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         }
     }
 
+    private void Style()
+    {
+        if(State == ControllerState.RAIL)
+        {
+            lastDashTimestamp = Time.time;
+            consecutiveDashCount = Mathf.Clamp(consecutiveDashCount + 1, 0, controllerData.maxConsecutiveDashCount);
+            styleBehaviour.StyleTrigger(hoverBehaviour.normalContainer.position, consecutiveDashCount);
+            dash?.Invoke(consecutiveDashCount);
+            style?.Invoke();
+        }
+    }
 
     public Coroutine catRoutine = null;
     private void CatTimeAbility(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -1056,6 +1077,23 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             {
                 return;
             }
+            
+            if (isRailSpinning)
+            {
+                currentRailSpinTime += Time.fixedDeltaTime;
+                Debug.Log("Current rail spin time= " + currentRailSpinTime);
+
+                if (currentRailSpinTime > railSpinChargeTime && hasRailSpinBoost == false)
+                {
+                    hasRailSpinBoost = true;
+
+                    spinCharged?.Invoke(true);
+                    togglePlayerBlinkMat.Invoke(true, 25f);
+
+                    PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
+                    PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGEDBOOST);
+                }
+            }
 
             if (bumpRail && railInfo.collider.CompareTag("RailCollider"))
             {
@@ -1160,10 +1198,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                     PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGEDBOOST);
                 }
             }
-        }
-        else if (isRailSpinning)
-        {
-
         }
 
         if (spinBehaviour.spinColEnabled != IsSpinning)
@@ -1315,6 +1349,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             }
         }
 
+        //reset dash counter if over threshold
+        if ((Time.time - lastDashTimestamp) > controllerData.styleCooldown + controllerData.dashTimeThreshold)
+            consecutiveDashCount = 0;
+
         //Hover on water
         if (State == ControllerState.SURFING)
         {
@@ -1326,11 +1364,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                     currentDashTime += Time.deltaTime;
                 else
                     currentDashTime = 0f;
-
-                //reset dash counter if over threshold
-                if ((Time.time - lastDashTimestamp) > controllerData.dashCooldown + controllerData.dashTimeThreshold)
-                    consecutiveDashCount = 0;
-
             }
             else
             {
@@ -1703,12 +1736,21 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         if (grindAbility)
         {
+            ComboManager.Instance.AddComboAction(ComboID.RailEnter);
+            ComboManager.Instance.SetComboTimerFrozen(true);
             ResetJump();
             ActionResetSpin();
             CancelActionWindow();
 
 
             currentRail = rail;
+
+            if (isSpinning)
+            {
+                //StartRailSpin();
+                //ResetSpin();
+                TransferSpinToRail();
+            }
 
             Vector3 intentDir = GetRailIntentDirection();
             rail.EnterRail(transform.position, intentDir);
@@ -1787,6 +1829,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private IEnumerator ReverseRailRoutine()
     {
         RailLock(true);
+
+        //RESET LE SPIN
+        ResetRailSpin();
 
         //ANIMATION
         reverseGrinding?.Invoke();
@@ -2036,13 +2081,15 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             railDetector.ExitRail();
             disableBoolAnim("Grind");
             PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GRINDRAIL );
-
+            ResetRailSpin();
             Jump(context);
+            ComboManager.Instance.SetComboTimerFrozen(false);
         }
     }
 
     public void OnRailExit(Rail rail)
     {
+        ComboManager.Instance.SetComboTimerFrozen(false);
         lastRail = rail;
         lastRailExitTime = Time.time;
     }
@@ -2051,6 +2098,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     {
         if (currentRail != null && State == ControllerState.RAIL && !isReverseRouting)
         {
+            ResetRailSpin();
             OnRailExit(currentRail);
 
             currentRail = null;
@@ -2062,6 +2110,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             disableBoolAnim("Grind");
 
             State = ControllerState.SURFING;
+            ComboManager.Instance.SetComboTimerFrozen(false);
 
             if (context.action.name == InputManager.Instance.strafLeft.action.name)
             {
@@ -2148,14 +2197,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 return;
             }
         }
-        //else if (state == ControllerState.RAIL)
-        //{
-        //    if (isRailSpinning == false)
-        //    {
-        //        isRailSpinning = true;
-        //        spinStart?.Invoke();
-        //    }
-        //}
+
+        else if (state == ControllerState.RAIL)
+        {
+            StartRailSpin();
+        }
     }
 
     public void SuperSpin()
@@ -2207,7 +2253,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
             else if (state == ControllerState.RAIL)
             {
-
+                ReleaseRailSpin();
+                return;
             }
         }
         ResetSpin();
@@ -2225,20 +2272,23 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     private void ResetSpin()
     {
-        //PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.DRIFT);
-        //PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGEDBOOST);
-        //PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
         spinCancel?.Invoke();
+
         canceledByAction = false;
         currentSpinTime = 0;
         hasSpinBoost = false;
+
         isSpinning = false;
-        isRailSpinning = false;
-        spinCharged?.Invoke(false);
-        spinBufferedFromJump = false;
+
+        if (!isRailSpinning)
+        {
+            spinCharged?.Invoke(false);
+            togglePlayerBlinkMat.Invoke(false, 25f);
+        }
+
         PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGEDBOOST);
         PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
-        togglePlayerBlinkMat.Invoke(false, 25f);
+
         isSuperSpinning = false;
     }
 
@@ -2326,6 +2376,51 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         return true;
     }
 
+    private void StartRailSpin()
+    {
+        if (isRailSpinning)
+            return;
+
+        if (Time.time - lastRailSpinTime < railSpinCooldown)
+            return;
+
+        isRailSpinning = true;
+        currentRailSpinTime = 0f;
+        hasRailSpinBoost = false;
+
+        spinStart?.Invoke();
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGINGBOOST);
+    }
+
+    private void ReleaseRailSpin()
+    {
+        if (!isRailSpinning)
+            return;
+
+        if (hasRailSpinBoost)
+        {
+            Style();
+        }
+
+        ResetRailSpin();
+    }
+    private void ResetRailSpin()
+    {
+        isRailSpinning = false;
+        hasRailSpinBoost = false;
+        currentRailSpinTime = 0;
+
+        lastRailSpinTime = Time.time;
+
+        spinCancel?.Invoke();
+        spinCharged?.Invoke(false);
+
+        togglePlayerBlinkMat.Invoke(false, 25f);
+
+        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGEDBOOST);
+        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
+    }
+
     private void EnterLedgeGrab(Vector3 point, Vector3 normal)
     {
         State = ControllerState.LEDGEGRAB;
@@ -2406,6 +2501,29 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         transform.forward = savedLedgeExitForward;
     }
 
+    private void TransferSpinToRail()
+    {
+        // stop ground spin state
+        isSpinning = false;
+
+        // start rail spin
+        isRailSpinning = true;
+
+        if (hasRailSpinBoost)
+        {
+            spinCharged?.Invoke(true);
+            togglePlayerBlinkMat.Invoke(true, 25f);
+        }
+
+        currentRailSpinTime = currentSpinTime;
+        hasRailSpinBoost = hasSpinBoost;
+
+        currentSpinTime = 0;
+        hasSpinBoost = false;
+
+        spinStart?.Invoke();
+    }
+
     #region ActionWindows
     private void StartActionWindow(ActionWindow window, float duration)
     {
@@ -2451,6 +2569,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             superSpinOnLand = isSuperSpinning;
 
             FOVController.instance.FOVEffect(FOVController.FovEffectType.STOMPLAND);
+
+            MantaVisuals.instance.AlignToCamForward();
 
             if (isSuperSpinning)
             {

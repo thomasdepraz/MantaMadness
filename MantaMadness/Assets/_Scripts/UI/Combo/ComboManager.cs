@@ -36,6 +36,9 @@ public class ComboManager : MonoBehaviour
     float frozenMainTimer;
 
     bool isBonusPhase;
+    public bool IsBonusPhase => isBonusPhase;
+
+    bool comboTimerFrozen = false;
 
     public int ComboLevel => Mathf.Clamp(currentComboValue, 0, 4);
     int currentComboValue;
@@ -98,6 +101,9 @@ public class ComboManager : MonoBehaviour
     {
         if (currentState != ComboState.Active &&
         currentState != ComboState.Fever)
+            return;
+
+        if (comboTimerFrozen)
             return;
 
         // BONUS PHASE d'abord : main timer est gelé => UI freeze
@@ -355,5 +361,10 @@ public class ComboManager : MonoBehaviour
 
         if (mainTimer > mainDuration)
             mainTimer = mainDuration;
+    }
+
+    public void SetComboTimerFrozen(bool value)
+    {
+        comboTimerFrozen = value;
     }
 }

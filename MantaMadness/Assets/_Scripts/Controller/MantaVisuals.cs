@@ -104,6 +104,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.updateDrift += UpdateDrift;
         mantaController.stateChanged += UpdateState;
         mantaController.boost += BoostParticles;
+        mantaController.style += BoostParticles;
         mantaController.superBoost += SuperBoostParticles;
         mantaController.updateRaceTarget += SetArrowTarget;
         mantaController.dash += Dash;
@@ -289,7 +290,7 @@ public class MantaVisuals : MonoBehaviour
         UpdateAnimatorRatio(Game.Instance.player.HorizontalVelocity.magnitude, Game.Instance.player.controllerData.maxSpeed, horizontalSpeedId);
         UpdateAnimatorRatio(Mathf.Abs(Game.Instance.player.Velocity.y), Game.Instance.player.controllerData.gravity * Game.Instance.player.controllerData.limitFallingSpeedFactor, verticalSpeedId);
         UpdateSpeedline();
-        if (!spinning)
+        if (!spinning && !superSpinning)
         {
             UpdateModelRoll();
         }
@@ -794,6 +795,7 @@ public class MantaVisuals : MonoBehaviour
     {
         if (spinning || superSpinning)
         {
+            modelTransform.localRotation = Quaternion.identity;
             AlignToCamForward();
             spinning = false;
             superSpinning = false;
@@ -818,7 +820,7 @@ public class MantaVisuals : MonoBehaviour
 
             currentSpinSpeed = Mathf.Clamp(currentSpinSpeed, minSpinSpeed, maxSpinSpeed);
 
-            transform.Rotate(Vector3.up * currentSpinSpeed * Time.deltaTime);
+            modelTransform.Rotate(Vector3.up * currentSpinSpeed * Time.deltaTime);
         }
         else if (superSpinning)
         {
@@ -838,7 +840,7 @@ public class MantaVisuals : MonoBehaviour
         }
     }
 
-    private void AlignToCamForward()
+    public void AlignToCamForward()
     {
         Vector3 camForward = Camera.main.transform.forward;
 
@@ -850,7 +852,7 @@ public class MantaVisuals : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(projectedForward, Vector3.up);
 
         Vector3 euler = targetRotation.eulerAngles;
-        transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
+        transform.localRotation = Quaternion.Euler(0f, euler.y, 0f);
     }
 
     public void SpawnSpinImpactParticles(Vector3 SpawnPointPosition)

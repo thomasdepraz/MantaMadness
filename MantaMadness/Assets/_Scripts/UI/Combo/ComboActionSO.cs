@@ -33,6 +33,9 @@ public enum ComboID
     SpinAirBoost,
     TornadoJump,
     GalaxyBoost,
+    RailStyle,
+    SuperRailStyle,
+    RailEnter,
 
 }
 

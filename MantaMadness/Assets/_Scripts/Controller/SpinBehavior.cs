@@ -42,18 +42,18 @@ public class SpinBehavior : MonoBehaviour
         if (other.gameObject.layer != LayerMask.NameToLayer("Wall"))
             return;
 
-        float distance = Vector3.Distance(transform.position, other.ClosestPoint(transform.position));
+//        float distance = Vector3.Distance(transform.position, other.ClosestPoint(transform.position));
 
-#if UNITY_EDITOR
-        EditorGUIUtility.PingObject(other.gameObject);
-        Selection.activeGameObject = other.gameObject;
-#endif
+//#if UNITY_EDITOR
+//        EditorGUIUtility.PingObject(other.gameObject);
+//        Selection.activeGameObject = other.gameObject;
+//#endif
 
-        Debug.Log("Collided with: " + other.name);
+//        Debug.Log("Collided with: " + other.name);
 
-        Vector3 closestPoint = other.ClosestPoint(transform.position);
-        Vector3 normal = (transform.position - closestPoint).normalized;
-        MantaVisuals.instance.SpawnSpinImpactParticles(closestPoint);
-        Game.Instance.player.SpinBounce(normal);
+//        Vector3 closestPoint = other.ClosestPoint(transform.position);
+//        Vector3 normal = (transform.position - closestPoint).normalized;
+//        MantaVisuals.instance.SpawnSpinImpactParticles(closestPoint);
+//        Game.Instance.player.SpinBounce(normal);
     }
 }

@@ -30,7 +30,7 @@ public class ControllerData : ScriptableObject
     public float minSpeedToDash;
     public float dashTimer;
     public float dashForce;
-    public float dashCooldown;
+    public float styleCooldown;
     public float dashTimeThreshold;
     public int maxConsecutiveDashCount;
     public bool canDriftandDash;

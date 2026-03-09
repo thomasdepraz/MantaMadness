@@ -21,5 +21,7 @@ public class StyleBehaviour : MonoBehaviour
             if(collider.gameObject.TryGetComponent(out StyleTriggerable component))
                 component.Trigger(combo);
         }
+
+        ComboManager.Instance.AddComboAction(ComboID.RailStyle);
     }
 }
