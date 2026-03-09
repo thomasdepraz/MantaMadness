@@ -148,12 +148,18 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     [SerializeField] public bool catAbility { get; private set; }
 
     [Header("Ledge Grab")]
-    [SerializeField] private float ledgeCheckDistance = 0.6f;
     [SerializeField] private float ledgeHeight = 1.5f;
     [SerializeField] private float ledgeForwardOffset = 0.3f;
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] private LayerMask waterLayer;
 
+    [Header("Ledge Grab - 360")]
+    [SerializeField] private float ledgeWallProbeRadius = 0.35f; // rayon du spherecast
+    [SerializeField] private float ledgeWallProbeDistance = 0.75f; // portée
+
+    private Vector3 savedPreLedgeUp = Vector3.up;
+    private Vector3 savedPreLedgeForward = Vector3.forward;
+    private Vector3 savedLedgeExitForward = Vector3.forward; // basé sur ledgeNormal
 
     private Vector3 ledgePoint;
     private Vector3 ledgeNormal;
@@ -2283,30 +2289,39 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         ledgePoint = Vector3.zero;
         ledgeNormal = Vector3.zero;
 
+        if (Time.time - lastLedgeGrabTime < ledgeCooldown)
+            return false;
+
         Vector3 chest = transform.position + Vector3.up * 1.2f;
 
-        // 1️⃣ detect wall
-        if (!Physics.Raycast(chest, transform.forward, out RaycastHit wallHit, ledgeCheckDistance, wallLayer))
+        // chercher mur devant le joueur
+        if (!Physics.SphereCast(
+            chest,
+            ledgeWallProbeRadius,
+            transform.forward,
+            out RaycastHit wallHit,
+            ledgeWallProbeDistance,
+            wallLayer))
             return false;
 
-        // position au dessus du mur
-        Vector3 topOrigin = wallHit.point + Vector3.up * ledgeHeight + transform.forward * 0.05f;
+        // point au dessus du mur
+        Vector3 topOrigin = wallHit.point + Vector3.up * ledgeHeight;
 
-        // 2️⃣ detect top surface (water layer)
-        if (!Physics.Raycast(topOrigin, Vector3.down, out RaycastHit topHit, ledgeHeight + 0.5f, waterLayer))
+        if (!Physics.Raycast(
+            topOrigin,
+            Vector3.down,
+            out RaycastHit topHit,
+            ledgeHeight + 0.75f,
+            waterLayer))
             return false;
 
-        // 3️⃣ vérifier que c'est un vrai rebord
         float heightDifference = topHit.point.y - transform.position.y;
 
-        if (heightDifference < 0.5f || heightDifference > ledgeHeight + 0.3f)
+        if (heightDifference < 0.5f || heightDifference > ledgeHeight + 0.4f)
             return false;
 
         ledgePoint = topHit.point;
         ledgeNormal = wallHit.normal;
-
-        Debug.DrawRay(chest, transform.forward * ledgeCheckDistance, Color.red);
-        Debug.DrawRay(topOrigin, Vector3.down * (ledgeHeight + 0.5f), Color.blue);
 
         return true;
     }
@@ -2319,14 +2334,28 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         rb.angularVelocity = Vector3.zero;
         rb.isKinematic = true;
 
-        ledgePoint = point;
-        ledgeNormal = normal;
+        // Cache orientation AVANT grab (utile si tu veux restaurer Up/Forward)
+        savedPreLedgeUp = NormalContainer.up;
+        savedPreLedgeForward = NormalContainer.forward;
 
-        Vector3 hangPos = point - normal * ledgeForwardOffset;
+        ledgePoint = point;
+        ledgeNormal = normal.normalized;
+
+        // Forward "propre" pour la sortie : on enlève la composante verticale
+        savedLedgeExitForward = Vector3.ProjectOnPlane(-ledgeNormal, Vector3.up).normalized;
+        if (savedLedgeExitForward.sqrMagnitude < 0.0001f)
+            savedLedgeExitForward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
+
+        Vector3 hangPos = point - ledgeNormal * ledgeForwardOffset;
         hangPos.y -= 0.5f;
 
         transform.position = hangPos;
-        transform.forward = -normal;
+
+        transform.forward = -ledgeNormal;
+
+        lastLedgeGrabTime = Time.time;
+
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.BUMP);
 
         triggerAnim?.Invoke("LedgeGrab");
     }
@@ -2335,21 +2364,34 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     {
         rb.isKinematic = false;
 
+        NormalContainer.up = Vector3.up;
+
+        // Applique la direction de sortie basée sur la normal capturée
+        Vector3 exitForward = savedLedgeExitForward;
+        transform.forward = exitForward;
+
         State = ControllerState.JUMPING;
 
         rb.AddForce(
             Vector3.up * controllerData.upwardImpulseForce +
-            transform.forward * controllerData.forwardImpulseForce,
+            exitForward * controllerData.forwardImpulseForce,
             ForceMode.VelocityChange
         );
+
+        triggerAnim.Invoke("Spin");
+
+        lastLedgeGrabTime = Time.time;
     }
     private void ClimbLedge()
     {
         rb.isKinematic = false;
 
         Vector3 climbPos = ledgePoint + Vector3.up * 1.2f;
-
         transform.position = climbPos;
+
+        // reset orientation propre
+        NormalContainer.up = Vector3.up;
+        transform.forward = savedLedgeExitForward;
 
         State = ControllerState.SURFING;
     }
@@ -2358,6 +2400,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     {
         rb.isKinematic = false;
         State = ControllerState.FALLING;
+
+        // reset orientation propre
+        NormalContainer.up = Vector3.up;
+        transform.forward = savedLedgeExitForward;
     }
 
     #region ActionWindows

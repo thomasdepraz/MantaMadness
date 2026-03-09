@@ -26627,6 +26627,17 @@ MonoBehaviour:
   targetRaycastLayer:
     serializedVersion: 2
     m_Bits: 65536
+  ledgeHeight: 1.5
+  ledgeForwardOffset: -0.3
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 524288
+  waterLayer:
+    serializedVersion: 2
+    m_Bits: 16
+  ledgeWallProbeRadius: 0.35
+  ledgeWallProbeDistance: 0.75
+  ledgeCooldown: 0.3
   grindOffset: {x: 0, y: 0.1, z: 0}
   railReenterCooldown: 0.25
   railLock: 0
@@ -26792,8 +26803,8 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 37695b4ad3f1232469fbd519d5ccc906, type: 2}
   playerMantaTrueBody: {fileID: 4602029587172647370}
   mantaBodyVisual: {fileID: 5177569997893001308}
-  afterImageMat: {fileID: 2100000, guid: 663517f63d1dff14682fb017c4de32a9, type: 2}
-  superAfterImageMat: {fileID: 0}
+  afterImageMat: {fileID: 2100000, guid: d2c13719e2c3b0f4496d286cd93fc979, type: 2}
+  superAfterImageMat: {fileID: 2100000, guid: 2f29a0e3daa296a4f83b9b37f0be0ec5, type: 2}
   fadeDuration: 1
   interval: 0.02
   strafEffectDuration: 0.25
@@ -27175,7 +27186,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -31915,7 +31926,7 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 2100000, guid: 6e0f1e8f0e19f624b8a061c66f2d26d7, type: 2}
+  - {fileID: 2100000, guid: 2f29a0e3daa296a4f83b9b37f0be0ec5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -32055,7 +32066,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -56618,7 +56629,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 2f29a0e3daa296a4f83b9b37f0be0ec5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -56819,7 +56830,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spinColEnabled: 0
   spinBoostColEnabled: 0
-  spinParticle: {fileID: 245418679092970812}
 --- !u!65 &8949749639890799213
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -62143,7 +62153,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -62963,7 +62973,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 200
+      scalar: 400
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -66883,7 +66893,7 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 2100000, guid: 6e0f1e8f0e19f624b8a061c66f2d26d7, type: 2}
+  - {fileID: 2100000, guid: 2f29a0e3daa296a4f83b9b37f0be0ec5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

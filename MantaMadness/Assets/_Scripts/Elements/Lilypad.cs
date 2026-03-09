@@ -40,6 +40,7 @@ public class Lilypad : MonoBehaviour
         FMOD.Studio.EventInstance audio = RuntimeManager.CreateInstance(audioEvent);
         RuntimeManager.AttachInstanceToGameObject(audio,gameObject);
         audio.start();
+        audio.release();
         //ENABLE SUB VISUAL
         visual.SetActive(true);
         //TWEEN SSCALE OF MAIN VISUAL
