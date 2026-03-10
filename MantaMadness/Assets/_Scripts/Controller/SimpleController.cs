@@ -214,7 +214,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         }
         set
         {
-            //Debug.Log(value);
+            if (state == value)
+                return;
+
             stateChanged.Invoke(state, value);
             state = value;
         }
@@ -905,6 +907,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private IEnumerator StompCoroutine(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         State = ControllerState.STOMP;
+        fallTime = 0f;
         rb.linearVelocity = Vector3.zero;
         rb.AddForce(hoverBehaviour.normalContainer.up * controllerData.stompUpForce, ForceMode.VelocityChange);
         triggerAnim.Invoke("StompCharge");
@@ -1067,6 +1070,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             ResetDrift();
         }
 
+        if (spinBehaviour.spinColEnabled != IsSpinning)
+        {
+            spinBehaviour.ToggleCollision(IsSpinning);
+        }
 
         if (OnRail)
         {
@@ -1109,11 +1116,14 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
             else if (false == currentRail.Progress(Time.fixedDeltaTime, out Vector3 nextPos, out Vector3 normal, out Vector3 direction))
             {
-                OnRailExit(currentRail);
+                Rail rail = currentRail;
+                OnRailExit(rail);
 
                 currentRail = null;
                 rb.isKinematic = false;
-                rb.AddForce(direction * 50, ForceMode.VelocityChange);
+
+                Vector3 exitDir = rail.GetExitDirection();
+                rb.AddForce(exitDir * controllerData.railExitForce, ForceMode.VelocityChange);
 
                 exitRail.Invoke();
                 railDetector.ExitRail();
@@ -1200,10 +1210,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             }
         }
 
-        if (spinBehaviour.spinColEnabled != IsSpinning)
-        {
-            spinBehaviour.ToggleCollision(IsSpinning);
-        }
+
 
 
         //Falling to Surfing
@@ -1231,8 +1238,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             //    Vector3 bumpDirection = bumptInfo.normal;
             //    Bump(bumpDirection);
             //}
-            fallTime += Time.fixedDeltaTime;
+        }
 
+        if(State == ControllerState.FALLING || State == ControllerState.STOMP)
+        {
+            fallTime += Time.fixedDeltaTime;
         }
 
         //LEDGEGRAB
@@ -1246,8 +1256,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (State == ControllerState.STOMP)
         {
             rb.AddForce(-hoverBehaviour.normalContainer.up * controllerData.stompAccelForce, ForceMode.Acceleration);
-            fallTime = 0f;
-            fallTime += Time.fixedDeltaTime;
             if (hasHitWater)
             {
                 State = ControllerState.SURFING;
@@ -1312,8 +1320,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (State == ControllerState.JUMPING ||
             State == ControllerState.AIRRIDE || 
             State == ControllerState.BOOSTJUMP ||
-            State == ControllerState.BUMP ||
-            State == ControllerState.STOMP)
+            State == ControllerState.BUMP)
         {
             float force = controllerData.gravity;
             if (State == ControllerState.AIRRIDE)
@@ -1340,9 +1347,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         }
         else if (State == ControllerState.STOMP)
         {
-            if(fallTime > controllerData.stompChargeTime)
+            float force = 1f;
+            if (fallTime > controllerData.stompChargeTime)
             {
-                float force = 1f;
                 force = controllerData.gravity * controllerData.maxAirTimeGravityFactor;
                 rb.AddForce(Vector3.down * force, ForceMode.Acceleration);
                 rb.linearVelocity = ClampYVelocity(Velocity, -controllerData.maxFallingSpeed * controllerData.limitFallingSpeedFactor, float.MaxValue);
@@ -1745,12 +1752,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
             currentRail = rail;
 
-            if (isSpinning)
-            {
-                //StartRailSpin();
-                //ResetSpin();
-                TransferSpinToRail();
-            }
+            ResetSpin();
 
             Vector3 intentDir = GetRailIntentDirection();
             rail.EnterRail(transform.position, intentDir);

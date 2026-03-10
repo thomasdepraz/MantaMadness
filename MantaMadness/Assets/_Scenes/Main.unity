@@ -868,6 +868,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -5905,7 +5909,7 @@ PrefabInstance:
       objectReference: {fileID: 347043814}
     - target: {fileID: 8445956669121627139, guid: 04b33f32b7065b2459146972946e30da, type: 3}
       propertyPath: m_Duration
-      value: 106.158325
+      value: 106.221725
       objectReference: {fileID: 0}
     - target: {fileID: 9180965776425842348, guid: 04b33f32b7065b2459146972946e30da, type: 3}
       propertyPath: playOnAwake
@@ -8925,6 +8929,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -12063,6 +12071,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -13035,6 +13047,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -13435,6 +13451,161 @@ Transform:
   - {fileID: 588272599}
   m_Father: {fileID: 1224577768}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &89158190
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 89158191}
+  - component: {fileID: 89158194}
+  - component: {fileID: 89158193}
+  - component: {fileID: 89158192}
+  m_Layer: 0
+  m_Name: Cube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &89158191
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89158190}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -108.33332, y: -23.333332, z: -28.333328}
+  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1793711234}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &89158192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89158190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playOnStart: 0
+  playOnEnable: 0
+  playOnBeat: 0
+  playSequenceOnEnable: 1
+  tweenSteps:
+  - animatePosition: 0
+    animateRotation: 1
+    animateScale: 1
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: -44, y: 0, z: 68}
+    rotationUseLocal: 0
+    rotationRelative: 0
+    scale: {x: 0.8, y: 5, z: 0.8}
+    scaleRelative: 0
+    duration: 0.5
+    delay: 0
+    ease: 6
+  - animatePosition: 0
+    animateRotation: 1
+    animateScale: 1
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 44, y: 0, z: -68}
+    rotationUseLocal: 0
+    rotationRelative: 0
+    scale: {x: 5, y: 0.8, z: 5}
+    scaleRelative: 1
+    duration: 0.5
+    delay: 0
+    ease: 6
+  sequenceLoops: -1
+  sequenceLoopType: 1
+  animateRotation: 0
+  loopRotationAmount: -1
+  yoyoRotation: 0
+  xRotation: 0
+  yRotation: 0
+  zRotation: 0
+  rotationDuration: 0
+  animatePosition: 0
+  loopPositionAmount: -1
+  yoyoPosition: 0
+  xPos: 0
+  yPos: 0
+  zPos: 0
+  moveDuration: 0
+  animateScale: 0
+  loopScaleAmount: -1
+  yoyoScale: 0
+  xScale: 1
+  yScale: 1
+  zScale: 1
+  scaleDuration: 0
+--- !u!23 &89158193
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89158190}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 1ec441dfdac2b194a8fd7a974383dbe5, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &89158194
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89158190}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &89587164 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3571100989906367951, guid: e9e301e1cac721e4e9997f27dff6fb0f, type: 3}
@@ -13922,6 +14093,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -14626,6 +14801,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -15437,6 +15616,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -15596,6 +15779,10 @@ MonoBehaviour:
   playOnStart: 0
   playOnEnable: 0
   playOnBeat: 1
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -16734,6 +16921,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -20848,6 +21039,10 @@ MonoBehaviour:
   playOnStart: 0
   playOnEnable: 0
   playOnBeat: 1
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -24521,6 +24716,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 1
@@ -24885,6 +25084,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -26583,6 +26786,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -32904,6 +33111,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -33240,6 +33451,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -37174,6 +37389,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -37903,6 +38122,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -38918,6 +39141,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -39125,6 +39352,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -44865,6 +45096,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -48104,6 +48339,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -48363,6 +48602,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -48533,6 +48776,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -49225,6 +49472,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -49659,6 +49910,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -54475,6 +54730,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -60081,6 +60340,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -60474,7 +60737,7 @@ PrefabInstance:
       objectReference: {fileID: 347043814}
     - target: {fileID: 8445956669121627139, guid: 04b33f32b7065b2459146972946e30da, type: 3}
       propertyPath: m_Duration
-      value: 106.158325
+      value: 106.221725
       objectReference: {fileID: 0}
     - target: {fileID: 9180965776425842348, guid: 04b33f32b7065b2459146972946e30da, type: 3}
       propertyPath: playOnAwake
@@ -66206,6 +66469,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -67768,6 +68035,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -70729,6 +71000,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -71362,6 +71637,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -72105,6 +72384,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -75019,6 +75302,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -78342,7 +78629,7 @@ PrefabInstance:
       objectReference: {fileID: 347043814}
     - target: {fileID: 8445956669121627139, guid: 04b33f32b7065b2459146972946e30da, type: 3}
       propertyPath: m_Duration
-      value: 106.158325
+      value: 106.221725
       objectReference: {fileID: 0}
     - target: {fileID: 9180965776425842348, guid: 04b33f32b7065b2459146972946e30da, type: 3}
       propertyPath: playOnAwake
@@ -78960,6 +79247,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -80028,6 +80319,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -81962,7 +82257,7 @@ PrefabInstance:
       objectReference: {fileID: 347043814}
     - target: {fileID: 8445956669121627139, guid: 04b33f32b7065b2459146972946e30da, type: 3}
       propertyPath: m_Duration
-      value: 106.158325
+      value: 106.221725
       objectReference: {fileID: 0}
     - target: {fileID: 9180965776425842348, guid: 04b33f32b7065b2459146972946e30da, type: 3}
       propertyPath: playOnAwake
@@ -82332,6 +82627,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -86651,6 +86950,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -87431,6 +87734,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -88339,6 +88646,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -91697,6 +92008,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -92387,6 +92702,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -92822,6 +93141,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -93476,6 +93799,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 1
@@ -95132,6 +95459,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -96803,6 +97134,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -98246,6 +98581,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -100333,6 +100672,10 @@ MonoBehaviour:
   playOnStart: 0
   playOnEnable: 0
   playOnBeat: 1
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -103139,6 +103482,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -103211,6 +103558,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -104768,6 +105119,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -105131,6 +105486,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -106939,6 +107298,10 @@ MonoBehaviour:
   playOnStart: 0
   playOnEnable: 0
   playOnBeat: 1
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -107618,6 +107981,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -109525,6 +109892,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -109925,6 +110296,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -111565,6 +111940,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -111724,6 +112103,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -111972,6 +112355,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -114338,6 +114725,10 @@ MonoBehaviour:
   playOnStart: 0
   playOnEnable: 0
   playOnBeat: 1
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -134097,6 +134488,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -140368,6 +140763,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -140904,6 +141303,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -142122,6 +142525,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -143543,6 +143950,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -146431,6 +146842,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -148543,6 +148958,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -150542,6 +150961,10 @@ MonoBehaviour:
   playOnStart: 0
   playOnEnable: 0
   playOnBeat: 1
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -151443,6 +151866,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -155573,6 +156000,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -155936,6 +156367,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -157559,6 +157994,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -159792,6 +160231,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -161188,6 +161631,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -162392,6 +162839,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -164964,6 +165415,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -165123,6 +165578,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -166368,6 +166827,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -167066,6 +167529,10 @@ MonoBehaviour:
   playOnStart: 0
   playOnEnable: 0
   playOnBeat: 1
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -171546,6 +172013,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -172847,6 +173318,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -173038,6 +173513,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -179236,6 +179715,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -180726,6 +181209,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -182998,6 +183485,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -183702,6 +184193,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -184009,6 +184504,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -186186,6 +186685,10 @@ MonoBehaviour:
   playOnStart: 0
   playOnEnable: 0
   playOnBeat: 1
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -192205,6 +192708,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -192587,6 +193094,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -193064,6 +193575,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -193593,6 +194108,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -198074,6 +198593,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -199225,6 +199748,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -199575,7 +200102,7 @@ PrefabInstance:
       objectReference: {fileID: 347043814}
     - target: {fileID: 8445956669121627139, guid: 04b33f32b7065b2459146972946e30da, type: 3}
       propertyPath: m_Duration
-      value: 106.158325
+      value: 106.221725
       objectReference: {fileID: 0}
     - target: {fileID: 9180965776425842348, guid: 04b33f32b7065b2459146972946e30da, type: 3}
       propertyPath: playOnAwake
@@ -200955,6 +201482,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -200991,6 +201522,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -201027,6 +201562,10 @@ MonoBehaviour:
   playOnStart: 0
   playOnEnable: 0
   playOnBeat: 1
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -207393,6 +207932,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -211283,6 +211826,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -211717,6 +212264,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -212819,6 +213370,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -217277,6 +217832,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -217531,6 +218090,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -218347,6 +218910,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -218419,6 +218986,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -218729,6 +219300,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -218801,6 +219376,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -222140,6 +222719,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -222717,6 +223300,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -224339,6 +224926,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -224569,6 +225160,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -227757,6 +228352,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -228189,6 +228788,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -241344,6 +241947,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -241788,6 +242395,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -242057,6 +242668,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -243691,6 +244306,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -244001,6 +244620,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -247189,6 +247812,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -250788,6 +251415,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -263877,6 +264508,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -265415,6 +266050,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -267572,6 +268211,10 @@ MonoBehaviour:
   playOnStart: 0
   playOnEnable: 0
   playOnBeat: 1
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -271832,6 +272475,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -273529,6 +274176,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -276620,6 +277271,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -278149,7 +278804,7 @@ PrefabInstance:
       objectReference: {fileID: 347043814}
     - target: {fileID: 8445956669121627139, guid: 04b33f32b7065b2459146972946e30da, type: 3}
       propertyPath: m_Duration
-      value: 106.158325
+      value: 106.221725
       objectReference: {fileID: 0}
     - target: {fileID: 9180965776425842348, guid: 04b33f32b7065b2459146972946e30da, type: 3}
       propertyPath: playOnAwake
@@ -279348,6 +280003,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -281758,6 +282417,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -282082,6 +282745,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -284380,6 +285047,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -286520,6 +287191,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -286942,6 +287617,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -289872,6 +290551,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -294114,6 +294797,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -296327,6 +297014,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -296494,6 +297185,7 @@ Transform:
   - {fileID: 977148127}
   - {fileID: 995237803}
   - {fileID: 2130042165}
+  - {fileID: 89158191}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1793800388
@@ -297845,6 +298537,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -299931,6 +300627,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -300992,6 +301692,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -301694,7 +302398,7 @@ PrefabInstance:
       objectReference: {fileID: 347043814}
     - target: {fileID: 8445956669121627139, guid: 04b33f32b7065b2459146972946e30da, type: 3}
       propertyPath: m_Duration
-      value: 106.158325
+      value: 106.221725
       objectReference: {fileID: 0}
     - target: {fileID: 9180965776425842348, guid: 04b33f32b7065b2459146972946e30da, type: 3}
       propertyPath: playOnAwake
@@ -303152,6 +303856,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -304140,6 +304848,10 @@ MonoBehaviour:
   playOnStart: 0
   playOnEnable: 0
   playOnBeat: 1
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -304338,6 +305050,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -304524,6 +305240,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -305861,6 +306581,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -305985,7 +306709,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1864325497
 Transform:
   m_ObjectHideFlags: 0
@@ -307206,6 +307930,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -308144,6 +308872,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -311326,6 +312058,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -316190,6 +316926,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -316354,6 +317094,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -318020,6 +318764,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -318196,6 +318944,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -319007,6 +319759,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -319316,7 +320072,7 @@ PrefabInstance:
       objectReference: {fileID: 347043814}
     - target: {fileID: 8445956669121627139, guid: 04b33f32b7065b2459146972946e30da, type: 3}
       propertyPath: m_Duration
-      value: 106.158325
+      value: 106.221725
       objectReference: {fileID: 0}
     - target: {fileID: 9180965776425842348, guid: 04b33f32b7065b2459146972946e30da, type: 3}
       propertyPath: playOnAwake
@@ -320546,6 +321302,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -320778,6 +321538,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -321779,6 +322543,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -328716,6 +329484,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -328875,6 +329647,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -330862,7 +331638,7 @@ PrefabInstance:
       objectReference: {fileID: 347043814}
     - target: {fileID: 8445956669121627139, guid: 04b33f32b7065b2459146972946e30da, type: 3}
       propertyPath: m_Duration
-      value: 106.158325
+      value: 106.221725
       objectReference: {fileID: 0}
     - target: {fileID: 9180965776425842348, guid: 04b33f32b7065b2459146972946e30da, type: 3}
       propertyPath: playOnAwake
@@ -332354,6 +333130,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -333141,6 +333921,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -334080,6 +334864,10 @@ MonoBehaviour:
   playOnStart: 0
   playOnEnable: 0
   playOnBeat: 1
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -335658,6 +336446,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 1
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -370202,7 +370994,7 @@ PrefabInstance:
       objectReference: {fileID: 347043814}
     - target: {fileID: 5119522944792891852, guid: 0dc295daf397d584292f586488866740, type: 3}
       propertyPath: m_Duration
-      value: 42.46333
+      value: 42.488693
       objectReference: {fileID: 0}
     - target: {fileID: 5119522944792891852, guid: 0dc295daf397d584292f586488866740, type: 3}
       propertyPath: m_MaxSpeed
@@ -370415,6 +371207,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -378371,6 +379167,10 @@ MonoBehaviour:
   playOnStart: 1
   playOnEnable: 1
   playOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0
@@ -388672,6 +389472,10 @@ MonoBehaviour:
   playOnStart: 0
   playOnEnable: 0
   playOnBeat: 1
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
   animateRotation: 0
   loopRotationAmount: -1
   yoyoRotation: 0

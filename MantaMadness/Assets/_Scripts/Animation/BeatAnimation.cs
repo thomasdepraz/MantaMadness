@@ -1,53 +1,9 @@
-using UnityEngine;
-using UnityEditor;
 using DG.Tweening;
-using System.Collections.Generic;
-using NUnit.Framework;
+using UnityEngine;
 
-[System.Serializable]
-public struct TweenStep
+public class BeatAnimation : MonoBehaviour
 {
-    [Header("Enable")]
-    public bool animatePosition;
-    public bool animateRotation;
-    public bool animateScale;
-
-    [Header("Position")]
-    public Vector3 position;
-    public bool positionUseLocal;
-    public bool positionRelative;
-
-    [Header("Rotation")]
-    public Vector3 rotation;
-    public bool rotationUseLocal;
-    public bool rotationRelative;
-
-    [Header("Scale")]
-    public Vector3 scale;
-    public bool scaleRelative;
-
-    [Header("Timing")]
-    public float duration;
-    public float delay;
-
-    [Header("Tween Settings")]
-    public Ease ease;
-}
-
-public class TweenAnimation : MonoBehaviour
-{
-
-    public bool playOnStart;
-    public bool playOnEnable;
-    public bool playOnBeat = false;
-    public bool playSequenceOnEnable;
-
-    [Header("Tween Steps Animations")]
-    public List<TweenStep> tweenSteps = new List<TweenStep>();
-
-    [Header("Sequence Settings")]
-    public int sequenceLoops = 0;
-    public LoopType sequenceLoopType = LoopType.Restart;
+    public bool onSubscribe = false;
 
     [Header("Rotation Tween")]
     public bool animateRotation;
@@ -90,27 +46,12 @@ public class TweenAnimation : MonoBehaviour
 
     void Start()
     {
-        if (playOnBeat == true)
-        {
-            MusicManager.OnBeat += BeatTween;
-        }
 
-        if (playOnStart == true)
-            Tween();
     }
 
     public void OnEnable()
     {
-        if (playOnBeat == true)
-        {
-            MusicManager.OnBeat += BeatTween;
-        }
 
-        if (playOnEnable == true)
-            Tween();
-
-        if (playSequenceOnEnable == true)
-            PlaySequence();
     }
 
     public void OnDisable()
@@ -169,12 +110,8 @@ public class TweenAnimation : MonoBehaviour
                 {
                     transform.DOScale(new Vector3(originalScale.x * xScale, originalScale.y * yScale, originalScale.z * zScale), scaleDuration).SetEase(Ease.InOutQuad).SetLoops(loopScaleAmount, LoopType.Yoyo);
                 }
-
         }
-
-
     }
-
     public void StopTween()
     {
         transform.DOKill(true);
@@ -190,72 +127,5 @@ public class TweenAnimation : MonoBehaviour
         StopTween();
         //print(tempo);
         transform.DOScale(new Vector3(originalScale.x * xScale, originalScale.y * yScale, originalScale.z * zScale), 60 / tempo).SetEase(Ease.InOutQuad).SetLoops(loopScaleAmount, LoopType.Yoyo);
-    }
-
-    private Sequence currentSequence;
-
-    public void PlaySequence()
-    {
-        StopTween();
-
-        if (tweenSteps == null || tweenSteps.Count == 0)
-            return;
-
-        currentSequence = DOTween.Sequence();
-
-        foreach (TweenStep step in tweenSteps)
-        {
-            Sequence stepSequence = DOTween.Sequence().SetAutoKill(false);
-
-            // Delay de la step
-            //if (step.delay > 0)
-            //    stepSequence.PrependInterval(step.delay);
-
-            if (step.animatePosition)
-            {
-                Tween moveTween = step.positionUseLocal
-                    ? transform.DOLocalMove(step.position, step.duration)
-                    : transform.DOMove(step.position, step.duration);
-
-                if (step.positionRelative)
-                    moveTween.SetRelative();
-
-                moveTween.SetEase(step.ease);
-
-                stepSequence.Join(moveTween);
-            }
-
-            if (step.animateRotation)
-            {
-                Tween rotateTween = step.rotationUseLocal
-                    ? transform.DOLocalRotate(step.rotation, step.duration)
-                    : transform.DORotate(step.rotation, step.duration);
-
-                if (step.rotationRelative)
-                    rotateTween.SetRelative();
-
-                rotateTween.SetEase(step.ease);
-
-                stepSequence.Join(rotateTween);
-            }
-
-            if (step.animateScale)
-            {
-                Tween scaleTween = transform.DOScale(step.scale, step.duration);
-
-                if (step.scaleRelative)
-                    scaleTween.SetRelative();
-
-                scaleTween.SetEase(step.ease);
-
-                stepSequence.Join(scaleTween);
-            }
-            currentSequence.AppendInterval(step.delay);
-            currentSequence.Append(stepSequence);
-        }
-
-
-        currentSequence.SetLoops(sequenceLoops, sequenceLoopType);
-        currentSequence.SetLink(gameObject);
     }
 }

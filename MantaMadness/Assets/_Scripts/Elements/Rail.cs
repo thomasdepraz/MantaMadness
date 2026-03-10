@@ -165,7 +165,8 @@ public class Rail : MonoBehaviour
         Vector3 worldUp = splineContainer.transform.TransformDirection(up);
 
         position = worldPos;
-        direction = (worldPos - currentPosition);
+        //direction = (worldPos - currentPosition);
+        direction = worldTan.normalized * dir;
         //direction = worldTan.normalized;
         normal = worldUp;
 
@@ -177,5 +178,17 @@ public class Rail : MonoBehaviour
     public void Reverse()
     {
         dir *= -1;
+    }
+
+    public Vector3 GetExitDirection()
+    {
+        railSpline.Evaluate(currentProgress, out float3 pos, out float3 tan, out float3 up);
+
+        Vector3 worldTan = splineContainer.transform.TransformDirection(tan).normalized;
+        Vector3 worldUp = splineContainer.transform.TransformDirection(up);
+
+        Vector3 exitDir = (worldTan * dir + worldUp * 0.5f).normalized;
+
+        return exitDir;
     }
 }
