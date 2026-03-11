@@ -17,8 +17,6 @@ public class Button : MonoBehaviour
     private const float c_lockDuration = 4f;
     private bool isActivated = false;
 
-    public TweenAnimation tweenToActivate;
-
     public MeshRenderer buttonMesh;
     public Material activatedMaterial;
 
@@ -44,8 +42,6 @@ public class Button : MonoBehaviour
     {
         if (other.TryGetComponent(out SimpleController controller))
         {
-            tweenToActivate.Tween();
-
             if(isActivated == false && routine == null)
             routine = StartCoroutine(ActivationCoroutine(controller));
         }

@@ -137,6 +137,7 @@ public class ControllerData : ScriptableObject
     [Header("Rail")]
     public float railImpulseForce;
     public float railExitForce;
+    public float railTransferForce = 20f;
 
     [Header("Bump Parameters")]
     public float bumpDetectionRadius;

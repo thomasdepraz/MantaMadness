@@ -34,12 +34,20 @@ public struct TweenStep
     public Ease ease;
 }
 
+public enum BeatType
+{
+    beat,
+    beat2,
+    beat4,
+    beat8,
+}
+
 public class TweenAnimation : MonoBehaviour
 {
 
     public bool playOnStart;
     public bool playOnEnable;
-    public bool playOnBeat = false;
+    public bool playSequenceOnBeat = false;
     public bool playSequenceOnEnable;
 
     [Header("Tween Steps Animations")]
@@ -48,37 +56,13 @@ public class TweenAnimation : MonoBehaviour
     [Header("Sequence Settings")]
     public int sequenceLoops = 0;
     public LoopType sequenceLoopType = LoopType.Restart;
-
-    [Header("Rotation Tween")]
-    public bool animateRotation;
-    public int loopRotationAmount = -1;
-    public bool yoyoRotation = false;
-    public float xRotation;
-    public float yRotation;
-    public float zRotation;
-    public float rotationDuration;
-
-    [Header("Position Tween")]
-    public bool animatePosition;
-    public int loopPositionAmount = -1;
-    public bool yoyoPosition = false;
-    public float xPos;
-    public float yPos;
-    public float zPos;
-    public float moveDuration;
-
-    [Header("Scale Tween")]
-    public bool animateScale;
-    public int loopScaleAmount = -1;
-    public bool yoyoScale = false;
-    public float xScale = 1;
-    public float yScale = 1;
-    public float zScale = 1;
-    public float scaleDuration;
+    public BeatType beatSequenceType;
 
     private Vector3 originalScale;
     private Vector3 originalPosition;
     private Quaternion originalRotation;
+
+    private int currentBeatStep = 0;
 
     private void Awake()
     {
@@ -90,25 +74,51 @@ public class TweenAnimation : MonoBehaviour
 
     void Start()
     {
-        if (playOnBeat == true)
-        {
-            MusicManager.OnBeat += BeatTween;
-        }
+        //if (playOnBeat == true)
+        //{
+        //    currentBeatStep = 0;
 
-        if (playOnStart == true)
-            Tween();
+        //    if ( beatSequenceType == BeatType.beat)
+        //    {
+        //        MusicManager.OnBeat += PlayBeatSequence;
+        //    }
+        //    else if(beatSequenceType == BeatType.beat2)
+        //    {
+        //        MusicManager.OnBeat2 += PlayBeatSequence;
+        //    }
+        //    else if (beatSequenceType == BeatType.beat4)
+        //    {
+        //        MusicManager.OnBeat4 += PlayBeatSequence;
+        //    }
+        //    else if (beatSequenceType == BeatType.beat8)
+        //    {
+        //        MusicManager.OnBeat8 += PlayBeatSequence;
+        //    }
+        //}
     }
 
     public void OnEnable()
     {
-        if (playOnBeat == true)
+        if (playSequenceOnBeat == true)
         {
-            MusicManager.OnBeat += BeatTween;
+            currentBeatStep = 0;
+
+            switch (beatSequenceType)
+            {
+                case BeatType.beat:
+                    MusicManager.OnBeat += PlayBeatSequence;
+                    break;
+                case BeatType.beat2:
+                    MusicManager.OnBeat2 += PlayBeatSequence;
+                    break;
+                case BeatType.beat4:
+                    MusicManager.OnBeat4 += PlayBeatSequence;
+                    break;
+                case BeatType.beat8:
+                    MusicManager.OnBeat8 += PlayBeatSequence;
+                    break;
+            }
         }
-
-        if (playOnEnable == true)
-            Tween();
-
         if (playSequenceOnEnable == true)
             PlaySequence();
     }
@@ -116,63 +126,41 @@ public class TweenAnimation : MonoBehaviour
     public void OnDisable()
     {
         StopTween();
-        MusicManager.OnBeat -= BeatTween;
+
+        switch (beatSequenceType)
+        {
+            case BeatType.beat:
+                MusicManager.OnBeat -= PlayBeatSequence;
+                break;
+            case BeatType.beat2:
+                MusicManager.OnBeat2 -= PlayBeatSequence;
+                break;
+            case BeatType.beat4:
+                MusicManager.OnBeat4 -= PlayBeatSequence;
+                break;
+            case BeatType.beat8:
+                MusicManager.OnBeat8 -= PlayBeatSequence;
+                break;
+        }
     }
 
     public void OnDestroy()
     {
-        MusicManager.OnBeat -= BeatTween;
-    }
-
-    public void Tween()
-    {
-        if (animateRotation == true)
+        switch (beatSequenceType)
         {
-            if (yoyoRotation == false)
-                transform.DOLocalRotate(new Vector3(originalRotation.eulerAngles.x + xRotation, originalRotation.eulerAngles.y + yRotation, originalRotation.eulerAngles.z + zRotation), rotationDuration).SetEase(Ease.Linear).SetLoops(loopRotationAmount, LoopType.Incremental);
-            else if (yoyoRotation == true)
-                transform.DOLocalRotate(new Vector3(originalRotation.eulerAngles.x + xRotation, originalRotation.eulerAngles.y + yRotation, originalRotation.eulerAngles.z + zRotation), rotationDuration).SetEase(Ease.InOutQuad).SetLoops(loopRotationAmount, LoopType.Yoyo);
+            case BeatType.beat:
+                MusicManager.OnBeat -= PlayBeatSequence;
+                break;
+            case BeatType.beat2:
+                MusicManager.OnBeat2 -= PlayBeatSequence;
+                break;
+            case BeatType.beat4:
+                MusicManager.OnBeat4 -= PlayBeatSequence;
+                break;
+            case BeatType.beat8:
+                MusicManager.OnBeat8 -= PlayBeatSequence;
+                break;
         }
-
-
-        if (animatePosition == true)
-        {
-            if (yoyoPosition == false)
-                transform.DOLocalMove(new Vector3(originalPosition.x + xPos, originalPosition.y + yPos, originalPosition.z + zPos), moveDuration).SetEase(Ease.InOutQuad).SetLoops(loopPositionAmount, LoopType.Incremental);
-            else if (yoyoPosition == true)
-                transform.DOLocalMove(new Vector3(originalPosition.x + xPos, originalPosition.y + yPos, originalPosition.z + zPos), moveDuration).SetEase(Ease.InOutQuad).SetLoops(loopPositionAmount, LoopType.Yoyo);
-
-
-        }
-
-        if (animateScale == true)
-        {
-            if (yoyoScale == false)
-            {
-                if (originalScale == Vector3.zero)
-                {
-                    transform.DOScale(new Vector3(1 * xScale, 1 * yScale, 1 * zScale), scaleDuration).SetEase(Ease.InOutQuad).SetLoops(loopScaleAmount, LoopType.Incremental);
-                }
-                else
-                {
-                    transform.DOScale(new Vector3(originalScale.x * xScale, originalScale.y * yScale, originalScale.z * zScale), scaleDuration).SetEase(Ease.InOutQuad).SetLoops(loopScaleAmount, LoopType.Incremental);
-                }
-            }
-
-            else if (yoyoScale == true)
-
-                if (originalScale == Vector3.zero)
-                {
-                    transform.DOScale(new Vector3(1 * xScale, 1 * yScale, 1 * zScale), scaleDuration).SetEase(Ease.InOutQuad).SetLoops(loopScaleAmount, LoopType.Yoyo);
-                }
-                else
-                {
-                    transform.DOScale(new Vector3(originalScale.x * xScale, originalScale.y * yScale, originalScale.z * zScale), scaleDuration).SetEase(Ease.InOutQuad).SetLoops(loopScaleAmount, LoopType.Yoyo);
-                }
-
-        }
-
-
     }
 
     public void StopTween()
@@ -181,15 +169,6 @@ public class TweenAnimation : MonoBehaviour
         transform.localPosition = originalPosition;
         transform.localRotation = originalRotation;
         transform.localScale = originalScale;
-    }
-
-    public void BeatTween(int bar, int beat, float tempo)
-    {
-        //print("bar =" + bar + " beat=" + beat + " tempo=" + tempo);
-        //print(60 / tempo);
-        StopTween();
-        //print(tempo);
-        transform.DOScale(new Vector3(originalScale.x * xScale, originalScale.y * yScale, originalScale.z * zScale), 60 / tempo).SetEase(Ease.InOutQuad).SetLoops(loopScaleAmount, LoopType.Yoyo);
     }
 
     private Sequence currentSequence;
@@ -257,5 +236,56 @@ public class TweenAnimation : MonoBehaviour
 
         currentSequence.SetLoops(sequenceLoops, sequenceLoopType);
         currentSequence.SetLink(gameObject);
+    }
+
+    public void PlayBeatSequence(int bar, int beat, float tempo)
+    {
+        if (tweenSteps == null || tweenSteps.Count == 0)
+            return;
+
+        TweenStep step = tweenSteps[currentBeatStep];
+
+        float duration = 60f / tempo;
+
+        if (step.animatePosition)
+        {
+            Tween moveTween = step.positionUseLocal
+                ? transform.DOLocalMove(step.position, duration)
+                : transform.DOMove(step.position, duration);
+
+            if (step.positionRelative)
+                moveTween.SetRelative();
+
+            moveTween.SetEase(step.ease);
+        }
+
+        if (step.animateRotation)
+        {
+            Tween rotateTween = step.rotationUseLocal
+                ? transform.DOLocalRotate(step.rotation, duration)
+                : transform.DORotate(step.rotation, duration);
+
+            if (step.rotationRelative)
+                rotateTween.SetRelative();
+
+            rotateTween.SetEase(step.ease);
+        }
+
+        if (step.animateScale)
+        {
+            Tween scaleTween = transform.DOScale(step.scale, duration);
+
+            if (step.scaleRelative)
+                scaleTween.SetRelative();
+
+            scaleTween.SetEase(step.ease);
+        }
+
+        currentBeatStep++;
+
+        if (currentBeatStep >= tweenSteps.Count)
+        {
+            currentBeatStep = 0;
+        }
     }
 }

@@ -168,7 +168,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     [SerializeField] float ledgeCooldown = 0.3f;
 
 
-
     //PLayer velocity
     public Vector3 Velocity => this.rb.linearVelocity;
     // Vector world space en local space par rapport a l'objet: permet de recup la vélocité horizontal peut importe la rotation
@@ -187,6 +186,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public bool OnWaterFall => currentWaterFall != null;
     public bool IsLocked => OnRail || InAirRail || forceLocked;
     public bool IsSpinning => isSpinning || isRailSpinning || isSuperSpinning;
+    public Rail CurrentRail => currentRail;
 
     private bool CanDrift => HorizontalVelocity.sqrMagnitude > controllerData.minSpeedToDrift * controllerData.minSpeedToDrift;
     //private bool CanDriftBreak => HorizontalVelocity.sqrMagnitude < (controllerData.minSpeedToDriftBreak * controllerData.minSpeedToDriftBreak);
@@ -205,6 +205,21 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     [Header("Rail")]
     [SerializeField] private float railReenterCooldown = 0.25f;
     private float lastRailExitTime = -999f;
+
+    [Header("Rail Transfer")]
+    [SerializeField] float railTransferDistance = 6f;
+    [SerializeField] float railTransferRayOffset = 1.2f;
+    [SerializeField] LayerMask railLayer;
+
+    Rail leftRailCandidate;
+    Rail rightRailCandidate;
+
+    Vector3 leftRailPoint;
+    Vector3 rightRailPoint;
+
+    public System.Action<Vector3> showRailTransferLeft;
+    public System.Action<Vector3> showRailTransferRight;
+    public System.Action hideRailTransfer;
 
 
     public ControllerState State {
@@ -875,6 +890,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 }
                 else if(State == ControllerState.RAIL)
                 {
+                    if (TryRailTransfer(context))
+                        return;
+
                     StrafOutOfRail(context);
                 }
             }
@@ -1084,7 +1102,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             {
                 return;
             }
-            
+
             if (isRailSpinning)
             {
                 currentRailSpinTime += Time.fixedDeltaTime;
@@ -1748,6 +1766,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             ResetJump();
             ActionResetSpin();
             CancelActionWindow();
+            railReverseRoutine = null;
 
 
             currentRail = rail;
@@ -2524,6 +2543,74 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         hasSpinBoost = false;
 
         spinStart?.Invoke();
+    }
+
+    private bool TryRailTransfer(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if (context.action.name == InputManager.Instance.strafLeft.action.name)
+        {
+            Rail rail = railDetector.leftRailCandidate;
+
+            if (rail != null)
+            {
+                railDetector.ConfirmTransfer(false);
+
+                StartCoroutine(RailTransfer(rail, railDetector.LeftHitPoint));
+                return true;
+            }
+        }
+
+        if (context.action.name == InputManager.Instance.strafRight.action.name)
+        {
+            Rail rail = railDetector.rightRailCandidate;
+
+            if (rail != null)
+            {
+                railDetector.ConfirmTransfer(true);
+
+                StartCoroutine(RailTransfer(rail, railDetector.RightHitPoint));
+                return true;
+            }
+        }
+
+        return false;
+    }
+    private IEnumerator RailTransfer(Rail targetRail, Vector3 targetPoint)
+    {
+        ResetRailSpin();
+
+        OnRailExit(currentRail);
+
+        currentRail = null;
+        rb.isKinematic = false;
+
+        exitRail?.Invoke();
+        railDetector.ExitRail();
+
+        disableBoolAnim("Grind");
+        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GRINDRAIL);
+
+        State = ControllerState.SURFING;
+
+        rb.linearVelocity = Vector3.zero;
+
+        Vector3 toTarget = targetPoint - transform.position;
+        toTarget.y = 0f;
+
+        Vector3 lateralDir = toTarget.normalized;
+
+        Vector3 force =
+            lateralDir * controllerData.strafForce +
+            NormalContainer.forward * controllerData.strafForwardForce;
+
+        rb.AddForce(force, ForceMode.VelocityChange);
+
+        straf?.Invoke();
+
+        yield return new WaitForSeconds(0.25f);
+
+        railDetector.ResetTransferPreview();
+        EnterRail(targetRail);
     }
 
     #region ActionWindows

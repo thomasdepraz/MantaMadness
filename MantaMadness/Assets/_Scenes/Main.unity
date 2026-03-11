@@ -867,32 +867,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &5128677
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7584,7 +7564,7 @@ GameObject:
   - component: {fileID: 44430846}
   - component: {fileID: 44430845}
   - component: {fileID: 44430844}
-  m_Layer: 19
+  m_Layer: 8
   m_Name: NurbsPath.014_Bezier_Instantiate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8928,32 +8908,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &53995438
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -12070,32 +12030,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &82441694
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -13046,32 +12986,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &85310681
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -13499,8 +13419,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 0
   playOnEnable: 0
-  playOnBeat: 0
-  playSequenceOnEnable: 1
+  playSequenceOnBeat: 0
+  playSequenceOnEnable: 0
   tweenSteps:
   - animatePosition: 0
     animateRotation: 1
@@ -13531,28 +13451,8 @@ MonoBehaviour:
     delay: 0
     ease: 6
   sequenceLoops: -1
-  sequenceLoopType: 1
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  sequenceLoopType: 0
+  beatSequenceType: 0
 --- !u!23 &89158193
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14092,32 +13992,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &97031825
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -14800,32 +14680,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &108269885
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -15615,32 +15475,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &114864742
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -15778,32 +15618,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 0
   playOnEnable: 0
-  playOnBeat: 1
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1.2
-  yScale: 1.2
-  zScale: 1.2
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!23 &115105054
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -16920,32 +16740,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &127262508
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -21038,32 +20838,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 0
   playOnEnable: 0
-  playOnBeat: 1
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 1
-  loopScaleAmount: -1
-  yoyoScale: 1
-  xScale: 0.5
-  yScale: 2.5
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!1 &142800710
 GameObject:
   m_ObjectHideFlags: 0
@@ -24715,32 +24495,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 1
-  xRotation: 0
-  yRotation: 50
-  zRotation: 40
-  rotationDuration: 0.25
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!23 &161932697
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -25083,32 +24843,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &163342283
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -26785,32 +26525,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &174143168
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -30656,7 +30376,7 @@ GameObject:
   - component: {fileID: 204908276}
   - component: {fileID: 204908275}
   - component: {fileID: 204908274}
-  m_Layer: 19
+  m_Layer: 8
   m_Name: NurbsPath.006_Bezier_Border_R_Instantiate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33110,32 +32830,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &219921724
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -33450,32 +33150,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &221652694
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -37388,32 +37068,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &239413892
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -38121,32 +37781,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &245821697
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -39140,32 +38780,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &255231118
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -39351,32 +38971,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &256999460
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -42442,7 +42042,7 @@ GameObject:
   - component: {fileID: 292678862}
   - component: {fileID: 292678861}
   - component: {fileID: 292678860}
-  m_Layer: 19
+  m_Layer: 8
   m_Name: NurbsPath.014_Bezier_Instantiate (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45095,32 +44695,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &303373212
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -48338,32 +47918,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &314249963
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -48601,32 +48161,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &315934003
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -48775,32 +48315,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &317535520
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -49471,32 +48991,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &325611040
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -49909,32 +49409,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 1
-  loopScaleAmount: 2
-  yoyoScale: 1
-  xScale: 1.2
-  yScale: 1.2
-  zScale: 1.2
-  scaleDuration: 0.33
+  beatSequenceType: 0
 --- !u!1 &330902327 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6064153176478479626, guid: a24474ca94d8eea439ceec7c3e1d640e, type: 3}
@@ -54729,32 +54209,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &372942555
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -60339,32 +59799,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &379945774
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -66468,32 +65908,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &413506096
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -68034,32 +67454,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &433403679
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -70999,32 +70399,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &455732311
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -71636,32 +71016,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &461370658
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -72383,32 +71743,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &467674453
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -75301,32 +74641,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &492351040
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -76117,7 +75437,7 @@ GameObject:
   - component: {fileID: 498460324}
   - component: {fileID: 498460323}
   - component: {fileID: 498460322}
-  m_Layer: 19
+  m_Layer: 8
   m_Name: NurbsPath.014_Bezier_Instantiate (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -79246,32 +78566,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &525919144
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -80318,32 +79618,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &534211237
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -82626,32 +81906,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &565325775
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -85060,7 +84320,7 @@ GameObject:
   - component: {fileID: 579670048}
   - component: {fileID: 579670047}
   - component: {fileID: 579670046}
-  m_Layer: 19
+  m_Layer: 8
   m_Name: NurbsPath.006_Bezier_Border_L_Instantiate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85076,7 +84336,7 @@ Transform:
   m_GameObject: {fileID: 579670044}
   serializedVersion: 2
   m_LocalRotation: {x: 0.00000003073364, y: 0.7071068, z: 0.7071068, w: -0.00000003073364}
-  m_LocalPosition: {x: -1.5300024, y: -3.705, z: 12.799999}
+  m_LocalPosition: {x: -1.53, y: -3.73, z: 12.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -86949,32 +86209,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &587080506
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -87733,32 +86973,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &591559094
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -88645,32 +87865,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &596306996
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -92007,32 +91207,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &610492207
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -92701,32 +91881,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &617955526
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -93140,32 +92300,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &619995839
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -93798,32 +92938,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 1
-  xRotation: 0
-  yRotation: 50
-  zRotation: 40
-  rotationDuration: 0.25
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!23 &627300522
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -95458,32 +94578,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &640008610
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -97133,32 +96233,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &643303645
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -98580,32 +97660,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &655753782
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -100671,32 +99731,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 0
   playOnEnable: 0
-  playOnBeat: 1
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 1
-  loopScaleAmount: -1
-  yoyoScale: 1
-  xScale: 0.5
-  yScale: 2.5
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!4 &675855157 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2736296043996856257, guid: 8da4c7c53a1d7a64084d340b424c4cba, type: 3}
@@ -103481,32 +102521,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 1
-  loopScaleAmount: 2
-  yoyoScale: 1
-  xScale: 1.2
-  yScale: 1.2
-  zScale: 1.2
-  scaleDuration: 0.33
+  beatSequenceType: 0
 --- !u!1 &695893644
 GameObject:
   m_ObjectHideFlags: 0
@@ -103557,32 +102577,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &695893647
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -105118,32 +104118,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &703795954
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -105485,32 +104465,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &707005899
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -107297,32 +106257,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 0
   playOnEnable: 0
-  playOnBeat: 1
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1.2
-  yScale: 1.2
-  zScale: 1.2
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!1 &725985718 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -208595431880416365, guid: 2520e5d3a8e3fe140856ad28faedfdfe, type: 3}
@@ -107980,32 +106920,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &731842120
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -109891,32 +108811,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &737742415
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -110295,32 +109195,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 1
-  loopPositionAmount: -1
-  yoyoPosition: 1
-  xPos: 0
-  yPos: 0.25
-  zPos: 0
-  moveDuration: 0.5
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!1001 &741387407
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -111939,32 +110819,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &757028199
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -112102,32 +110962,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &758160246
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -112354,32 +111194,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &758869791
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -114724,32 +113544,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 0
   playOnEnable: 0
-  playOnBeat: 1
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1.2
-  yScale: 1.2
-  zScale: 1.2
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!1 &777191780
 GameObject:
   m_ObjectHideFlags: 0
@@ -130376,7 +129176,7 @@ GameObject:
   - component: {fileID: 818441603}
   - component: {fileID: 818441602}
   - component: {fileID: 818441601}
-  m_Layer: 19
+  m_Layer: 8
   m_Name: NurbsPath.009_Bezier_Border_L_Instantiate (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130924,7 +129724,7 @@ GameObject:
   - component: {fileID: 821476541}
   - component: {fileID: 821476540}
   - component: {fileID: 821476539}
-  m_Layer: 19
+  m_Layer: 8
   m_Name: NurbsPath.009_Bezier_Border_L_Instantiate (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134487,32 +133287,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 1
-  loopPositionAmount: -1
-  yoyoPosition: 1
-  xPos: 0
-  yPos: 2
-  zPos: 0
-  moveDuration: 1.5
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!1001 &843456476
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -140762,32 +139542,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &876845184
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -141302,32 +140062,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &879381030
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -142524,32 +141264,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &891058264
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -143949,32 +142669,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &896977807
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -146841,32 +145541,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &918703556
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -148957,32 +147637,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &932705091
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -150960,32 +149620,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 0
   playOnEnable: 0
-  playOnBeat: 1
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 1
-  loopPositionAmount: -1
-  yoyoPosition: 1
-  xPos: 0
-  yPos: 5
-  zPos: 0
-  moveDuration: 2
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1.1
-  yScale: 1.1
-  zScale: 1.1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &952018841
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -151865,32 +150505,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &962355386
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -155999,32 +154619,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &985428215
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -156366,32 +154966,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &989636887
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -157993,32 +156573,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1001792056
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -160230,32 +158790,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1020883719
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -161630,32 +160170,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1022740332
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -162838,32 +161358,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1032348025
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -165414,32 +163914,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1055581435
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -165577,32 +164057,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1056317867
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -166826,32 +165286,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1066689187
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -167528,32 +165968,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 0
   playOnEnable: 0
-  playOnBeat: 1
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1.2
-  yScale: 1.2
-  zScale: 1.2
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!1001 &1071307316
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -172012,32 +170432,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1097044668
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -173317,32 +171717,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1105719996
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -173512,32 +171892,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1106713533
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -179714,32 +178074,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 1
-  loopScaleAmount: 2
-  yoyoScale: 1
-  xScale: 1.2
-  yScale: 1.2
-  zScale: 1.2
-  scaleDuration: 0.33
+  beatSequenceType: 0
 --- !u!4 &1144946545 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2736296043996856257, guid: 8da4c7c53a1d7a64084d340b424c4cba, type: 3}
@@ -181208,32 +179548,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1155310855
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -183484,32 +181804,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1169266166
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -184192,32 +182492,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1178549424
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -184503,32 +182783,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1180835893
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -186684,32 +184944,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 0
   playOnEnable: 0
-  playOnBeat: 1
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 1
-  loopScaleAmount: -1
-  yoyoScale: 1
-  xScale: 0.8
-  yScale: 3.5
-  zScale: 0.8
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!1 &1193796333
 GameObject:
   m_ObjectHideFlags: 0
@@ -192707,32 +190947,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 4
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1212642450
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -193093,32 +191313,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1215810151
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -193574,32 +191774,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1220482676
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -194107,32 +192287,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1226321915
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -198592,32 +196752,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1262267563
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -199747,32 +197887,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1269347007
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -201481,32 +199601,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 1
-  loopPositionAmount: -1
-  yoyoPosition: 1
-  xPos: 0
-  yPos: 0.25
-  zPos: 0
-  moveDuration: 0.5
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!114 &1281865508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201521,32 +199621,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 1
-  loopPositionAmount: -1
-  yoyoPosition: 1
-  xPos: 0
-  yPos: 2
-  zPos: 0
-  moveDuration: 1.5
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!114 &1281865509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201561,32 +199641,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 0
   playOnEnable: 0
-  playOnBeat: 1
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1.2
-  yScale: 1.2
-  zScale: 1.2
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!1 &1282557433
 GameObject:
   m_ObjectHideFlags: 0
@@ -207931,32 +205991,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1297559960
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -211825,32 +209865,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1333862854
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -212263,32 +210283,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1338248501
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -213369,32 +211369,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1344221803
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -217831,32 +215811,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1352722083
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -218089,32 +216049,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1353542075
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -218909,32 +216849,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 120
-  rotationDuration: 0.3
-  animatePosition: 1
-  loopPositionAmount: -1
-  yoyoPosition: 1
-  xPos: 0
-  yPos: 0.1
-  zPos: 0
-  moveDuration: 0.5
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!1 &1363222999
 GameObject:
   m_ObjectHideFlags: 0
@@ -218985,32 +216905,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1363223002
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -219299,32 +217199,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 120
-  rotationDuration: 0.3
-  animatePosition: 1
-  loopPositionAmount: -1
-  yoyoPosition: 1
-  xPos: 0
-  yPos: 0.1
-  zPos: 0
-  moveDuration: 0.5
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!1 &1366440478
 GameObject:
   m_ObjectHideFlags: 0
@@ -219375,32 +217255,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1366440481
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -222718,32 +220578,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1384053970
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -223299,32 +221139,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1390505475
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -224925,32 +222745,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1403558791
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -225159,32 +222959,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1406174121
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -228351,32 +226131,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1444345388
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -228787,32 +226547,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1446246265
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -241946,32 +239686,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1483029131
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -242394,32 +240114,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1488367253
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -242667,32 +240367,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1491775120
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -244305,32 +241985,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1508072684
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -244619,32 +242279,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1510027953
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -247811,32 +245451,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1523261633
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -251414,32 +249034,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1546285873
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -253001,7 +250601,7 @@ GameObject:
   - component: {fileID: 1562904890}
   - component: {fileID: 1562904889}
   - component: {fileID: 1562904888}
-  m_Layer: 19
+  m_Layer: 8
   m_Name: NurbsPath.014_Bezier_Instantiate (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -264507,32 +262107,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1574386979
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -266049,32 +263629,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1590767911
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -268210,32 +265770,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 0
   playOnEnable: 0
-  playOnBeat: 1
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 1
-  loopPositionAmount: -1
-  yoyoPosition: 1
-  xPos: 0
-  yPos: 5
-  zPos: 0
-  moveDuration: 2
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1.1
-  yScale: 1.1
-  zScale: 1.1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!1 &1612037156
 GameObject:
   m_ObjectHideFlags: 0
@@ -272474,32 +270014,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1630777745
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -274175,32 +271695,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1647291001
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -277270,32 +274770,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1661977471
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -280002,32 +277482,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1683916513
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -282416,32 +279876,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 180
-  zRotation: 0
-  rotationDuration: 1.5
-  animatePosition: 1
-  loopPositionAmount: -1
-  yoyoPosition: 1
-  xPos: 0
-  yPos: 0.2
-  zPos: 0
-  moveDuration: 0.5
-  animateScale: 1
-  loopScaleAmount: -1
-  yoyoScale: 1
-  xScale: 1.2
-  yScale: 1.2
-  zScale: 1.2
-  scaleDuration: 1.75
+  beatSequenceType: 0
 --- !u!1001 &1691811173
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -282744,32 +280184,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 1
-  loopScaleAmount: 2
-  yoyoScale: 1
-  xScale: 1.2
-  yScale: 1.2
-  zScale: 1.2
-  scaleDuration: 0.33
+  beatSequenceType: 0
 --- !u!1001 &1694746640
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -285046,32 +282466,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1711489788
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -287190,32 +284590,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1726605627
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -287616,32 +284996,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 1
-  loopScaleAmount: 2
-  yoyoScale: 1
-  xScale: 1.2
-  yScale: 1.2
-  zScale: 1.2
-  scaleDuration: 0.33
+  beatSequenceType: 0
 --- !u!1 &1728596569 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4611842544960491346, guid: e9e301e1cac721e4e9997f27dff6fb0f, type: 3}
@@ -290550,32 +287910,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1747256056
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -294796,32 +292136,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1777487265
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -297013,32 +294333,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1793605481
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -298536,32 +295836,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1804218561
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -298884,7 +296164,7 @@ GameObject:
   - component: {fileID: 1807811101}
   - component: {fileID: 1807811100}
   - component: {fileID: 1807811099}
-  m_Layer: 19
+  m_Layer: 8
   m_Name: NurbsPath.014_Bezier_Instantiate (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -300626,32 +297906,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1821201460
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -301691,32 +298951,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1831134748
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -303855,32 +301095,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 1
-  loopScaleAmount: 2
-  yoyoScale: 1
-  xScale: 1.2
-  yScale: 1.2
-  zScale: 1.2
-  scaleDuration: 0.33
+  beatSequenceType: 0
 --- !u!4 &1843150890 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8860770917047063654, guid: 95d3dacbe58b6b24a94d37343db3d76b, type: 3}
@@ -304847,32 +302067,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 0
   playOnEnable: 0
-  playOnBeat: 1
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1.2
-  yScale: 1.2
-  zScale: 1.2
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!23 &1846552957
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -305049,32 +302249,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1846813601
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -305239,32 +302419,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1847048488
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -306580,32 +303740,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1863770562
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -306709,7 +303849,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1864325497
 Transform:
   m_ObjectHideFlags: 0
@@ -307929,32 +305069,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 1
-  loopScaleAmount: 2
-  yoyoScale: 1
-  xScale: 1.2
-  yScale: 1.2
-  zScale: 1.2
-  scaleDuration: 0.33
+  beatSequenceType: 0
 --- !u!4 &1879922781 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2736296043996856257, guid: 8da4c7c53a1d7a64084d340b424c4cba, type: 3}
@@ -308871,32 +305991,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1892067794
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -312057,32 +309157,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1911763692
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -316925,32 +314005,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1932303635
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -317093,32 +314153,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1933414860
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -318763,32 +315803,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1947385302
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -318943,32 +315963,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1948165799
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -319758,32 +316758,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1956183779
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -321301,32 +318281,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1970412111
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -321537,32 +318497,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1971039473
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -322542,32 +319482,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &1978412667
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -329483,32 +326403,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &2026292047
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -329646,32 +326546,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 9
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &2026417467
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -333129,32 +330009,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &2060576971
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -333920,32 +330780,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &2067401072
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -334863,32 +331703,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 0
   playOnEnable: 0
-  playOnBeat: 1
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1.2
-  yScale: 1.2
-  zScale: 1.2
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!1 &2073417247
 GameObject:
   m_ObjectHideFlags: 0
@@ -336445,32 +333265,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 3
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!64 &2084246618
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -370526,10 +367326,38 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 699599342051909160, guid: dca7f13816397624b95432a30aded4ae, type: 3}
+      propertyPath: railLayer.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
     - target: {fileID: 1819065601580436475, guid: dca7f13816397624b95432a30aded4ae, type: 3}
       propertyPath: Target.TrackingTarget
       value: 
       objectReference: {fileID: 1604402786}
+    - target: {fileID: 1872447627237145241, guid: dca7f13816397624b95432a30aded4ae, type: 3}
+      propertyPath: railLayer.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 1872447627237145241, guid: dca7f13816397624b95432a30aded4ae, type: 3}
+      propertyPath: railPreviewPrefab
+      value: 
+      objectReference: {fileID: 2495647488618740588, guid: 3bbc0e3865ba43642b1e028f37806109, type: 3}
+    - target: {fileID: 1872447627237145241, guid: dca7f13816397624b95432a30aded4ae, type: 3}
+      propertyPath: transferRayOffset
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1872447627237145241, guid: dca7f13816397624b95432a30aded4ae, type: 3}
+      propertyPath: obstacleLayer.m_Bits
+      value: 524304
+      objectReference: {fileID: 0}
+    - target: {fileID: 1872447627237145241, guid: dca7f13816397624b95432a30aded4ae, type: 3}
+      propertyPath: transferSphereRadius
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1872447627237145241, guid: dca7f13816397624b95432a30aded4ae, type: 3}
+      propertyPath: transferDetectDistance
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 2814310667035003850, guid: dca7f13816397624b95432a30aded4ae, type: 3}
       propertyPath: target
       value: 
@@ -371206,32 +368034,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 1
-  loopPositionAmount: -1
-  yoyoPosition: 1
-  xPos: 0
-  yPos: 0.25
-  zPos: 0
-  moveDuration: 0
-  animateScale: 1
-  loopScaleAmount: -1
-  yoyoScale: 1
-  xScale: 0.75
-  yScale: 3
-  zScale: 1
-  scaleDuration: 2
+  beatSequenceType: 0
 --- !u!4 &3695406006344639209
 Transform:
   m_ObjectHideFlags: 0
@@ -379166,32 +375974,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 1
   playOnEnable: 1
-  playOnBeat: 0
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 1
-  loopScaleAmount: -1
-  yoyoScale: 1
-  xScale: 1.5
-  yScale: 1.5
-  zScale: 1
-  scaleDuration: 2
+  beatSequenceType: 0
 --- !u!4 &6152400790194324849
 Transform:
   m_ObjectHideFlags: 0
@@ -389471,32 +386259,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playOnStart: 0
   playOnEnable: 0
-  playOnBeat: 1
+  playSequenceOnBeat: 0
   playSequenceOnEnable: 0
   tweenSteps: []
   sequenceLoops: 0
   sequenceLoopType: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1.2
-  yScale: 1.2
-  zScale: 1.2
-  scaleDuration: 0
+  beatSequenceType: 0
 --- !u!1 &8057933830609846789
 GameObject:
   m_ObjectHideFlags: 0
