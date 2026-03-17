@@ -35,21 +35,33 @@ public class CoinManager : MonoBehaviour, IDataPersistence
         } 
     }
 
-    public Action<int> collectiblePickedUp;
-    private int pickupCollectibleCount;
-    public int PickupCollectibleCount
+    public Action<int> clamPickedUp;
+    private int clamCollectibleCount;
+    public int ClamCollectibleCount
     {
-        get => pickupCollectibleCount;
+        get => clamCollectibleCount;
         set
         {
-            pickupCollectibleCount = value;
-            collectiblePickedUp?.Invoke(value);
+            clamCollectibleCount = value;
+            clamPickedUp?.Invoke(value);
+        }
+    }
+
+    public Action<int> buckiePickedUp;
+    private int buckieCollectibleCount;
+    public int BuckieCollectibleCount
+    {
+        get => buckieCollectibleCount;
+        set
+        {
+            buckieCollectibleCount = value;
+            buckiePickedUp?.Invoke(value);
         }
     }
 
     public void LoadData(GameData data)
     {
-        pickupCollectibleCount = data.clamCount;
+        clamCollectibleCount = data.clamCount;
 
         foreach(KeyValuePair<string, bool> pair in data.coinsCollected)
         {
@@ -65,13 +77,14 @@ public class CoinManager : MonoBehaviour, IDataPersistence
     public IEnumerator LateLoadUpdate(GameData data)
     {
         yield return new WaitForSeconds(0.1f);
-        UIManager.Instance.gameInterface.UpdateCollectibleCount(data.clamCount);
+        UIManager.Instance.gameInterface.UpdateClamCount(data.clamCount);
         UIManager.Instance.gameInterface.UpdateCoinCount(pickupCointCount);
+        UIManager.Instance.gameInterface.UpdateBuckieCount(data.buckieCount);
     }
 
     public void SaveData(ref GameData data)
     {
-        data.clamCount = pickupCollectibleCount;
+        data.clamCount = clamCollectibleCount;
     }
 
     public void PickupCoin()
@@ -79,9 +92,14 @@ public class CoinManager : MonoBehaviour, IDataPersistence
         PickupCoinCount++;
     }
 
-    public void PickupCollectible(int addValue)
+    public void PickupClam(int addValue)
     {
-        PickupCollectibleCount += addValue;
+        ClamCollectibleCount += addValue;
+    }
+
+    public void PickupBuckie(int addValue)
+    {
+        BuckieCollectibleCount += addValue;
     }
 
     public void ActivateCoinHolder(string coinName)

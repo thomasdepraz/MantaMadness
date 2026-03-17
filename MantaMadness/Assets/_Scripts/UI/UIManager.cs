@@ -29,6 +29,8 @@ public class UIManager : MonoBehaviour
     public BoostGaugeInterface boostGaugeInterface;
     [HideInInspector]
     public DialogInteractDisplay dialogInteractDisplay;
+    [HideInInspector]
+    public ShopInteractDisplay shopInteractDisplay;
 
     public void ToggleBaseInterface(bool toggle)
     {

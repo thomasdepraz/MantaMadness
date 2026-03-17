@@ -9,6 +9,7 @@ public class GameData
 
     //Currencies Counters
     public int clamCount;
+    public int buckieCount;
     public SerializableDictionnary<string, bool> coinsCollected;
 
     //Checkpoints
@@ -22,6 +23,13 @@ public class GameData
 
     //NPC Dialogs
     public SerializableDictionnary<string, NPCDialogData> npcDialogData;
+
+    //Doors
+    public SerializableDictionnary<string, bool> doorsOpened;
+
+    //Shop Standss
+    public SerializableDictionnary<string, ShopStandData> shopStands;
+
 
     //Player Upgrades Tracking
     public bool doubleJump;
@@ -42,6 +50,7 @@ public class GameData
         GameState = 0;
 
         this.clamCount = 0;
+        this.buckieCount = 0;
         this.gameStartMusic = MUSICS.MUSIC_LEVEL01;
         this.gameStartAmbient = AMBIENT.AMB_BEACH;
         coinsCollected = new SerializableDictionnary<string, bool>();
@@ -49,6 +58,8 @@ public class GameData
         abilityAltars = new SerializableDictionnary<string, bool>();
         npcDialogData = new SerializableDictionnary<string, NPCDialogData>();
         specialPickups = new SerializableDictionnary<string, bool>();
+        doorsOpened = new SerializableDictionnary<string, bool>();
+        shopStands = new SerializableDictionnary<string, ShopStandData>();
 
         doubleJump = false;
         chargeBoost = false;
@@ -57,5 +68,19 @@ public class GameData
         alienAntennas = false;
         grind = false;
         cat = false;
+
+    }
+}
+
+[System.Serializable]
+public class ShopStandData
+{
+    public int renewalCount;
+    public bool disabled;
+
+    public ShopStandData(int renewalCount, bool disabled)
+    {
+        this.renewalCount = renewalCount;
+        this.disabled = disabled;
     }
 }

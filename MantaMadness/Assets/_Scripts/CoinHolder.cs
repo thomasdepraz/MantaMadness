@@ -90,12 +90,12 @@ public class CoinHolder : MonoBehaviour, IDataPersistence
         UIEffectManager.Instance.SpecificAction?.Invoke(UiParticles.CHALLENGE, "Armature_Chad");
         if (hasBeenObtained == false)
         {
-            coin.transform.localScale = Vector3.zero;
+            //coin.transform.localScale = Vector3.zero;
             coin.SetActive(true);
         }
         else
         {
-            greyCoin.transform.localScale = Vector3.zero;
+            //greyCoin.transform.localScale = Vector3.zero;
             greyCoin.SetActive(true);
         }
 

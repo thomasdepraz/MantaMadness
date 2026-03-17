@@ -1,12 +1,14 @@
+using DG.Tweening;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
-using DG.Tweening;
 
 public class FOVController : MonoBehaviour
 {   
     public static FOVController instance;
 
+    [SerializeField] private List<CinemachineCamera> playerCameras = new List<CinemachineCamera>();
 
     public enum FovEffectType
     {
@@ -59,6 +61,11 @@ public class FOVController : MonoBehaviour
         StartCoroutine(InitializeCinemachine());
     }
 
+    bool IsPlayerCamera(CinemachineCamera cam)
+    {
+        return playerCameras.Contains(cam);
+    }
+
     System.Collections.IEnumerator InitializeCinemachine()
     {
         while (Camera.main == null)
@@ -93,17 +100,23 @@ public class FOVController : MonoBehaviour
 
         var cam = brain.ActiveVirtualCamera as CinemachineCamera;
         if (cam == null) return;
-        
-        if(cam != current)
-        {
-            var currentFOV = current.Lens.FieldOfView;
-            current.Lens.FieldOfView = defaultFOV;
 
-            cam.Lens.FieldOfView = currentFOV;
+        if (!IsPlayerCamera(cam))
+            return;
+
+        if (cam != current)
+        {
+            float previousFov = current != null ? current.Lens.FieldOfView : defaultFOV;
+
+            if (current != null)
+                current.Lens.FieldOfView = defaultFOV;
+
+            cam.Lens.FieldOfView = previousFov;
+
             current = cam;
         }
 
-        if(FovEffectRoutine == null)
+        if (FovEffectRoutine == null)
         {
 
             Vector3 horizontalVel = controller.Velocity;
@@ -132,8 +145,13 @@ public class FOVController : MonoBehaviour
 
     public void FOVEffect(FovEffectType type)
     {
-        Debug.Log("FOV EFFECT PASSED");
-        if(FovEffectRoutine == null)
+
+        var cam = brain.ActiveVirtualCamera as CinemachineCamera;
+
+        if (cam == null || !IsPlayerCamera(cam))
+            return;
+
+        if (FovEffectRoutine == null)
         {
             switch (type)
             {

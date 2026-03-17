@@ -23,6 +23,11 @@ public class CinematicManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        //cinematicPlayer.stopped += OnCinematicFinished;
+    }
+
     public void PlayCinematic(TimelineAsset cinematic)
     {
         ResetCam();
@@ -49,5 +54,10 @@ public class CinematicManager : MonoBehaviour
         {
             cam.gameObject.SetActive(false);
         }
+    }
+
+    private void OnCinematicFinished(PlayableDirector director)
+    {
+        EndCinematic();
     }
 }

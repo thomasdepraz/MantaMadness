@@ -1,17 +1,21 @@
 using FMODUnity;
 using System;
-using UnityEngine;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class SpecialPickups : MonoBehaviour, IDataPersistence
 {
-    [SerializeField] private CollisionRelay relay;
+    [SerializeField] private CollectibleRelay relay;
     [SerializeField] private string specialPickupName;
 
     [SerializeField] private GameObject[] visuals;
 
     [SerializeField] private int updateGameStateValue;
+    [SerializeField] private float speed = 0.8f;
+
+    private GameObject player;
 
     [Header("FMOD Sound")]
     public EventReference pickupSound;
@@ -20,6 +24,8 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
     public UiParticles particle;
 
     private bool hasBeenObtained;
+
+    private bool movingTowardtarget = false;
 
     private void Start()
     {
@@ -32,7 +38,7 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
         yield return new WaitForSeconds(0.1f);
         if (relay != null)
         {
-            relay.HitCollision += OnPickup;
+            relay.HitCollision += MoveToTarget;
         }
 
         if (hasBeenObtained == true)
@@ -43,7 +49,18 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
 
     private void OnDisable()
     {
-        relay.HitCollision -= OnPickup;
+        if (relay != null)
+        {
+            relay.HitCollision -= MoveToTarget;
+        }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent(out SimpleController controller))
+        {
+            OnPickup(controller);
+        }
     }
 
     public void LoadData(GameData data)
@@ -66,12 +83,21 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
         RuntimeManager.PlayOneShot(pickupSound, Game.Instance.player.transform.position);
 
         StartCoroutine(VFXSequence());
+
         if (updateGameStateValue > 0)
         {
             Game.Instance.SetGameState(updateGameStateValue);
         }
 
         hasBeenObtained = true;
+
+        //Update save for door check
+        GameData data = DataPersistenceManager.Instance.gameData;
+
+        if (data.specialPickups.ContainsKey(specialPickupName))
+            data.specialPickups[specialPickupName] = true;
+        else
+            data.specialPickups.Add(specialPickupName, true);
 
         DisablePickup();
     }
@@ -88,7 +114,23 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
         {
             visual.SetActive(false);
         }
-        relay.HitCollision -= OnPickup;
         relay.gameObject.SetActive(false);
+    }
+
+    private void FixedUpdate()
+    {
+        if (movingTowardtarget == true && player != null)
+        {
+            transform.position = Vector3.Lerp(transform.position, player.transform.position, speed);
+        }
+    }
+
+    public void MoveToTarget(GameObject target)
+    {
+        if (movingTowardtarget == false)
+        {
+            player = target;
+            movingTowardtarget = true;
+        }
     }
 }

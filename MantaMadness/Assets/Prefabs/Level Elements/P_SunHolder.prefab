@@ -10318,30 +10318,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playOnStart: 0
-  playOnEnable: 1
-  playOnBeat: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 180
-  zRotation: 0
-  rotationDuration: 1
-  animatePosition: 1
-  loopPositionAmount: -1
-  yoyoPosition: 1
-  xPos: 0
-  yPos: 2
-  zPos: 0
-  moveDuration: 1
-  animateScale: 1
-  loopScaleAmount: 1
-  yoyoScale: 1
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0.5
+  playSequenceOnBeat: 0
+  playSequenceOnEnable: 1
+  tweenSteps:
+  - animatePosition: 0
+    animateRotation: 1
+    animateScale: 0
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 0, y: 360, z: 0}
+    rotationUseLocal: 0
+    rotationRelative: 1
+    scale: {x: 0.8, y: 0.8, z: 0.8}
+    scaleRelative: 0
+    duration: 2
+    delay: 0
+    ease: 7
+  sequenceLoops: -1
+  sequenceLoopType: 2
+  beatSequenceType: 0
 --- !u!1 &4164594299891675069
 GameObject:
   m_ObjectHideFlags: 0

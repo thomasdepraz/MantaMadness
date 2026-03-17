@@ -9,7 +9,7 @@ public class Collectible : MonoBehaviour
     private Coroutine routine;
     
     [SerializeField] private CollectibleType type;
-    public enum CollectibleType { normal, super, mega, greyCoin}
+    public enum CollectibleType { normal, super, mega, greyCoin, buckie}
 
     [SerializeField] private CollectibleRelay relay;
 
@@ -18,7 +18,7 @@ public class Collectible : MonoBehaviour
 
     [SerializeField] private float speed = 0.8f;
 
-    private void Start()
+    private void OnEnable()
     {
         if(relay != null)
         {
@@ -27,6 +27,14 @@ public class Collectible : MonoBehaviour
         else
         {
             print("Careful! this clam doesn't have a CollectibleRelay!");
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (relay != null)
+        {
+            relay.HitCollision -= MoveToTarget;
         }
     }
 
@@ -61,21 +69,25 @@ public class Collectible : MonoBehaviour
         {
             case CollectibleType.normal:
                 //Increase coincount
-                CoinManager.Instance.PickupCollectible(1);
+                CoinManager.Instance.PickupClam(1);
                 break;
             case CollectibleType.super:
                 //Increase coincount
-                CoinManager.Instance.PickupCollectible(20);
+                CoinManager.Instance.PickupClam(20);
                 break;
             case CollectibleType.mega:
                 UIManager.Instance.gameInterface.StartCoroutine("pickupMegaClam");
                 //Increase coincount
-                CoinManager.Instance.PickupCollectible(100);
+                CoinManager.Instance.PickupClam(100);
                 break;
             case CollectibleType.greyCoin:
                 UIManager.Instance.gameInterface.StartCoroutine("pickupMegaClam");
                 //Increase coincount
-                CoinManager.Instance.PickupCollectible(100);
+                CoinManager.Instance.PickupClam(100);
+                break;
+            case CollectibleType.buckie:
+                //UIManager.Instance.gameInterface.StartCoroutine("pickupBuckie");
+                CoinManager.Instance.PickupBuckie(1);
                 break;
             default:
                 break;

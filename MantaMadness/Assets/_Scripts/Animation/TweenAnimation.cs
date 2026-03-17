@@ -44,9 +44,6 @@ public enum BeatType
 
 public class TweenAnimation : MonoBehaviour
 {
-
-    public bool playOnStart;
-    public bool playOnEnable;
     public bool playSequenceOnBeat = false;
     public bool playSequenceOnEnable;
 
@@ -166,9 +163,13 @@ public class TweenAnimation : MonoBehaviour
     public void StopTween()
     {
         transform.DOKill(true);
-        transform.localPosition = originalPosition;
-        transform.localRotation = originalRotation;
-        transform.localScale = originalScale;
+
+        if (sequenceLoopType != LoopType.Incremental)
+        {
+            transform.localPosition = originalPosition;
+            transform.localRotation = originalRotation;
+            transform.localScale = originalScale;
+        }
     }
 
     private Sequence currentSequence;
@@ -184,55 +185,41 @@ public class TweenAnimation : MonoBehaviour
 
         foreach (TweenStep step in tweenSteps)
         {
-            Sequence stepSequence = DOTween.Sequence().SetAutoKill(false);
+            if (step.delay > 0)
+                currentSequence.AppendInterval(step.delay);
 
-            // Delay de la step
-            //if (step.delay > 0)
-            //    stepSequence.PrependInterval(step.delay);
+            float tweenDuration = step.duration;
 
-            if (step.animatePosition)
-            {
-                Tween moveTween = step.positionUseLocal
-                    ? transform.DOLocalMove(step.position, step.duration)
-                    : transform.DOMove(step.position, step.duration);
-
-                if (step.positionRelative)
-                    moveTween.SetRelative();
-
-                moveTween.SetEase(step.ease);
-
-                stepSequence.Join(moveTween);
-            }
+            Tween stepTween = null;
 
             if (step.animateRotation)
             {
-                Tween rotateTween = step.rotationUseLocal
-                    ? transform.DOLocalRotate(step.rotation, step.duration)
-                    : transform.DORotate(step.rotation, step.duration);
-
-                if (step.rotationRelative)
-                    rotateTween.SetRelative();
-
-                rotateTween.SetEase(step.ease);
-
-                stepSequence.Join(rotateTween);
+                stepTween = step.rotationUseLocal
+                    ? transform.DOLocalRotate(step.rotation, tweenDuration, RotateMode.FastBeyond360)
+                    : transform.DORotate(step.rotation, tweenDuration, RotateMode.FastBeyond360);
             }
-
-            if (step.animateScale)
+            else if (step.animatePosition)
             {
-                Tween scaleTween = transform.DOScale(step.scale, step.duration);
-
-                if (step.scaleRelative)
-                    scaleTween.SetRelative();
-
-                scaleTween.SetEase(step.ease);
-
-                stepSequence.Join(scaleTween);
+                stepTween = step.positionUseLocal
+                    ? transform.DOLocalMove(step.position, tweenDuration)
+                    : transform.DOMove(step.position, tweenDuration);
             }
-            currentSequence.AppendInterval(step.delay);
-            currentSequence.Append(stepSequence);
-        }
+            else if (step.animateScale)
+            {
+                stepTween = transform.DOScale(step.scale, tweenDuration);
+            }
 
+            if (stepTween != null)
+            {
+                if (step.rotationRelative || step.positionRelative || step.scaleRelative)
+                    stepTween.SetRelative();
+
+                stepTween.SetEase(step.ease);
+
+                // IMPORTANT
+                currentSequence.Append(stepTween);
+            }
+        }
 
         currentSequence.SetLoops(sequenceLoops, sequenceLoopType);
         currentSequence.SetLink(gameObject);
@@ -245,47 +232,58 @@ public class TweenAnimation : MonoBehaviour
 
         TweenStep step = tweenSteps[currentBeatStep];
 
-        float duration = 60f / tempo;
+        float beatDuration = 60f / tempo;
+        float tweenDuration = sequenceLoopType == LoopType.Yoyo ? beatDuration * 0.5f : beatDuration;
 
         if (step.animatePosition)
         {
             Tween moveTween = step.positionUseLocal
-                ? transform.DOLocalMove(step.position, duration)
-                : transform.DOMove(step.position, duration);
+                ? transform.DOLocalMove(step.position, tweenDuration)
+                : transform.DOMove(step.position, tweenDuration);
 
             if (step.positionRelative)
                 moveTween.SetRelative();
 
             moveTween.SetEase(step.ease);
+
+            if (sequenceLoopType == LoopType.Yoyo)
+                moveTween.SetLoops(2, LoopType.Yoyo);
         }
 
         if (step.animateRotation)
         {
             Tween rotateTween = step.rotationUseLocal
-                ? transform.DOLocalRotate(step.rotation, duration)
-                : transform.DORotate(step.rotation, duration);
+                ? transform.DOLocalRotate(step.rotation, tweenDuration, RotateMode.FastBeyond360)
+                : transform.DORotate(step.rotation, tweenDuration, RotateMode.FastBeyond360);
 
             if (step.rotationRelative)
                 rotateTween.SetRelative();
 
             rotateTween.SetEase(step.ease);
+
+            if (sequenceLoopType == LoopType.Yoyo)
+                rotateTween.SetLoops(2, LoopType.Yoyo);
         }
 
         if (step.animateScale)
         {
-            Tween scaleTween = transform.DOScale(step.scale, duration);
+            Tween scaleTween = transform.DOScale(
+                new Vector3(originalScale.x * step.scale.x,
+                            originalScale.y * step.scale.y,
+                            originalScale.z * step.scale.z),
+                tweenDuration);
 
             if (step.scaleRelative)
                 scaleTween.SetRelative();
 
             scaleTween.SetEase(step.ease);
+
+            if (sequenceLoopType == LoopType.Yoyo)
+                scaleTween.SetLoops(2, LoopType.Yoyo);
         }
 
         currentBeatStep++;
-
         if (currentBeatStep >= tweenSteps.Count)
-        {
             currentBeatStep = 0;
-        }
     }
 }

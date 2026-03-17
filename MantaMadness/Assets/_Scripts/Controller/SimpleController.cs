@@ -135,6 +135,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     [Header("Parameters")]
     [SerializeField] public ControllerData controllerData;
     [SerializeField] private LayerMask waterRaycastLayer;
+    [SerializeField] private LayerMask obstacleRaycastLayer;
     [SerializeField] private LayerMask defaultRaycastLayer;
     [SerializeField] private LayerMask targetRaycastLayer;
 
@@ -1077,7 +1078,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     {
         //print(hasResetCam);
 
-        hasHitWater = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit waterInfo, controllerData.hoverRaycastLength, waterRaycastLayer.value);
+        LayerMask waterCheckMask = waterRaycastLayer | obstacleRaycastLayer;
+
+        bool hitSomething = Physics.Raycast(hoverBehaviour.normalContainer.position,-hoverBehaviour.normalContainer.up,out RaycastHit waterInfo,controllerData.hoverRaycastLength,waterCheckMask);
+
+
+        hasHitWater = hitSomething && ((1 << waterInfo.collider.gameObject.layer) & waterRaycastLayer) != 0;
         hasHitWalls = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit defaultInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
         bumpRail = Physics.Raycast(hoverBehaviour.normalContainer.position, hoverBehaviour.normalContainer.forward, out RaycastHit railInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
         stompSweetSpot = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit stompInfo, controllerData.stompCancelRange, defaultRaycastLayer.value);

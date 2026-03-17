@@ -2,6 +2,7 @@
 using FMODUnity;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,20 +10,38 @@ public class CameraTargetDetection : MonoBehaviour
 {
     public static CameraTargetDetection Instance;
 
+    private Transform playerTransform;
+
+    [Header("Jump Target Detection")]
     [SerializeField] private float jumpDetectionRange;
     [SerializeField] private float activationRangeMultiplier = 1.8f;
     [SerializeField] private float approachingRange = 3f;
     [SerializeField] float jumpRangeBuffer =  0.75f;
+
+    [Header("NPC Target Detection")]
     [SerializeField] private float npcDetectionRange;
+
+    [Header("Shop Target Detection")]
+    [SerializeField] private float shopDetectionRange;
+    [SerializeField] private LayerMask shopTargetMask;
+
+    [Header("Parameters")]
     [SerializeField] private float viewAngle;
     [SerializeField] private LayerMask obstacleMask;
     [SerializeField] private LayerMask jumpargetMask;
     [SerializeField] private LayerMask npcTargetMask;
 
+    [Header("Target Lists")]
     [SerializeField] public List<Collider> validJumpTargets = new List<Collider>();
     [SerializeField] public List<Collider> validNPCTargets = new List<Collider>();
+    [SerializeField] public List<Collider> validShopTargets = new List<Collider>();
 
     [SerializeField] private EventReference addTargetSound;
+
+    [SerializeField] private List<CinemachineCamera> playerCameras = new List<CinemachineCamera>();
+
+    private CinemachineBrain brain;
+
 
 
     private void Awake()
@@ -34,24 +53,63 @@ public class CameraTargetDetection : MonoBehaviour
     }
     private void Start()
     {
+        if (playerTransform == null && Game.Instance != null && Game.Instance.player != null)
+            playerTransform = Game.Instance.player.transform;
+
         jumpDetectionRange = Game.Instance.player.controllerData.targetDetectionRadius;
         npcDetectionRange = Game.Instance.player.controllerData.npcInteractionRadius;
+        shopDetectionRange = Game.Instance.player.controllerData.npcInteractionRadius;
+
+        brain = Camera.main.GetComponent<CinemachineBrain>();
         viewAngle = Camera.main.fieldOfView;
     }
 
-    //private void Update()
-    //{
-    //    DetectJumpTargets();
-    //    DetectNPCTargets();
-    //}
     private void LateUpdate()
     {
         Physics.SyncTransforms();
 
         DetectJumpTargets();
         DetectNPCTargets();
+        DetectShopTargets();
     }
 
+    private bool IsPlayerCameraActive()
+    {
+        if (brain == null || brain.ActiveVirtualCamera == null)
+            return true; // fallback safe
+
+        var activeCam = brain.ActiveVirtualCamera as CinemachineCamera;
+        if (activeCam == null)
+            return false;
+
+        return playerCameras.Contains(activeCam);
+    }
+    private float GetCurrentViewAngle()
+    {
+        if (Camera.main != null)
+            return Camera.main.fieldOfView;
+
+        return viewAngle;
+    }
+
+    private Vector3 GetDetectionOrigin()
+{
+    if (playerTransform != null)
+        return playerTransform.position;
+
+    return transform.position;
+}
+
+private Vector3 GetDetectionForward()
+{
+    if (IsPlayerCameraActive() && Camera.main != null)
+        return Camera.main.transform.forward;
+
+    if (playerTransform != null)
+        return playerTransform.forward;
+
+    return transform.forward;
+}
 
     void DetectJumpTargets()
     {
@@ -168,92 +226,183 @@ public class CameraTargetDetection : MonoBehaviour
         }
     }
 
+
+
     void DetectNPCTargets()
     {
-        if ((DialogManager.instance.currentSequence != null))
+        if (DialogManager.instance.currentSequence != null)
         {
             ClearNPCTargets();
             return;
         }
 
-        Collider[] targetsInRange = Physics.OverlapSphere(transform.position, npcDetectionRange, npcTargetMask);
+        bool useCameraLogic = IsPlayerCameraActive();
+
+        Collider[] targetsInRange = Physics.OverlapSphere(GetDetectionOrigin(), npcDetectionRange, npcTargetMask);
 
         for (int i = validNPCTargets.Count - 1; i >= 0; i--)
         {
             Collider npc = validNPCTargets[i];
-            if(npc == null || Vector3.Distance(transform.position, npc.transform.position) > npcDetectionRange || !npc.TryGetComponent<InteractableNPC>(out _))
+
+            if (npc == null ||
+                Vector3.Distance(GetDetectionOrigin(), npc.transform.position) > npcDetectionRange ||
+                !npc.TryGetComponent<InteractableNPC>(out _))
             {
                 validNPCTargets.RemoveAt(i);
-                npc?.GetComponent<InteractableNPC>().DisableVisual();
+                npc?.GetComponent<InteractableNPC>()?.DisableVisual();
                 UIManager.Instance.dialogInteractDisplay.ToggleInterface(false);
-                print(npc + "removed (out of range)");
             }
         }
 
         foreach (Collider target in targetsInRange)
         {
-            Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
-            float distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
+            if (!target.TryGetComponent(out InteractableNPC npc))
+                continue;
 
-            // Vérifie si la cible est dans le champ de vision
-            float angleToTarget = Vector3.Angle(transform.forward, directionToTarget);
+            Vector3 directionToTarget = (target.transform.position - GetDetectionOrigin()).normalized;
+            float distanceToTarget = Vector3.Distance(GetDetectionOrigin(), target.transform.position);
 
+            bool isValid = false;
 
-            if (angleToTarget < viewAngle / 2f) // Si dans le FOV
+            if (useCameraLogic)
             {
-                Debug.Log("NPCs in range: " + targetsInRange.Length);
-
-                RaycastHit hit;
+                float currentViewAngle = GetCurrentViewAngle();
+                float angleToTarget = Vector3.Angle(GetDetectionForward(), directionToTarget);
+                bool inFOV = angleToTarget < currentViewAngle / 2f;
                 bool blocked = Physics.Raycast(
-                    transform.position,
+                    GetDetectionOrigin(),
                     directionToTarget,
-                    out hit,
                     distanceToTarget,
                     obstacleMask,
                     QueryTriggerInteraction.Ignore);
 
+                isValid = inFOV && !blocked;
+            }
+            else
+            {
+                // fallback : uniquement la distance
+                // tu peux ajouter blocked si tu veux
+                bool blocked = Physics.Raycast(
+                    GetDetectionOrigin(),
+                    directionToTarget,
+                    distanceToTarget,
+                    obstacleMask,
+                    QueryTriggerInteraction.Ignore);
 
-                if (blocked)
+                isValid = !blocked; // ou juste true si tu veux vraiment "distance only"
+            }
+
+            if (isValid)
+            {
+                if (!validNPCTargets.Contains(target))
                 {
-                    Debug.Log("BLOCKED BY: " + hit.collider.name + " | layer: " + hit.collider.gameObject.layer);
-                }
-                // Vérifie qu’aucun obstacle ne bloque la vue
-                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleMask, QueryTriggerInteraction.Ignore))
-                {
-                    //Add to list
-                    //Debug.Log("Objet VISIBLE : " + target.name);
-                    if (!validNPCTargets.Contains(target))
-                    {
-                        validNPCTargets.Add(target);
-                        target.GetComponent<InteractableNPC>().EnableVisual();
-                        UIManager.Instance.dialogInteractDisplay.ToggleInterface(true);
-                        print(target + "Has been added");
-                    }
-                }
-                else
-                {
-                    //Remove from list
-                    //Debug.Log("Objet CACHÉ : " + target.name);
-                    if (validNPCTargets.Contains(target))
-                    {
-                        validNPCTargets.Remove(target);
-                        target.GetComponent<InteractableNPC>().DisableVisual();
-                        UIManager.Instance.dialogInteractDisplay.ToggleInterface(false);
-                        print(target + "Has been removed");
-                    }
+                    validNPCTargets.Add(target);
+                    npc.EnableVisual();
+                    UIManager.Instance.dialogInteractDisplay.ToggleInterface(true);
                 }
             }
             else
             {
-                //Debug.Log(target.name + "is in range but not in view");
                 if (validNPCTargets.Contains(target))
                 {
                     validNPCTargets.Remove(target);
-                    target.GetComponent<InteractableNPC>().DisableVisual();
+                    npc.DisableVisual();
                     UIManager.Instance.dialogInteractDisplay.ToggleInterface(false);
-                    print(target + "Has been removed");
                 }
             }
+        }
+    }
+
+    void DetectShopTargets()
+    {
+        if (validNPCTargets.Count > 0) return;
+
+        bool useCameraLogic = IsPlayerCameraActive();
+
+        Collider[] targetsInRange = Physics.OverlapSphere(
+            GetDetectionOrigin(),
+            shopDetectionRange,
+            shopTargetMask);
+
+        ShopStand bestShop = null;
+        Collider bestCollider = null;
+
+        float bestScore = float.MaxValue;
+
+        foreach (Collider target in targetsInRange)
+        {
+            if (!target.TryGetComponent(out ShopStand shop)) continue;
+            if (!shop.IsActive) continue;
+
+            Vector3 directionToTarget = (target.transform.position - GetDetectionOrigin()).normalized;
+            float distanceToTarget = Vector3.Distance(GetDetectionOrigin(), target.transform.position);
+
+            bool blocked = Physics.Raycast(
+                GetDetectionOrigin(),
+                directionToTarget,
+                distanceToTarget,
+                obstacleMask,
+                QueryTriggerInteraction.Ignore);
+
+            if (blocked) continue;
+
+            if (useCameraLogic)
+            {
+                float angleToTarget = Vector3.Angle(GetDetectionForward(), directionToTarget);
+                if (angleToTarget > viewAngle / 2f) continue;
+
+                // priorité au plus centré
+                if (angleToTarget < bestScore)
+                {
+                    bestScore = angleToTarget;
+                    bestShop = shop;
+                    bestCollider = target;
+                }
+            }
+            else
+            {
+                // fallback : priorité au plus proche
+                if (distanceToTarget < bestScore)
+                {
+                    bestScore = distanceToTarget;
+                    bestShop = shop;
+                    bestCollider = target;
+                }
+            }
+        }
+
+        if (bestShop == null)
+        {
+            if (validShopTargets.Count > 0)
+            {
+                foreach (var col in validShopTargets)
+                {
+                    if (col != null && col.TryGetComponent(out ShopStand shop))
+                        shop.ShopIndicatorToggle(false);
+                }
+
+                validShopTargets.Clear();
+                UIManager.Instance.shopInteractDisplay.ClearShop();
+            }
+
+            return;
+        }
+
+        if (validShopTargets.Count == 0 || validShopTargets[0] != bestCollider)
+        {
+            // désactive les anciens indicators
+            foreach (var col in validShopTargets)
+            {
+                if (col != null && col.TryGetComponent(out ShopStand oldShop))
+                    oldShop.ShopIndicatorToggle(false);
+            }
+
+            validShopTargets.Clear();
+            validShopTargets.Add(bestCollider);
+
+            bestShop.ShopIndicatorToggle(true);
+
+            UIManager.Instance.shopInteractDisplay.ShowShop(bestShop);
         }
     }
 

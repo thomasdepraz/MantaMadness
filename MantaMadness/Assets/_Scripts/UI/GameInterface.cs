@@ -16,6 +16,7 @@ public class GameInterface : MonoBehaviour, IScreen
     [Header("UI Ressources Parameters")]
     public TextMeshProUGUI coinText;
     public TextMeshProUGUI clamText;
+    public TextMeshProUGUI buckieText;
 
     [Header("Sun Overlay Parameters")]
     public Image sunImage;
@@ -67,7 +68,8 @@ public class GameInterface : MonoBehaviour, IScreen
         CameraManager.Instance.AddCameraToStack(uiCamera);
 
         CoinManager.Instance.coinPickedUp += UpdateCoinCount;
-        CoinManager.Instance.collectiblePickedUp += UpdateCollectibleCount;
+        CoinManager.Instance.buckiePickedUp += UpdateBuckieCount;
+        CoinManager.Instance.clamPickedUp += UpdateClamCount;
         coinText.text = CoinManager.Instance.PickupCoinCount.ToString();
         ComboManager.Instance.OnComboLevelChanged += SunComboBehavior;
         MusicManager.OnBeat += SunOnBeatFever;
@@ -93,7 +95,8 @@ public class GameInterface : MonoBehaviour, IScreen
     private void OnDestroy()
     {
         CoinManager.Instance.coinPickedUp -= UpdateCoinCount;
-        CoinManager.Instance.collectiblePickedUp -= UpdateCollectibleCount;
+        CoinManager.Instance.buckiePickedUp -= UpdateBuckieCount;
+        CoinManager.Instance.clamPickedUp -= UpdateClamCount;
         ComboManager.Instance.OnComboLevelChanged -= SunComboBehavior;
         MusicManager.OnBeat -= SunOnBeatFever;
         MusicManager.OnBeat2 -= SunOnBeat;
@@ -106,12 +109,29 @@ public class GameInterface : MonoBehaviour, IScreen
         sunImage?.transform.DOPunchScale(Vector3.one, 1, 5);
     }
 
-    public void UpdateCollectibleCount(int collectibleCount)
+    public void UpdateClamCount(int clamCount)
     {
-        clamText.text = collectibleCount.ToString();
+        clamText.text = clamCount.ToString();
+    }
+
+    public void UpdateBuckieCount(int buckieCount)
+    {
+        buckieText.text = buckieCount.ToString();
     }
 
     public void toggleSunOverlay(bool toggleValue)
+    {
+        if (toggleValue == false)
+        {
+            sunImage.enabled = false;
+        }
+        else
+        {
+            sunImage.enabled = true;
+        }
+    }
+
+    public void toggleSunInterface(bool toggleValue)
     {
         if (toggleValue == false)
         {
