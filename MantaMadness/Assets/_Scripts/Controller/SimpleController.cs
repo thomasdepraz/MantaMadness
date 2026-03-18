@@ -2139,6 +2139,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             State = ControllerState.SURFING;
             ComboManager.Instance.SetComboTimerFrozen(false);
 
+            if (disableCollisionRoutine == null)
+            {
+                disableCollisionRoutine = StartCoroutine(DisableCollisionTemporarily(0.15f));
+            }
+
             if (context.action.name == InputManager.Instance.strafLeft.action.name)
             {
                 rb.linearVelocity = Vector3.zero;
@@ -2613,10 +2618,30 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         straf?.Invoke();
 
+        StartCoroutine(DisableCollisionTemporarily(0.15f));
+
         yield return new WaitForSeconds(0.25f);
 
         railDetector.ResetTransferPreview();
         EnterRail(targetRail);
+    }
+
+    private Coroutine disableCollisionRoutine;
+
+    private IEnumerator DisableCollisionTemporarily(float duration)
+    {
+
+        Collider col = GetComponent<Collider>();
+
+        if (col != null)
+            col.enabled = false;
+
+        yield return new WaitForSeconds(duration);
+
+        if (col != null)
+            col.enabled = true;
+
+        disableCollisionRoutine = null;
     }
 
     #region ActionWindows

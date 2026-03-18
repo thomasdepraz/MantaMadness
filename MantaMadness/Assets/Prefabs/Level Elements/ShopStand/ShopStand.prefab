@@ -180,7 +180,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -350,8 +350,8 @@ Transform:
   m_GameObject: {fileID: 3939902300582944846}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.103, y: 0.417, z: 0.018}
-  m_LocalScale: {x: 0.33333337, y: 0.33333337, z: 0.33333337}
+  m_LocalPosition: {x: 0.103, y: 0.417, z: 0.074}
+  m_LocalScale: {x: 0.33333337, y: 0.33333337, z: 0.18434002}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5567908683385124013}
@@ -420,6 +420,7 @@ GameObject:
   - component: {fileID: 4325331082441619855}
   - component: {fileID: 840328316084581930}
   - component: {fileID: 3192354424223466208}
+  - component: {fileID: 1879103668112778376}
   m_Layer: 0
   m_Name: Shop
   m_TagString: Untagged
@@ -496,6 +497,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &1879103668112778376
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3984974421127537461}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -1359189856529635300, guid: 474d27bc06284174a95bb477d03e57f9, type: 3}
 --- !u!1 &4107342320293253049
 GameObject:
   m_ObjectHideFlags: 0
@@ -610,6 +633,7 @@ GameObject:
   - component: {fileID: 310868703257197180}
   - component: {fileID: 5193673927494302071}
   - component: {fileID: 6749808453881380305}
+  - component: {fileID: 8840746660258885078}
   m_Layer: 0
   m_Name: Cube.058
   m_TagString: Untagged
@@ -686,6 +710,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &8840746660258885078
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4510911019075992011}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4224634350726116895, guid: 474d27bc06284174a95bb477d03e57f9, type: 3}
 --- !u!1 &5264831208246435117
 GameObject:
   m_ObjectHideFlags: 0
@@ -964,7 +1010,7 @@ Transform:
   m_GameObject: {fileID: 7669298730667406226}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 8.35, y: 0, z: 7.15}
+  m_LocalPosition: {x: 3.03, y: 1.34, z: 12.19}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -981,6 +1027,7 @@ GameObject:
   - component: {fileID: 4283888646419001975}
   - component: {fileID: 7471703308714576342}
   - component: {fileID: 6399276139310800754}
+  - component: {fileID: 5723447125224651420}
   m_Layer: 0
   m_Name: Cube.059
   m_TagString: Untagged
@@ -1056,6 +1103,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &5723447125224651420
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8946372502881237708}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2329056047041703686, guid: 474d27bc06284174a95bb477d03e57f9, type: 3}
 --- !u!1001 &5390692274185622342
 PrefabInstance:
   m_ObjectHideFlags: 0
