@@ -21,6 +21,15 @@ public enum PlayerActionFMOD
     CAT,
     EXPLOSION,
     STOMPJUMP,
+    SPIN,
+    SPINCHARGED,
+    GALAXYSPIN,
+    GRINDRAILDASH,
+    JUMPTORNADO,
+    LEDGEGRAB,
+    DIVESTART,
+    DIVE,
+    DIVELAND,
 }
 
 public enum PlayerRailGrindType

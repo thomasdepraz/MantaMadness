@@ -616,30 +616,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playOnStart: 0
-  playOnEnable: 1
-  playOnBeat: 0
-  animateRotation: 1
-  loopRotationAmount: 2
-  yoyoRotation: 1
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 1
-  loopScaleAmount: 2
-  yoyoScale: 1
-  xScale: 1
-  yScale: 3
-  zScale: 1
-  scaleDuration: 0.25
+  playSequenceOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
+  beatSequenceType: 0
 --- !u!1 &2707589151247276337
 GameObject:
   m_ObjectHideFlags: 0
@@ -868,30 +850,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playOnStart: 1
-  playOnEnable: 1
-  playOnBeat: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 1
-  xRotation: 12
-  yRotation: 40
-  zRotation: 0
-  rotationDuration: 6
-  animatePosition: 1
-  loopPositionAmount: -1
-  yoyoPosition: 1
-  xPos: 0
-  yPos: 1
-  zPos: 0
-  moveDuration: 1.5
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  playSequenceOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
+  beatSequenceType: 0
 --- !u!1 &6276117588097001848
 GameObject:
   m_ObjectHideFlags: 0
@@ -5941,11 +5905,11 @@ MonoBehaviour:
   particle: {fileID: 5242652565189711218}
   soundToPlay:
     Guid:
-      Data1: 688764739
-      Data2: 1253163660
-      Data3: 1499697821
-      Data4: -963320407
-    Path: event:/Sfx/InGame/Stingers/Stinger_BigButton_Press
+      Data1: -381439788
+      Data2: 1182214546
+      Data3: -968279377
+      Data4: 54469832
+    Path: event:/Sfx/InGame/Stingers/Stinger_Checkpoint
 --- !u!65 &8579140930801669853
 BoxCollider:
   m_ObjectHideFlags: 0

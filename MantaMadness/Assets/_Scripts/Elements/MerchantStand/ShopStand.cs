@@ -1,8 +1,6 @@
 using FMODUnity;
 using System;
-using System.Collections;
 using TMPro;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.UI;
 

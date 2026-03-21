@@ -7,20 +7,20 @@ using UnityEngine;
 
 public class Destructible : MonoBehaviour
 {
-    [SerializeField] private GameObject visual;
-    [SerializeField] private GameObject remain;
-    [SerializeField] private ParticleSystem particle;
-    [SerializeField] private ParticleSystem ImpactParticle;
-    [SerializeField] private DestructibleCollisionRelay hitbox;
-    [SerializeField] private int clamNumber;
-    [SerializeField] private GameObject clam;
-    [SerializeField] private bool hard = false;
-    [SerializeField] private EventReference destructionSFX;
+    [SerializeField] protected GameObject visual;
+    [SerializeField] protected GameObject remain;
+    [SerializeField] protected ParticleSystem particle;
+    [SerializeField] protected ParticleSystem ImpactParticle;
+    [SerializeField] protected DestructibleCollisionRelay hitbox;
+    [SerializeField] protected int clamNumber;
+    [SerializeField] protected GameObject clam;
+    [SerializeField] protected bool hard = false;
+    [SerializeField] protected EventReference destructionSFX;
 
-    private bool isBroken = false;
+    protected bool isBroken = false;
 
 
-    private void Start()
+    public virtual void Start()
     {
         if (visual.activeSelf == false)
             visual.SetActive(true);
@@ -32,17 +32,17 @@ public class Destructible : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    public virtual void OnEnable()
     {
         hitbox.HitCollision += StartDestruction;
     }
 
-    private void OnDisable()
+    public virtual void OnDisable()
     {
         hitbox.HitCollision -= StartDestruction;
     }
 
-    void StartDestruction(Vector3 point)
+    public virtual void StartDestruction(Vector3 point)
     {
         if (isBroken == false)
         {
@@ -50,7 +50,7 @@ public class Destructible : MonoBehaviour
         }
     }
 
-    private IEnumerator DestructionRoutine(Vector3 point)
+    public virtual IEnumerator DestructionRoutine(Vector3 point)
     {
         //HITSTOP
         ImpactParticle.transform.position = point;

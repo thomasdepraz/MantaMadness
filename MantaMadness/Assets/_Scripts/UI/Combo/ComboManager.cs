@@ -1,4 +1,4 @@
-using NUnit.Framework;
+using FMODUnity;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +30,8 @@ public class ComboManager : MonoBehaviour
     [SerializeField] float mainDuration = 5f;
     [SerializeField] float bonusDuration = 2f;
     [SerializeField] float bonusStartThreshold = 0.25f;
+
+    [SerializeField] private EventReference feverStinger;
 
     float mainTimer;
     float bonusTimer;
@@ -255,6 +257,8 @@ public class ComboManager : MonoBehaviour
     void StartFever()
     {
         ChangeState(ComboState.Fever);
+
+        RuntimeManager.PlayOneShot(feverStinger, Camera.main.transform.position);
 
         if (useSeparateFeverDuration)
         {

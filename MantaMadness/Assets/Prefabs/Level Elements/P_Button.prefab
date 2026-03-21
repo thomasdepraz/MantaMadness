@@ -201,9 +201,16 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   objectsToActivate: []
-  tweenToActivate: {fileID: 2194009648504851837}
+  objectsToDeactivate: []
   buttonMesh: {fileID: 6973788603658131517}
   activatedMaterial: {fileID: 2100000, guid: 5b7e5d7ec9e7528428cd05e6e7f1eef7, type: 2}
+  buttonStinger:
+    Guid:
+      Data1: 688764739
+      Data2: 1253163660
+      Data3: 1499697821
+      Data4: -963320407
+    Path: event:/Sfx/InGame/Stingers/Stinger_BigButton_Press
 --- !u!65 &6678640303820843876
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -325,29 +332,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playOnStart: 0
-  playOnEnable: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 1
-  loopPositionAmount: 2
-  yoyoPosition: 1
-  xPos: 0
-  yPos: -0.25
-  zPos: 0
-  moveDuration: 0.25
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  playSequenceOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
+  beatSequenceType: 0
 --- !u!1 &8603590325798772826
 GameObject:
   m_ObjectHideFlags: 0

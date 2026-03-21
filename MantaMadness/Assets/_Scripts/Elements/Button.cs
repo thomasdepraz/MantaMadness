@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Cinemachine;
 using System.Collections;
+using FMODUnity;
 
 public class Button : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class Button : MonoBehaviour
 
     public MeshRenderer buttonMesh;
     public Material activatedMaterial;
+
+    public EventReference buttonStinger;
 
     private void Start()
     {
@@ -51,6 +54,8 @@ public class Button : MonoBehaviour
     {
         isActivated = true;
         buttonMesh.material = activatedMaterial;
+
+        RuntimeManager.PlayOneShot(buttonStinger, Camera.main.transform.position);
 
         yield return new WaitForSeconds(0.75f);
 

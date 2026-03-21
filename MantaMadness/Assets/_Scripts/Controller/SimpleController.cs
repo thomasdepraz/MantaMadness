@@ -875,7 +875,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 if (State == ControllerState.SURFING)
                 {
                         //ENABLE strafHitbox
-                        
+                        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.GRINDRAILDASH);    
+
                         if (context.action.name == InputManager.Instance.strafLeft.action.name)
                         {
                             rb.linearVelocity = Vector3.zero;
@@ -930,10 +931,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         rb.linearVelocity = Vector3.zero;
         rb.AddForce(hoverBehaviour.normalContainer.up * controllerData.stompUpForce, ForceMode.VelocityChange);
         triggerAnim.Invoke("StompCharge");
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DIVESTART);
         fallTime = 0f;
         StartStompBuildup();
         yield return new WaitUntil(() => stompBuildupWindowEnded);
         FOVController.instance.FOVEffect(FOVController.FovEffectType.STOMP);
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DIVE);
         triggerAnim.Invoke("Stomp");
         //afterImageEffect.Invoke(controllerData.stompAfterImageEffectTime);
         rb.linearVelocity = Vector3.zero;
@@ -1121,8 +1124,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                     spinCharged?.Invoke(true);
                     togglePlayerBlinkMat.Invoke(true, 25f);
 
-                    PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
-                    PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGEDBOOST);
+                    //PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.SPIN);
+                    PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.SPINCHARGED);
                 }
             }
 
@@ -1228,8 +1231,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                     hasSpinBoost = true;
                     spinCharged?.Invoke(true);
                     togglePlayerBlinkMat.Invoke(true, 25f);
-                    PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
-                    PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGEDBOOST);
+                    //PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.SPIN);
+                    PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.SPINCHARGED);
                 }
             }
         }
@@ -1528,6 +1531,20 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         {
             rb.linearDamping = 1;
             return;
+        }
+
+        if (Physics.SphereCast(transform.position + Vector3.up * 0.5f, 0.4f, direction, out RaycastHit hit, 1f, defaultRaycastLayer))
+        {
+            if(jumpRoutine == null)
+            {
+                float dodot = Vector3.Dot(direction, -hit.normal);
+
+                if (dodot > 0.2f)
+                {
+                    State = ControllerState.FALLING;
+                    return;
+                }
+            }
         }
 
         rb.linearDamping = 0;
@@ -2133,6 +2150,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
             exitRail.Invoke();
             PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GRINDRAIL);
+            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.GRINDRAILDASH);
             railDetector.ExitRail();
             disableBoolAnim("Grind");
 
@@ -2173,6 +2191,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if(stompRoutine != null)
         {
             StopCoroutine(stompRoutine);
+            PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.DIVE);
             stompRoutine = null;
         }
     }
@@ -2200,7 +2219,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 actionDelayRoutine = StartCoroutine(ActionDelay());
                 isSpinning = true;
                 spinStart?.Invoke();
-                PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGINGBOOST);
+                PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.SPIN);
             }
         }
         else if(state == ControllerState.FALLING)
@@ -2212,7 +2231,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 hasAirSpin = true;
                 isSpinning = true;
                 spinStart?.Invoke();
-                PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGINGBOOST);
+                PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.SPIN);
 
                 rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
                 Vector3 force = (NormalContainer.up * controllerData.bumpForce) + (direction * controllerData.forwardImpulseForce);       
@@ -2241,7 +2260,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         isSuperSpinning = true;
         isSpinning = false;
         superSpinStart?.Invoke();
-        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGINGBOOST);
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.GALAXYSPIN);
+        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.SPIN);
     }
 
     private bool canceledByAction;
@@ -2318,8 +2338,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             togglePlayerBlinkMat.Invoke(false, 25f);
         }
 
-        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGEDBOOST);
-        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
+        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.SPIN);
+        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GALAXYSPIN);
+        //PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
 
         isSuperSpinning = false;
     }
@@ -2421,7 +2442,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         hasRailSpinBoost = false;
 
         spinStart?.Invoke();
-        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGINGBOOST);
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.SPIN);
     }
 
     private void ReleaseRailSpin()
@@ -2449,8 +2470,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         togglePlayerBlinkMat.Invoke(false, 25f);
 
-        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGEDBOOST);
-        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
+        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.SPIN);
+        //PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
     }
 
     private void EnterLedgeGrab(Vector3 point, Vector3 normal)
@@ -2482,7 +2503,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         lastLedgeGrabTime = Time.time;
 
-        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.BUMP);
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.LEDGEGRAB);
 
         triggerAnim?.Invoke("LedgeGrab");
     }
@@ -2600,6 +2621,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         disableBoolAnim("Grind");
         PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GRINDRAIL);
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.GRINDRAILDASH);
 
         State = ControllerState.SURFING;
 
@@ -2618,6 +2640,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         straf?.Invoke();
 
+        StartCoroutine(DisableCollisionTemporarily(0.15f));
         StartCoroutine(DisableCollisionTemporarily(0.15f));
 
         yield return new WaitForSeconds(0.25f);
@@ -2682,8 +2705,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             //VFX dans manta visual
             actionWindowActive?.Invoke(stompWindow.Type);
 
-            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.BUMP);
-
             actionWindowLocked = true;
 
             superSpinOnLand = isSuperSpinning;
@@ -2691,6 +2712,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             FOVController.instance.FOVEffect(FOVController.FovEffectType.STOMPLAND);
 
             MantaVisuals.instance.AlignToCamForward();
+
+            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DIVELAND);
+            PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.DIVE);
 
             if (isSuperSpinning)
             {
@@ -2807,7 +2831,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                         isSpinning = true;
                         spinStart?.Invoke();
                         triggerAnim.Invoke("Spin");
-                        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.CHARGINGBOOST);
+                        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.SPIN);
 
                         rb.linearVelocity = new Vector3(rb.linearVelocity.x / 2, 0, rb.linearVelocity.z / 2);
 
@@ -2847,4 +2871,16 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     }
     #endregion
     #endregion
+
+    public void DebugUnlockAbilities()
+    {
+        doubleJumpAbility = true;
+        chargeBoostAbility = true;
+        stompAbility = true;
+        lavaResistanceAbility = true;
+        alienAntennasAbility = true;
+        grindAbility = true;
+        catAbility = true;
+        updateEquipmentVisual?.Invoke();
+    }
 }

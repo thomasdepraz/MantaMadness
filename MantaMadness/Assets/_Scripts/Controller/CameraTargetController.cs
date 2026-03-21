@@ -314,4 +314,9 @@ public class CameraTargetController : MonoBehaviour
             }
         }
     }
+
+    public void ToggleDebugMod()
+    {
+        Cursor.lockState = CursorLockMode.None;
+    }
 }
