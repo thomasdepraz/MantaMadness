@@ -88,4 +88,10 @@ public class Destructible : MonoBehaviour
         //END
         yield return null;
     }
+
+    public virtual void DisableDestructible()
+    {
+        Debug.Log("Bha bonhomme ca va pas ?");
+        visual.SetActive(false);
+    }
 }

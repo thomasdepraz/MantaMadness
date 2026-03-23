@@ -30,6 +30,8 @@ public class GameData
     //Shop Standss
     public SerializableDictionnary<string, ShopStandData> shopStands;
 
+    //Temple Door Statue
+    public SerializableDictionnary<TempleStatueType, bool> templeStatue;
 
     //Player Upgrades Tracking
     public bool doubleJump;
@@ -60,6 +62,7 @@ public class GameData
         specialPickups = new SerializableDictionnary<string, bool>();
         doorsOpened = new SerializableDictionnary<string, bool>();
         shopStands = new SerializableDictionnary<string, ShopStandData>();
+        templeStatue = new SerializableDictionnary<TempleStatueType, bool>();
 
         doubleJump = false;
         chargeBoost = false;
