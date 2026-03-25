@@ -36,6 +36,7 @@ public enum ComboID
     RailStyle,
     SuperRailStyle,
     RailEnter,
+    DynamoJump,
 
 }
 

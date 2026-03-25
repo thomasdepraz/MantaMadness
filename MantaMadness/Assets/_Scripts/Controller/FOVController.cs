@@ -20,6 +20,7 @@ public class FOVController : MonoBehaviour
         BOOST,
         SUPERBOOST,
         STOMPLAND,
+        ELECTRICJUMP,
     }
 
 
@@ -38,6 +39,7 @@ public class FOVController : MonoBehaviour
     private SimpleController controller;
     private bool initialized = false;
 
+    private float currentEffectTargetFov = 0f;
     private void Awake()
     {
         if(instance == null)
@@ -151,28 +153,54 @@ public class FOVController : MonoBehaviour
         if (cam == null || !IsPlayerCamera(cam))
             return;
 
-        if (FovEffectRoutine == null)
-        {
-            switch (type)
-            {
-                case FovEffectType.EXPLOSIF:
-                    FovEffectRoutine = StartCoroutine(FovEffectCoroutine(120, 1.2f));
-                    break;
-                case FovEffectType.STOMP:
-                    FovEffectRoutine = StartCoroutine(FovEffectCoroutine(90, 0.5f));
-                    break;
-                case FovEffectType.BOOST:
-                    FovEffectRoutine = StartCoroutine(FovEffectCoroutine(120, 1.5f));
-                    break;
-                case FovEffectType.SUPERBOOST:
-                    FovEffectRoutine = StartCoroutine(FovEffectCoroutine(150, 1.5f));
-                    break;
-                case FovEffectType.STOMPLAND:
-                    FovEffectRoutine = StartCoroutine(FovEffectCoroutine(30, 0.5f));
-                    break;
+        float targetFov = defaultFOV;
+        float duration = 1f;
 
-            }
+        switch (type)
+        {
+            case FovEffectType.EXPLOSIF:
+                targetFov = 120;
+                duration = 1.2f;
+                break;
+
+            case FovEffectType.STOMP:
+                targetFov = 90;
+                duration = 0.5f;
+                break;
+
+            case FovEffectType.BOOST:
+                targetFov = 120;
+                duration = 1.5f;
+                break;
+
+            case FovEffectType.SUPERBOOST:
+                targetFov = 150;
+                duration = 1.5f;
+                break;
+
+            case FovEffectType.STOMPLAND:
+                targetFov = 30;
+                duration = 0.5f;
+                break;
+
+            case FovEffectType.ELECTRICJUMP:
+                targetFov = 150;
+                duration = 1f;
+                break;
         }
+
+        if (FovEffectRoutine != null && targetFov <= currentEffectTargetFov)
+            return;
+
+        // Sinon on écrase l'effet
+        if (FovEffectRoutine != null)
+        {
+            StopCoroutine(FovEffectRoutine);
+            activeTween?.Kill();
+        }
+
+        currentEffectTargetFov = targetFov;
+        FovEffectRoutine = StartCoroutine(FovEffectCoroutine(targetFov, duration));
     }
 
     private Coroutine FovEffectRoutine;
@@ -206,6 +234,7 @@ public class FOVController : MonoBehaviour
 
         yield return activeTween.WaitForCompletion();
 
+        currentEffectTargetFov = 0f;
         activeTween = null;
         FovEffectRoutine = null;
     }

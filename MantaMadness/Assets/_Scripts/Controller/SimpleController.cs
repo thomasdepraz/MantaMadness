@@ -20,6 +20,7 @@ public enum ControllerState
     BUMP,
     RAIL,
     LEDGEGRAB,
+    ELECTRICJUMP,
 }
 
 public enum ControllerAbility
@@ -31,6 +32,7 @@ public enum ControllerAbility
     ALIEN,
     GRIND,
     CAT,
+    DYNAMO,
 }
 
 public enum ActionWindowType
@@ -128,6 +130,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public StyleBehaviour styleBehaviour;
     [SerializeField]
     public SpinBehavior spinBehaviour;
+    [SerializeField]
+    public ElectricBehaviour electricBehaviour;
 
     private ControllerStats stats;
     private RailDetector railDetector;
@@ -138,6 +142,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     [SerializeField] private LayerMask obstacleRaycastLayer;
     [SerializeField] private LayerMask defaultRaycastLayer;
     [SerializeField] private LayerMask targetRaycastLayer;
+    [SerializeField] private LayerMask metalLayer;
 
     [Header("Player Abilities")]
     [SerializeField] public bool doubleJumpAbility { get; private set; }
@@ -147,6 +152,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     [SerializeField] public bool alienAntennasAbility { get; private set; }
     [SerializeField] public bool grindAbility { get; private set; }
     [SerializeField] public bool catAbility { get; private set; }
+    [SerializeField] public bool dynamoAbility { get; private set; }
 
     [Header("Ledge Grab")]
     [SerializeField] private float ledgeHeight = 1.5f;
@@ -186,7 +192,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public bool OnRail => currentRail != null;
     public bool OnWaterFall => currentWaterFall != null;
     public bool IsLocked => OnRail || InAirRail || forceLocked;
-    public bool IsSpinning => isSpinning || isRailSpinning || isSuperSpinning;
+    public bool IsSpinning => isSpinning || isRailSpinning || isSuperSpinning || ForcedSpin;
     public Rail CurrentRail => currentRail;
 
     private bool CanDrift => HorizontalVelocity.sqrMagnitude > controllerData.minSpeedToDrift * controllerData.minSpeedToDrift;
@@ -195,6 +201,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                             currentDashTime > controllerData.dashTimer && 
                             (Time.time - lastDashTimestamp) > controllerData.styleCooldown;
     private bool hasResetCam => (State == ControllerState.SURFING && IsDrifting);
+
+    public bool ForcedSpin { get; private set; }
 
     public int ConsecutiveDashCount => consecutiveDashCount;
     private Transform NormalContainer => hoverBehaviour.normalContainer;
@@ -358,7 +366,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         //Components Setup
         hoverBehaviour.Initialize(controllerData, rb);
         styleBehaviour.Initialize(controllerData);
-        updateEquipmentVisual.Invoke();
+        updateEquipmentVisual?.Invoke();
     }
 
     private void OnDisable()
@@ -378,6 +386,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         inputs.jump.action.performed -= JumpOutOfRail;
         inputs.spin.action.started -= Spin;
         inputs.spin.action.canceled -= InputSpinRelease;
+
+        SetMetalCollision(true);
     }
 
     public void LoadData(GameData data)
@@ -389,6 +399,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         alienAntennasAbility = data.alienAntennas;
         grindAbility = data.grind;
         catAbility = data.cat;
+        dynamoAbility = data.dynamo;
     }
 
     public void SaveData(ref GameData data)
@@ -400,6 +411,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         data.alienAntennas = alienAntennasAbility;
         data.grind = grindAbility;
         data.cat = catAbility;
+        data.dynamo = dynamoAbility;
     }
 
     private void StyleDash(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -569,6 +581,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                     //Default in - air jump
                     if (jumpCount <= 1)
                     {
+                        if (electricBehaviour != null && electricBehaviour.IsCharged)
+                        {
+                            ElectricJump();
+                            return;
+                        }
+
                         AirDash(controllerData.doubleJumpForwardForce, controllerData.doubleJumpUpForce);
                     }
                 }
@@ -1068,6 +1086,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             }
         }
 
+        if(electricBehaviour != null)
+        {
+            electricBehaviour.Tick(IsSpinning, dynamoAbility, transform.position);
+        }
+
     }
 
     bool hasHitWater = false;
@@ -1090,6 +1113,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         hasHitWalls = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit defaultInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
         bumpRail = Physics.Raycast(hoverBehaviour.normalContainer.position, hoverBehaviour.normalContainer.forward, out RaycastHit railInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
         stompSweetSpot = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit stompInfo, controllerData.stompCancelRange, defaultRaycastLayer.value);
+
+        if (State == ControllerState.ELECTRICJUMP)
+        {
+            return;
+        }
 
         if (State != ControllerState.SURFING)
         {
@@ -1993,6 +2021,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         transform.rotation = rotation;
         transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
         ResetJump();
+        electricBehaviour?.ResetCharge();
     }
 
     private float GetSpeedRatio()
@@ -2026,7 +2055,18 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         forceLocked = lockController;
 
         if (lockController)
+        {
             CancelActionWindow();
+
+            if (electricJumpRoutine != null)
+            {
+                StopCoroutine(electricJumpRoutine);
+                electricJumpRoutine = null;
+                SetMetalCollision(true);
+                electricBehaviour?.ConsumeCharge();
+            }
+        }
+
 
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
@@ -2067,6 +2107,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                     break;
                 case ControllerAbility.CAT:
                     catAbility = true;
+                    break;
+                case ControllerAbility.DYNAMO:
+                    dynamoAbility = true;
                     break;
                 default:
                     break;
@@ -2275,6 +2318,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     public void SpinRelease()
     {
+        if (ForcedSpin)
+            return;
+
         if (state == ControllerState.STOMP && isSuperSpinning)
             return;
 
@@ -2322,8 +2368,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         ResetSpin();
     }
 
-    private void ResetSpin()
+    public void ResetSpin()
     {
+        if (ForcedSpin)
+            return;
+
         spinCancel?.Invoke();
 
         canceledByAction = false;
@@ -2336,6 +2385,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         {
             spinCharged?.Invoke(false);
             togglePlayerBlinkMat.Invoke(false, 25f);
+        }
+
+        if (electricBehaviour != null && !electricBehaviour.IsCharged)
+        {
+            electricBehaviour.ResetCharge();
         }
 
         PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.SPIN);
@@ -2667,6 +2721,127 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         disableCollisionRoutine = null;
     }
 
+    private Coroutine electricJumpRoutine;
+    private void ElectricJump()
+    {
+        if (electricJumpRoutine != null)
+            return;
+
+        electricJumpRoutine = StartCoroutine(ElectricJumpCoroutine());
+    }
+
+    private IEnumerator ElectricJumpCoroutine()
+    {
+        jumpCount = 2;
+        State = ControllerState.ELECTRICJUMP;
+        ComboManager.Instance.AddComboAction(ComboID.DynamoJump);
+
+        CancelActionWindow();
+        CancelStomp();
+        ActionResetSpin();
+
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        Vector3 jumpDirection = GetElectricJumpDirection();
+        transform.forward = jumpDirection;
+
+        Collider playerCollider = GetComponent<Collider>();
+        int playerLayer = gameObject.layer;
+
+        bool previousKinematic = rb.isKinematic;
+        rb.isKinematic = false;
+
+        //Goes through metal layer
+        SetMetalCollision(false);
+
+        FOVController.instance.FOVEffect(FOVController.FovEffectType.ELECTRICJUMP);
+
+        float timer = 0f;
+
+        electricBehaviour.electricJumpStart?.Invoke();
+
+        triggerAnim?.Invoke("Boost");
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.BOOST);
+
+        while (timer < controllerData.electricJumpDuration)
+        {
+            rb.linearVelocity = jumpDirection * controllerData.electricJumpSpeed;
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        SetMetalCollision(true);
+
+        rb.linearVelocity = jumpDirection * controllerData.electricJumpSpeed * controllerData.electricJumpExitVelocityFactor;
+
+        if (electricBehaviour != null)
+            electricBehaviour.ConsumeCharge();
+
+        electricBehaviour.electricJumpEnd?.Invoke();
+
+        State = ControllerState.FALLING;
+        electricJumpRoutine = null;
+    }
+
+    private Vector3 GetElectricJumpDirection()
+    {
+        Transform cam = Camera.main.transform;
+
+        Vector3 camForward = cam.forward;
+        Vector3 camRight = cam.right;
+
+        camForward.y = 0f;
+        camRight.y = 0f;
+
+        camForward.Normalize();
+        camRight.Normalize();
+
+        Vector2 move = inputs.airControl.action.ReadValue<Vector2>();
+
+        Vector3 dir = (camForward * move.y + camRight * move.x);
+
+        if (dir.sqrMagnitude < 0.01f)
+            dir = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
+
+        if (dir.sqrMagnitude < 0.01f)
+            dir = camForward;
+
+        return dir.normalized;
+    }
+
+    private void SetMetalCollision(bool enabled)
+    {
+        int playerLayer = gameObject.layer;
+
+        for (int i = 0; i < 32; i++)
+        {
+            if ((metalLayer.value & (1 << i)) != 0)
+            {
+                Physics.IgnoreLayerCollision(playerLayer, i, !enabled);
+            }
+        }
+    }
+    public void SetForcedSpin(bool value)
+    {
+        ForcedSpin = value;
+
+        if (value)
+        {
+            isSpinning = true;
+            spinStart?.Invoke();
+        }
+    }
+
+    public void CancelSpinFromDynamo()
+    {
+        SetForcedSpin(false);
+        ResetSpin();
+        ForceLock(false);
+        rb.AddForce(transform.forward * 5f, ForceMode.VelocityChange);
+    }
+
     #region ActionWindows
     private void StartActionWindow(ActionWindow window, float duration)
     {
@@ -2881,6 +3056,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         alienAntennasAbility = true;
         grindAbility = true;
         catAbility = true;
+        dynamoAbility = true;
         updateEquipmentVisual?.Invoke();
     }
 }

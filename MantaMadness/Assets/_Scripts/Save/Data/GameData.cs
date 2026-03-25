@@ -41,6 +41,7 @@ public class GameData
     public bool alienAntennas;
     public bool grind;
     public bool cat;
+    public bool dynamo;
 
     public MUSICS gameStartMusic;
     public AMBIENT gameStartAmbient;
@@ -71,6 +72,7 @@ public class GameData
         alienAntennas = false;
         grind = false;
         cat = false;
+        dynamo = false;
 
     }
 }

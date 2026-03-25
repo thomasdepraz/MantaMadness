@@ -60,6 +60,8 @@ public class MantaVisuals : MonoBehaviour
     public ParticleSystem superSpinParticle;
     public ParticleSystem spinParticle;
     public ParticleSystem stompJumpParticle;
+    public ParticleSystem electricSparkParticles;
+    public ParticleSystem electricJumpParticles;
 
     [Header("Visual")]
     public SkinnedMeshRenderer[] mantaAllVisuals;
@@ -68,8 +70,11 @@ public class MantaVisuals : MonoBehaviour
     public SkinnedMeshRenderer doubleJumpGlassesVisual;
     public SkinnedMeshRenderer grindVisual;
     public SkinnedMeshRenderer[] catVisual;
+    public SkinnedMeshRenderer[] dynamoVisual;
     public Material[] playerMat;
     public GameObject playerMantaTrueBody;
+    public Material electricMaterial;
+    private Material[] originalMaterials;
 
     [Header("After Image")]
     public SkinnedMeshRenderer mantaBodyVisual;
@@ -88,6 +93,7 @@ public class MantaVisuals : MonoBehaviour
     private int horizontalSpeedId = Animator.StringToHash("HorizontalSpeedFactor");
     private int verticalSpeedId = Animator.StringToHash("VerticalVelocity");
 
+    private bool electricVisualActive = false;
 
     private void Awake()
     {
@@ -131,6 +137,9 @@ public class MantaVisuals : MonoBehaviour
         mantaController.actionWindowActive += ActionWindowParticles;
         mantaController.spinCharged += ToggleSpinChargedParticles;
         mantaController.stompJump += StompJumpParticle;
+        mantaController.electricBehaviour.onElectricChargeFull += OnElectricChargeFull;
+        mantaController.electricBehaviour.onElectricChargeLost += OnElectricChargeLost;
+        mantaController.electricBehaviour.electricJumpStart += OnElectricJumpStart;
     }
 
     private void OnDisable()
@@ -163,7 +172,12 @@ public class MantaVisuals : MonoBehaviour
         mantaController.superSpinStart -= SuperSpinStart;
         mantaController.actionWindowActive -= ActionWindowParticles;
         mantaController.spinCharged -= ToggleSpinChargedParticles;
-        mantaController.stompJump-= StompJumpParticle;
+        mantaController.stompJump -= StompJumpParticle;
+        mantaController.electricBehaviour.onElectricChargeFull -= OnElectricChargeFull;
+        mantaController.electricBehaviour.onElectricChargeLost -= OnElectricChargeLost;
+        mantaController.electricBehaviour.electricJumpStart -= OnElectricJumpStart;
+
+        EnableElectricVisual(false);
     }
 
 
@@ -188,6 +202,9 @@ public class MantaVisuals : MonoBehaviour
     {
         arrow.gameObject.SetActive(false);
         PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.SURF);
+
+        originalMaterials = new Material[1];
+        originalMaterials[0] = mantaBodyVisual.sharedMaterial;
     }
 
     private Coroutine afterImageRoutine;
@@ -560,6 +577,11 @@ public class MantaVisuals : MonoBehaviour
         {
             skin.enabled = toggle;
         }
+
+        if (toggle)
+        {
+            UpdateAbilityVisuals();
+        }
     }
 
     public void strafEffectsAndVisual()
@@ -705,6 +727,22 @@ public class MantaVisuals : MonoBehaviour
             foreach (var visual in catVisual)
             {
                 visual.enabled = false;
+            }
+        }
+
+        //DYNAMO ABILITY VISUAL
+        if (Game.Instance.player.dynamoAbility == true)
+        {
+            foreach (var visual in dynamoVisual)
+            {
+               visual.enabled = true;
+            }
+        }
+        else
+        {
+            foreach (var visual in dynamoVisual)
+            {
+               visual.enabled = false;
             }
         }
     }
@@ -919,5 +957,58 @@ public class MantaVisuals : MonoBehaviour
             spinParticle.Stop();
             spinParticle.gameObject.SetActive(false);
         }
+    }
+
+    private void OnElectricChargeFull()
+    {
+        EnableElectricVisual(true);
+
+        // SFX optionnel
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.SPINCHARGED);
+    }
+
+    private void OnElectricChargeLost()
+    {
+        EnableElectricVisual(false);
+    }
+
+    private void EnableElectricVisual(bool enable)
+    {
+        if (electricVisualActive == enable)
+            return;
+
+        electricVisualActive = enable;
+
+        if (enable)
+            mantaBodyVisual.material = electricMaterial;
+        else
+            mantaBodyVisual.material = originalMaterials[0];
+
+        if (electricSparkParticles != null)
+        {
+            if (enable)
+                electricSparkParticles.Play();
+            else
+                electricSparkParticles.Stop();
+        }
+    }
+
+    private void OnElectricJumpStart()
+    {
+        if (electricJumpRoutine != null)
+            return;
+
+        StartCoroutine(ElectricJumpCoroutine());
+    }
+
+    private Coroutine electricJumpRoutine;
+    private IEnumerator ElectricJumpCoroutine()
+    {
+        electricJumpParticles.Play();
+        EnableElectricVisual(false);
+        ToggleMantaVisual(false);
+        yield return new WaitForSeconds(mantaController.controllerData.electricJumpDuration);
+        ToggleMantaVisual(true);
+        electricJumpParticles.Stop();
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using Unity.Cinemachine;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ControllerData", menuName = "Game Data/ControllerData")]
@@ -149,5 +150,10 @@ public class ControllerData : ScriptableObject
     public float spinBounceTimer = 0.75f;
     public float spinForce = 50f;
     public float spinPerfectBonusForce = 70f;
+
+    [Header("Electric Jump")]
+    public float electricJumpSpeed = 40f;
+    public float electricJumpDuration = 0.35f;
+    public float electricJumpExitVelocityFactor = 0.5f;
 
 }

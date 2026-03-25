@@ -8,6 +8,17 @@ public class ComboDatabase : ScriptableObject
 
     private Dictionary<ComboID, ComboActionSO> lookup;
 
+
+    public void Awake()
+    {
+        Init();
+    }
+
+    public void OnEnable()
+    {
+        Init();
+    }
+
     public void Init()
     {
         lookup = new Dictionary<ComboID, ComboActionSO>();
