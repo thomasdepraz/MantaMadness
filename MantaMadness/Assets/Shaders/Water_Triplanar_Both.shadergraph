@@ -275,6 +275,9 @@
         },
         {
             "m_Id": "35cd1bc6785149b688eb047d52141372"
+        },
+        {
+            "m_Id": "8470c8391d8642ceb7c532bbda4257df"
         }
     ],
     "m_GroupDatas": [
@@ -1318,8 +1321,8 @@
     ],
     "m_VertexContext": {
         "m_Position": {
-            "x": 2721.0,
-            "y": 587.9998168945313
+            "x": 3158.0,
+            "y": 306.0
         },
         "m_Blocks": [
             {
@@ -1335,8 +1338,8 @@
     },
     "m_FragmentContext": {
         "m_Position": {
-            "x": 2721.0,
-            "y": 787.9998168945313
+            "x": 3158.0,
+            "y": 505.9999694824219
         },
         "m_Blocks": [
             {
@@ -5799,6 +5802,48 @@
 }
 
 {
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.SubGraphNode",
+    "m_ObjectId": "8470c8391d8642ceb7c532bbda4257df",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "PSX_ScreenEffect",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": 2602.111083984375,
+            "y": 163.11111450195313,
+            "width": 283.0,
+            "height": 279.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "caf449045a204a62ace974cf59ab1c6f"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_SerializedSubGraph": "{\n    \"subGraph\": {\n        \"fileID\": -5475051401550479605,\n        \"guid\": \"66cd5a97ae5428e41aa003233dc3156d\",\n        \"type\": 3\n    }\n}",
+    "m_PropertyGuids": [
+        "8bf585a1-809b-4d18-9795-3c412c738482"
+    ],
+    "m_PropertyIds": [
+        89514881
+    ],
+    "m_Dropdowns": [],
+    "m_DropdownSelectedEntries": []
+}
+
+{
     "m_SGVersion": 1,
     "m_Type": "UnityEditor.ShaderGraph.PositionNode",
     "m_ObjectId": "84c791ff21a8445dba760d90239a38b6",
@@ -8033,6 +8078,29 @@
         "e32": 0.0,
         "e33": 1.0
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector3MaterialSlot",
+    "m_ObjectId": "caf449045a204a62ace974cf59ab1c6f",
+    "m_Id": 1,
+    "m_DisplayName": "Out_Vector3",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "OutVector3",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "m_Labels": []
 }
 
 {
