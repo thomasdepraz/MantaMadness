@@ -267,19 +267,15 @@ public class TweenAnimation : MonoBehaviour
 
         if (step.animateScale)
         {
-            Tween scaleTween = transform.DOScale(
-                new Vector3(originalScale.x * step.scale.x,
-                            originalScale.y * step.scale.y,
-                            originalScale.z * step.scale.z),
-                tweenDuration);
+            Tween stepTween = transform.DOScale(step.scale, tweenDuration);
 
             if (step.scaleRelative)
-                scaleTween.SetRelative();
+                stepTween.SetRelative();
 
-            scaleTween.SetEase(step.ease);
+            stepTween.SetEase(step.ease);
 
             if (sequenceLoopType == LoopType.Yoyo)
-                scaleTween.SetLoops(2, LoopType.Yoyo);
+                stepTween.SetLoops(2, LoopType.Yoyo);
         }
 
         currentBeatStep++;

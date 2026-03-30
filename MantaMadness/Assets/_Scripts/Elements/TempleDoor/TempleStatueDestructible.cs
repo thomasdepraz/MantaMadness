@@ -13,6 +13,7 @@ public class TempleStatueDestructible : SpecialDestructible, IDataPersistence
 {
 
     [SerializeField] public TempleStatueType type;
+    [SerializeField] private string id;
 
     public override void Start()
     {
@@ -43,7 +44,7 @@ public class TempleStatueDestructible : SpecialDestructible, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        if (data.templeStatue.TryGetValue(type, out bool state))
+        if (data.puzzleElements.TryGetValue(id, out bool state))
         {
             isBroken = state;
 
@@ -56,14 +57,10 @@ public class TempleStatueDestructible : SpecialDestructible, IDataPersistence
 
     public void SaveData(ref GameData data)
     {
-        if (data.templeStatue.ContainsKey(type))
-        {
-            data.templeStatue[type] = isBroken;
-        }
+        if (data.puzzleElements.ContainsKey(id))
+            data.puzzleElements[id] = isBroken;
         else
-        {
-            data.templeStatue.Add(type, isBroken);
-        }
+            data.puzzleElements.Add(id, isBroken);
     }
 
     public override void DisableDestructible()

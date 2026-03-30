@@ -17,7 +17,7 @@ public class Destructible : MonoBehaviour
     [SerializeField] protected bool hard = false;
     [SerializeField] protected EventReference destructionSFX;
 
-    protected bool isBroken = false;
+    public bool isBroken = false;
 
 
     public virtual void Start()

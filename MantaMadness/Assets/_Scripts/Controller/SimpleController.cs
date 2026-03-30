@@ -2733,7 +2733,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private IEnumerator ElectricJumpCoroutine()
     {
         jumpCount = 2;
-        State = ControllerState.ELECTRICJUMP;
+
         ComboManager.Instance.AddComboAction(ComboID.DynamoJump);
 
         CancelActionWindow();
@@ -2743,46 +2743,126 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        Vector3 jumpDirection = GetElectricJumpDirection();
-        transform.forward = jumpDirection;
+        Collider[] colliders = Physics.OverlapSphere(hoverBehaviour.normalContainer.position, controllerData.targetDetectionRadius, controllerData.targetObjectsMask);
 
-        Collider playerCollider = GetComponent<Collider>();
-        int playerLayer = gameObject.layer;
+        List<Collider> validColliders = new List<Collider>();
 
-        bool previousKinematic = rb.isKinematic;
-        rb.isKinematic = false;
-
-        //Goes through metal layer
-        SetMetalCollision(false);
-
-        FOVController.instance.FOVEffect(FOVController.FovEffectType.ELECTRICJUMP);
-
-        float timer = 0f;
-
-        electricBehaviour.electricJumpStart?.Invoke();
-
-        triggerAnim?.Invoke("Boost");
-        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.BOOST);
-
-        while (timer < controllerData.electricJumpDuration)
+        foreach (Collider target in colliders)
         {
-            rb.linearVelocity = jumpDirection * controllerData.electricJumpSpeed;
-
-            timer += Time.deltaTime;
-            yield return null;
+            if (CameraTargetDetection.Instance.validJumpTargets.Contains(target))
+            {
+                validColliders.Add(target);
+            }
         }
 
-        SetMetalCollision(true);
+        if (validColliders.Count > 0)
+        {
+            int index = 0;
+            float distance = 0;
+            Transform target = null;
+            //Play anim
+            triggerAnim.Invoke("TargetJump");
+            playTargetJumpParticles.Invoke();
+            FOVController.instance.FOVEffect(FOVController.FovEffectType.EXPLOSIF);
 
-        rb.linearVelocity = jumpDirection * controllerData.electricJumpSpeed * controllerData.electricJumpExitVelocityFactor;
+            //COMBO
+            ComboManager.Instance.AddComboAction(ComboID.TargetJump);
 
-        if (electricBehaviour != null)
-            electricBehaviour.ConsumeCharge();
+            if (validColliders.Count == 1)
+            {
+                target = validColliders[0].transform;
+            }
+            else if (validColliders.Count > 1)
+            {
+                distance = Vector3.Distance(validColliders[0].transform.position, hoverBehaviour.normalContainer.position);
+                for (int i = 1; i < validColliders.Count; i++)
+                {
+                    if (CameraTargetDetection.Instance.validJumpTargets.Contains(validColliders[i]))
+                    {
+                        var dist = Vector3.Distance(validColliders[i].transform.position, hoverBehaviour.normalContainer.transform.position);
+                        if (dist < distance)
+                        {
+                            index = i;
+                            distance = dist;
+                        }
+                    }
+                }
+                target = validColliders[index].transform;
+            }
 
-        electricBehaviour.electricJumpEnd?.Invoke();
+            targetDashDirection = new Vector3(target.position.x - hoverBehaviour.normalContainer.transform.position.x,
+                          target.position.y - hoverBehaviour.normalContainer.transform.position.y,
+                          target.position.z - hoverBehaviour.normalContainer.transform.position.z);
+            targetDashDirection = targetDashDirection.normalized;
 
-        State = ControllerState.FALLING;
-        electricJumpRoutine = null;
+            transform.forward = new Vector3(targetDashDirection.x, 0, targetDashDirection.z);
+            rb.linearVelocity = targetDashDirection * HorizontalVelocity.magnitude;
+
+            rb.AddForce(targetDashDirection * controllerData.targetBoostFactor, ForceMode.VelocityChange);
+
+            electricBehaviour.electricJumpStart?.Invoke();
+
+            triggerAnim?.Invoke("Boost");
+
+            FOVController.instance.FOVEffect(FOVController.FovEffectType.ELECTRICJUMP);
+
+            if (jumpRoutine != null)
+                StopCoroutine(jumpRoutine);
+            jumpRoutine = StartCoroutine(JumpRoutine());
+
+            if (electricBehaviour != null)
+                electricBehaviour.ConsumeCharge();
+
+            electricBehaviour.electricJumpEnd?.Invoke();
+
+            electricJumpRoutine = null;
+        }
+        else
+        {
+
+            State = ControllerState.ELECTRICJUMP;
+
+            Vector3 jumpDirection = GetElectricJumpDirection();
+            transform.forward = jumpDirection;
+
+            Collider playerCollider = GetComponent<Collider>();
+            int playerLayer = gameObject.layer;
+
+            bool previousKinematic = rb.isKinematic;
+            rb.isKinematic = false;
+
+            //Goes through metal layer
+            SetMetalCollision(false);
+
+            FOVController.instance.FOVEffect(FOVController.FovEffectType.ELECTRICJUMP);
+
+            float timer = 0f;
+
+            electricBehaviour.electricJumpStart?.Invoke();
+
+            triggerAnim?.Invoke("Boost");
+            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.BOOST);
+
+            while (timer < controllerData.electricJumpDuration)
+            {
+                rb.linearVelocity = jumpDirection * controllerData.electricJumpSpeed;
+
+                timer += Time.deltaTime;
+                yield return null;
+            }
+
+            SetMetalCollision(true);
+
+            rb.linearVelocity = jumpDirection * controllerData.electricJumpSpeed * controllerData.electricJumpExitVelocityFactor;
+
+            if (electricBehaviour != null)
+                electricBehaviour.ConsumeCharge();
+
+            electricBehaviour.electricJumpEnd?.Invoke();
+
+            State = ControllerState.FALLING;
+            electricJumpRoutine = null;
+        }
     }
 
     private Vector3 GetElectricJumpDirection()

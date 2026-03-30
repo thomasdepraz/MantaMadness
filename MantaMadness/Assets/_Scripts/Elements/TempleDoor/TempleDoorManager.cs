@@ -94,7 +94,7 @@ public class TempleDoorManager : SpecialDestructibleManager, IDataPersistence
         {
             if (destructible is TempleStatueDestructible statue)
             {
-                if (data.templeStatue.TryGetValue(statue.type, out bool state) && state)
+                if (statue.isBroken)
                 {
                     destroyedCount++;
                     ActivateCrystal(statue.type);
@@ -102,7 +102,7 @@ public class TempleDoorManager : SpecialDestructibleManager, IDataPersistence
             }
         }
 
-        if(destroyedCount >= destructibles.Count)
+        if (destroyedCount >= destructibles.Count)
         {
             DisableDoor();
         }

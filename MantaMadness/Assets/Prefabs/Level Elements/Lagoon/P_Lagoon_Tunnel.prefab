@@ -105,6 +105,8 @@ MonoBehaviour:
   nameToDisplay: 
   enterSecretRoom: 0
   musicToPlay: 5
+  levelToLoad: []
+  levelToUnload: []
 --- !u!1 &7196981529733364593
 GameObject:
   m_ObjectHideFlags: 0
@@ -195,7 +197,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.16379592, y: 0.92893296, z: 0.057659168, w: 0.32700145}
   m_LocalPosition: {x: 321.73, y: 101.35, z: 0.03}
-  m_LocalScale: {x: 10, y: 8, z: 10}
+  m_LocalScale: {x: 10, y: 6, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 472392643850449384}
@@ -216,30 +218,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playOnStart: 1
-  playOnEnable: 1
-  playOnBeat: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 1
-  xRotation: 0
-  yRotation: 0
-  zRotation: -20
-  rotationDuration: 1
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 1
-  loopScaleAmount: -1
-  yoyoScale: 1
-  xScale: 0.8
-  yScale: 1.2
-  zScale: 1
-  scaleDuration: 0.5
+  playSequenceOnBeat: 1
+  playSequenceOnEnable: 0
+  tweenSteps:
+  - animatePosition: 0
+    animateRotation: 0
+    animateScale: 1
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 0, y: 0, z: 0}
+    rotationUseLocal: 0
+    rotationRelative: 0
+    scale: {x: 6, y: 10, z: 6}
+    scaleRelative: 0
+    duration: 1.25
+    delay: 0
+    ease: 27
+  - animatePosition: 0
+    animateRotation: 0
+    animateScale: 1
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 0, y: 0, z: 0}
+    rotationUseLocal: 0
+    rotationRelative: 0
+    scale: {x: 10, y: 6, z: 10}
+    scaleRelative: 0
+    duration: 1.25
+    delay: 0
+    ease: 27
+  sequenceLoops: -1
+  sequenceLoopType: 0
+  beatSequenceType: 0
 --- !u!1001 &73464858016470531
 PrefabInstance:
   m_ObjectHideFlags: 0
