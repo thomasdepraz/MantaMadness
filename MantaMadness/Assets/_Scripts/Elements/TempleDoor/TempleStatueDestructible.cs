@@ -13,7 +13,7 @@ public class TempleStatueDestructible : SpecialDestructible, IDataPersistence
 {
 
     [SerializeField] public TempleStatueType type;
-    [SerializeField] private string id;
+    [SerializeField] public string id;
 
     public override void Start()
     {

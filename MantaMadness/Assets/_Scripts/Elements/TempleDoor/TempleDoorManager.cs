@@ -94,7 +94,7 @@ public class TempleDoorManager : SpecialDestructibleManager, IDataPersistence
         {
             if (destructible is TempleStatueDestructible statue)
             {
-                if (statue.isBroken)
+                if (data.puzzleElements.TryGetValue(statue.id, out bool state) && state)
                 {
                     destroyedCount++;
                     ActivateCrystal(statue.type);
