@@ -134,6 +134,7 @@ public class ControllerData : ScriptableObject
 
     [Header("NPC Interaction")]
     public float npcInteractionRadius;
+    public float npcFixedCamInteractionRadius;
 
     [Header("Rail")]
     public float railImpulseForce;

@@ -23,8 +23,8 @@ public class Rail : MonoBehaviour
 
     public bool isRoadBorder = false;
 
-    private SplineContainer splineContainer;
-    private Spline railSpline;
+    protected SplineContainer splineContainer;
+    protected Spline railSpline;
     private float invRailLength;
     private float worldRailLength;
 

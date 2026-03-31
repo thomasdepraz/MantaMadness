@@ -644,7 +644,7 @@ public class MantaVisuals : MonoBehaviour
     //        triggerAnimation("GrindSwitch");
     //}
 
-    public void ResetGrindOnRail()
+    public void ResetGrindOnRail(Rail overload)
     {
         //foreach (ParticleSystem p in driftParticles)
         //{

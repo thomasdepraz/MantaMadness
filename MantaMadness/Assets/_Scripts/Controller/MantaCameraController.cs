@@ -98,7 +98,7 @@ public class MantaCameraController : MonoBehaviour
         //SetActiveCamera(railCamera);
     }
 
-    private void ExitRail()
+    private void ExitRail(Rail overload)
     {
         UpdateState(mantaController.State, mantaController.State);
     }

@@ -20,6 +20,7 @@ public class CameraTargetDetection : MonoBehaviour
 
     [Header("NPC Target Detection")]
     [SerializeField] private float npcDetectionRange;
+    [SerializeField] private float npcFixedCamDetectionRange;
 
     [Header("Shop Target Detection")]
     [SerializeField] private float shopDetectionRange;
@@ -58,6 +59,7 @@ public class CameraTargetDetection : MonoBehaviour
 
         jumpDetectionRange = Game.Instance.player.controllerData.targetDetectionRadius;
         npcDetectionRange = Game.Instance.player.controllerData.npcInteractionRadius;
+        npcFixedCamDetectionRange = Game.Instance.player.controllerData.npcFixedCamInteractionRadius;
         shopDetectionRange = Game.Instance.player.controllerData.npcInteractionRadius;
 
         brain = Camera.main.GetComponent<CinemachineBrain>();
@@ -93,23 +95,26 @@ public class CameraTargetDetection : MonoBehaviour
     }
 
     private Vector3 GetDetectionOrigin()
-{
-    if (playerTransform != null)
-        return playerTransform.position;
+    {   
+        if (CameraZone.ActiveZone != null && playerTransform != null)
+            return playerTransform.position;
 
-    return transform.position;
-}
+        if (Camera.main != null)
+            return Camera.main.transform.position;
 
-private Vector3 GetDetectionForward()
-{
-    if (IsPlayerCameraActive() && Camera.main != null)
-        return Camera.main.transform.forward;
+        return transform.position;
+    }
 
-    if (playerTransform != null)
-        return playerTransform.forward;
+    private Vector3 GetDetectionForward()
+    {
+        if (CameraZone.ActiveZone != null && playerTransform != null)
+            return playerTransform.forward;
 
-    return transform.forward;
-}
+        if (Camera.main != null)
+            return Camera.main.transform.forward;
+
+        return transform.forward;
+    }
 
     void DetectJumpTargets()
     {
@@ -238,7 +243,17 @@ private Vector3 GetDetectionForward()
 
         bool useCameraLogic = IsPlayerCameraActive();
 
-        Collider[] targetsInRange = Physics.OverlapSphere(GetDetectionOrigin(), npcDetectionRange, npcTargetMask);
+        Collider[] targetsInRange;
+
+        if (CameraZone.ActiveZone != null)
+        {
+            targetsInRange = Physics.OverlapSphere(GetDetectionOrigin(), npcFixedCamDetectionRange, npcTargetMask);
+        }
+        else
+        {
+            targetsInRange = Physics.OverlapSphere(GetDetectionOrigin(), npcDetectionRange, npcTargetMask);
+        }
+
 
         for (int i = validNPCTargets.Count - 1; i >= 0; i--)
         {

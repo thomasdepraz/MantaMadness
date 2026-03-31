@@ -42,6 +42,9 @@ public class DialogManager : MonoBehaviour
 
     private InteractableNPC currentNpc;
 
+    private bool skipRequested = false;
+    private bool nextRequested = false;
+
     private void Awake()
     {
         if(instance == null)
@@ -122,7 +125,10 @@ public class DialogManager : MonoBehaviour
 
     private void Interacts(InputAction.CallbackContext context)
     {
-        interacted = true;
+        if (isTyping)
+            skipRequested = true;
+        else
+            nextRequested = true;
     }
 
     private void StartNPCInteraction(InputAction.CallbackContext context)
@@ -276,14 +282,15 @@ public class DialogManager : MonoBehaviour
         dialogTextBox.text = parsedText;
         RuntimeManager.PlayOneShot(dialog.dialogSound);
         dialogWriter.OnCharacterShown.AddListener(PlaySoundOnCharWritten);
+        dialogWriter.OnCharacterShown.RemoveListener(PlaySoundOnCharWritten);
         dialogWriter.StartWriter();
 
         while(dialogWriter.IsWriting == true)
         {
-            if (interacted == true)
+            if (skipRequested)
             {
                 dialogWriter.SkipWriter(true);
-                interacted = false;
+                skipRequested = false;
                 break;
             }
             yield return null;
@@ -294,6 +301,9 @@ public class DialogManager : MonoBehaviour
         dialogIndicator.DOFade(1, 0.5f).SetLoops(-1,LoopType.Yoyo);
 
         isTyping = false;
+
+        skipRequested = false;
+        nextRequested = false;
 
         yield return StartCoroutine(EndDialog());
     }
@@ -308,8 +318,12 @@ public class DialogManager : MonoBehaviour
 
     private IEnumerator EndDialog()
     {
-        yield return new WaitUntil(() => interacted == true);
-        interacted = false;
+        yield return new WaitForEndOfFrame();
+
+        yield return new WaitUntil(() => nextRequested);
+
+        nextRequested = false;
+
         currentSequenceCount++;
 
         //Disable indicator visual
@@ -328,8 +342,6 @@ public class DialogManager : MonoBehaviour
             print("Sequence continues");
             yield return null;
         }
-
-
     }
 
     private void ResetSequence()
@@ -339,6 +351,8 @@ public class DialogManager : MonoBehaviour
         //STOP DIALOG FMOD EVENT
         dialogActiveEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         dialogActiveEvent.release();
+
+
 
         if (currentNpc != null)
         {

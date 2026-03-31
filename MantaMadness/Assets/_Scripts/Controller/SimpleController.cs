@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -241,6 +242,13 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             if (state == value)
                 return;
 
+            ControllerState previous = state;
+            state = value;
+
+            OnStateExit(previous);
+            OnStateEnter(value);
+
+
             stateChanged.Invoke(state, value);
             state = value;
         }
@@ -308,7 +316,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public Action superBoost;
     public Action<Transform> updateRaceTarget;
     public Action enterRail;
-    public Action exitRail;
+    public Action<Rail> exitRail;
     public Action enterWaterfall;
     public Action exitWaterfall;
     public Action<int> dash;
@@ -361,7 +369,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         inputs.jump.action.performed += JumpOutOfRail;
         inputs.spin.action.started += Spin;
         inputs.spin.action.canceled += InputSpinRelease;
-
+        inputs.interact.action.performed += CancelSpinWithInteract;
 
         //Components Setup
         hoverBehaviour.Initialize(controllerData, rb);
@@ -386,6 +394,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         inputs.jump.action.performed -= JumpOutOfRail;
         inputs.spin.action.started -= Spin;
         inputs.spin.action.canceled -= InputSpinRelease;
+        inputs.interact.action.performed -= CancelSpinWithInteract;
 
         SetMetalCollision(true);
     }
@@ -412,6 +421,19 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         data.grind = grindAbility;
         data.cat = catAbility;
         data.dynamo = dynamoAbility;
+    }
+
+    private void OnStateEnter(ControllerState newState)
+    {
+        if (newState == ControllerState.DIALOG)
+        {
+            ResetAllPlayerActions();
+        }
+    }
+
+    private void OnStateExit(ControllerState previousState)
+    {
+        //TO FILL IF NEEDED;
     }
 
     private void StyleDash(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -1171,6 +1193,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
             else if (false == currentRail.Progress(Time.fixedDeltaTime, out Vector3 nextPos, out Vector3 normal, out Vector3 direction))
             {
+                ResetRailSpin();
+
                 Rail rail = currentRail;
                 OnRailExit(rail);
 
@@ -1180,9 +1204,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 Vector3 exitDir = rail.GetExitDirection();
                 rb.AddForce(exitDir * controllerData.railExitForce, ForceMode.VelocityChange);
 
-                exitRail.Invoke();
+                exitRail?.Invoke(currentRail);
                 railDetector.ExitRail();
                 State = ControllerState.SURFING;
+
                 PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GRINDRAIL);
                 disableBoolAnim("Grind");
             }
@@ -1804,46 +1829,51 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     public bool EnterRail(Rail rail)
     {
+        return EnterRail(rail, GetRailIntentDirection());
+    }
+
+    public bool EnterRail(Rail rail, Vector3 forcedDirection)
+    {
         if (State == ControllerState.RAIL)
             return false;
 
         if (rail == lastRail && Time.time - lastRailExitTime < railReenterCooldown)
             return false;
 
-        if (grindAbility)
-        {
-            ComboManager.Instance.AddComboAction(ComboID.RailEnter);
-            ComboManager.Instance.SetComboTimerFrozen(true);
-            ResetJump();
-            ActionResetSpin();
-            CancelActionWindow();
-            railReverseRoutine = null;
+        if (!grindAbility)
+            return false;
 
+        ComboManager.Instance.AddComboAction(ComboID.RailEnter);
+        ComboManager.Instance.SetComboTimerFrozen(true);
 
-            currentRail = rail;
+        ResetJump();
+        ActionResetSpin();
+        CancelActionWindow();
+        railReverseRoutine = null;
 
-            ResetSpin();
+        currentRail = rail;
 
-            Vector3 intentDir = GetRailIntentDirection();
-            rail.EnterRail(transform.position, intentDir);
+        ResetSpin();
 
-            rb.isKinematic = true;
-            boost.Invoke();
-            enterRail.Invoke();
-            enableBoolAnim.Invoke("Grind");
-            triggerAnim("StartGrind");
+        rail.EnterRail(transform.position, forcedDirection);
 
-            PlayerActionFMODManager.Instance.PlayPlayerActionWithParam(
-                PlayerActionFMOD.GRINDRAIL,
-                "L_Grind_Surface",
-                (float)rail.railType
-            );
+        rb.isKinematic = true;
 
-            CancelStomp();
+        boost.Invoke();
+        enterRail.Invoke();
 
-            return true;
-        }
-        return false;
+        enableBoolAnim.Invoke("Grind");
+        triggerAnim("StartGrind");
+
+        PlayerActionFMODManager.Instance.PlayPlayerActionWithParam(
+            PlayerActionFMOD.GRINDRAIL,
+            "L_Grind_Surface",
+            (float)rail.railType
+        );
+
+        CancelStomp();
+
+        return true;
     }
 
     private Vector3 GetRailIntentDirection()
@@ -2056,15 +2086,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         if (lockController)
         {
-            CancelActionWindow();
-
-            if (electricJumpRoutine != null)
-            {
-                StopCoroutine(electricJumpRoutine);
-                electricJumpRoutine = null;
-                SetMetalCollision(true);
-                electricBehaviour?.ConsumeCharge();
-            }
+            ResetAllPlayerActions();       
         }
 
 
@@ -2121,12 +2143,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     {
         if (value)
         {
-            state = ControllerState.DIALOG;
+            State = ControllerState.DIALOG;
             ForceLock(true);
         }
         else
         {
-            state = ControllerState.SURFING;
+            State = ControllerState.SURFING;
             ForceLock(false);
         }
 
@@ -2164,7 +2186,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             hoverBehaviour.normalContainer.up = Vector3.up;
 
             rb.isKinematic = false;
-            exitRail.Invoke();
+            exitRail?.Invoke(currentRail);
             railDetector.ExitRail();
             disableBoolAnim("Grind");
             PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GRINDRAIL );
@@ -2191,7 +2213,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             currentRail = null;
             rb.isKinematic = false;
 
-            exitRail.Invoke();
+            exitRail?.Invoke(currentRail);
             PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GRINDRAIL);
             PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.GRINDRAILDASH);
             railDetector.ExitRail();
@@ -2249,13 +2271,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     public void Spin(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        //if(state == ControllerState.STOMP && (currentActionWindow == null || currentActionWindow.Type != ActionWindowType.StompBuildup))
-        //{
+        if ((state == ControllerState.DIALOG))
+        {
+            return;
+        }
 
-        //    return;
-        //}
-
-        if(state == ControllerState.SURFING)
+        if (state == ControllerState.SURFING)
         {
             if(isSpinning == false)
             {
@@ -2356,6 +2377,22 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             }
         }
         ResetSpin();
+    }
+
+    private void CancelSpinWithInteract(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if (stompAbility == true)
+            return;
+
+        if (!IsSpinning)
+            return;
+
+        canceledByAction = true;
+
+        ResetSpin();
+
+        hasSpinBoost = false;
+        currentSpinTime = 0f;
     }
 
     public void SuperSpinBoost()
@@ -2670,7 +2707,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         currentRail = null;
         rb.isKinematic = false;
 
-        exitRail?.Invoke();
+        exitRail?.Invoke(currentRail);
         railDetector.ExitRail();
 
         disableBoolAnim("Grind");
@@ -2728,6 +2765,18 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             return;
 
         electricJumpRoutine = StartCoroutine(ElectricJumpCoroutine());
+    }
+
+    private void ResetElectricState()
+    {
+        if(electricJumpRoutine != null)
+        {
+            StopCoroutine(electricJumpRoutine);
+        }
+
+        electricJumpRoutine = null;
+        SetMetalCollision(true);
+        electricBehaviour?.ConsumeCharge();
     }
 
     private IEnumerator ElectricJumpCoroutine()
@@ -3126,6 +3175,50 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     }
     #endregion
     #endregion
+
+    public void ResetAllPlayerActions()
+    {
+        // Cancel gameplay windows
+        CancelActionWindow();
+
+        // Cancel stomp if active
+        CancelStomp();
+
+        // Reset spin systems
+        ResetSpin();
+        ResetRailSpin();
+        ResetAirSpin();
+
+        // Reset movement related actions
+        ResetJump();
+        ResetDrift();
+
+        // Stop critical coroutines
+        if (jumpRoutine != null)
+        {
+            StopCoroutine(jumpRoutine);
+            jumpRoutine = null;
+        }
+
+        if (boostJumpRoutine != null)
+        {
+            StopCoroutine(boostJumpRoutine);
+            boostJumpRoutine = null;
+        }
+
+        ResetElectricState();
+
+        // Reset stomp routine if still running
+        if (stompRoutine != null)
+        {
+            StopCoroutine(stompRoutine);
+            stompRoutine = null;
+        }
+
+        // Reset small state flags that are NOT handled elsewhere
+        actionWindowLocked = false;
+        stompBuildupWindowEnded = false;
+    }
 
     public void DebugUnlockAbilities()
     {

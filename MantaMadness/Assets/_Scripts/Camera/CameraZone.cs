@@ -5,6 +5,8 @@ using System.Collections.Generic;
 [RequireComponent(typeof(Collider))]
 public class CameraZone : MonoBehaviour
 {
+    public static CameraZone ActiveZone {get; private set;} 
+
     public CinemachineCamera zoneCamera;
 
     [Header("Priorités Cinemachine")]
@@ -113,5 +115,7 @@ public class CameraZone : MonoBehaviour
                 ? zone.activePriority
                 : zone.inactivePriority;
         }
+
+        ActiveZone = bestZone;
     }
 }

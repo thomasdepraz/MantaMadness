@@ -27,6 +27,8 @@ public class RailDetector : MonoBehaviour
     public Vector3 LeftHitPoint { get; private set; }
     public Vector3 RightHitPoint { get; private set; }
 
+    public Vector3 railRaycastDir;
+
 
     void Start()
     {
@@ -40,17 +42,55 @@ public class RailDetector : MonoBehaviour
         }
     }
 
+    bool IsRailBlocked(Collider railCollider)
+    {
+        Vector3 origin = GetComponent<Collider>().bounds.center;
+
+        // vrai point du rail le plus proche du joueur
+        Vector3 target = railCollider.ClosestPoint(origin);
+
+        railRaycastDir = target - origin;
+        float dist = railRaycastDir.magnitude;
+
+        Debug.DrawRay(origin, railRaycastDir.normalized * dist, Color.green, 2f);
+
+
+        if (Physics.Raycast(origin, railRaycastDir.normalized, out RaycastHit hit, dist, obstacleLayer))
+        {
+            Debug.Log("COLLIDER DETECTED: " + hit.collider.name);
+            // si on touche autre chose que ce collider
+            if (hit.collider != railCollider)
+                return true;
+        }
+
+
+        return false;
+    }
+
     public void OnTriggerEnter(Collider other)
     {
         if(other.TryGetComponent(out Rail rail) && onRail is false)
         {
-            if(rail.isRoadBorder == true && controller.strafRoutine != null || 
+
+            if (IsRailBlocked(other))
+            {
+                Debug.Log("RAIL BLOCKED");
+                return;
+            }
+
+
+            if (rail.isRoadBorder == true && controller.strafRoutine != null || 
                 rail.isRoadBorder == true && controller.boostRoutine != null || 
                 rail.isRoadBorder == true && controller.State != ControllerState.SURFING)
             {
                 if (controller.EnterRail(rail))
                 {
                     onRail = true;
+
+                    if (rail is RailTarget railTarget)
+                    {
+                        railTarget.OnPlayerEnteredRail(controller);
+                    }
                 }
             }
 
@@ -59,6 +99,11 @@ public class RailDetector : MonoBehaviour
                 if (controller.EnterRail(rail))
                 {
                     onRail = true;
+
+                    if (rail is RailTarget railTarget)
+                    {
+                        railTarget.OnPlayerEnteredRail(controller);
+                    }
                 }
             }
 
@@ -120,6 +165,8 @@ public class RailDetector : MonoBehaviour
         Debug.DrawRay(origin, rightDir * transferDetectDistance, Color.blue);
         Debug.DrawRay(origin, -rightDir * transferDetectDistance, Color.red);
 
+        int mask = railLayer | obstacleLayer;
+
         // RIGHT
         if (Physics.SphereCast(
             origin,
@@ -127,17 +174,19 @@ public class RailDetector : MonoBehaviour
             rightDir,
             out RaycastHit hitRight,
             transferDetectDistance,
-            railLayer,
+            mask,
             QueryTriggerInteraction.Collide))
         {
-            if (!IsPathBlocked(origin, hitRight.point))
+            // si on touche un obstacle en premier on ignore
+            if (((1 << hitRight.collider.gameObject.layer) & obstacleLayer) != 0)
             {
-                if (hitRight.collider.TryGetComponent(out Rail rail) && rail != controller.CurrentRail)
-                {
-                    rightRailCandidate = rail;
-                    RightHitPoint = hitRight.point;
-                    ShowPreview(rightPreview, hitRight.point);
-                }
+                // obstacle touché avant un rail
+            }
+            else if (hitRight.collider.TryGetComponent(out Rail rail) && rail != controller.CurrentRail)
+            {
+                rightRailCandidate = rail;
+                RightHitPoint = hitRight.point;
+                ShowPreview(rightPreview, hitRight.point);
             }
         }
 
@@ -148,17 +197,18 @@ public class RailDetector : MonoBehaviour
             -rightDir,
             out RaycastHit hitLeft,
             transferDetectDistance,
-            railLayer,
+            mask,
             QueryTriggerInteraction.Collide))
         {
-            if (!IsPathBlocked(origin, hitLeft.point))
+            if (((1 << hitLeft.collider.gameObject.layer) & obstacleLayer) != 0)
             {
-                if (hitLeft.collider.TryGetComponent(out Rail rail) && rail != controller.CurrentRail)
-                {
-                    leftRailCandidate = rail;
-                    LeftHitPoint = hitLeft.point;
-                    ShowPreview(leftPreview, hitLeft.point);
-                }
+                // obstacle touché avant un rail
+            }
+            else if (hitLeft.collider.TryGetComponent(out Rail rail) && rail != controller.CurrentRail)
+            {
+                leftRailCandidate = rail;
+                LeftHitPoint = hitLeft.point;
+                ShowPreview(leftPreview, hitLeft.point);
             }
         }
 
@@ -221,15 +271,37 @@ public class RailDetector : MonoBehaviour
             rightPreview.SetActive(false);
     }
 
-    bool IsPathBlocked(Vector3 origin, Vector3 targetPoint)
+    void OnDrawGizmos()
     {
-        Vector3 dir = targetPoint - origin;
-        float dist = dir.magnitude;
+        if (controller == null || controller.hoverBehaviour == null)
+            return;
 
-        if (Physics.SphereCast(origin, 0.2f, dir.normalized, out _, dist, obstacleLayer))
-            return true;
+        Vector3 origin = controller.transform.position + controller.hoverBehaviour.normalContainer.forward * transferRayOffset;
+        Vector3 rightDir = controller.hoverBehaviour.normalContainer.right;
 
-        return false;
+        Vector3 rightEnd = origin + rightDir * transferDetectDistance;
+        Vector3 leftEnd = origin - rightDir * transferDetectDistance;
+
+        // couleur origine
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(origin, 0.1f);
+
+        // RIGHT CAST
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(origin, transferSphereRadius);
+        Gizmos.DrawWireSphere(rightEnd, transferSphereRadius);
+        Gizmos.DrawLine(origin, rightEnd);
+
+        // LEFT CAST
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(origin, transferSphereRadius);
+        Gizmos.DrawWireSphere(leftEnd, transferSphereRadius);
+        Gizmos.DrawLine(origin, leftEnd);
+
+        Vector3 origin2 = transform.position + Vector3.up * 0.5f;
+
+        ////RAYCAST DETECTION RAIL
+        //Gizmos.color = Color.green;
+        //Gizmos.DrawLine(origin2, origin2 + railRaycastDir);
     }
-
 }

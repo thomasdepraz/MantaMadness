@@ -149,6 +149,9 @@ MonoBehaviour:
   approachingScaleNear: {x: 1, y: 1, z: 1}
   approachSmooth: 10
   isAvailable: 1
+  entryDirection: 0
+  visual: {fileID: 2160147872990253215}
+  burstParticle: {fileID: 3837924991708883413}
   dir: 0
 --- !u!135 &3203699559699232112
 SphereCollider:
@@ -812,6 +815,9 @@ MonoBehaviour:
   approachingScaleNear: {x: 1, y: 1, z: 1}
   approachSmooth: 10
   isAvailable: 1
+  entryDirection: 0
+  visual: {fileID: 6079914161504746977}
+  burstParticle: {fileID: 6773652449538554140}
   dir: 0
 --- !u!135 &1746507498380085879
 SphereCollider:
@@ -1071,6 +1077,11 @@ ParticleSystem:
 --- !u!4 &5204837837141771145 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9053667729310437251, guid: a8536de401133cc4aad4ac482d4f2a5f, type: 3}
+  m_PrefabInstance: {fileID: 3863625291342433290}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6773652449538554140 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7754780438385489174, guid: a8536de401133cc4aad4ac482d4f2a5f, type: 3}
   m_PrefabInstance: {fileID: 3863625291342433290}
   m_PrefabAsset: {fileID: 0}
 --- !u!198 &7776134151127286563 stripped

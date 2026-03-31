@@ -21,9 +21,9 @@ public class JumpTarget : MonoBehaviour
     [Header("Particles")]
     [SerializeField] protected ParticleSystem indicator;
     [Header("Parameters")]
-    [SerializeField] protected float respawnCooldown = 1f;
+    [SerializeField] public float respawnCooldown = 1f;
 
-    public virtual event Action<SimpleController, Vector3> OnPlayerHit;
+    public virtual event Action<JumpTarget, SimpleController, Vector3> OnPlayerHit;
 
     [Header("Advanced Indicators (Optional)")]
     [SerializeField] private ParticleSystem greyIndicator;
@@ -35,12 +35,12 @@ public class JumpTarget : MonoBehaviour
     [SerializeField] private Vector3 approachingScaleNear = Vector3.one;
     [SerializeField] private float approachSmooth = 10f;
 
-    private JumpTargetVisualState currentState = (JumpTargetVisualState)(-1);
+    protected JumpTargetVisualState currentState = (JumpTargetVisualState)(-1);
     private float approachT;
 
     protected virtual void NotifyPlayerHit(SimpleController p, Vector3 contactPoint)
     {
-        OnPlayerHit?.Invoke(p, contactPoint);
+        OnPlayerHit?.Invoke(this, p, contactPoint);
     }
 
 
@@ -58,7 +58,7 @@ public class JumpTarget : MonoBehaviour
     }
     public bool isAvailable = true;
 
-    public void DeactivateTarget()
+    public virtual void DeactivateTarget()
     {
         if (!isAvailable) return;
 
