@@ -17,6 +17,7 @@ public class CameraTargetDetection : MonoBehaviour
     [SerializeField] private float activationRangeMultiplier = 1.8f;
     [SerializeField] private float approachingRange = 3f;
     [SerializeField] float jumpRangeBuffer =  0.75f;
+    [SerializeField] private float jumpCameraAngleBonus = 20f;
 
     [Header("NPC Target Detection")]
     [SerializeField] private float npcDetectionRange;
@@ -123,7 +124,7 @@ public class CameraTargetDetection : MonoBehaviour
         float activationRange = jumpDetectionRange * activationRangeMultiplier;
 
         Collider[] targetsInActivationRange = Physics.OverlapSphere(
-            transform.position,
+            playerTransform.position,
             activationRange,
             jumpargetMask);
 
@@ -137,7 +138,7 @@ public class CameraTargetDetection : MonoBehaviour
                 continue;
             }
 
-            float dist = Vector3.Distance(transform.position, col.transform.position);
+            float dist = Vector3.Distance(playerTransform.position, col.transform.position);
 
             if (dist > removeRange)
             {
@@ -163,27 +164,24 @@ public class CameraTargetDetection : MonoBehaviour
             }
 
             float distanceToTarget =
-                Vector3.Distance(transform.position, target.transform.position);
+                Vector3.Distance(playerTransform.position, target.transform.position);
 
-            // ----------------------------
-            // 1️⃣ Hors activation range
-            // ----------------------------
             if (distanceToTarget > activationRange)
             {
                 jumpTar.SetVisualState(JumpTargetVisualState.OutOfRange, 0f);
                 continue;
             }
 
-            // ----------------------------
-            // 2️⃣ Dans activation range
-            // ----------------------------
             Vector3 directionToTarget =
-                (target.transform.position - transform.position).normalized;
+                (target.transform.position - playerTransform.position).normalized;
 
-            float angleToTarget =
-                Vector3.Angle(transform.forward, directionToTarget);
+            Vector3 camForward = Camera.main != null ? Camera.main.transform.forward : transform.forward;
 
-            bool inFOV = angleToTarget < viewAngle / 2f;
+            float jumpDetectionAngle = viewAngle + jumpCameraAngleBonus;
+            float angleToTarget = Vector3.Angle(camForward, directionToTarget);
+
+            bool inFOV = angleToTarget < jumpDetectionAngle / 2f;
+
             bool blocked =
                 Physics.Raycast(transform.position,
                                 directionToTarget,
@@ -193,9 +191,6 @@ public class CameraTargetDetection : MonoBehaviour
 
             bool inAddRange = distanceToTarget <= addRange;
 
-            // ----------------------------
-            // 3️⃣ VALID
-            // ----------------------------
             if (inAddRange && inFOV && !blocked)
             {
                 if (!validJumpTargets.Contains(target))
@@ -211,9 +206,6 @@ public class CameraTargetDetection : MonoBehaviour
                 if (validJumpTargets.Contains(target))
                     validJumpTargets.Remove(target);
 
-                // ----------------------------
-                // 4️⃣ APPROACHING
-                // ----------------------------
                 if (distanceToTarget <= jumpDetectionRange + approachingRange)
                 {
                     float approachingStart = jumpDetectionRange + approachingRange;
@@ -222,9 +214,6 @@ public class CameraTargetDetection : MonoBehaviour
                 }
                 else
                 {
-                    // ----------------------------
-                    // 5️⃣ OUT OF RANGE (but activated)
-                    // ----------------------------
                     jumpTar.SetVisualState(JumpTargetVisualState.OutOfRange, 0f);
                 }
             }

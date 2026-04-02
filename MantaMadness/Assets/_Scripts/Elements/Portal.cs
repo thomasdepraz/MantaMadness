@@ -20,10 +20,13 @@ public class Portal : MonoBehaviour
     [SerializeField] private bool enterSecretRoom = false;
 
     [SerializeField] private MUSICS musicToPlay = MUSICS.NULL;
-
+    [SerializeField] public FogState fogStateToEnable = FogState.disabled;
+    [SerializeField] public WeatherType specialWeatherType = WeatherType.MountainTemple;
 
     [SerializeField] public GameObject[] levelToLoad;
     [SerializeField] public GameObject[] levelToUnload;
+
+
 
     private void Start()
     {
@@ -54,7 +57,7 @@ public class Portal : MonoBehaviour
     {
         if (other.TryGetComponent(out SimpleController controller))
         {
-            PortalManager.Instance.StartCoroutine(PortalManager.Instance.Teleport(targetIndex, enterSecretRoom, musicToPlay,this));
+            PortalManager.Instance.StartCoroutine(PortalManager.Instance.Teleport(targetIndex, enterSecretRoom, musicToPlay,this, fogStateToEnable, specialWeatherType));
             PortalManager.Instance.SetCheckpoint(targetIndex, displayAreaName, nameToDisplay);
         }
     }

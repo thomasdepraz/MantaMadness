@@ -21,6 +21,7 @@ public class GameInterface : MonoBehaviour, IScreen
     [Header("Sun Overlay Parameters")]
     public Image sunImage;
     public Image sunOverlay;
+    public Image sunCountImage;
     [SerializeField] private Vector3[] sunScales =
     {
         Vector3.one * 0.5f,
@@ -106,7 +107,7 @@ public class GameInterface : MonoBehaviour, IScreen
     public void UpdateCoinCount(int coinCount)
     {
         coinText.text = coinCount.ToString();
-        sunImage?.transform.DOPunchScale(Vector3.one, 1, 5);
+        sunCountImage?.transform.DOPunchScale(Vector3.one, 1, 5);
     }
 
     public void UpdateClamCount(int clamCount)
@@ -119,7 +120,7 @@ public class GameInterface : MonoBehaviour, IScreen
         buckieText.text = buckieCount.ToString();
     }
 
-    public void toggleSunOverlay(bool toggleValue)
+    public void toggleSunInterface(bool toggleValue)
     {
         if (toggleValue == false)
         {
@@ -131,7 +132,7 @@ public class GameInterface : MonoBehaviour, IScreen
         }
     }
 
-    public void toggleSunInterface(bool toggleValue)
+    public void toggleSunOverlay(bool toggleValue)
     {
         if (toggleValue == false)
         {

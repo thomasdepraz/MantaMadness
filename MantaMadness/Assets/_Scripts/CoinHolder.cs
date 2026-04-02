@@ -77,6 +77,7 @@ public class CoinHolder : MonoBehaviour, IDataPersistence
         // PART 1 LOCK PLAYER ACTIVATE CAM
         //lock player
         controller.ForceLock(true);
+        controller.RailLock(true);
 
         //activate camera + play sound
         vcam.enabled = true;
@@ -104,7 +105,8 @@ public class CoinHolder : MonoBehaviour, IDataPersistence
 
         //unlock player
         controller.ForceLock(false);
-    
+        controller.RailLock(false);
+
 
         //reset camera
         CameraManager.Instance.ResetCamera(vcam);

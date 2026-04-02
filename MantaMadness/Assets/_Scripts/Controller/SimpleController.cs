@@ -21,7 +21,7 @@ public enum ControllerState
     BUMP,
     RAIL,
     LEDGEGRAB,
-    ELECTRICJUMP,
+    ELECTRICACTION,
 }
 
 public enum ControllerAbility
@@ -249,7 +249,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             OnStateEnter(value);
 
 
-            stateChanged.Invoke(state, value);
+            stateChanged.Invoke(previous, value);
             state = value;
         }
     }
@@ -1136,7 +1136,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         bumpRail = Physics.Raycast(hoverBehaviour.normalContainer.position, hoverBehaviour.normalContainer.forward, out RaycastHit railInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
         stompSweetSpot = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit stompInfo, controllerData.stompCancelRange, defaultRaycastLayer.value);
 
-        if (State == ControllerState.ELECTRICJUMP)
+        if (State == ControllerState.ELECTRICACTION)
         {
             return;
         }
@@ -2351,10 +2351,17 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             {
                 if (hasSpinBoost == true)
                 {
-                    //COMBO
-                    ComboManager.Instance.AddComboAction(ComboID.SpinBoost);
+                    if (electricBehaviour.IsCharged)
+                    {
+                        ElectricBoost();
+                    }
+                    else
+                    {
+                        //COMBO
+                        ComboManager.Instance.AddComboAction(ComboID.SpinBoost);
 
-                    Boost(controllerData.boostForce, Camera.main.transform.forward);
+                        Boost(controllerData.boostForce, Camera.main.transform.forward);
+                    }
                 }
 
 
@@ -2363,10 +2370,17 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             {
                 if (hasSpinBoost == true)
                 {
-                    //COMBO
-                    ComboManager.Instance.AddComboAction(ComboID.SpinAirBoost);
+                    if (electricBehaviour.IsCharged)
+                    {
+                        ElectricBoost();
+                    }
+                    else
+                    {
+                        //COMBO
+                        ComboManager.Instance.AddComboAction(ComboID.SpinAirBoost);
 
-                    Boost(controllerData.boostForce, Camera.main.transform.forward);
+                        Boost(controllerData.boostForce, Camera.main.transform.forward);
+                    }
                 }
             }
 
@@ -2621,52 +2635,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         lastLedgeGrabTime = Time.time;
     }
-    private void ClimbLedge()
-    {
-        rb.isKinematic = false;
-
-        Vector3 climbPos = ledgePoint + Vector3.up * 1.2f;
-        transform.position = climbPos;
-
-        // reset orientation propre
-        NormalContainer.up = Vector3.up;
-        transform.forward = savedLedgeExitForward;
-
-        State = ControllerState.SURFING;
-    }
-
-    private void DropLedge()
-    {
-        rb.isKinematic = false;
-        State = ControllerState.FALLING;
-
-        // reset orientation propre
-        NormalContainer.up = Vector3.up;
-        transform.forward = savedLedgeExitForward;
-    }
-
-    private void TransferSpinToRail()
-    {
-        // stop ground spin state
-        isSpinning = false;
-
-        // start rail spin
-        isRailSpinning = true;
-
-        if (hasRailSpinBoost)
-        {
-            spinCharged?.Invoke(true);
-            togglePlayerBlinkMat.Invoke(true, 25f);
-        }
-
-        currentRailSpinTime = currentSpinTime;
-        hasRailSpinBoost = hasSpinBoost;
-
-        currentSpinTime = 0;
-        hasSpinBoost = false;
-
-        spinStart?.Invoke();
-    }
 
     private bool TryRailTransfer(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
@@ -2758,23 +2726,31 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         disableCollisionRoutine = null;
     }
 
-    private Coroutine electricJumpRoutine;
+    private Coroutine electricActionRoutine;
     private void ElectricJump()
     {
-        if (electricJumpRoutine != null)
+        if (electricActionRoutine != null)
             return;
 
-        electricJumpRoutine = StartCoroutine(ElectricJumpCoroutine());
+        electricActionRoutine = StartCoroutine(ElectricJumpCoroutine());
+    }
+
+    private void ElectricBoost()
+    {
+        if (electricActionRoutine != null)
+            return;
+
+        electricActionRoutine = StartCoroutine(ElectricBoostCoroutine());
     }
 
     private void ResetElectricState()
     {
-        if(electricJumpRoutine != null)
+        if(electricActionRoutine != null)
         {
-            StopCoroutine(electricJumpRoutine);
+            StopCoroutine(electricActionRoutine);
         }
 
-        electricJumpRoutine = null;
+        electricActionRoutine = null;
         SetMetalCollision(true);
         electricBehaviour?.ConsumeCharge();
     }
@@ -2864,12 +2840,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
             electricBehaviour.electricJumpEnd?.Invoke();
 
-            electricJumpRoutine = null;
+            electricActionRoutine = null;
         }
         else
         {
 
-            State = ControllerState.ELECTRICJUMP;
+            State = ControllerState.ELECTRICACTION;
 
             Vector3 jumpDirection = GetElectricJumpDirection();
             transform.forward = jumpDirection;
@@ -2910,8 +2886,65 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             electricBehaviour.electricJumpEnd?.Invoke();
 
             State = ControllerState.FALLING;
-            electricJumpRoutine = null;
+            electricActionRoutine = null;
         }
+    }
+
+    private IEnumerator ElectricBoostCoroutine()
+    {
+        State = ControllerState.ELECTRICACTION;
+
+        ComboManager.Instance.AddComboAction(ComboID.DynamoJump);
+
+        CancelActionWindow();
+        CancelStomp();
+        ActionResetSpin();
+
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+
+        Vector3 jumpDirection = GetElectricJumpDirection();
+        transform.forward = jumpDirection;
+
+        Collider playerCollider = GetComponent<Collider>();
+        int playerLayer = gameObject.layer;
+
+        bool previousKinematic = rb.isKinematic;
+        rb.isKinematic = false;
+
+        //Goes through metal layer
+        SetMetalCollision(false);
+
+        FOVController.instance.FOVEffect(FOVController.FovEffectType.ELECTRICJUMP);
+
+        float timer = 0f;
+
+        electricBehaviour.electricJumpStart?.Invoke();
+
+        triggerAnim?.Invoke("Boost");
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.BOOST);
+
+        while (timer < controllerData.electricJumpDuration)
+        {
+            rb.linearVelocity = jumpDirection * controllerData.electricJumpSpeed;
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        SetMetalCollision(true);
+
+        rb.linearVelocity = jumpDirection * controllerData.electricJumpSpeed * controllerData.electricJumpExitVelocityFactor;
+
+        if (electricBehaviour != null)
+            electricBehaviour.BoostConsumeCharge();
+
+        if (electricBehaviour.remainingElectricUses > 0)
+            electricBehaviour.onElectricChargeFull?.Invoke();
+
+        State = ControllerState.SURFING;
+        electricActionRoutine = null;
     }
 
     private Vector3 GetElectricJumpDirection()

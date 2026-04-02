@@ -90,6 +90,11 @@ public class DebugGUI : MonoBehaviour
             controller.DebugUnlockAbilities();
         }
 
-        GUILayout.EndArea();
+        if (GUILayout.Button($"Switch Weather Condition"))
+        {
+            WeatherManager.instance.DebugSwitchCondition();
+        }
+
+            GUILayout.EndArea();
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class ElectricBehaviour : MonoBehaviour
 {
@@ -7,6 +8,9 @@ public class ElectricBehaviour : MonoBehaviour
     [SerializeField] private float maxCharge = 1f;
     [SerializeField] public float chargeDuration = 2f;
     [SerializeField] private float decayDuration = 5f;
+    [SerializeField] private int maxElectricUses = 1;
+
+    public int remainingElectricUses = 0;
 
     private float currentCharge = 0f;
     private bool isCharged = false;
@@ -58,6 +62,7 @@ public class ElectricBehaviour : MonoBehaviour
         if (!isCharged && currentCharge >= maxCharge)
         {
             isCharged = true;
+            remainingElectricUses = maxElectricUses;
             onElectricChargeFull?.Invoke();
         }
     }
@@ -95,6 +100,9 @@ public class ElectricBehaviour : MonoBehaviour
 
     public void ConsumeCharge()
     {
+        if (!isCharged)
+            return;
+
         currentCharge = 0f;
 
         if (isCharged)
@@ -104,6 +112,19 @@ public class ElectricBehaviour : MonoBehaviour
         }
 
         onElectricChargeUpdated?.Invoke(0f);
+    }
+
+    public void BoostConsumeCharge()
+    {
+        if (!isCharged)
+            return;
+
+        remainingElectricUses--;
+
+        if (remainingElectricUses > 0)
+            return;
+
+        ConsumeCharge();
     }
 
     public void ForceFullCharge()

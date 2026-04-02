@@ -283,11 +283,13 @@ public class MantaVisuals : MonoBehaviour
         if(newState == ControllerState.FALLING)
         {
             mantaAnimator.SetBool("Falling", true);
+            Debug.Log("ALLO TU FALL CONNARD ?");
         }
 
         if(previous == ControllerState.FALLING)
         {
             mantaAnimator.SetBool("Falling", false);
+            Debug.Log("TU FALL PLUS LA DUCON");
         }
 
         if (newState == ControllerState.SURFING)

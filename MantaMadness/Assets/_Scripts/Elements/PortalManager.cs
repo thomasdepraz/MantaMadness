@@ -26,7 +26,7 @@ public class PortalManager : MonoBehaviour
             }
     }
 
-    public IEnumerator Teleport(string targetIndex, bool secretRoomMusic, MUSICS musicToPlay, Portal portal)
+    public IEnumerator Teleport(string targetIndex, bool secretRoomMusic, MUSICS musicToPlay, Portal portal, FogState fogStateToEnable, WeatherType specialWeatherType)
     {
         // Set Velocity to 0
         Game.Instance.player?.LockPlayerForDuration(teleportTransitionDuration);
@@ -51,6 +51,7 @@ public class PortalManager : MonoBehaviour
         UIManager.Instance.transitionScreen.TransitionInOut();
         FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Warping, 1);
         MusicManager.Instance.PlayMusic(musicToPlay);
+        WeatherManager.instance.UpdateFog(fogStateToEnable, specialWeatherType);
 
         yield return new WaitForSeconds(teleportTransitionDuration/2);
         PlayTeleportSFX("WarpState", 1);

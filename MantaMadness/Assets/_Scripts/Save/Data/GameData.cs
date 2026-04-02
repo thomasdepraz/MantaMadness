@@ -44,8 +44,12 @@ public class GameData
     public bool cat;
     public bool dynamo;
 
+
+
     public MUSICS gameStartMusic;
     public AMBIENT gameStartAmbient;
+    public WeatherType weatherCondition;
+    public FogState fogState;
 
     // The values defined in this constructor will be the default values
     // Start with this when there's no data to load
@@ -57,6 +61,8 @@ public class GameData
         this.buckieCount = 0;
         this.gameStartMusic = MUSICS.MUSIC_LEVEL01;
         this.gameStartAmbient = AMBIENT.AMB_BEACH;
+        this.weatherCondition = WeatherType.Shores;
+        this.fogState = FogState.enabled;
         coinsCollected = new SerializableDictionnary<string, bool>();
         checkpoints = new SerializableDictionnary<string, bool>();
         abilityAltars = new SerializableDictionnary<string, bool>();

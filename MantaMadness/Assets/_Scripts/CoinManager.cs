@@ -62,6 +62,7 @@ public class CoinManager : MonoBehaviour, IDataPersistence
     public void LoadData(GameData data)
     {
         clamCollectibleCount = data.clamCount;
+        buckieCollectibleCount = data.buckieCount;
 
         foreach(KeyValuePair<string, bool> pair in data.coinsCollected)
         {
@@ -85,6 +86,7 @@ public class CoinManager : MonoBehaviour, IDataPersistence
     public void SaveData(ref GameData data)
     {
         data.clamCount = clamCollectibleCount;
+        data.buckieCount = buckieCollectibleCount;
     }
 
     public void PickupCoin()
