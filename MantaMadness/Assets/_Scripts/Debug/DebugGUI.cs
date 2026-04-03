@@ -11,6 +11,7 @@ public class DebugGUI : MonoBehaviour
 
     private bool showDebug = true; // état d'affichage
     public KeyCode toggleKey = KeyCode.F3; // touche pour toggle
+    public KeyCode skyKey = KeyCode.K;
 
     private void Awake()
     {
@@ -34,6 +35,12 @@ public class DebugGUI : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
+
+        if (Input.GetKeyDown(skyKey))
+        {
+            WeatherManager.instance.DebugSwitchCondition();
+        }
+
     }
 
     private void OnGUI()

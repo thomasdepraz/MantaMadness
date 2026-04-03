@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.LookDev;
 
@@ -27,6 +28,7 @@ public struct weatherColor
     public Color fogColorClose;
     [ColorUsage(showAlpha: true, hdr: true)]
     public Color fogColorFar;
+    public MUSICS music;
 }
 
 
@@ -64,6 +66,12 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
+        StartCoroutine(LoadDataDelay(data));
+    }
+
+    public IEnumerator LoadDataDelay(GameData data)
+    {
+        yield return new WaitForSeconds(0.1f);
         SetNewWeather(data.weatherCondition);
         currentWeather = data.weatherCondition;
         currentFogState = data.fogState;
@@ -100,6 +108,11 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
                     {
                         fog.fogMat.DOColor(condition.fogColorFar, "_FogColor", easeDuration).SetEase(ease).OnUpdate(() => DynamicGI.UpdateEnvironment());
                     }
+                }
+
+                if (condition.music != MUSICS.NULL)
+                {
+                    MusicManager.Instance.PlayMusic(condition.music);
                 }
             }
         }
