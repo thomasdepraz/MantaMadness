@@ -143367,8 +143367,8 @@ MonoBehaviour:
         Data4: 1065218578
       Path: event:/Sfx/InGame/Stingers/Stinger_Words
     param: 
-    paramValue: 0
-    doesntPlaySound: 0
+    paramValue: 3
+    doesntPlaySound: 1
   - type: 13
     data: {fileID: 7302724363811116681}
     sound:
@@ -143841,10 +143841,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playSequenceOnBeat: 0
+  playSequenceOnBeat: 1
   playSequenceOnEnable: 0
-  tweenSteps: []
-  sequenceLoops: 0
+  tweenSteps:
+  - animatePosition: 0
+    animateRotation: 0
+    animateScale: 1
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 0, y: 0, z: 0}
+    rotationUseLocal: 0
+    rotationRelative: 0
+    scale: {x: 1.2, y: 1.2, z: 11}
+    scaleRelative: 1
+    duration: 0
+    delay: 0
+    ease: 24
+  sequenceLoops: -1
   sequenceLoopType: 0
   beatSequenceType: 0
 --- !u!1 &9125138568081847818

@@ -4,6 +4,12 @@ using System;
 using System.Collections;
 using FMODUnity;
 
+public enum CarType
+{
+    Car,
+    TribouliBoat,
+}
+
 public class CarsSplineAnimate : MonoBehaviour
 {
 
@@ -18,6 +24,8 @@ public class CarsSplineAnimate : MonoBehaviour
     [SerializeField] private GameObject visual;
 
     [SerializeField] private ParticleSystem explosion;
+
+    [SerializeField] private CarType type = CarType.Car;
 
     [SerializeField] private EventReference hornAudio;
 
@@ -49,10 +57,17 @@ public class CarsSplineAnimate : MonoBehaviour
 
     private void PlayHorn()
     {
-        //Check if car is a moving car
-        if (splineAnimate != null)
+        switch (type)
         {
-           RuntimeManager.PlayOneShot(hornAudio, transform.position);
+            case CarType.Car:
+                //Check if car is a moving car
+                if (splineAnimate != null)
+                {
+                    RuntimeManager.PlayOneShot(hornAudio, transform.position);
+                }
+                break;
+            case CarType.TribouliBoat:
+                break;
         }
     }
 

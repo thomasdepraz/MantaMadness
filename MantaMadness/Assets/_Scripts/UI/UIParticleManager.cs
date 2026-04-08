@@ -29,6 +29,7 @@ public enum WordType
     WOW,
     SEXY,
     SICK,
+    NULL,
 }
 
 [Serializable]
@@ -140,7 +141,7 @@ public class UIParticleManager : MonoBehaviour
         EventInstance instance = RuntimeManager.CreateInstance(soundToPlay);
 
         //IMPORTANT FOR SFX WITH FMOD LOCAL PARAMETER
-        if (fmodParameter != null)
+        if (fmodParameter != null && parameterValue != WordType.NULL)
         {
             instance.setParameterByName(fmodParameter, (float)parameterValue);
         }

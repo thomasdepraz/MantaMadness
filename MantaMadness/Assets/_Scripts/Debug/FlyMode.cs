@@ -1,15 +1,25 @@
-using TMPro;
 using UnityEngine;
-using UnityEngine.ProBuilder;
-using UnityEngine.UIElements;
+
+public enum FlyModeSpeed
+{
+    Default,
+    Fast,
+    Slow,
+    VerySlow,
+}
 
 public class FlyMode : MonoBehaviour
 {
-   public static FlyMode instance;
+    public static FlyMode instance;
 
     public bool disableFlyMode = false;
     [Header("Vitesse de déplacement")]
-    public float moveSpeed = 50f;
+    private FlyModeSpeed speedMode;
+    public float defaultSpeed = 50f;
+    public float fastSpeed = 100f;
+    public float slowSpeed = 20f;
+    public float verySlowSpeed = 5f;
+
     public float boostMultiplier = 15f;
     public float smoothSpeed = 10f;
     public float smoothFactor = 10f;
@@ -54,9 +64,25 @@ public class FlyMode : MonoBehaviour
 
                 targetRotation = Quaternion.Euler(rotationY, rotationX, 0f);
                 //transform.rotation = Quaternion.Euler(rotationY, rotationX, 0f);
-
+                float speed = 50f;
                 // --- Déplacement avec ZQSD ---
-                float speed = moveSpeed;
+
+                switch (speedMode)
+                {
+                    case FlyModeSpeed.Slow:
+                        speed = slowSpeed;
+                        break;
+                    case FlyModeSpeed.Fast:
+                        speed = fastSpeed;
+                        break;
+                    case FlyModeSpeed.VerySlow:
+                        speed = verySlowSpeed;
+                        break;
+                    case FlyModeSpeed.Default:
+                        speed = defaultSpeed;
+                        break;
+                }
+
                 if (Input.GetKey(KeyCode.LeftShift)) speed *= boostMultiplier;
                 if (Input.GetKey(KeyCode.LeftShift)) smoothSpeed *= boostMultiplier;
 
@@ -67,31 +93,13 @@ public class FlyMode : MonoBehaviour
                     Input.GetAxisRaw("Vertical")    // Z/S
                 );
 
-                if (smoothMode == true)
-                {
-                    Vector3 move = (transform.TransformDirection(direction).normalized) * smoothSpeed * Time.deltaTime;
+                transform.rotation = Quaternion.Euler(rotationY, rotationX, 0f);
+                Vector3 move = transform.TransformDirection(direction).normalized * speed * Time.deltaTime;
+                transform.position += move;
 
-                    if (Input.GetKey(KeyCode.E))
-                        move += Vector3.up * smoothSpeed * Time.deltaTime;
-                    if (Input.GetKey(KeyCode.LeftControl))
-                        move -= Vector3.up * smoothSpeed * Time.deltaTime;
+                if (Input.GetKey(KeyCode.E)) transform.position += Vector3.up * speed * Time.deltaTime;
+                if (Input.GetKey(KeyCode.LeftControl)) transform.position += Vector3.down * speed * Time.deltaTime;
 
-                    targetPosition += move;
-
-                    // --- Appliquer le lissage ---
-                    transform.position = Vector3.SmoothDamp(transform.localPosition, targetPosition, ref currentVelocity, 1f / smoothFactor);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSmoothSpeed * Time.deltaTime);
-                }
-
-                else
-                {
-                    transform.rotation = Quaternion.Euler(rotationY, rotationX, 0f);
-                    Vector3 move = transform.TransformDirection(direction).normalized * speed * Time.deltaTime;
-                    transform.position += move;
-
-                    if (Input.GetKey(KeyCode.E)) transform.position += Vector3.up * speed * Time.deltaTime;
-                    if (Input.GetKey(KeyCode.LeftControl)) transform.position += Vector3.down * speed * Time.deltaTime;
-                }
 
                 // Quitter le mode "fly" en débloquant la souris avec ESC
                 if (Input.GetKeyDown(KeyCode.Escape))
@@ -109,6 +117,11 @@ public class FlyMode : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.G))
             {
                 SwitchCamMode();
+            }
+
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                SwitchCamSpeed();
             }
         }
     }
@@ -143,5 +156,12 @@ public class FlyMode : MonoBehaviour
             targetPosition = transform.position;
         }
 
+    }
+
+    public void SwitchCamSpeed()
+    {
+        int enumLength = System.Enum.GetValues(typeof(FlyModeSpeed)).Length;
+        int next = ((int)speedMode + 1) % enumLength;
+        speedMode = (FlyModeSpeed)next;
     }
 }
