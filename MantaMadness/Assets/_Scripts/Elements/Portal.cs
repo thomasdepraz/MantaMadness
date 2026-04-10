@@ -3,20 +3,16 @@ using TMPro;
 using FMODUnity;
 
 [RequireComponent(typeof(BoxCollider))]
-public class Portal : MonoBehaviour
+public class Portal : WorldCheckpoint
 {
-    [SerializeField] public string index;
     [SerializeField] private string targetIndex;
 
     public Transform teleportPoint;
     private SimpleController player;
 
-
     [SerializeField] public TextMeshProUGUI signText;
-    [Header("Checkpoint Parameters")]
-    [SerializeField] public bool displayAreaName = false;
-    [SerializeField] public string nameToDisplay;
 
+    [Header("World State Parameters")]
     [SerializeField] private bool enterSecretRoom = false;
 
     [SerializeField] private MUSICS musicToPlay = MUSICS.NULL;
@@ -28,8 +24,10 @@ public class Portal : MonoBehaviour
 
 
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         if(player == null)
         {
             player = Game.Instance.player;
@@ -37,7 +35,7 @@ public class Portal : MonoBehaviour
 
         if (signText != null)
         {
-            signText.text = index;
+            signText.text = indexName;
         }
 
         if (!PortalManager.Instance.portals.Contains(this))
@@ -53,13 +51,24 @@ public class Portal : MonoBehaviour
         //player.transform.forward = teleportPoint.forward;
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected override void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out SimpleController controller))
         {
+            WorldCheckpointManager.Instance.SetCheckpoint(respawnTransform, indexName, displayAreaName, nameToDisplay);
             PortalManager.Instance.StartCoroutine(PortalManager.Instance.Teleport(targetIndex, enterSecretRoom, musicToPlay,this, fogStateToEnable, specialWeatherType));
             PortalManager.Instance.SetCheckpoint(targetIndex, displayAreaName, nameToDisplay);
         }
+    }
+
+    public override void EnableMat()
+    {
+        //RIEN
+    }
+
+    public override void DisableMat()
+    {
+        //RIEN
     }
 
 }

@@ -10,8 +10,8 @@ public class WorldCheckpoint : MonoBehaviour
     [SerializeField] public string indexName;
     [SerializeField] public bool displayAreaName;
     [SerializeField] public string nameToDisplay;
-    [SerializeField] public MUSICS musicToPlay = MUSICS.NULL;
-    [SerializeField] public AMBIENT ambientToPlay = AMBIENT.NULL;
+    //[SerializeField] public MUSICS musicToPlay = MUSICS.NULL;
+    //[SerializeField] public AMBIENT ambientToPlay = AMBIENT.NULL;
 
     [SerializeField] private MeshRenderer[] visuals;
     [SerializeField] private GameObject flag;
@@ -20,16 +20,7 @@ public class WorldCheckpoint : MonoBehaviour
     [SerializeField] private ParticleSystem particle;
     [SerializeField] private EventReference soundToPlay;
 
-
-    private void Awake()
-    {
-        //if(gameObject.GetComponent<MeshRenderer>().enabled == true)
-        //{
-        //    gameObject.GetComponent<MeshRenderer>().enabled = false;
-        //}
-    }
-
-    private void Start()
+    protected virtual void Start()
     {
         if (!WorldCheckpointManager.Instance.checkpoints.Contains(this))
         {
@@ -37,26 +28,27 @@ public class WorldCheckpoint : MonoBehaviour
             print(indexName + " Has been added to checkpoint list");
         }
     }
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.TryGetComponent(out SimpleController controller))
         {
             WorldCheckpointManager.Instance.SetCheckpoint(respawnTransform, indexName, displayAreaName, nameToDisplay);
-            if (musicToPlay != MUSICS.NULL)
-            {
-                MusicManager.Instance.PlayMusic(musicToPlay);
-            }
-            if(ambientToPlay != AMBIENT.NULL)
-            {
-                MusicManager.Instance.PlayAmbient(ambientToPlay);
-            }
+            //if (musicToPlay != MUSICS.NULL)
+            //{
+            //    MusicManager.Instance.PlayMusic(musicToPlay);
+            //}
+            //if(ambientToPlay != AMBIENT.NULL)
+            //{
+            //    MusicManager.Instance.PlayAmbient(ambientToPlay);
+            //}
         }
     }
 
-    public void EnableMat()
+    public virtual void EnableMat()
     {
         //Enable Flag
         flag.SetActive(true);
+
         //Change mat to enablemat
         foreach(MeshRenderer renderer in visuals)
         {
@@ -70,10 +62,14 @@ public class WorldCheckpoint : MonoBehaviour
         UIParticleManager.Instance.playSpecificUIParticle(UiParticles.CHECKPOINT, "");
     }
     
-    public void DisableMat()
+    public virtual void DisableMat()
     {
-        //Disable Flag
-        flag.SetActive(false);
+        if(flag != null)
+        {
+            //Disable Flag
+            flag.SetActive(false);
+        }
+
         //Change Mat to disableMat
         foreach (MeshRenderer renderer in visuals)
         {

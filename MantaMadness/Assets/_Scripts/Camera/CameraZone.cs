@@ -2,6 +2,12 @@ using Unity.Cinemachine;
 using UnityEngine;
 using System.Collections.Generic;
 
+public enum CameraType
+{
+    Perspective,
+    Orthographic
+}
+
 [RequireComponent(typeof(Collider))]
 public class CameraZone : MonoBehaviour
 {
@@ -15,6 +21,9 @@ public class CameraZone : MonoBehaviour
 
     [Header("Priorité logique de la zone")]
     public int zonePriority = 0;
+
+    [SerializeField] private CameraType camType;
+    public CameraType CamType => camType;
 
     private Collider zoneCollider;
     private Transform player;

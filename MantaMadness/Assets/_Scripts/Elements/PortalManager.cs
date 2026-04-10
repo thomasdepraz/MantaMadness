@@ -57,7 +57,7 @@ public class PortalManager : MonoBehaviour
         PlayTeleportSFX("WarpState", 1);
         for (int i = 0; i < portals.Count; i++)
         {
-            if (portals[i].index == targetIndex)
+            if (portals[i].indexName == targetIndex)
             {
                 portals[i].Teleport();
                 break;
@@ -84,7 +84,7 @@ public class PortalManager : MonoBehaviour
 
         for (int i = 0; i < portals.Count; i++)
         {
-            if (portals[i].index == index)
+            if (portals[i].indexName == index)
             {
                 respawnPos = portals[i].teleportPoint;
                 break;

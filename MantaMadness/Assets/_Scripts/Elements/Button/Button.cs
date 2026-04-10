@@ -1,29 +1,34 @@
-using UnityEngine;
-using Unity.Cinemachine;
-using System.Collections;
+using DG.Tweening;
 using FMODUnity;
+using System.Collections;
+using Unity.Cinemachine;
+using UnityEngine;
 
 public class Button : MonoBehaviour
 {
+    [Header("Parameter")]
+    public float spawnTime = 0.05f;
+
     [Header("Cinemachine")]
     public CinemachineCamera vcam;
     public CinemachineBlendDefinition blend;
 
-    private WaitForSeconds wait;
-    private Coroutine routine;
+    protected WaitForSeconds wait;
+    protected Coroutine routine;
 
     public GameObject[] objectsToActivate;
     public GameObject[] objectsToDeactivate;
 
-    private const float c_lockDuration = 4f;
-    private bool isActivated = false;
+    protected const float c_lockDuration = 4f;
+    protected bool isActivated = false;
 
     public MeshRenderer buttonMesh;
     public Material activatedMaterial;
 
     public EventReference buttonStinger;
 
-    private void Start()
+
+    protected virtual void Start()
     {
         if(isActivated == false)
         {
@@ -41,7 +46,7 @@ public class Button : MonoBehaviour
         vcam.enabled = false;
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out SimpleController controller))
         {
@@ -50,7 +55,7 @@ public class Button : MonoBehaviour
         }
     }
 
-    private IEnumerator ActivationCoroutine(SimpleController controller)
+    protected virtual IEnumerator ActivationCoroutine(SimpleController controller)
     {
         isActivated = true;
         buttonMesh.material = activatedMaterial;
@@ -74,19 +79,30 @@ public class Button : MonoBehaviour
         //animation
 
         yield return new WaitForSeconds(c_lockDuration / 2);
-        UIManager.Instance.transitionScreen.TransitionInOut();
-        yield return new WaitForSeconds(0.5f);
+        //UIManager.Instance.transitionScreen.TransitionInOut();
+        //yield return new WaitForSeconds(0.5f);
 
         // PART 2 SPAWN IN OBJECTS
 
-        foreach (GameObject objects in objectsToActivate)
-        {
-            objects.SetActive(true);
-        }
+        //foreach (GameObject objects in objectsToActivate)
+        //{
+        //    objects.SetActive(true);
+        //}
 
         foreach (GameObject objects in objectsToDeactivate)
         {
             objects.SetActive(false);
+        }
+
+        if (objectsToActivate.Length > 0)
+        {
+            for (int i = 0; i < objectsToActivate.Length; i++)
+            {
+                //ACTIVATE OBJECT
+                objectsToActivate[i].SetActive(true);
+                objectsToActivate[i].transform.DOMoveY(objectsToActivate[i].transform.position.y + 5f, 0.2f).SetEase(Ease.OutQuad).SetLoops(2, LoopType.Yoyo);
+                yield return new WaitForSeconds(spawnTime / objectsToActivate.Length);
+            }
         }
 
         yield return new WaitForSeconds(c_lockDuration / 2);
@@ -100,7 +116,5 @@ public class Button : MonoBehaviour
         CameraManager.Instance.ResetCamera(vcam);
 
         routine = null;
-
-
     }
 }

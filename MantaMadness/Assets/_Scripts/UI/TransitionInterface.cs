@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using System.Collections;
 
 public class TransitionInterface : MonoBehaviour, IScreen
 {
@@ -11,6 +12,12 @@ public class TransitionInterface : MonoBehaviour, IScreen
     private void Start()
     {
         UIManager.Instance.transitionScreen = this;
+        TransitionOnLoad();
+    }
+
+    public void TransitionOnLoad()
+    {
+        fadeTransform.localScale = new Vector3(30, 30, 1);
     }
 
     public void TransitionInOut()

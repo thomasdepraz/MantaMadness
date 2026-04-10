@@ -12,6 +12,7 @@ public class Game : MonoBehaviour, IDataPersistence
     private float respawnTimer = -1f;
     private System.Action onTimerFinished;
     private bool isRespawning = false;
+    private bool onLoadCheck = false;
     public bool isHitStop = false;
 
     //Cinematic / State Points
@@ -186,7 +187,16 @@ public class Game : MonoBehaviour, IDataPersistence
     {
         isRespawning = true;
         //Action before timer
-        UIManager.Instance.transitionScreen.TransitionIn();
+        if(onLoadCheck != true)
+        {
+            onLoadCheck = true;
+            //UIManager.Instance.transitionScreen.TransitionOnLoad();
+        }
+        else
+        {
+            UIManager.Instance.transitionScreen.TransitionIn();
+        }
+
         FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Life, 1f);
         PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DEATH);
         yield return new WaitForSeconds(1f);

@@ -39,7 +39,7 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
 
     [SerializeField] private weatherColor[] weatherConditions;
 
-    private WeatherType currentWeather;
+    public WeatherType currentWeather;
     private FogState currentFogState;
 
     [SerializeField] private Ease ease;
@@ -72,7 +72,7 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
     public IEnumerator LoadDataDelay(GameData data)
     {
         yield return new WaitForSeconds(0.1f);
-        SetNewWeather(data.weatherCondition);
+        SetWeatherOnLoad(data.weatherCondition);
         currentWeather = data.weatherCondition;
         currentFogState = data.fogState;
     }
@@ -83,11 +83,42 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
         data.fogState = currentFogState;
     }
 
+    public void SetWeatherOnLoad(WeatherType newWeather)
+    {
+        if (currentWeather == newWeather)
+            return;
+
+        foreach (weatherColor condition in weatherConditions)
+        {
+            if (condition.type == newWeather)
+            {
+                Material sky = RenderSettings.skybox;
+
+                sky.DOColor(condition.color, "_Tint", easeDuration).SetEase(ease).OnUpdate(() => DynamicGI.UpdateEnvironment());
+
+                currentWeather = newWeather;
+
+                foreach (FogTypeClass fog in fogs)
+                {
+                    if (fog.type == FogTypeClass.FogType.Close || fog.type == FogTypeClass.FogType.Special)
+                    {
+                        fog.fogMat.DOColor(condition.fogColorClose, "_FogColor", easeDuration).SetEase(ease).OnUpdate(() => DynamicGI.UpdateEnvironment());
+                    }
+                    else
+                    {
+                        fog.fogMat.DOColor(condition.fogColorFar, "_FogColor", easeDuration).SetEase(ease).OnUpdate(() => DynamicGI.UpdateEnvironment());
+                    }
+                }
+            }
+        }
+    }
+
     public void SetNewWeather(WeatherType newWeather)
     {
         if (currentWeather == newWeather)
             return;
 
+        Debug.Log("Frr wsh pk srx?");
         foreach (weatherColor condition in weatherConditions)
         {
             if (condition.type == newWeather)
@@ -115,6 +146,12 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
                     MusicManager.Instance.PlayMusic(condition.music);
                 }
             }
+        }
+
+        Debug.Log("Frr wsh pk?");
+        if (SunPositionManager.instance != null)
+        {
+            SunPositionManager.instance.SetSunPosition(newWeather);
         }
     }
 
@@ -151,17 +188,6 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
         }
         currentFogState = state;
     }
-
-
-    //Maintenant nouvelle logique qui rejoint la precedente
-    // L'idée c'est qu'en gros, on get le mat de tout les fog layer. donc faut pouvoir differencier les fogs selon leur type (Fog near / fog far > il on un mat différent)
-    //Ensuite lors de l'update du sky, il faut que les mat des fog se set selon le weatherColor, ca signifie qu'il faut rajouter 2 parametres au weather color, soit fogColorNear et fogColorFar;
-    //Puis lors du changement de biome, il faut faire blend les materiaux de chaque fog selon la valeur de weathercolor qui correspond au type du fog
-    // Donc en gros, chaque fog doit aussi avoir un script FOG avec un fogtype et selon le fogtype, on applique la bonne couleur
-
-    //2e, un systeme pour desactiver le fog si on est dans une zone qui ne l'utilise pas. la facon la plus simple c'est:
-    // Lié au TP, lorsque le perso tp > on check si le tp est de type "Enable" ou "Disable" ou "Null". Si enable > active le fog / Si disable desactive le fog
-    // Aussi il faut pour register tout ca, créer un booléen dans la gameData qu'on appelera "fogEnabled" et il faut l'enregistrer au moment de save data.
 
     public void DebugSwitchCondition()
     {

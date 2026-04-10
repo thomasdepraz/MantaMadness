@@ -532,11 +532,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         Vector3 camForward = cam.forward;
         Vector3 camRight = cam.right;
 
-        camForward.y = 0;
-        camRight.y = 0;
-
-        camForward.Normalize();
-        camRight.Normalize();
+        GetCameraAxes(out camForward, out camRight);
 
         Vector3 moveDir = (camForward * airControl.y + camRight * airControl.x).normalized;
 
@@ -664,11 +660,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         Vector3 camForward = cam.forward;
         Vector3 camRight = cam.right;
 
-        camForward.y = 0;
-        camRight.y = 0;
-
-        camForward.Normalize();
-        camRight.Normalize();
+        GetCameraAxes(out camForward, out camRight);
 
         Vector3 moveDir = (camForward * airControl.y + camRight * airControl.x).normalized;
 
@@ -884,7 +876,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         {
             if(boostRoutine == null && IsDrifting == false)
             {
-                boostBehaviour.UseBoost(() => Boost(controllerData.boostForce, Camera.main.transform.forward));
+                GetCameraAxes(out Vector3 forward, out _);
+                boostBehaviour.UseBoost(() => Boost(controllerData.boostForce, forward));
             }
         }
 
@@ -916,17 +909,17 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 {
                         //ENABLE strafHitbox
                         PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.GRINDRAILDASH);    
-
+                        GetCameraAxes(out Vector3 forward, out Vector3 right);
                         if (context.action.name == InputManager.Instance.strafLeft.action.name)
                         {
                             rb.linearVelocity = Vector3.zero;
-                            rb.AddForce(-Camera.main.transform.right * controllerData.strafForce + Camera.main.transform.forward * controllerData.strafForwardForce, ForceMode.VelocityChange);
+                            rb.AddForce(-right * controllerData.strafForce + forward * controllerData.strafForwardForce, ForceMode.VelocityChange);
                             straf.Invoke();
                         }
                         else if (context.action.name == InputManager.Instance.strafRight.action.name)
                         {
                             rb.linearVelocity = Vector3.zero;
-                            rb.AddForce(Camera.main.transform.right * controllerData.strafForce + Camera.main.transform.forward * controllerData.strafForwardForce, ForceMode.VelocityChange);
+                            rb.AddForce(right * controllerData.strafForce + forward * controllerData.strafForwardForce, ForceMode.VelocityChange);
                             straf.Invoke();
                         }
                 }
@@ -1007,7 +1000,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         triggerAnim.Invoke("Boost");
         boost.Invoke();
         afterImageEffect.Invoke(controllerData.boostAfterImageEffectDuration);
-        rb.AddForce(Camera.main.transform.forward * controllerData.boostForce, ForceMode.VelocityChange);
+
+        GetCameraAxes(out Vector3 forward, out _);
+        rb.AddForce(forward * controllerData.boostForce, ForceMode.VelocityChange);
         yield return new WaitForSeconds(controllerData.boostCooldown);
         boostJumpRoutine = null;
     }
@@ -1348,6 +1343,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             }
             else if (hasHitWalls)
             {
+                if (stompInfo.collider.gameObject.CompareTag("StompCollision"))
+                    return;
+
                 State = ControllerState.FALLING;
                 rb.AddForce(hoverBehaviour.normalContainer.up * rb.linearVelocity.magnitude / 2f, ForceMode.Acceleration);
             }
@@ -1547,8 +1545,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     private void AirControl()
     {
-        Vector3 camForward = Camera.main.transform.forward;
-        Vector3 camRight = Camera.main.transform.right;
+        Vector3 camForward;
+        Vector3 camRight;
+
+        GetCameraAxes(out camForward, out camRight);
 
         camForward.Normalize();
         camRight.Normalize();
@@ -1615,8 +1615,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         Vector3 camForward = Camera.main.transform.forward;
         Vector3 camRight = Camera.main.transform.right;
 
-        camForward.Normalize();
-        camRight.Normalize();
+        CameraZone zone = CameraZone.ActiveZone;
+
+        GetCameraAxes(out camForward, out camRight);
+
+        //camForward.Normalize();
+        //camRight.Normalize();
 
         float right = inputs.driftR.action.ReadValue<float>();
         float left = inputs.driftL.action.ReadValue<float>();
@@ -1880,14 +1884,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     {
         Transform cam = Camera.main.transform;
 
-        Vector3 camForward = cam.forward;
-        Vector3 camRight = cam.right;
+        Vector3 camForward;
+        Vector3 camRight;
 
-        camForward.y = 0f;
-        camRight.y = 0f;
-
-        camForward.Normalize();
-        camRight.Normalize();
+        GetCameraAxes(out camForward, out camRight);
 
         // Input prioritaire
         Vector2 move = inputs.moveDirection.action.ReadValue<Vector2>();
@@ -2157,14 +2157,15 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private Coroutine bumpRoutine;
     public void Bump(Vector3 direction)
     {
-        if (state == ControllerState.BUMP)
+        if (state == ControllerState.FALLING)
             return;
 
         if (bumpRoutine != null)
             return;
 
+        CancelStomp();
         bumpRoutine = StartCoroutine(BumpCoroutine());
-        state = ControllerState.BUMP;
+        state = ControllerState.FALLING;
         PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.BUMP);
         Vector3 force = (NormalContainer.up * controllerData.bumpForce) + (direction * controllerData.forwardImpulseForce);
         rb.AddForce(force, ForceMode.VelocityChange);
@@ -2359,8 +2360,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                     {
                         //COMBO
                         ComboManager.Instance.AddComboAction(ComboID.SpinBoost);
-
-                        Boost(controllerData.boostForce, Camera.main.transform.forward);
+                        Vector3 boostDir = GetBoostDirectionFromInput();
+                        Boost(controllerData.boostForce, boostDir);
                     }
                 }
 
@@ -2378,8 +2379,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                     {
                         //COMBO
                         ComboManager.Instance.AddComboAction(ComboID.SpinAirBoost);
-
-                        Boost(controllerData.boostForce, Camera.main.transform.forward);
+                        Vector3 boostDir = GetBoostDirectionFromInput();
+                        Boost(controllerData.boostForce, boostDir);
                     }
                 }
             }
@@ -2411,7 +2412,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     public void SuperSpinBoost()
     {
-        Boost(controllerData.superBoostForce, Camera.main.transform.forward);
+        GetCameraAxes(out Vector3 forward, out _);
+        Boost(controllerData.superBoostForce, forward);
     }
     private void ActionResetSpin()
     {
@@ -2951,14 +2953,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     {
         Transform cam = Camera.main.transform;
 
-        Vector3 camForward = cam.forward;
-        Vector3 camRight = cam.right;
+        Vector3 camForward;
+        Vector3 camRight;
 
-        camForward.y = 0f;
-        camRight.y = 0f;
-
-        camForward.Normalize();
-        camRight.Normalize();
+        GetCameraAxes(out camForward, out camRight);
 
         Vector2 move = inputs.airControl.action.ReadValue<Vector2>();
 
@@ -3003,6 +3001,56 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         ForceLock(false);
         rb.AddForce(transform.forward * 5f, ForceMode.VelocityChange);
     }
+
+    private void GetCameraAxes(out Vector3 forward, out Vector3 right)
+    {
+        CameraZone zone = CameraZone.ActiveZone;
+
+        // TOP DOWN
+        if (zone != null && zone.CamType == CameraType.Orthographic)
+        {
+            forward = Vector3.forward;
+            right = Vector3.right;
+            return;
+        }
+
+        // DEFAULT CAMERA RELATIVE
+        Transform cam = Camera.main.transform;
+
+        forward = cam.forward;
+        right = cam.right;
+
+        forward.y = 0;
+        right.y = 0;
+
+        forward.Normalize();
+        right.Normalize();
+    }
+
+    private Vector3 GetBoostDirectionFromInput()
+{
+    CameraZone zone = CameraZone.ActiveZone;
+
+    // Caméra top-down
+    if (zone != null && zone.CamType == CameraType.Orthographic)
+    {
+        Vector2 input = inputs.airControl.action.ReadValue<Vector2>();
+
+        if (input.sqrMagnitude > 0.01f)
+        {
+            GetCameraAxes(out Vector3 camForward, out Vector3 camRight);
+            Vector3 dir = camForward * input.y + camRight * input.x;
+            dir.y = 0;
+            return dir.normalized;
+        }
+
+        return transform.forward;
+    }
+
+    // Caméra normale
+    GetCameraAxes(out Vector3 forward, out _);
+    return forward;
+}
 
     #region ActionWindows
     private void StartActionWindow(ActionWindow window, float duration)

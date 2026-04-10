@@ -2,19 +2,24 @@ using UnityEngine;
 
 public class BreakableWall : MonoBehaviour
 {
-    [SerializeField] private GameObject wall;
-    [SerializeField] private ParticleSystem breakParticle;
-    [SerializeField] private Collider hardCollider;
+    [SerializeField] protected GameObject wall;
+    [SerializeField] protected ParticleSystem breakParticle;
 
-    private bool isBroken = false;
+    protected bool isBroken = false;
 
-    private void Start()
+    protected virtual void Start()
     {
         if (wall.activeSelf == false)
             wall.SetActive(true);
+
+        if(breakParticle !=  null && wall != null)
+        {
+            var rend = breakParticle.GetComponent<ParticleSystemRenderer>();
+            rend.material = wall.GetComponent<MeshRenderer>().material;
+        }
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out SimpleController controller))
         {
@@ -23,8 +28,6 @@ public class BreakableWall : MonoBehaviour
                 isBroken = true;
                 wall.SetActive(false);
                 breakParticle.Play();
-                if (hardCollider != null)
-                    hardCollider.enabled = false;
             }
         }
     }
