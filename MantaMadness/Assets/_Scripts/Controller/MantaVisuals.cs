@@ -283,13 +283,11 @@ public class MantaVisuals : MonoBehaviour
         if(newState == ControllerState.FALLING)
         {
             mantaAnimator.SetBool("Falling", true);
-            Debug.Log("ALLO TU FALL CONNARD ?");
         }
 
         if(previous == ControllerState.FALLING)
         {
             mantaAnimator.SetBool("Falling", false);
-            Debug.Log("TU FALL PLUS LA DUCON");
         }
 
         if (newState == ControllerState.SURFING)
@@ -696,17 +694,17 @@ public class MantaVisuals : MonoBehaviour
             stompVisual.enabled = false;
         }
 
-        //ALIEN ABILITY VISUAL
-        if (Game.Instance.player.alienAntennasAbility == true)
-        {
-            alienAntennaVisual.enabled = true;
-        }
-        else
-        {
-            alienAntennaVisual.enabled = false;
-        }
+        ////ALIEN ABILITY VISUAL
+        //if (Game.Instance.player.alienAntennasAbility == true)
+        //{
+        //    alienAntennaVisual.enabled = true;
+        //}
+        //else
+        //{
+        //    alienAntennaVisual.enabled = false;
+        //}
 
-        //ALIEN ABILITY VISUAL
+        //GRIND ABILITY VISUAL
         if (Game.Instance.player.grindAbility== true)
         {
             grindVisual.enabled = true;
@@ -716,21 +714,21 @@ public class MantaVisuals : MonoBehaviour
             grindVisual.enabled = false;
         }
 
-        //CAT ABILITY VISUAL
-        if(Game.Instance.player.catAbility == true)
-        {
-            foreach(var visual in catVisual)
-            {
-                visual.enabled = true;
-            }
-        }
-        else
-        {
-            foreach (var visual in catVisual)
-            {
-                visual.enabled = false;
-            }
-        }
+        ////CAT ABILITY VISUAL
+        //if(Game.Instance.player.catAbility == true)
+        //{
+        //    foreach(var visual in catVisual)
+        //    {
+        //        visual.enabled = true;
+        //    }
+        //}
+        //else
+        //{
+        //    foreach (var visual in catVisual)
+        //    {
+        //        visual.enabled = false;
+        //    }
+        //}
 
         //DYNAMO ABILITY VISUAL
         if (Game.Instance.player.dynamoAbility == true)

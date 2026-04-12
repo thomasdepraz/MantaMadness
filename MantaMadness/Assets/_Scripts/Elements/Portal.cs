@@ -16,7 +16,6 @@ public class Portal : WorldCheckpoint
     [SerializeField] private bool enterSecretRoom = false;
 
     [SerializeField] private MUSICS musicToPlay = MUSICS.NULL;
-    [SerializeField] public FogState fogStateToEnable = FogState.disabled;
     [SerializeField] public WeatherType specialWeatherType = WeatherType.MountainTemple;
 
     [SerializeField] public GameObject[] levelToLoad;
@@ -56,7 +55,7 @@ public class Portal : WorldCheckpoint
         if (other.TryGetComponent(out SimpleController controller))
         {
             WorldCheckpointManager.Instance.SetCheckpoint(respawnTransform, indexName, displayAreaName, nameToDisplay);
-            PortalManager.Instance.StartCoroutine(PortalManager.Instance.Teleport(targetIndex, enterSecretRoom, musicToPlay,this, fogStateToEnable, specialWeatherType));
+            PortalManager.Instance.StartCoroutine(PortalManager.Instance.Teleport(targetIndex, enterSecretRoom, musicToPlay,this, specialWeatherType));
             PortalManager.Instance.SetCheckpoint(targetIndex, displayAreaName, nameToDisplay);
         }
     }

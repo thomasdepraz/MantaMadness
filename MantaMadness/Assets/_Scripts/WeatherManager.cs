@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.LookDev;
+using UnityEngine.SceneManagement;
 
 public enum WeatherType
 {
@@ -9,6 +10,7 @@ public enum WeatherType
     City,
     Vulcano,
     MountainTemple,
+    Null,
 }
 
 public enum FogState
@@ -28,6 +30,7 @@ public struct weatherColor
     public Color fogColorClose;
     [ColorUsage(showAlpha: true, hdr: true)]
     public Color fogColorFar;
+    public FogState fogState;
     public MUSICS music;
 }
 
@@ -72,24 +75,56 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
     public IEnumerator LoadDataDelay(GameData data)
     {
         yield return new WaitForSeconds(0.1f);
-        SetWeatherOnLoad(data.weatherCondition);
-        currentWeather = data.weatherCondition;
-        currentFogState = data.fogState;
+        if(SceneManager.GetActiveScene() == SceneManager.GetSceneByName("MainMenu"))
+        {
+            SetWeatherOnLoad(data.mainMenuWeatherCondition);
+        }
+        else
+        {
+            SetWeatherOnLoad(data.weatherCondition);
+        }
+
     }
 
     public void SaveData(ref GameData data)
     {
         data.weatherCondition = currentWeather;
         data.fogState = currentFogState;
+
+        //Save Weather State if its a valid Main menu State.
+        switch (currentWeather)
+        {
+            case WeatherType.Vulcano:
+                data.mainMenuWeatherCondition = currentWeather;
+                break;
+            case WeatherType.City:
+                data.mainMenuWeatherCondition = currentWeather;
+                break;
+            case WeatherType.Shores:
+                data.mainMenuWeatherCondition = currentWeather;
+                break;
+        }
     }
 
     public void SetWeatherOnLoad(WeatherType newWeather)
     {
-        if (currentWeather == newWeather)
+        if (newWeather == WeatherType.Null)
+        {
+            foreach (weatherColor condition in weatherConditions)
+            {
+                if (condition.type == WeatherType.Null)
+                {
+                    UpdateFog(condition.fogState);
+                    currentWeather = WeatherType.Null;
+                }
+            }
             return;
+        }
 
         foreach (weatherColor condition in weatherConditions)
         {
+
+
             if (condition.type == newWeather)
             {
                 Material sky = RenderSettings.skybox;
@@ -97,6 +132,15 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
                 sky.DOColor(condition.color, "_Tint", easeDuration).SetEase(ease).OnUpdate(() => DynamicGI.UpdateEnvironment());
 
                 currentWeather = newWeather;
+
+                UpdateFog(condition.fogState);
+
+                if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("MainMenu"))
+                {
+                    SunPositionManager.instance.SetSunStateOnload(DataPersistenceManager.Instance.gameData.mainMenuWeatherCondition);
+                    return;
+                }
+
 
                 foreach (FogTypeClass fog in fogs)
                 {
@@ -111,14 +155,32 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
                 }
             }
         }
+
+        if (SunPositionManager.instance != null)
+        {
+            SunPositionManager.instance.SetSunPosition(newWeather);
+        }
+
     }
 
     public void SetNewWeather(WeatherType newWeather)
     {
         if (currentWeather == newWeather)
-            return;
+           return;
 
-        Debug.Log("Frr wsh pk srx?");
+        if (newWeather == WeatherType.Null)
+        {
+            foreach (weatherColor condition in weatherConditions)
+            {
+                if (condition.type == WeatherType.Null)
+                {
+                    UpdateFog(condition.fogState);
+                    currentWeather = WeatherType.Null;
+                }
+            }
+            return;
+        }
+
         foreach (weatherColor condition in weatherConditions)
         {
             if (condition.type == newWeather)
@@ -129,7 +191,9 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
 
                 currentWeather = newWeather;
 
-                foreach(FogTypeClass fog in fogs)
+                UpdateFog(condition.fogState);
+
+                foreach (FogTypeClass fog in fogs)
                 {
                     if(fog.type == FogTypeClass.FogType.Close || fog.type == FogTypeClass.FogType.Special)
                     {
@@ -148,15 +212,30 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
             }
         }
 
-        Debug.Log("Frr wsh pk?");
         if (SunPositionManager.instance != null)
         {
             SunPositionManager.instance.SetSunPosition(newWeather);
         }
+
+
+        //Set weather Conditions in save
+        switch (currentWeather)
+        {
+            case WeatherType.Vulcano:
+                DataPersistenceManager.Instance.gameData.mainMenuWeatherCondition = currentWeather;
+                break;
+            case WeatherType.City:
+                DataPersistenceManager.Instance.gameData.mainMenuWeatherCondition = currentWeather;
+                break;
+            case WeatherType.Shores:
+                DataPersistenceManager.Instance.gameData.mainMenuWeatherCondition = currentWeather;
+                break;
+        }
     }
 
-    public void UpdateFog(FogState state, WeatherType specialType)
+    public void UpdateFog(FogState state)
     {
+        Debug.Log("Fog State is " + state);
         switch (state)
         {
             case FogState.disabled:
@@ -183,7 +262,6 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
                 {
                     fog.gameObject.SetActive(true);
                 }
-                SetNewWeather(specialType);
                 break;
         }
         currentFogState = state;
@@ -194,5 +272,12 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
         int enumLength = System.Enum.GetValues(typeof(WeatherType)).Length;
         int next = ((int)currentWeather + 1) % enumLength;
         SetNewWeather((WeatherType)next);
+    }
+
+    public void DebugFogCondition()
+    {
+        int enumLength = System.Enum.GetValues(typeof(FogState)).Length;
+        int next = ((int)currentFogState + 1) % enumLength;
+        UpdateFog((FogState)next);
     }
 }

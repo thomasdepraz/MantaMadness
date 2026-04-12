@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class SunHandler : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class SunHandler : MonoBehaviour
 
     public void Start()
     {
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("MainMenu"))
+            return;
+
         UIEffectManager.Instance.GoodAction += playGoodAnimation;
         UIEffectManager.Instance.BadAction += playWhackAnimation;
         UIEffectManager.Instance.SpecificAction += playSunAnimation;

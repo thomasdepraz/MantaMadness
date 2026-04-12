@@ -2755,6 +2755,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         electricActionRoutine = null;
         SetMetalCollision(true);
         electricBehaviour?.ConsumeCharge();
+
+        if (State == ControllerState.ELECTRICACTION)
+            State = ControllerState.FALLING;
     }
 
     private IEnumerator ElectricJumpCoroutine()
@@ -3301,16 +3304,30 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         stompBuildupWindowEnded = false;
     }
 
-    public void DebugUnlockAbilities()
+    public void DebugUnlockAbilities(bool toggle)
     {
-        doubleJumpAbility = true;
-        chargeBoostAbility = true;
-        stompAbility = true;
-        lavaResistanceAbility = true;
-        alienAntennasAbility = true;
-        grindAbility = true;
-        catAbility = true;
-        dynamoAbility = true;
+        if(toggle == true)
+        {
+            doubleJumpAbility = true;
+            chargeBoostAbility = true;
+            stompAbility = true;
+            lavaResistanceAbility = true;
+            alienAntennasAbility = true;
+            grindAbility = true;
+            catAbility = true;
+            dynamoAbility = true;
+        }
+        else
+        {
+            doubleJumpAbility = false;
+            chargeBoostAbility = false;
+            stompAbility = false;
+            lavaResistanceAbility = false;
+            alienAntennasAbility = false;
+            grindAbility = false;
+            catAbility = false;
+            dynamoAbility = false;
+        }
         updateEquipmentVisual?.Invoke();
     }
 }

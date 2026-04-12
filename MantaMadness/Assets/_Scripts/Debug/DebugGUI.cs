@@ -13,6 +13,8 @@ public class DebugGUI : MonoBehaviour
     public KeyCode toggleKey = KeyCode.F3; // touche pour toggle
     public KeyCode skyKey = KeyCode.K;
 
+    private bool toggleAbility = true;
+
     private void Awake()
     {
         controller = GameObject.FindGameObjectWithTag("Player").GetComponent<SimpleController>();
@@ -94,7 +96,8 @@ public class DebugGUI : MonoBehaviour
 
         if (GUILayout.Button($"Unlock All Abilities"))
         {
-            controller.DebugUnlockAbilities();
+            controller.DebugUnlockAbilities(toggleAbility);
+            toggleAbility = !toggleAbility;
         }
 
         if (GUILayout.Button($"Switch Weather Condition"))
@@ -102,6 +105,16 @@ public class DebugGUI : MonoBehaviour
             WeatherManager.instance.DebugSwitchCondition();
         }
 
-            GUILayout.EndArea();
+        if (GUILayout.Button($"Sun Random Emote"))
+        {
+            UIEffectManager.Instance.GoodAction.Invoke();
+        }
+
+        if (GUILayout.Button($"Toggle Fog"))
+        {
+            WeatherManager.instance.DebugFogCondition();
+        }
+
+        GUILayout.EndArea();
     }
 }

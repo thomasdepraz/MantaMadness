@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum SunState
 {
@@ -39,11 +40,6 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
         }
     }
 
-    //private void Start()
-    //{
-    //    originalScale = sunVisual.transform.localScale;
-    //}
-
     public void LoadData(GameData data)
     {
         originalScale = sunVisual.transform.localScale;
@@ -70,6 +66,9 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
                 case WeatherType.City:
                     sunSwitchRoutine = StartCoroutine(SunSwitchPosition(cityPos, SunState.Moon));
                     break;
+                default:
+                    sunSwitchRoutine = StartCoroutine(SunSwitchPosition(shoresPos, SunState.Sun));
+                    break;
             }
         }
     }
@@ -77,12 +76,117 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
     private Coroutine sunSwitchRoutine = null;
     private IEnumerator SunSwitchPosition(Transform swichPosition, SunState state)
     {
-        sunVisual.transform.DOScale(Vector3.one, 1.5f).SetEase(Ease.InOutQuad);
-        yield return new WaitForSeconds(2f);
 
-        if(state == SunState.Sun)
+        if(SceneManager.GetActiveScene() == SceneManager.GetSceneByName("MainMenu"))
         {
-            foreach(GameObject visual in sunStateVisual)
+            if (state == SunState.Sun)
+            {
+                foreach (GameObject visual in sunStateVisual)
+                {
+                    visual.SetActive(true);
+                }
+
+                foreach (GameObject visual in moonStateVisual)
+                {
+                    visual.SetActive(false);
+                }
+
+                foreach (Renderer renderer in sunFaceRenderer)
+                {
+                    renderer.material = sunMat;
+                }
+            }
+            else
+            {
+                foreach (GameObject visual in sunStateVisual)
+                {
+                    visual.SetActive(false);
+                }
+
+                foreach (GameObject visual in moonStateVisual)
+                {
+                    visual.SetActive(true);
+                }
+
+                foreach (Renderer renderer in sunFaceRenderer)
+                {
+                    renderer.material = moonMat;
+                }
+            }
+        }
+        else
+        {
+            sunVisual.transform.DOScale(Vector3.one, 1.5f).SetEase(Ease.InOutQuad);
+            yield return new WaitForSeconds(2f);
+
+            if (state == SunState.Sun)
+            {
+                foreach (GameObject visual in sunStateVisual)
+                {
+                    visual.SetActive(true);
+                }
+
+                foreach (GameObject visual in moonStateVisual)
+                {
+                    visual.SetActive(false);
+                }
+
+                foreach (Renderer renderer in sunFaceRenderer)
+                {
+                    renderer.material = sunMat;
+                }
+            }
+            else
+            {
+                foreach (GameObject visual in sunStateVisual)
+                {
+                    visual.SetActive(false);
+                }
+
+                foreach (GameObject visual in moonStateVisual)
+                {
+                    visual.SetActive(true);
+                }
+
+                foreach (Renderer renderer in sunFaceRenderer)
+                {
+                    renderer.material = moonMat;
+                }
+            }
+
+            sunVisual.transform.position = swichPosition.position;
+            sunVisual.transform.DOScale(originalScale, 1.5f).SetEase(Ease.InOutQuad);
+            sunSwitchRoutine = null;
+        }
+
+    }
+
+    public void SetSunStateOnload(WeatherType type)
+    {
+        switch (type)
+        {
+            case WeatherType.Vulcano:
+                SetSunState(SunState.Sun);
+                break;
+            case WeatherType.City:
+                SetSunState(SunState.Moon);
+                break;
+            case WeatherType.Shores:
+                SetSunState(SunState.Sun);
+                break;
+            default:
+                SetSunState(SunState.Sun);
+                Debug.Log("Default Case quelqu'un ?");
+                break;
+        }
+
+    }
+
+    private void SetSunState(SunState state)
+    {
+        if (state == SunState.Sun)
+        {
+            foreach (GameObject visual in sunStateVisual)
             {
                 visual.SetActive(true);
             }
@@ -114,10 +218,6 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
                 renderer.material = moonMat;
             }
         }
-
-        sunVisual.transform.position = swichPosition.position;
-        sunVisual.transform.DOScale(originalScale, 1.5f).SetEase(Ease.InOutQuad);
-        sunSwitchRoutine = null;
     }
 
 

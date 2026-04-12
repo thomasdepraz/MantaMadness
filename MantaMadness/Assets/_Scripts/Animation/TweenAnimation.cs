@@ -24,7 +24,6 @@ public struct TweenStep
 
     [Header("Scale")]
     public Vector3 scale;
-    public bool scaleRelative;
 
     [Header("Timing")]
     public float duration;
@@ -183,13 +182,14 @@ public class TweenAnimation : MonoBehaviour
 
         currentSequence = DOTween.Sequence();
 
+        Vector3 simulatedScale = transform.localScale;
+
         foreach (TweenStep step in tweenSteps)
         {
             if (step.delay > 0)
                 currentSequence.AppendInterval(step.delay);
 
             float tweenDuration = step.duration;
-
             Tween stepTween = null;
 
             if (step.animateRotation)
@@ -197,26 +197,33 @@ public class TweenAnimation : MonoBehaviour
                 stepTween = step.rotationUseLocal
                     ? transform.DOLocalRotate(step.rotation, tweenDuration, RotateMode.FastBeyond360)
                     : transform.DORotate(step.rotation, tweenDuration, RotateMode.FastBeyond360);
+
+                if (step.rotationRelative)
+                    stepTween.SetRelative();
             }
             else if (step.animatePosition)
             {
                 stepTween = step.positionUseLocal
                     ? transform.DOLocalMove(step.position, tweenDuration)
                     : transform.DOMove(step.position, tweenDuration);
+
+                if (step.positionRelative)
+                    stepTween.SetRelative();
             }
             else if (step.animateScale)
             {
-                stepTween = transform.DOScale(step.scale, tweenDuration);
+                Vector3 baseScale = sequenceLoopType == LoopType.Restart
+                    ? originalScale
+                    : transform.localScale;
+
+                Vector3 targetScale = Vector3.Scale(baseScale, step.scale);
+
+                stepTween = transform.DOScale(targetScale, tweenDuration);
             }
 
             if (stepTween != null)
             {
-                if (step.rotationRelative || step.positionRelative || step.scaleRelative)
-                    stepTween.SetRelative();
-
                 stepTween.SetEase(step.ease);
-
-                // IMPORTANT
                 currentSequence.Append(stepTween);
             }
         }
@@ -229,6 +236,8 @@ public class TweenAnimation : MonoBehaviour
     {
         if (tweenSteps == null || tweenSteps.Count == 0)
             return;
+
+        transform.DOKill();
 
         TweenStep step = tweenSteps[currentBeatStep];
 
@@ -267,15 +276,21 @@ public class TweenAnimation : MonoBehaviour
 
         if (step.animateScale)
         {
-            Tween stepTween = transform.DOScale(step.scale, tweenDuration);
+            Vector3 baseScale = sequenceLoopType == LoopType.Restart
+                ? originalScale
+                : transform.localScale;
 
-            if (step.scaleRelative)
-                stepTween.SetRelative();
+            Vector3 targetScale = Vector3.Scale(baseScale, step.scale);
 
-            stepTween.SetEase(step.ease);
+            if (sequenceLoopType == LoopType.Restart)
+                transform.localScale = baseScale;
+
+            Tween scaleTween = transform.DOScale(targetScale, tweenDuration);
+
+            scaleTween.SetEase(step.ease);
 
             if (sequenceLoopType == LoopType.Yoyo)
-                stepTween.SetLoops(2, LoopType.Yoyo);
+                scaleTween.SetLoops(2, LoopType.Yoyo);
         }
 
         currentBeatStep++;

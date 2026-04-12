@@ -57,6 +57,9 @@ public class FlyMode : MonoBehaviour
         {
             if (isEnabled == true)
             {
+
+                Game.Instance.player.transform.position = flyCam.transform.position;
+
                 // --- Rotation de la caméra avec la souris ---
                 rotationX += Input.GetAxis("Mouse X") * mouseSensitivity;
                 rotationY -= Input.GetAxis("Mouse Y") * mouseSensitivity;
@@ -98,7 +101,7 @@ public class FlyMode : MonoBehaviour
                 transform.position += move;
 
                 if (Input.GetKey(KeyCode.E)) transform.position += Vector3.up * speed * Time.deltaTime;
-                if (Input.GetKey(KeyCode.LeftControl)) transform.position += Vector3.down * speed * Time.deltaTime;
+                if (Input.GetKey(KeyCode.X)) transform.position += Vector3.down * speed * Time.deltaTime;
 
 
                 // Quitter le mode "fly" en débloquant la souris avec ESC
@@ -139,6 +142,7 @@ public class FlyMode : MonoBehaviour
 
             Game.Instance.player.transform.position = flyCam.transform.position;
             Game.Instance.player.ForceLock(false);
+            Game.Instance.player.togglePlayerBodyVisual(true);
             isEnabled = false;
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
             UnityEngine.Cursor.visible = true;
@@ -149,6 +153,7 @@ public class FlyMode : MonoBehaviour
         {
             flyCam.transform.position = Game.Instance.player.transform.position;
             Game.Instance.player.ForceLock(true);
+            Game.Instance.player.togglePlayerBodyVisual(false);
             isEnabled = true;
             UnityEngine.Cursor.lockState = CursorLockMode.None;
             UnityEngine.Cursor.visible = false;
