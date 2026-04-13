@@ -136,7 +136,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.superSpinStart += SuperSpinStart;
         mantaController.actionWindowActive += ActionWindowParticles;
         mantaController.spinCharged += ToggleSpinChargedParticles;
-        mantaController.stompJump += StompJumpParticle;
+        mantaController.stompJump += StompJump;
         mantaController.electricBehaviour.onElectricChargeFull += OnElectricChargeFull;
         mantaController.electricBehaviour.onElectricChargeLost += OnElectricChargeLost;
         mantaController.electricBehaviour.electricJumpStart += OnElectricJumpStart;
@@ -172,7 +172,7 @@ public class MantaVisuals : MonoBehaviour
         mantaController.superSpinStart -= SuperSpinStart;
         mantaController.actionWindowActive -= ActionWindowParticles;
         mantaController.spinCharged -= ToggleSpinChargedParticles;
-        mantaController.stompJump -= StompJumpParticle;
+        mantaController.stompJump -= StompJump;
         mantaController.electricBehaviour.onElectricChargeFull -= OnElectricChargeFull;
         mantaController.electricBehaviour.onElectricChargeLost -= OnElectricChargeLost;
         mantaController.electricBehaviour.electricJumpStart -= OnElectricJumpStart;
@@ -929,8 +929,9 @@ public class MantaVisuals : MonoBehaviour
         }
     }
 
-    public void StompJumpParticle()
+    public void StompJump()
     {
+        mantaAnimator.SetTrigger("AntiGravJump");
         Instantiate(stompJumpParticle, transform.position, Quaternion.identity);
     }
 

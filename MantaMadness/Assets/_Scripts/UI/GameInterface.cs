@@ -14,6 +14,9 @@ public class GameInterface : MonoBehaviour, IScreen
 
     public Camera uiCamera;
     [Header("UI Ressources Parameters")]
+    public GameObject coinUiVisual;
+    public GameObject clamUiVisual;
+    public GameObject buckieUiVisual;
     public TextMeshProUGUI coinText;
     public TextMeshProUGUI clamText;
     public TextMeshProUGUI buckieText;
@@ -321,5 +324,12 @@ public class GameInterface : MonoBehaviour, IScreen
         {
             sunImage.transform.DOPunchScale(Vector3.one * 0.15f, 0.2f);
         }
+    }
+
+    public void DebugToggleVisualCount(bool toggle)
+    {
+        coinUiVisual.SetActive(toggle);
+        clamUiVisual.SetActive(toggle);
+        buckieUiVisual.SetActive(toggle);
     }
 }

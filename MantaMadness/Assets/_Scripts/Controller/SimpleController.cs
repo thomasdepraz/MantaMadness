@@ -22,6 +22,7 @@ public enum ControllerState
     RAIL,
     LEDGEGRAB,
     ELECTRICACTION,
+    ANTIGRAVJUMP,
 }
 
 public enum ControllerAbility
@@ -507,7 +508,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (actionDelayRoutine != null)
             return;
 
-        if (currentActionWindow != null && currentActionWindow.Type == ActionWindowType.StompLand && currentActionWindow.IsActive)
+        if (currentActionWindow != null && currentActionWindow.Type == ActionWindowType.StompLand && currentActionWindow.IsActive && alienAntennasAbility)
         {
             currentActionWindow.Success(ActionWindowResult.Jump);
             currentActionWindow = null;
@@ -746,32 +747,29 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     }
     private void StompLandJump()
-    { 
-        State = ControllerState.JUMPING;
+    {
+        State = ControllerState.ANTIGRAVJUMP;
         jumpCount++;
 
+        //ComboManager.Instance.AddComboAction(ComboID.DynamoJump);
+
+        CancelStomp();
+        ActionResetSpin();
 
         rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
 
-        rb.AddForce((hoverBehaviour.normalContainer.up * controllerData.upwardImpulseForce * controllerData.stompJumpBonusUpForceMult)
-            + hoverBehaviour.normalContainer.forward * controllerData.forwardImpulseForce * controllerData.stompJumpBonusForwardForceMult, 
-            ForceMode.VelocityChange);
+        rb.AddForce((Vector3.up * controllerData.upwardImpulseForce * controllerData.stompJumpBonusUpForceMult), ForceMode.VelocityChange);
         PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.STOMPJUMP);
 
         //Play anim
-        triggerAnim.Invoke("StyleTrigger");
+        //triggerAnim.Invoke("StyleTrigger");
         stompJump?.Invoke();
-        boost?.Invoke();
+ 
 
         if (jumpRoutine != null)
             StopCoroutine(jumpRoutine);
         jumpRoutine = StartCoroutine(JumpRoutine());
-
-        //if (isSpinning)
-        //{
-        //    // Bonus si spinning pendant stomp
-        //    Boost(controllerData.spinPerfectBonusForce, transform.forward);
-        //}
     }
 
     private void SetDrift(bool drifting, bool boost = false)
@@ -3089,7 +3087,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         stompWindow.OnStart = () =>
         {
-
             //VFX dans manta visual
             actionWindowActive?.Invoke(stompWindow.Type);
 
@@ -3115,7 +3112,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             switch (result)
             {
                 case ActionWindowResult.Jump:
-                    ComboManager.Instance.AddComboAction(ComboID.TornadoJump);
+                    //ComboManager.Instance.AddComboAction(ComboID.AntiGravityJump);
                     StompLandJump();
                     break;
             }
@@ -3139,6 +3136,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             else
             {
                 ComboManager.Instance.AddComboAction(ComboID.DiveBoost);
+                Debug.Log("BOOST POST DIVE LAND");
                 if (direction.magnitude > 0.1f)
                 {
                     Boost(controllerData.boostForce, direction);

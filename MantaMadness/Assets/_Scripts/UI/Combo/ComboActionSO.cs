@@ -31,12 +31,13 @@ public enum ComboID
     TargetJump,
     SpinBoost,
     SpinAirBoost,
-    TornadoJump,
+    AntiGravityJump,
     GalaxyBoost,
     RailStyle,
     SuperRailStyle,
     RailEnter,
     DynamoJump,
+    DynamoBoost,
 
 }
 

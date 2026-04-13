@@ -2,6 +2,7 @@ using TMPEffects.Components;
 using TMPro;
 using UnityEngine;
 using System.Collections;
+using DG.Tweening;
 
 public class ComboUIController : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class ComboUIController : MonoBehaviour
 
     private Coroutine feverRoutine;
     private Vector3 timerObjectInitialScale;
+    private Vector3 ComboTextInitialScale;
 
     private TMP_FontAsset defaultFont;
     private Material defaultMaterial;
@@ -65,6 +67,7 @@ public class ComboUIController : MonoBehaviour
         Sync();
 
         timerObjectInitialScale = timerScaleObject.localScale;
+        ComboTextInitialScale = comboNameText.gameObject.transform.localScale;
         defaultFont = comboNameText.font;
         defaultMaterial = comboNameText.fontMaterial;
     }
@@ -151,6 +154,9 @@ public class ComboUIController : MonoBehaviour
 
     void UpdateActionName(ComboActionSO action)
     {
+        comboNameText.gameObject.transform.DOKill();
+        comboNameText.gameObject.transform.localScale = ComboTextInitialScale;
+        comboNameText.gameObject.transform.DOScale(new Vector3(1.5f,1.5f,1.5f),0.15f).SetEase(Ease.OutQuad).SetLoops(2,LoopType.Yoyo);
 
         ApplyFont(action);
 

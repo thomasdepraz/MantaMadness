@@ -14,6 +14,7 @@ public class DebugGUI : MonoBehaviour
     public KeyCode skyKey = KeyCode.K;
 
     private bool toggleAbility = true;
+    private bool visualCountToggle = true;
 
     private void Awake()
     {
@@ -113,6 +114,12 @@ public class DebugGUI : MonoBehaviour
         if (GUILayout.Button($"Toggle Fog"))
         {
             WeatherManager.instance.DebugFogCondition();
+        }
+
+        if (GUILayout.Button($"Toggle Visual Count"))
+        {
+            UIManager.Instance.gameInterface.DebugToggleVisualCount(visualCountToggle);
+            visualCountToggle = !visualCountToggle;
         }
 
         GUILayout.EndArea();
