@@ -32,6 +32,7 @@ public struct weatherColor
     public Color fogColorFar;
     public FogState fogState;
     public MUSICS music;
+    public AMBIENT ambient;
 }
 
 
@@ -208,6 +209,11 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
                 if (condition.music != MUSICS.NULL)
                 {
                     MusicManager.Instance.PlayMusic(condition.music);
+                }
+
+                if(condition.ambient != AMBIENT.NULL)
+                {
+                    MusicManager.Instance.PlayAmbient(condition.ambient);
                 }
             }
         }

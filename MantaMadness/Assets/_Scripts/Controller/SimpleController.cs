@@ -748,6 +748,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     }
     private void StompLandJump()
     {
+        if (stompLandJumpRoutine != null)
+            return;
+
+        stompLandJumpRoutine = StartCoroutine(StompLandJumpCoroutine());
         State = ControllerState.ANTIGRAVJUMP;
         jumpCount++;
 
@@ -762,14 +766,21 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         rb.AddForce((Vector3.up * controllerData.upwardImpulseForce * controllerData.stompJumpBonusUpForceMult), ForceMode.VelocityChange);
         PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.STOMPJUMP);
 
-        //Play anim
-        //triggerAnim.Invoke("StyleTrigger");
         stompJump?.Invoke();
  
 
         if (jumpRoutine != null)
             StopCoroutine(jumpRoutine);
         jumpRoutine = StartCoroutine(JumpRoutine());
+    }
+
+    public Coroutine stompLandJumpRoutine;
+    private IEnumerator StompLandJumpCoroutine()
+    {
+        yield return new WaitForSeconds(1.2f);
+        stompLandJumpRoutine = null;
+        state = ControllerState.JUMPING;
+        triggerAnim.Invoke("Spin");
     }
 
     private void SetDrift(bool drifting, bool boost = false)

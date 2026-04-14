@@ -15,6 +15,7 @@ public class DebugGUI : MonoBehaviour
 
     private bool toggleAbility = true;
     private bool visualCountToggle = true;
+    private bool trailerVisualToggle = true;
 
     private void Awake()
     {
@@ -120,6 +121,12 @@ public class DebugGUI : MonoBehaviour
         {
             UIManager.Instance.gameInterface.DebugToggleVisualCount(visualCountToggle);
             visualCountToggle = !visualCountToggle;
+        }
+
+        if (GUILayout.Button($"Toggle Trailer visual"))
+        {
+            MantaVisuals.instance.ToggleTrailerVisuals(trailerVisualToggle);
+            trailerVisualToggle = !trailerVisualToggle;
         }
 
         GUILayout.EndArea();

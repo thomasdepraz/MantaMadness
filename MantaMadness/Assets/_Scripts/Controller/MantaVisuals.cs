@@ -76,6 +76,10 @@ public class MantaVisuals : MonoBehaviour
     public Material electricMaterial;
     private Material[] originalMaterials;
 
+    [Header("Trailer Visual")]
+    public SkinnedMeshRenderer[] bosseVisuals;
+    public Material burntMaterial;
+
     [Header("After Image")]
     public SkinnedMeshRenderer mantaBodyVisual;
     public Material afterImageMat;
@@ -180,24 +184,6 @@ public class MantaVisuals : MonoBehaviour
         EnableElectricVisual(false);
     }
 
-
-    private void Dash(int dashCount)
-    {
-        mantaAnimator.SetFloat(styleIndexId, UnityEngine.Random.Range(0, dashBlendTreeAnimationCount));
-        mantaAnimator.SetTrigger(styleTriggerId);
-
-        //PARTICLE EFFECT + SUN EFFECT DEPENDING ON DASHCOUNT
-        if(dashCount > 4)
-        {
-            styleParticles.Play();
-            UIEffectManager.Instance.GoodAction.Invoke();
-             
-        }
-
-        var index = Mathf.Max(0, dashCount);
-        PlayerActionFMODManager.Instance.PlayStyleAction(PlayerActionFMOD.STYLE, dashCount);
-    }
-
     private void Start()
     {
         arrow.gameObject.SetActive(false);
@@ -205,6 +191,24 @@ public class MantaVisuals : MonoBehaviour
 
         originalMaterials = new Material[1];
         originalMaterials[0] = mantaBodyVisual.sharedMaterial;
+        ToggleTrailerVisuals(false);
+    }
+
+    private void Dash(int dashCount)
+    {
+        mantaAnimator.SetFloat(styleIndexId, UnityEngine.Random.Range(0, dashBlendTreeAnimationCount));
+        mantaAnimator.SetTrigger(styleTriggerId);
+
+        //PARTICLE EFFECT + SUN EFFECT DEPENDING ON DASHCOUNT
+        if (dashCount > 4)
+        {
+            styleParticles.Play();
+            UIEffectManager.Instance.GoodAction.Invoke();
+
+        }
+
+        var index = Mathf.Max(0, dashCount);
+        PlayerActionFMODManager.Instance.PlayStyleAction(PlayerActionFMOD.STYLE, dashCount);
     }
 
     private Coroutine afterImageRoutine;
@@ -695,14 +699,14 @@ public class MantaVisuals : MonoBehaviour
         }
 
         ////ALIEN ABILITY VISUAL
-        //if (Game.Instance.player.alienAntennasAbility == true)
-        //{
-        //    alienAntennaVisual.enabled = true;
-        //}
-        //else
-        //{
-        //    alienAntennaVisual.enabled = false;
-        //}
+        if (Game.Instance.player.alienAntennasAbility == true)
+        {
+            alienAntennaVisual.enabled = true;
+        }
+        else
+        {
+            alienAntennaVisual.enabled = false;
+        }
 
         //GRIND ABILITY VISUAL
         if (Game.Instance.player.grindAbility== true)
@@ -1011,5 +1015,34 @@ public class MantaVisuals : MonoBehaviour
         yield return new WaitForSeconds(mantaController.controllerData.electricJumpDuration);
         ToggleMantaVisual(true);
         electricJumpParticles.Stop();
+    }
+
+
+    public void ToggleTrailerVisuals(bool toggle)
+    {
+        if (toggle)
+        {
+            mantaBodyVisual.material = burntMaterial;
+        }
+        else
+        {
+            mantaBodyVisual.material = originalMaterials[0];
+        }
+
+        if (toggle)
+        {
+            foreach (SkinnedMeshRenderer bosse in bosseVisuals)
+            {
+                bosse.gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            foreach (SkinnedMeshRenderer bosse in bosseVisuals)
+            {
+                bosse.gameObject.SetActive(false);
+            }
+        }
+
     }
 }

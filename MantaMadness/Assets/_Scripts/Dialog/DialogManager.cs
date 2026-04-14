@@ -67,6 +67,7 @@ public class DialogManager : MonoBehaviour
         dialogTextBox = GameObject.Find("DialogContent").GetComponent<TextMeshProUGUI>();
         dialogIndicator = GameObject.Find("DialogIndicator").GetComponent<Image>();
         dialogIndicator.color = new Color(255, 255, 255, 0);
+        dialogWriter.OnCharacterShown.AddListener(PlaySoundOnCharWritten);
         foreach (GameObject visual in dialogUIVisuals)
         {
             visual.SetActive(false);
@@ -90,6 +91,7 @@ public class DialogManager : MonoBehaviour
     }
     private void OnDisable()
     {
+        dialogWriter.OnCharacterShown.RemoveListener(PlaySoundOnCharWritten);
         DialogLoader.OnLanguageChanged -= OnLanguageChanged;
         inputs.interact.action.performed -= Interacts;
         inputs.interact.action.performed -= StartNPCInteraction;
@@ -281,8 +283,6 @@ public class DialogManager : MonoBehaviour
         string parsedText = DialogLoader.ParseInputs(dialog.dialogText);
         dialogTextBox.text = parsedText;
         RuntimeManager.PlayOneShot(dialog.dialogSound);
-        dialogWriter.OnCharacterShown.AddListener(PlaySoundOnCharWritten);
-        dialogWriter.OnCharacterShown.RemoveListener(PlaySoundOnCharWritten);
         dialogWriter.StartWriter();
 
         while(dialogWriter.IsWriting == true)
