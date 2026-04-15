@@ -62,7 +62,7 @@ MonoBehaviour:
   minSpeedToDash: 0
   dashTimer: 0.5
   dashForce: 5
-  dashCooldown: 0.75
+  styleCooldown: 0
   dashTimeThreshold: 0.3
   maxConsecutiveDashCount: 5
   canDriftandDash: 0
@@ -115,6 +115,8 @@ MonoBehaviour:
   jumpForceMultiplierMin: 0
   jumpForceMultiplierMax: 0
   jumpChargeTime: 0
+  antiGravJumpDamping: 0
+  AntiGravJumpBonusForceMult: 5
   minimumFloatingForce: 2
   maximumFloatingForce: 50
   floatingForceMultiplier: 5
@@ -138,6 +140,8 @@ MonoBehaviour:
   driftDirectionalDecay: 0
   driftBrakeDecay: 0
   boostForce: 0
+  superBoostForce: 0
+  superBoostAfterImageEffectDuration: 0
   boostAfterImageEffectDuration: 0
   boostCooldown: 0
   strafForce: 0
@@ -164,11 +168,25 @@ MonoBehaviour:
   stompAccelForce: 0
   stompJumpCancelUpForce: 0
   stompJumpCancelForwardForce: 0
+  stompCancelRange: 2.5
+  stompActionWindowTime: 0.35
+  stompJumpBonusForwardForceMult: 0.5
+  stompHitStopDuration: 0.1
+  stompActionBuildupWindowTime: 0.5
+  stompSpinCancelUpForce: 0
+  stompDamping: 0
   npcInteractionRadius: 0
+  npcFixedCamInteractionRadius: 0
   railImpulseForce: 0
+  railExitForce: 0
+  railTransferForce: 20
   bumpDetectionRadius: 0
   bumpRaycastLenght: 0
   bumpForce: 0
   spinBoostTimer: 1
   spinBounceTimer: 0.75
   spinForce: 25
+  spinPerfectBonusForce: 70
+  electricJumpSpeed: 40
+  electricJumpDuration: 0.35
+  electricJumpExitVelocityFactor: 0.5

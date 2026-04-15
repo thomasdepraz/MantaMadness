@@ -44,6 +44,7 @@ public enum ActionWindowType
     StompBuildup,
     PerfectSpin,
     PerfectRail,
+    AntiGravJumpApex,
 }
 
 public enum ActionWindowResult
@@ -293,6 +294,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private bool spinBufferedFromStompBuildup;
     private bool isRailSpinning;
     private bool stompBuildupWindowEnded;
+    private bool antiGravJumpApexWindowEnded;
 
     private float currentRailSpinTime;
     private bool hasRailSpinBoost;
@@ -334,7 +336,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public Action<bool, float> togglePlayerBlinkMat;
     public Action reverseGrinding;
     public Action stomplanding;
-    public Action stompJump;
+    public Action antigravJumpStart;
+    public Action antigravJumpEnd;
+    public Action antigravJumpReset;
     public Action<ActionWindowType> actionWindowActive;
     public Action spinStart;
     public Action superSpinStart;
@@ -508,7 +512,16 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (actionDelayRoutine != null)
             return;
 
+        //STOMP LAND SUCCESS
         if (currentActionWindow != null && currentActionWindow.Type == ActionWindowType.StompLand && currentActionWindow.IsActive && alienAntennasAbility)
+        {
+            currentActionWindow.Success(ActionWindowResult.Jump);
+            currentActionWindow = null;
+            return;
+        }
+
+        //ANTI GRAV DOUBLE JUMP SUCCESS
+        if (currentActionWindow != null && currentActionWindow.Type == ActionWindowType.AntiGravJumpApex && currentActionWindow.IsActive && doubleJumpAbility)
         {
             currentActionWindow.Success(ActionWindowResult.Jump);
             currentActionWindow = null;
@@ -746,16 +759,41 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
 
     }
-    private void StompLandJump()
+
+    private bool pendingAntiGravJump;
+    private void AntiGravJumpBuffer()
     {
-        if (stompLandJumpRoutine != null)
+        if (antiGravJumpRoutine != null)
             return;
 
-        stompLandJumpRoutine = StartCoroutine(StompLandJumpCoroutine());
+        antiGravJumpRoutine = StartCoroutine(AntiGravJumpCoroutine());
+        pendingAntiGravJump = true;
+
+    }
+
+    public Coroutine antiGravJumpRoutine;
+    private IEnumerator AntiGravJumpCoroutine()
+    {
+        yield return new WaitForSeconds(controllerData.antiGravJumpDuration);
+        antiGravJumpRoutine = null;
+
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        antigravJumpEnd?.Invoke();
+        StartAntiGravJumpApex();
+
+        yield return new WaitUntil(() => antiGravJumpApexWindowEnded);
+
+        antigravJumpReset?.Invoke();
+        State = ControllerState.FALLING;
+    }
+
+    private void ExecuteAntiGravJump()
+    {
+        ComboManager.Instance.AddComboAction(ComboID.AntiGravityJump);
         State = ControllerState.ANTIGRAVJUMP;
         jumpCount++;
-
-        //ComboManager.Instance.AddComboAction(ComboID.DynamoJump);
 
         CancelStomp();
         ActionResetSpin();
@@ -763,24 +801,34 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        rb.AddForce((Vector3.up * controllerData.upwardImpulseForce * controllerData.stompJumpBonusUpForceMult), ForceMode.VelocityChange);
+
+        if (disableCollisionRoutine == null)
+        {
+            disableCollisionRoutine = StartCoroutine(DisableCollisionTemporarily(0.15f));
+        }
+
+        rb.linearDamping = controllerData.antiGravJumpDamping;
+
+        rb.linearVelocity = Vector3.up * (controllerData.upwardImpulseForce * controllerData.antiGravJumpBonusForceMult);
+
         PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.STOMPJUMP);
-
-        stompJump?.Invoke();
- 
-
-        if (jumpRoutine != null)
-            StopCoroutine(jumpRoutine);
-        jumpRoutine = StartCoroutine(JumpRoutine());
+        antigravJumpStart?.Invoke();
+        FOVController.instance.FOVEffect(FOVController.FovEffectType.ANTIGRAVJUMP);
     }
 
-    public Coroutine stompLandJumpRoutine;
-    private IEnumerator StompLandJumpCoroutine()
+    private void ResetAntiGravJump()
     {
-        yield return new WaitForSeconds(1.2f);
-        stompLandJumpRoutine = null;
-        state = ControllerState.JUMPING;
-        triggerAnim.Invoke("Spin");
+        // Stop la coroutine si elle tourne
+        if (antiGravJumpRoutine!= null)
+        {
+            StopCoroutine(antiGravJumpRoutine);
+            antiGravJumpRoutine = null;
+        }
+
+        antigravJumpReset?.Invoke();
+
+        // Annule le déclenchement pending si tu utilises le buffer
+        pendingAntiGravJump = false;
     }
 
     private void SetDrift(bool drifting, bool boost = false)
@@ -982,6 +1030,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         triggerAnim.Invoke("Stomp");
         //afterImageEffect.Invoke(controllerData.stompAfterImageEffectTime);
         rb.linearVelocity = Vector3.zero;
+        rb.linearDamping = controllerData.stompDamping;
         rb.AddForce(-hoverBehaviour.normalContainer.up * controllerData.stompForce, ForceMode.VelocityChange);
         
     }
@@ -1057,7 +1106,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Speed, 1f);
         }
 
-        if(State == ControllerState.FALLING || State == ControllerState.JUMPING || State == ControllerState.AIRRIDE || State == ControllerState.BUMP) 
+        if(State == ControllerState.FALLING || State == ControllerState.JUMPING || State == ControllerState.AIRRIDE || State == ControllerState.BUMP || State == ControllerState.ANTIGRAVJUMP) 
         {
             FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Flying, 1);
         }
@@ -1139,6 +1188,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         hasHitWalls = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit defaultInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
         bumpRail = Physics.Raycast(hoverBehaviour.normalContainer.position, hoverBehaviour.normalContainer.forward, out RaycastHit railInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
         stompSweetSpot = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit stompInfo, controllerData.stompCancelRange, defaultRaycastLayer.value);
+
+        if (pendingAntiGravJump)
+        {
+            pendingAntiGravJump = false;
+            ExecuteAntiGravJump();
+        }
 
         if (State == ControllerState.ELECTRICACTION)
         {
@@ -1711,6 +1766,14 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         else if (brake > 0.0f)
         {
             rb.linearDamping = Mathf.Lerp(defaultDrag, controllerData.brakeForce, brake);
+        }
+        else if (State == ControllerState.ANTIGRAVJUMP)
+        {
+            rb.linearDamping = controllerData.antiGravJumpDamping;
+        }
+        else if(State == ControllerState.STOMP)
+        {
+            rb.linearDamping = controllerData.stompDamping;
         }
         else
         {
@@ -3123,8 +3186,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             switch (result)
             {
                 case ActionWindowResult.Jump:
-                    //ComboManager.Instance.AddComboAction(ComboID.AntiGravityJump);
-                    StompLandJump();
+                    AntiGravJumpBuffer();
                     break;
             }
 
@@ -3267,6 +3329,80 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         return stompWindow;
     }
     #endregion
+
+    #region AntiGravJumpApex
+    private void StartAntiGravJumpApex()
+    {
+        StartActionWindow(CreateAntiGravApexWindow(), controllerData.stompActionBuildupWindowTime);
+    }
+
+    private ActionWindow CreateAntiGravApexWindow()
+    {
+        ActionWindow antiGravWindow = new ActionWindow();
+        antiGravWindow.Type = ActionWindowType.AntiGravJumpApex;
+
+        antiGravWindow.OnStart = () =>
+        {
+
+            //VFX dans manta visual
+            actionWindowActive?.Invoke(antiGravWindow.Type);
+
+            actionWindowLocked = true;
+            antiGravJumpApexWindowEnded = false;
+
+            //if (spinBufferedFromStompBuildup)
+            //{
+            //    spinBufferedFromStompBuildup = false;
+            //    antiGravWindow.Success(ActionWindowResult.Spin);
+            //    return;
+            //}
+        };
+
+        antiGravWindow.OnSuccess = (result) =>
+        {
+
+            antigravJumpReset();
+
+            switch (result)
+            {
+                case ActionWindowResult.Jump:
+                    ActionResetSpin();
+                    if (jumpCount <= 1)
+                    {
+                        if (electricBehaviour != null && electricBehaviour.IsCharged)
+                        {
+                            ElectricJump();
+                            return;
+                        }
+                        else
+                        {
+                            AirDash(controllerData.stompJumpCancelForwardForce, controllerData.stompJumpCancelUpForce);
+                        }
+                    }
+                    break;
+            }
+        };
+
+        antiGravWindow.OnFail = () =>
+        {
+
+        };
+
+        antiGravWindow.OnCancel = () =>
+        {
+
+        };
+
+        antiGravWindow.OnEnd = () =>
+        {
+            actionWindowLocked = false;
+            antiGravJumpApexWindowEnded = true;
+        };
+
+        return antiGravWindow;
+    }
+
+    #endregion
     #endregion
 
     public void ResetAllPlayerActions()
@@ -3285,6 +3421,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         // Reset movement related actions
         ResetJump();
         ResetDrift();
+
+        //Reset Anti grav jump
+        ResetAntiGravJump();
 
         // Stop critical coroutines
         if (jumpRoutine != null)

@@ -57,6 +57,12 @@ public class ControllerData : ScriptableObject
     public float jumpForceMultiplierMax;
     public float jumpChargeTime;
 
+    [Header("Anti Gravity Jump Parameters")]
+    public float antiGravJumpDamping = 0f;
+    public float antiGravJumpBonusForceMult = 1.2f;
+    public float antiGravJumpDuration = 1f;
+    public float antiGravJumpApexWindowDuration = 0.75f;
+
     [Header("Swimming parameters")]
     public float minimumFloatingForce;
     public float maximumFloatingForce;
@@ -126,11 +132,11 @@ public class ControllerData : ScriptableObject
     public float stompJumpCancelForwardForce;
     public float stompCancelRange = 2.5f;
     public float stompActionWindowTime = 0.35f;
-    public float stompJumpBonusUpForceMult = 1.2f;
     public float stompJumpBonusForwardForceMult = 0.5f;
     public float stompHitStopDuration = 0.1f;
     public float stompActionBuildupWindowTime = 0.5f;
     public float stompSpinCancelUpForce;
+    public float stompDamping = 0f;
 
     [Header("NPC Interaction")]
     public float npcInteractionRadius;

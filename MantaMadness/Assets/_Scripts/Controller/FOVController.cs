@@ -21,6 +21,7 @@ public class FOVController : MonoBehaviour
         SUPERBOOST,
         STOMPLAND,
         ELECTRICJUMP,
+        ANTIGRAVJUMP,
     }
 
 
@@ -185,6 +186,11 @@ public class FOVController : MonoBehaviour
 
             case FovEffectType.ELECTRICJUMP:
                 targetFov = 150;
+                duration = 1f;
+                break;
+
+            case FovEffectType.ANTIGRAVJUMP:
+                targetFov = 130;
                 duration = 1f;
                 break;
         }

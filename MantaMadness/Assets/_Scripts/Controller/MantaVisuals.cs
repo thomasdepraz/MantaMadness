@@ -62,6 +62,7 @@ public class MantaVisuals : MonoBehaviour
     public ParticleSystem stompJumpParticle;
     public ParticleSystem electricSparkParticles;
     public ParticleSystem electricJumpParticles;
+    public ParticleSystem antiGravJumParticles;
 
     [Header("Visual")]
     public SkinnedMeshRenderer[] mantaAllVisuals;
@@ -140,7 +141,9 @@ public class MantaVisuals : MonoBehaviour
         mantaController.superSpinStart += SuperSpinStart;
         mantaController.actionWindowActive += ActionWindowParticles;
         mantaController.spinCharged += ToggleSpinChargedParticles;
-        mantaController.stompJump += StompJump;
+        mantaController.antigravJumpStart += AntiGravJumpStart;
+        mantaController.antigravJumpEnd += AntiGravJumpEnd;
+        mantaController.antigravJumpReset += ResetAntiGravJump;
         mantaController.electricBehaviour.onElectricChargeFull += OnElectricChargeFull;
         mantaController.electricBehaviour.onElectricChargeLost += OnElectricChargeLost;
         mantaController.electricBehaviour.electricJumpStart += OnElectricJumpStart;
@@ -176,7 +179,9 @@ public class MantaVisuals : MonoBehaviour
         mantaController.superSpinStart -= SuperSpinStart;
         mantaController.actionWindowActive -= ActionWindowParticles;
         mantaController.spinCharged -= ToggleSpinChargedParticles;
-        mantaController.stompJump -= StompJump;
+        mantaController.antigravJumpStart -= AntiGravJumpStart;
+        mantaController.antigravJumpEnd -= AntiGravJumpEnd;
+        mantaController.antigravJumpReset -= ResetAntiGravJump;
         mantaController.electricBehaviour.onElectricChargeFull -= OnElectricChargeFull;
         mantaController.electricBehaviour.onElectricChargeLost -= OnElectricChargeLost;
         mantaController.electricBehaviour.electricJumpStart -= OnElectricJumpStart;
@@ -917,6 +922,10 @@ public class MantaVisuals : MonoBehaviour
                 //PLAY VFX
                 stompActionWindowParticle.Play();
                 break;
+            case ActionWindowType.AntiGravJumpApex:
+                //PLAY VFX
+                stompActionWindowParticle.Play();
+                break;
             default:
                 break;
         }
@@ -933,10 +942,23 @@ public class MantaVisuals : MonoBehaviour
         }
     }
 
-    public void StompJump()
+    public void AntiGravJumpStart()
     {
-        mantaAnimator.SetTrigger("AntiGravJump");
-        Instantiate(stompJumpParticle, transform.position, Quaternion.identity);
+        mantaAnimator.SetBool("AntiGravJump", true);
+        antiGravJumParticles.Play();
+    }
+
+    public void AntiGravJumpEnd()
+    {
+        mantaAnimator.SetBool("AntiGravJump", false);
+        mantaAnimator.SetTrigger("AntiGravJumpEnd");
+        antiGravJumParticles.Stop();
+    }
+
+    public void ResetAntiGravJump()
+    {
+        mantaAnimator.SetBool("AntiGravJump", false);
+        mantaAnimator.ResetTrigger("AntiGravJumpEnd");
     }
 
     public void ToggleSpinParticle(bool toggleValue, bool superSpin)

@@ -115,6 +115,10 @@ MonoBehaviour:
   jumpForceMultiplierMin: 0.75
   jumpForceMultiplierMax: 1.5
   jumpChargeTime: 1
+  antiGravJumpDamping: 0
+  antiGravJumpBonusForceMult: 4
+  antiGravJumpDuration: 0.65
+  antiGravJumpApexWindowDuration: 0.75
   minimumFloatingForce: 2
   maximumFloatingForce: 50
   floatingForceMultiplier: 5
@@ -168,11 +172,11 @@ MonoBehaviour:
   stompJumpCancelForwardForce: 15
   stompCancelRange: 2.5
   stompActionWindowTime: 0.35
-  stompJumpBonusUpForceMult: 3
   stompJumpBonusForwardForceMult: 0.5
   stompHitStopDuration: 0.1
   stompActionBuildupWindowTime: 0.5
   stompSpinCancelUpForce: 25
+  stompDamping: 0
   npcInteractionRadius: 40
   npcFixedCamInteractionRadius: 20
   railImpulseForce: 60
