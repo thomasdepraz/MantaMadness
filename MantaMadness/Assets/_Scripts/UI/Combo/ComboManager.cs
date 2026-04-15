@@ -227,6 +227,7 @@ public class ComboManager : MonoBehaviour
         if (currentState == ComboState.Fever)
         {
             OnFeverEnded?.Invoke();
+            FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Fever, 0);
         }
 
         lastComboLevel = 0;
@@ -254,10 +255,12 @@ public class ComboManager : MonoBehaviour
             StartFever();
     }
 
-    void StartFever()
+    public void StartFever()
     {
         ChangeState(ComboState.Fever);
+        
 
+        FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Fever, 1);
         RuntimeManager.PlayOneShot(feverStinger, Camera.main.transform.position);
 
         if (useSeparateFeverDuration)

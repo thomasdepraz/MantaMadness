@@ -24,6 +24,7 @@ public enum MUSICS
     MUSIC_LEVEL01,
     MUSIC_LEVEL02,
     MUSIC_LEVEL03,
+    MUSIC_UFO,
     NULL,
 }
 
@@ -41,7 +42,7 @@ public class MusicManager : MonoBehaviour, IDataPersistence
     public static MusicManager Instance;
 
 
-    public EventReference music_menu, music_cave, music_level01, music_level02, music_level03, music_null;
+    public EventReference music_menu, music_cave, music_level01, music_level02, music_level03, music_null, music_UFO;
     public FMOD.Studio.EventInstance musicAudioEvent;
 
     public EventReference amb_beach, amb_secret, amb_city, amb_volcano;
@@ -163,6 +164,9 @@ public class MusicManager : MonoBehaviour, IDataPersistence
                     break;
                 case MUSICS.MUSIC_LEVEL03:
                     musicAudioEvent = RuntimeManager.CreateInstance(music_level03);
+                    break;
+                case MUSICS.MUSIC_UFO:
+                    musicAudioEvent = RuntimeManager.CreateInstance(music_UFO);
                     break;
                 case MUSICS.NULL:
                     break;

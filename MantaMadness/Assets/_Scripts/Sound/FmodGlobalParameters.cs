@@ -23,7 +23,8 @@ public enum FmodGlobalParamName
     G_Player_TurnAngle,
     G_Player_Underwater,
     G_SecretRoom,
-    G_Warping
+    G_Warping,
+    G_Player_Fever
 }
 
 public class FmodGlobalParameters : MonoBehaviour

@@ -53,7 +53,7 @@ public class DebugGUI : MonoBehaviour
             return;
 
 
-        GUILayout.BeginArea(new Rect(10, 10, 200, 500), "Debug", GUI.skin.window);
+        GUILayout.BeginArea(new Rect(10, 10, 200, 700), "Debug", GUI.skin.window);
         GUILayout.Label($"Velocity : {Math.Round(controller.Velocity.magnitude, 2)}");
         GUILayout.Label($"H Velocity : {Math.Round(controller.HorizontalVelocity.magnitude, 2)}");
         GUILayout.Label($"y velocity : {Math.Round(controller.Velocity.y, 2)}");
@@ -127,6 +127,11 @@ public class DebugGUI : MonoBehaviour
         {
             MantaVisuals.instance.ToggleTrailerVisuals(trailerVisualToggle);
             trailerVisualToggle = !trailerVisualToggle;
+        }
+
+        if (GUILayout.Button($"Enable Fever"))
+        {
+            ComboManager.Instance.StartFever();
         }
 
         GUILayout.EndArea();
