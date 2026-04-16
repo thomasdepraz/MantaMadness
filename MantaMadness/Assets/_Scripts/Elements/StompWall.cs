@@ -11,12 +11,16 @@ public class StompWall : BreakableWall
     {
         if (other.TryGetComponent(out SimpleController controller))
         {
-            if (controller.State == ControllerState.STOMP && isBroken == false)
+            if(isBroken == false)
             {
-                isBroken = true;
-                wall.SetActive(false);
-                breakParticle.Play();
+                if (controller.State == ControllerState.STOMP || controller.State == ControllerState.ANTIGRAVJUMP)
+                {
+                    isBroken = true;
+                    wall.SetActive(false);
+                    breakParticle.Play();
+                }
             }
+
         }
     }
 

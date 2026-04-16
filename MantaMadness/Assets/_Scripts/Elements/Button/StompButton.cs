@@ -18,7 +18,7 @@ public class StompButon : Button
     {
         if (other.TryGetComponent(out SimpleController controller))
         {
-            if (controller.State == ControllerState.STOMP)
+            if (controller.State == ControllerState.STOMP || controller.State == ControllerState.ANTIGRAVJUMP)
             {
                 controller.Bump(new Vector3(0, 1, 1));
                 if (isActivated == false && routine == null)
