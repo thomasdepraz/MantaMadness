@@ -8,6 +8,7 @@ public enum CarType
 {
     Car,
     TribouliBoat,
+    Truck,
 }
 
 public class CarsSplineAnimate : MonoBehaviour
@@ -25,7 +26,7 @@ public class CarsSplineAnimate : MonoBehaviour
 
     [SerializeField] private ParticleSystem explosion;
 
-    [SerializeField] private CarType type = CarType.Car;
+    [SerializeField] private CarType carType = CarType.Car;
 
     [SerializeField] private EventReference hornAudio;
 
@@ -57,7 +58,7 @@ public class CarsSplineAnimate : MonoBehaviour
 
     private void PlayHorn()
     {
-        switch (type)
+        switch (carType)
         {
             case CarType.Car:
                 //Check if car is a moving car
@@ -68,6 +69,8 @@ public class CarsSplineAnimate : MonoBehaviour
                 break;
             case CarType.TribouliBoat:
                 break;
+            case CarType.Truck:
+                break;
         }
     }
 
@@ -77,6 +80,13 @@ public class CarsSplineAnimate : MonoBehaviour
         {
             if(type == "player")
             {
+                switch (carType)
+                {
+                    case CarType.Truck:
+                        Game.Instance.Respawn(out Game.Instance.m_SpawnPosition, out Game.Instance.m_SpawnRotation);
+                        return;
+                }
+
                 if (player.HorizontalVelocity.magnitude > player.controllerData.maxSpeed / 2 || splineAnimate == null)
                 {
                     StartCoroutine(KillSequence());

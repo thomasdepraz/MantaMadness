@@ -519,6 +519,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             currentActionWindow = null;
             return;
         }
+        else if(currentActionWindow != null && currentActionWindow.Type == ActionWindowType.StompLand && currentActionWindow.IsActive && !alienAntennasAbility)
+        {
+            return;
+        }
 
         //ANTI GRAV DOUBLE JUMP SUCCESS
         if (currentActionWindow != null && currentActionWindow.Type == ActionWindowType.AntiGravJumpApex && currentActionWindow.IsActive && doubleJumpAbility)
@@ -3242,8 +3246,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     {
         StartActionWindow(CreateStompBuildupWindow(), controllerData.stompActionBuildupWindowTime);
     }
-
-
 
     private ActionWindow CreateStompBuildupWindow()
     {
