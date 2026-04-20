@@ -1,14 +1,12 @@
-using UnityEngine;
 using DG.Tweening;
+using FMODUnity;
 using System.Collections;
+using UnityEngine;
 
-public class StompButton : Button
+public class SpecialStompButton : StompButton
 {
 
-    [SerializeField] protected GameObject buttonVisual;
-    [SerializeField] protected Collider buttonVisualCollision;
-    [SerializeField] protected Transform buttonOriginalPos;
-    [SerializeField] protected Transform buttonActivatedPos;
+    protected SpecialButtonManager manager;
 
     protected override void Start()
     {
@@ -31,9 +29,23 @@ public class StompButton : Button
         }
     }
 
-    protected virtual void ButtonImpactEffect()
+    protected override void ButtonImpactEffect()
     {
-        buttonVisual.transform.DOMove(buttonActivatedPos.position,0.2f).SetEase(Ease.InOutQuad);
+        buttonVisual.transform.DOMove(buttonActivatedPos.position, 0.2f).SetEase(Ease.InOutQuad);
         buttonVisualCollision.enabled = false;
+    }
+    public void SetManager(SpecialButtonManager newManager)
+    {
+        manager = newManager;
+    }
+
+    protected override IEnumerator ActivationCoroutine(SimpleController controller)
+    {
+        manager.RegisterDestruction(this);
+        isActivated = true;
+        buttonMesh.material = activatedMaterial;
+
+        RuntimeManager.PlayOneShot(buttonStinger, Camera.main.transform.position);
+        yield return null;
     }
 }
