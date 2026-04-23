@@ -63,6 +63,9 @@ public class MantaVisuals : MonoBehaviour
     public ParticleSystem electricSparkParticles;
     public ParticleSystem electricJumpParticles;
     public ParticleSystem antiGravJumParticles;
+    public ParticleSystem burntParticles;
+    public ParticleSystem electrocutedParticles;
+    public ParticleSystem flattenParticle;
 
     [Header("Visual")]
     public SkinnedMeshRenderer[] mantaAllVisuals;
@@ -75,11 +78,13 @@ public class MantaVisuals : MonoBehaviour
     public Material[] playerMat;
     public GameObject playerMantaTrueBody;
     public Material electricMaterial;
+    public Material burntMaterial;
+    public Material electrocutedMaterial;
     private Material[] originalMaterials;
+    public GameObject mantaHolder;
 
     [Header("Trailer Visual")]
-    public SkinnedMeshRenderer[] bosseVisuals;
-    public Material burntMaterial;
+    public SkinnedMeshRenderer[] flattenVisuals;
 
     [Header("After Image")]
     public SkinnedMeshRenderer mantaBodyVisual;
@@ -147,6 +152,9 @@ public class MantaVisuals : MonoBehaviour
         mantaController.electricBehaviour.onElectricChargeFull += OnElectricChargeFull;
         mantaController.electricBehaviour.onElectricChargeLost += OnElectricChargeLost;
         mantaController.electricBehaviour.electricJumpStart += OnElectricJumpStart;
+        mantaController.deathStart += OnDeathStart;
+        mantaController.deathEnd += OnDeathEnd;
+
     }
 
     private void OnDisable()
@@ -185,6 +193,8 @@ public class MantaVisuals : MonoBehaviour
         mantaController.electricBehaviour.onElectricChargeFull -= OnElectricChargeFull;
         mantaController.electricBehaviour.onElectricChargeLost -= OnElectricChargeLost;
         mantaController.electricBehaviour.electricJumpStart -= OnElectricJumpStart;
+        mantaController.deathStart -= OnDeathStart;
+        mantaController.deathEnd -= OnDeathEnd;
 
         EnableElectricVisual(false);
     }
@@ -1053,18 +1063,113 @@ public class MantaVisuals : MonoBehaviour
 
         if (toggle)
         {
-            foreach (SkinnedMeshRenderer bosse in bosseVisuals)
+            foreach (SkinnedMeshRenderer bosse in flattenVisuals)
             {
                 bosse.gameObject.SetActive(true);
             }
         }
         else
         {
-            foreach (SkinnedMeshRenderer bosse in bosseVisuals)
+            foreach (SkinnedMeshRenderer bosse in flattenVisuals)
             {
                 bosse.gameObject.SetActive(false);
             }
         }
+
+    }
+
+    public void OnDeathStart(DeathType type)
+    {
+        switch (type)
+        {
+            case DeathType.BURNED:
+                triggerAnimation("Burn");
+                burntParticles.Play();
+                mantaBodyVisual.material = burntMaterial;
+                break;
+
+            case DeathType.ELECTROCUTED:
+                triggerAnimation("Electrocuted");
+                electrocutedParticles.Play();
+                mantaBodyVisual.material = electrocutedMaterial;
+                break;
+
+            case DeathType.FLATTEN:
+                triggerAnimation("Flatten");
+                mantaHolder.transform.DOScale(new Vector3(3, 0.8f, 1.5f), 0.25f).SetEase(Ease.OutBounce);
+                flattenParticle.Play();
+                break;
+
+            case DeathType.DEFAULT:
+                break;
+        }
+    }
+
+    public void OnDeathEnd(DeathType type)
+    {
+        switch (type)
+        {
+            case DeathType.BURNED:
+                StartCoroutine(ResetBurnDeath());
+                break;
+            case DeathType.ELECTROCUTED:
+                StartCoroutine(ResetElectrocutedDeath());
+                break;
+            case DeathType.FLATTEN:
+                StartCoroutine(ResetFlattenDeath());
+                break;
+        }
+    }
+
+    private IEnumerator ResetBurnDeath()
+    {
+        mantaAnimator.ResetTrigger("Burn");
+        yield return new WaitForSeconds(5f);
+
+        burntParticles.Stop();
+
+        if (mantaBodyVisual.material.mainTexture == burntMaterial.mainTexture)
+        {
+            mantaBodyVisual.material = originalMaterials[0];
+        }
+    }
+
+    private IEnumerator ResetElectrocutedDeath()
+    {
+        mantaAnimator.ResetTrigger("Electrocuted");
+
+        electrocutedParticles.Stop();
+
+        if (mantaBodyVisual.material.mainTexture == electrocutedMaterial.mainTexture)
+        {
+            mantaBodyVisual.material = originalMaterials[0];
+        }
+
+        yield return null;
+    }
+
+    private IEnumerator ResetFlattenDeath()
+    {
+        mantaAnimator.ResetTrigger("Flatten");
+
+        mantaHolder.transform.localScale = Vector3.one;
+
+        yield return new WaitForSeconds(1.5f);
+
+        //reset anim
+
+        foreach (SkinnedMeshRenderer bosse in flattenVisuals)
+        {
+            bosse.gameObject.SetActive(true);
+        }
+
+        yield return new WaitForSeconds(10f);
+
+        foreach (SkinnedMeshRenderer bosse in flattenVisuals)
+        {
+            bosse.gameObject.SetActive(false);
+        }
+
 
     }
 }

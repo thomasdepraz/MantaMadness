@@ -23,6 +23,10 @@ public enum ControllerState
     LEDGEGRAB,
     ELECTRICACTION,
     ANTIGRAVJUMP,
+    DEATH,
+    BURN,
+    ELECTROCUTED,
+    FLATTEN,
 }
 
 public enum ControllerAbility
@@ -35,6 +39,15 @@ public enum ControllerAbility
     GRIND,
     CAT,
     DYNAMO,
+}
+
+public enum DeathType
+{
+    DEFAULT,
+    BURNED,
+    ELECTROCUTED,
+    FLATTEN,
+
 }
 
 public enum ActionWindowType
@@ -311,6 +324,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     private ActionWindow currentActionWindow;
 
+    private Coroutine deathRoutine;
+    private DeathType lastDeathType;
+    public bool IsDead { get; private set; }
+
     public Action<ControllerState, ControllerState> stateChanged;
     public Action<AirRail> enterAirRail;
     public Action<AirRail> exitAirRail;
@@ -345,6 +362,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public Action spinCancel;
     public Action<bool> spinCharged;
     public Action style;
+    public Action<DeathType> deathStart;
+    public Action<DeathType> deathEnd;
 
 
     private void Awake()
@@ -1466,7 +1485,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (State == ControllerState.JUMPING ||
             State == ControllerState.AIRRIDE || 
             State == ControllerState.BOOSTJUMP ||
-            State == ControllerState.BUMP)
+            State == ControllerState.BUMP ||
+            State == ControllerState.BURN)
         {
             float force = controllerData.gravity;
             if (State == ControllerState.AIRRIDE)
@@ -3107,29 +3127,123 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     }
 
     private Vector3 GetBoostDirectionFromInput()
-{
-    CameraZone zone = CameraZone.ActiveZone;
-
-    // Caméra top-down
-    if (zone != null && zone.CamType == CameraType.Orthographic)
     {
-        Vector2 input = inputs.airControl.action.ReadValue<Vector2>();
+        CameraZone zone = CameraZone.ActiveZone;
 
-        if (input.sqrMagnitude > 0.01f)
+        // Caméra top-down
+        if (zone != null && zone.CamType == CameraType.Orthographic)
         {
-            GetCameraAxes(out Vector3 camForward, out Vector3 camRight);
-            Vector3 dir = camForward * input.y + camRight * input.x;
-            dir.y = 0;
-            return dir.normalized;
+            Vector2 input = inputs.airControl.action.ReadValue<Vector2>();
+
+            if (input.sqrMagnitude > 0.01f)
+            {
+                GetCameraAxes(out Vector3 camForward, out Vector3 camRight);
+                Vector3 dir = camForward * input.y + camRight * input.x;
+                dir.y = 0;
+                return dir.normalized;
+            }
+
+            return transform.forward;
         }
 
-        return transform.forward;
+        // Caméra normale
+        GetCameraAxes(out Vector3 forward, out _);
+        return forward;
     }
 
-    // Caméra normale
-    GetCameraAxes(out Vector3 forward, out _);
-    return forward;
-}
+    public void Kill(DeathType deathType)
+    {
+        if (IsDead || deathRoutine != null)
+            return;
+
+        deathRoutine = StartCoroutine(DeathRoutine(deathType));
+    }
+    private IEnumerator DeathRoutine(DeathType deathType)
+    {
+        IsDead = true;
+        lastDeathType = deathType;
+
+        ResetAllPlayerActions();
+
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        // Trigger VFX
+        deathStart?.Invoke(deathType);
+
+        // SWITCH SUR LA MORT
+        yield return StartCoroutine(PlayDeathByType(deathType));
+
+        // LOCK PLAYER AVANT RESPAWN
+        ForceLock(true);
+
+        // RECUP SPAWN
+        Vector3 pos;
+        Quaternion rot;
+        Game.Instance.Respawn(out pos, out rot);
+
+        // Petite sécurité visuelle si besoin
+        yield return new WaitForSeconds(1f);
+
+        // UNLOCK
+        ForceLock(false);
+        State = ControllerState.SURFING;
+
+        deathEnd?.Invoke(deathType);
+
+        deathRoutine = null;
+        IsDead = false;
+    }
+
+    private IEnumerator PlayDeathByType(DeathType type)
+    {
+        switch (type)
+        {
+            case DeathType.BURNED:
+                yield return BurnDeath();
+                break;
+
+            case DeathType.ELECTROCUTED:
+                yield return ElectricDeath();
+                break;
+
+            case DeathType.FLATTEN:
+                yield return FlattenDeath();
+                break;
+
+            case DeathType.DEFAULT:
+                yield return DefaultDeath();
+                break;
+        }
+    }
+
+    private IEnumerator DefaultDeath()
+    {
+        yield return new WaitForSeconds(0f);
+    }
+
+    private IEnumerator BurnDeath()
+    {
+        State = ControllerState.BURN;
+        Vector3 force = (NormalContainer.up * controllerData.burnedJumpForce);
+        rb.AddForce(force, ForceMode.VelocityChange);
+        yield return new WaitForSeconds(1.1f);
+
+    }
+
+    private IEnumerator ElectricDeath()
+    {
+        State = ControllerState.ELECTROCUTED;
+        yield return new WaitForSeconds(0.95f);
+
+    }
+
+    private IEnumerator FlattenDeath()
+    {
+        State = ControllerState.FLATTEN;
+        yield return new WaitForSeconds(1.2f);
+
+    }
 
     #region ActionWindows
     private void StartActionWindow(ActionWindow window, float duration)

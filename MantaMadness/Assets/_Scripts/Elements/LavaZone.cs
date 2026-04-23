@@ -8,7 +8,7 @@ public class LavaZone : MonoBehaviour
         {
             if(controller.lavaResistanceAbility != true)
             {
-                Game.Instance.Respawn(out Game.Instance.m_SpawnPosition, out Game.Instance.m_SpawnRotation);
+                Game.Instance.player.Kill(DeathType.BURNED);
             }
         }
     }
@@ -19,7 +19,7 @@ public class LavaZone : MonoBehaviour
         {
             if (controller.lavaResistanceAbility != true)
             {
-                Game.Instance.Respawn(out Game.Instance.m_SpawnPosition, out Game.Instance.m_SpawnRotation);
+                Game.Instance.player.Kill(DeathType.BURNED);
             }
         }
     }

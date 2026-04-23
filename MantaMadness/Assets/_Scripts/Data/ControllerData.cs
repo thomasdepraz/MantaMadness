@@ -163,4 +163,8 @@ public class ControllerData : ScriptableObject
     public float electricJumpDuration = 0.35f;
     public float electricJumpExitVelocityFactor = 0.5f;
 
+    [Header("Death Parameters")]
+    public float burnedJumpForce = 100f;
+
+
 }

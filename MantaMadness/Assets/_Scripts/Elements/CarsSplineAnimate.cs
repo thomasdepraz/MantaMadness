@@ -83,7 +83,7 @@ public class CarsSplineAnimate : MonoBehaviour
                 switch (carType)
                 {
                     case CarType.Truck:
-                        Game.Instance.Respawn(out Game.Instance.m_SpawnPosition, out Game.Instance.m_SpawnRotation);
+                        player.Kill(DeathType.FLATTEN);
                         return;
                 }
 

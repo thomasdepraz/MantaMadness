@@ -106,7 +106,7 @@ public class Game : MonoBehaviour, IDataPersistence
                 }
 
                 //PLAY LE DIALOG DU VIEUX
-                DialogManager.instance.StartCinematicInteraction(introNpc);
+                //DialogManager.instance.StartCinematicInteraction(introNpc);
 
                 //SET POSITION TO FIRST CHECKPOINT POS
                 WorldCheckpointManager.Instance.SetStartCheckpoint(introCheckpoint.respawnTransform);
