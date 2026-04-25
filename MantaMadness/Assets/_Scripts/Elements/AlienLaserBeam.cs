@@ -3,27 +3,6 @@ using UnityEngine;
 
 public class AlienLaserBeam : MonoBehaviour
 {
-    //ALIEN LASER BEAM SCRIPT:
-    //Le script doit faire les choses suivante:
-    //
-    //Lorsqu'il est actif
-    //Au rythme de la music un counteur augment en permanence (public int)
-    //AUSSI il faut un parameters pour gerer un potentiel offset du premier beat (pattern alternatif)
-    //
-    //Lorsque le compteur est plein, le laser doit ensuite sustain pendant X beat (nouveau parametre)
-    //
-    //Si le joueur rentre en contact avec le laser actif > mort electrocuté
-    //
-    //Ensuite le laser se desactive
-    //
-    //Il faut un son / visuel au moment de:
-    //Charge des laser (boule qui scale a chaque beat)
-    //Tir des lasers
-    //Laser qui disparais
-    //
-    //
-    //
-
     private int beatCounter = 0;
     private int beatLaserCounter = 0;
     public int laserBeatDuration = 4;
@@ -31,12 +10,19 @@ public class AlienLaserBeam : MonoBehaviour
     public int maxBeatValue = 4;
     public int beatOffset = 0;
 
+    [SerializeField] private Transform startPoint;
+    [SerializeField] private Transform endPoint;
+    [SerializeField] private float radius = 0.5f;
+    [SerializeField] private LayerMask playerLayer;
+
     private bool isFiring = false;
     private bool isEnding = false;
 
     public GameObject laserChargeVisual;
     public GameObject laserBeam;
     private Vector3 laserBeamOriginalScale;
+
+    private const float MIN_SCALE_Y = 0.01f;
 
     private void Start()
     {
@@ -124,7 +110,7 @@ public class AlienLaserBeam : MonoBehaviour
             else
             {
                 laserChargeVisual.SetActive(true);
-                laserChargeVisual.transform.localScale = Vector3.zero;
+                laserChargeVisual.transform.localScale = new Vector3(1,0.01f,1f);
                 laserChargeVisual.transform
                     .DOScale(Vector3.one, beatDuration)
                     .SetEase(Ease.OutQuad);
@@ -143,7 +129,7 @@ public class AlienLaserBeam : MonoBehaviour
             laserBeam.transform.DOKill();
 
             laserBeam.transform
-                .DOScale(new Vector3(0, laserBeamOriginalScale.y, 0), beatDuration * laserFadeOutOffset)
+                .DOScale(new Vector3(0.1f, laserBeamOriginalScale.y, 0.2f), beatDuration * laserFadeOutOffset)
                 .SetEase(Ease.Linear);
         }
 
@@ -170,7 +156,7 @@ public class AlienLaserBeam : MonoBehaviour
 
         laserBeam.transform.localScale = new Vector3(
             laserBeamOriginalScale.x,
-            0,
+            MIN_SCALE_Y,
             laserBeamOriginalScale.z
         );
 
@@ -192,5 +178,62 @@ public class AlienLaserBeam : MonoBehaviour
         isEnding = false;
         beatCounter = 0;
         beatLaserCounter = 0;
+        hasKilledThisCycle = false;
+    }
+
+    private bool hasKilledThisCycle = false;
+
+
+    private void Update()
+    {
+        CheckPlayerInLaser();
+    }
+    private void CheckPlayerInLaser()
+    {
+        if (!isFiring || hasKilledThisCycle) return;
+
+        Collider[] hits = Physics.OverlapCapsule(startPoint.position, endPoint.position, radius, playerLayer);
+
+        foreach (var hit in hits)
+        {
+            if (hit.TryGetComponent(out SimpleController controller))
+            {
+                hasKilledThisCycle = true;
+                Game.Instance.player.Kill(DeathType.ELECTROCUTED);
+            }
+        }
+    }
+    private void OnDrawGizmos()
+    {
+        if (startPoint == null || endPoint == null) return;
+
+        Gizmos.color = Color.cyan;
+
+        Vector3 start = startPoint.position;
+        Vector3 end = endPoint.position;
+
+        // Sphères aux extrémités
+        Gizmos.DrawWireSphere(start, radius);
+        Gizmos.DrawWireSphere(end, radius);
+
+        // Direction du laser
+        Vector3 direction = (end - start).normalized;
+
+        // Trouver un vecteur perpendiculaire pour dessiner les côtés
+        Vector3 offset = Vector3.Cross(direction, Vector3.up) * radius;
+
+        // Si direction ~ vertical, fallback
+        if (offset == Vector3.zero)
+            offset = Vector3.Cross(direction, Vector3.right) * radius;
+
+        // Lignes de la capsule
+        Gizmos.DrawLine(start + offset, end + offset);
+        Gizmos.DrawLine(start - offset, end - offset);
+
+        // Optionnel : autre axe pour meilleure lisibilité
+        Vector3 offset2 = Vector3.Cross(direction, offset).normalized * radius;
+
+        Gizmos.DrawLine(start + offset2, end + offset2);
+        Gizmos.DrawLine(start - offset2, end - offset2);
     }
 }

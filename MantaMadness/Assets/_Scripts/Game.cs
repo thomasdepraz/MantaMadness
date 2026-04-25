@@ -100,10 +100,10 @@ public class Game : MonoBehaviour, IDataPersistence
             //Start the game
             case 0:
                 //Play intro cinematic
-                if (introCinematicTimeline != null)
-                {
-                    CinematicManager.instance.PlayCinematic(introCinematicTimeline);
-                }
+                //if (introCinematicTimeline != null)
+                //{
+                //    CinematicManager.instance.PlayCinematic(introCinematicTimeline);
+                //}
 
                 //PLAY LE DIALOG DU VIEUX
                 //DialogManager.instance.StartCinematicInteraction(introNpc);

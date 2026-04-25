@@ -351,6 +351,10 @@ public class MusicManager : MonoBehaviour, IDataPersistence
             case MUSICS.MUSIC_LEVEL03:
                 musicAudioEvent = RuntimeManager.CreateInstance(music_level03);
                 break;
+
+            case MUSICS.MUSIC_UFO:
+                musicAudioEvent = RuntimeManager.CreateInstance(music_UFO);
+                break;
         }
 
         // 5. Rebind du callback FMOD (IMPORTANT)

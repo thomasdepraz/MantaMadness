@@ -33,6 +33,9 @@ public class SpecialButtonManager : MonoBehaviour, IDataPersistence
 
     private SimpleController controller;
 
+    [SerializeField] private string puzzleID;
+    private bool isCompleted = false;
+
     protected virtual void Start()
     {
         if(controller == null)
@@ -50,25 +53,48 @@ public class SpecialButtonManager : MonoBehaviour, IDataPersistence
             button.SetManager(this);
         }
 
-        foreach (GameObject objects in objectsToActivate)
+        if (isCompleted)
         {
-            objects.SetActive(false);
+            ApplyCompletedState();
+            return;
         }
-
-        foreach (GameObject objects in objectsToDeactivate)
+        else
         {
-            objects.SetActive(true);
+            foreach (GameObject objects in objectsToActivate)
+            {
+                objects.SetActive(false);
+            }
+
+            foreach (GameObject objects in objectsToDeactivate)
+            {
+                objects.SetActive(true);
+            }
         }
     }
 
     public void LoadData(GameData data)
     {
+        if (data.puzzleElements.TryGetValue(puzzleID, out bool completed))
+        {
+            isCompleted = completed;
 
+            if (isCompleted)
+            {
+                ApplyCompletedState();
+            }
+        }
     }
 
     public void SaveData(ref GameData data)
     {
-
+        if (data.puzzleElements.ContainsKey(puzzleID))
+        {
+            data.puzzleElements[puzzleID] = isCompleted;
+        }
+        else
+        {
+            data.puzzleElements.Add(puzzleID, isCompleted);
+        }
     }
 
     public virtual void RegisterDestruction(SpecialStompButton button)
@@ -89,6 +115,9 @@ public class SpecialButtonManager : MonoBehaviour, IDataPersistence
     protected virtual void ActivateEvent()
     {
         Debug.Log("Module completed!");
+
+        isCompleted = true;
+
         onAllActivated?.Invoke();
     }
 
@@ -140,6 +169,21 @@ public class SpecialButtonManager : MonoBehaviour, IDataPersistence
 
         routine = null;
         yield return null;
+    }
+
+    private void ApplyCompletedState()
+    {
+        // désactiver anciens objets
+        foreach (GameObject obj in objectsToDeactivate)
+        {
+            obj.SetActive(false);
+        }
+
+        // activer nouveaux
+        foreach (GameObject obj in objectsToActivate)
+        {
+            obj.SetActive(true);
+        }
     }
 
 }
