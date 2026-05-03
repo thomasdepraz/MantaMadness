@@ -4,6 +4,11 @@ using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 
+public interface IButtonAction
+{
+    void Execute();
+}
+
 public class Button : MonoBehaviour
 {
     [Header("Parameter")]
@@ -27,6 +32,9 @@ public class Button : MonoBehaviour
 
     public EventReference buttonStinger;
 
+    [SerializeField] private MonoBehaviour[] actionsTargets;
+    private IButtonAction[] actions;
+
 
     protected virtual void Start()
     {
@@ -44,6 +52,18 @@ public class Button : MonoBehaviour
         }
 
         vcam.enabled = false;
+
+        actions = new IButtonAction[actionsTargets.Length];
+
+        for (int i = 0; i < actionsTargets.Length; i++)
+        {
+            actions[i] = actionsTargets[i] as IButtonAction;
+
+            if (actions[i] == null)
+            {
+                Debug.LogError(actionsTargets[i].name + " does not implement IButtonAction");
+            }
+        }
     }
 
     protected virtual void OnTriggerEnter(Collider other)
@@ -89,20 +109,9 @@ public class Button : MonoBehaviour
         //    objects.SetActive(true);
         //}
 
-        foreach (GameObject objects in objectsToDeactivate)
+        foreach (var action in actions)
         {
-            objects.SetActive(false);
-        }
-
-        if (objectsToActivate.Length > 0)
-        {
-            for (int i = 0; i < objectsToActivate.Length; i++)
-            {
-                //ACTIVATE OBJECT
-                objectsToActivate[i].SetActive(true);
-                objectsToActivate[i].transform.DOMoveY(objectsToActivate[i].transform.position.y + 5f, 0.2f).SetEase(Ease.OutQuad).SetLoops(2, LoopType.Yoyo);
-                yield return new WaitForSeconds(spawnTime / objectsToActivate.Length);
-            }
+            action?.Execute();
         }
 
         yield return new WaitForSeconds(c_lockDuration / 2);

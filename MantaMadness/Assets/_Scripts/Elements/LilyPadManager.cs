@@ -111,6 +111,8 @@ public class LilyPadManager : MonoBehaviour
                     yield return new WaitForSeconds(spawnTime / toActivate.Length);
                 }
             }
+
+            yield return new WaitForSeconds(1.2f);
             //unlock player
             Game.Instance.player.ForceLock(false);
             Game.Instance.player.RailLock(false);

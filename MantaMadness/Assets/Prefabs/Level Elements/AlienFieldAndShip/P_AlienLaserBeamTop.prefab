@@ -28,10 +28,9 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 4.33, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 18.4784, y: 18.4784, z: 18.4784}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2032696476304936487}
+  m_Children: []
   m_Father: {fileID: 36751817472547165}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6764236093955772082
@@ -144,12 +143,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3360188390929410929}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -2.2835913, z: 0}
-  m_LocalScale: {x: 0.05, y: 0.05, z: 1}
+  m_LocalRotation: {x: -0.7071068, y: -0.0000000018626449, z: -0.0000000018626449, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: -0.23719603, z: 0}
+  m_LocalScale: {x: 0.9, y: 0.9, z: 1.4}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1813984298178132520}
+  m_Father: {fileID: 36751817472547165}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!114 &5626543928791610356
 MonoBehaviour:
@@ -208,6 +207,7 @@ Transform:
   - {fileID: 5439208481050274642}
   - {fileID: 7492359527479944390}
   - {fileID: 1813984298178132520}
+  - {fileID: 2032696476304936487}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
 --- !u!114 &4536003227196209617
@@ -226,8 +226,15 @@ MonoBehaviour:
   laserFadeOutOffset: 4
   maxBeatValue: 8
   beatOffset: 0
+  startPoint: {fileID: 0}
+  endPoint: {fileID: 0}
+  radius: 0.5
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 128
   laserChargeVisual: {fileID: 233309303054756480}
   laserBeam: {fileID: 1900824800264803685}
+  laserChargeDecal: {fileID: 3360188390929410929}
 --- !u!1001 &574742612692576452
 PrefabInstance:
   m_ObjectHideFlags: 0

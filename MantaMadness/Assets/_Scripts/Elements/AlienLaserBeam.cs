@@ -10,23 +10,28 @@ public class AlienLaserBeam : MonoBehaviour
     public int maxBeatValue = 4;
     public int beatOffset = 0;
 
-    [SerializeField] private Transform startPoint;
-    [SerializeField] private Transform endPoint;
-    [SerializeField] private float radius = 0.5f;
-    [SerializeField] private LayerMask playerLayer;
+    [SerializeField] protected Transform startPoint;
+    [SerializeField] protected Transform endPoint;
+    [SerializeField] protected float radius = 0.5f;
+    [SerializeField] protected LayerMask playerLayer;
 
     private bool isFiring = false;
     private bool isEnding = false;
 
     public GameObject laserChargeVisual;
     public GameObject laserBeam;
-    private Vector3 laserBeamOriginalScale;
+    public GameObject laserChargeDecal;
+    protected Vector3 laserBeamOriginalScale;
+    protected Vector3 laserChargeVisualOriginalScale;
+    protected Vector3 laserChargeDecalOriginalScale;
 
     private const float MIN_SCALE_Y = 0.01f;
 
-    private void Start()
+    protected virtual void Start()
     {
         laserBeamOriginalScale = laserBeam.transform.localScale;
+        laserChargeVisualOriginalScale = laserChargeVisual.transform.localScale;
+        laserChargeDecalOriginalScale = laserChargeDecal.transform.localScale;
 
         ResetChargeVisual();
         ResetLaser();
@@ -35,12 +40,12 @@ public class AlienLaserBeam : MonoBehaviour
         beatLaserCounter = 0;
     }
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         MusicManager.OnBeat += IncreaseBeatCounter;
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         MusicManager.OnBeat -= IncreaseBeatCounter;
     }
@@ -93,29 +98,40 @@ public class AlienLaserBeam : MonoBehaviour
     {
         float beatDuration = 60f / tempo;
 
-        if (beatCounter >= maxBeatValue)
+        float progress = (float)beatCounter / maxBeatValue;
+        progress = Mathf.Clamp01(progress);
+
+        Vector3 minScale = new Vector3(1f, 0.01f, 1f);
+        Vector3 minScaleDecal = new Vector3(0.1f,0.1f, laserChargeDecalOriginalScale.z);
+
+        Vector3 targetScaleVisual = Vector3.Lerp(minScale, laserChargeVisualOriginalScale, progress);
+        Vector3 targetScaleDecal = Vector3.Lerp(minScaleDecal, laserChargeDecalOriginalScale, progress);
+
+        // Activation si nécessaire
+        if (!laserChargeVisual.activeSelf)
         {
-            ResetChargeVisual();
-            FireLaser();
+            laserChargeVisual.SetActive(true);
+            laserChargeVisual.transform.localScale = minScale;
         }
-        else
+
+        if (!laserChargeDecal.activeSelf)
         {
-            if (laserChargeVisual.activeSelf)
-            {
-                laserChargeVisual.transform.DOKill();
-                laserChargeVisual.transform
-                    .DOScale(laserChargeVisual.transform.localScale * 1.5f, beatDuration / 2)
-                    .SetEase(Ease.OutQuad);
-            }
-            else
-            {
-                laserChargeVisual.SetActive(true);
-                laserChargeVisual.transform.localScale = new Vector3(1,0.01f,1f);
-                laserChargeVisual.transform
-                    .DOScale(Vector3.one, beatDuration)
-                    .SetEase(Ease.OutQuad);
-            }
+            laserChargeDecal.SetActive(true);
+            laserChargeDecal.transform.localScale = minScale;
         }
+
+        // Kill tweens
+        laserChargeVisual.transform.DOKill();
+        laserChargeDecal.transform.DOKill();
+
+        // Tween
+        laserChargeVisual.transform
+            .DOScale(targetScaleVisual, beatDuration)
+            .SetEase(Ease.OutQuad);
+
+        laserChargeDecal.transform
+            .DOScale(targetScaleDecal, beatDuration)
+            .SetEase(Ease.OutQuad);
     }
 
     private void UpdateLaser(float tempo)
@@ -143,7 +159,10 @@ public class AlienLaserBeam : MonoBehaviour
     private void ResetChargeVisual()
     {
         laserChargeVisual.transform.DOKill();
+        laserChargeDecal.transform.DOKill();
+
         laserChargeVisual.SetActive(false);
+        laserChargeDecal.SetActive(false);
     }
 
     private void FireLaser()
@@ -188,9 +207,9 @@ public class AlienLaserBeam : MonoBehaviour
     {
         CheckPlayerInLaser();
     }
-    private void CheckPlayerInLaser()
+    protected virtual void CheckPlayerInLaser()
     {
-        if (!isFiring || hasKilledThisCycle) return;
+        if (!isFiring || hasKilledThisCycle || isEnding) return;
 
         Collider[] hits = Physics.OverlapCapsule(startPoint.position, endPoint.position, radius, playerLayer);
 

@@ -27,6 +27,7 @@ public enum ControllerState
     BURN,
     ELECTROCUTED,
     FLATTEN,
+    DEBUG,
 }
 
 public enum ControllerAbility
@@ -3153,7 +3154,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     public void Kill(DeathType deathType)
     {
-        if (IsDead || deathRoutine != null)
+        if (IsDead || deathRoutine != null || State == ControllerState.DEBUG)
             return;
 
         deathRoutine = StartCoroutine(DeathRoutine(deathType));

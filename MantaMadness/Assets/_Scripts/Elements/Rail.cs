@@ -131,6 +131,18 @@ public class Rail : MonoBehaviour
                 break;
         }
 
+        const float edgeThreshold = 0.02f;
+
+        if (currentProgress <= edgeThreshold && dir < 0)
+        {
+            dir = 1;
+        }
+
+        else if (currentProgress >= 1f - edgeThreshold && dir > 0)
+        {
+            dir = -1;
+        }
+
         currentPosition = splineContainer.transform.TransformPoint(nearest);
     }
 
@@ -167,6 +179,7 @@ public class Rail : MonoBehaviour
         position = worldPos;
         //direction = (worldPos - currentPosition);
         direction = worldTan.normalized * dir;
+        lastDirection = direction;
         //direction = worldTan.normalized;
         normal = worldUp;
 
@@ -180,15 +193,19 @@ public class Rail : MonoBehaviour
         dir *= -1;
     }
 
+
+    private Vector3 lastDirection;
     public Vector3 GetExitDirection()
     {
-        railSpline.Evaluate(currentProgress, out float3 pos, out float3 tan, out float3 up);
+        railSpline.Evaluate(currentProgress, out _, out float3 tan, out float3 up);
 
         Vector3 worldTan = splineContainer.transform.TransformDirection(tan).normalized;
         Vector3 worldUp = splineContainer.transform.TransformDirection(up);
 
-        Vector3 exitDir = (worldTan * dir + worldUp * 0.5f).normalized;
+        Vector3 exitDir = worldTan * dir;
 
-        return exitDir;
+        exitDir += worldUp * 0.05f;
+
+        return exitDir.normalized;
     }
 }

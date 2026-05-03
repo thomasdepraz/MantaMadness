@@ -60,6 +60,7 @@ public class FlyMode : MonoBehaviour
 
                 Game.Instance.player.transform.position = flyCam.transform.position;
 
+
                 // --- Rotation de la caméra avec la souris ---
                 rotationX += Input.GetAxis("Mouse X") * mouseSensitivity;
                 rotationY -= Input.GetAxis("Mouse Y") * mouseSensitivity;
@@ -133,14 +134,8 @@ public class FlyMode : MonoBehaviour
     {
         if (isEnabled == true)
         {
-            //if(smoothMode == false)
-            //{
-            //    smoothMode = true;
-            //    targetPosition = transform.position;
-            //    return;
-            //}
-
             Game.Instance.player.transform.position = flyCam.transform.position;
+            Game.Instance.player.State = ControllerState.FALLING;
             Game.Instance.player.ForceLock(false);
             Game.Instance.player.togglePlayerBodyVisual(true);
             isEnabled = false;
@@ -153,6 +148,7 @@ public class FlyMode : MonoBehaviour
         {
             flyCam.transform.position = Game.Instance.player.transform.position;
             Game.Instance.player.ForceLock(true);
+            Game.Instance.player.State = ControllerState.DEBUG;
             Game.Instance.player.togglePlayerBodyVisual(false);
             isEnabled = true;
             UnityEngine.Cursor.lockState = CursorLockMode.None;
