@@ -237,6 +237,14 @@ public class TweenAnimation : MonoBehaviour
         if (tweenSteps == null || tweenSteps.Count == 0)
             return;
 
+        if (Time.timeScale == 0f)
+        {
+            currentBeatStep++;
+            if (currentBeatStep >= tweenSteps.Count)
+                currentBeatStep = 0;
+            return;
+        }
+
         transform.DOKill();
 
         TweenStep step = tweenSteps[currentBeatStep];

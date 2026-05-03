@@ -193,6 +193,9 @@ public class ComboUIController : MonoBehaviour
 
     void OnBeatEnableFever(int bar, int beat, float tempo)
     {
+        if (Time.timeScale == 0f)
+            return;
+
         if (ComboManager.Instance.State == ComboState.Fever && feverRoot.activeSelf != true)
         {
             feverRoot.SetActive(true);
@@ -203,6 +206,9 @@ public class ComboUIController : MonoBehaviour
 
     void OnBeatPlayParticle(int bar, int beat, float tempo)
     {
+        if (Time.timeScale == 0f)
+            return;
+
         if (ComboManager.Instance.State == ComboState.Fever && feverRoot.activeSelf == true)
         {
             FeverParticlesAndEffects();

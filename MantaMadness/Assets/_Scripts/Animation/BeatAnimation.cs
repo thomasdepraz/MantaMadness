@@ -122,6 +122,9 @@ public class BeatAnimation : MonoBehaviour
 
     public void BeatTween(int bar, int beat, float tempo)
     {
+        if (Time.timeScale == 0f)
+            return;
+
         //print("bar =" + bar + " beat=" + beat + " tempo=" + tempo);
         //print(60 / tempo);
         StopTween();

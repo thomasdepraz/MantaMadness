@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using FMODUnity;
 using System.Collections;
+using DG.Tweening;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -222,6 +223,7 @@ public class PauseMenu : MonoBehaviour
 
         isPaused = true;
         Time.timeScale = 0f;
+        DOTween.PauseAll();
 
         pauseMenuBackground.SetActive(true);
 
@@ -243,6 +245,7 @@ public class PauseMenu : MonoBehaviour
         if (!isPaused) return;
 
         Time.timeScale = 1f;
+        DOTween.PlayAll();
         isPaused = false;
 
         pauseMenuBackground.SetActive(false);
@@ -269,6 +272,7 @@ public class PauseMenu : MonoBehaviour
     private void LoadMainMenu()
     {
         Time.timeScale = 1f;
+        DOTween.PlayAll();
         SceneManager.LoadScene("MainMenu");
         DataPersistenceManager.Instance.SaveGame();
     }
