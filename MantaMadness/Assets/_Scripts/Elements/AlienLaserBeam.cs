@@ -52,6 +52,9 @@ public class AlienLaserBeam : MonoBehaviour
 
     private void IncreaseBeatCounter(int bar, int beat, float tempo)
     {
+        if (Time.timeScale == 0f)
+            return;
+
         int beatsPerCycle = maxBeatValue + laserBeatDuration + laserFadeOutOffset;
 
         // Si ton beat commence à 1 au lieu de 0, utilise (beat - 1)

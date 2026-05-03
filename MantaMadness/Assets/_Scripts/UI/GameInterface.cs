@@ -65,6 +65,11 @@ public class GameInterface : MonoBehaviour, IScreen
         );
     }
 
+    // FMOD beats still fire while paused; skip new tweens so they cannot stack on resume.
+    private static bool GameplayPaused()
+    {
+        return Time.timeScale == 0f;
+    }
 
     public void Start()
     {
@@ -110,7 +115,8 @@ public class GameInterface : MonoBehaviour, IScreen
     public void UpdateCoinCount(int coinCount)
     {
         coinText.text = coinCount.ToString();
-        sunCountImage?.transform.DOPunchScale(Vector3.one, 1, 5);
+        if (GameplayPaused() == false)
+            sunCountImage?.transform.DOPunchScale(Vector3.one, 1, 5);
     }
 
     public void UpdateClamCount(int clamCount)
@@ -285,6 +291,9 @@ public class GameInterface : MonoBehaviour, IScreen
     {
         if (sunImage == null) return;
 
+        if (GameplayPaused())
+            return;
+
         if (level == 0)
         {
             sunImage.transform.DOScale(sunScales[0], 0.3f).SetEase(Ease.InBack);
@@ -310,6 +319,9 @@ public class GameInterface : MonoBehaviour, IScreen
     {
         if (sunImage == null) return;
 
+        if (GameplayPaused())
+            return;
+
         if (ComboManager.Instance.ComboLevel >= 4)
         {
             sunImage.transform.DOPunchScale(Vector3.one * 0.15f, 0.2f);
@@ -319,6 +331,9 @@ public class GameInterface : MonoBehaviour, IScreen
     void SunOnBeat(int bar, int beat, float tempo)
     {
         if (sunImage == null) return;
+
+        if (GameplayPaused())
+            return;
 
         if (ComboManager.Instance.ComboLevel < 4)
         {
