@@ -1107,6 +1107,8 @@ public class MantaVisuals : MonoBehaviour
 
     public void OnDeathEnd(DeathType type)
     {
+        //Set anim trigger reset
+        triggerAnimation("Respawn");
         switch (type)
         {
             case DeathType.BURNED:
