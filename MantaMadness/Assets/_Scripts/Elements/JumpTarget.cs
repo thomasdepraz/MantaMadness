@@ -48,10 +48,7 @@ public class JumpTarget : MonoBehaviour
     
     public void SwitchIndicatorVisibility(bool validTarget)
     {
-        if (validTarget)
-            SetVisualState(JumpTargetVisualState.InRange, 1f);
-        else
-            SetVisualState(JumpTargetVisualState.OutOfRange, 0f);
+
     }
     public bool isAvailable = true;
 
@@ -61,12 +58,14 @@ public class JumpTarget : MonoBehaviour
 
         isAvailable = false;
 
-        SetVisualState(JumpTargetVisualState.Inactive);
         currentState = JumpTargetVisualState.Inactive;
 
         var col = GetComponent<Collider>();
         if (CameraTargetDetection.Instance != null && col != null)
+        {
+            CameraTargetDetection.Instance.NotifyJumpTargetPopped(col);
             CameraTargetDetection.Instance.validJumpTargets.Remove(col);
+        }
 
         ToggleFunctionElements(false);
 
@@ -76,7 +75,6 @@ public class JumpTarget : MonoBehaviour
     protected IEnumerator DisableCoroutine()
     {
         yield return new WaitForSeconds(respawnCooldown);
-        SetVisualState(JumpTargetVisualState.OutOfRange);
         ToggleFunctionElements(true);
     }
 
@@ -85,7 +83,6 @@ public class JumpTarget : MonoBehaviour
         if (toggleValue)
         {
             //SET ANIMATION TO IDLE
-            SetVisualState(JumpTargetVisualState.OutOfRange);
             gameObject.GetComponent<Collider>().enabled = true;
             isAvailable = true;
         }
@@ -120,30 +117,23 @@ public class JumpTarget : MonoBehaviour
         }
     }
 
-    public void SetVisualState(JumpTargetVisualState state, float proximity01 = 0f)
+    public void SetAsCurrentTarget(bool active)
     {
-        proximity01 = Mathf.Clamp01(proximity01);
-
-        if (currentState != state)
+        if (!isAvailable)
         {
             StopAllIndicators();
+            return;
+        }
 
-            currentState = state;
-
-            switch (state)
-            {
-                case JumpTargetVisualState.Inactive:
-                    break;
-                case JumpTargetVisualState.InRange:
-                    if (readyIndicator != null)
-                        readyIndicator.Play();
-                    break;
-                case JumpTargetVisualState.OutOfRange:
-                    if(readyIndicator != null)
-                        readyIndicator.Stop();
-                    break;
-
-            }
+        if (active)
+        {
+            if (readyIndicator != null && !readyIndicator.isPlaying)
+                readyIndicator.Play();
+        }
+        else
+        {
+            if (readyIndicator != null)
+                readyIndicator.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
     }
 

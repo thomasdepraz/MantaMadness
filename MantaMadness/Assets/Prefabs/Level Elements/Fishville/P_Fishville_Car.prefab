@@ -499,6 +499,7 @@ MonoBehaviour:
   audioHitBox: {fileID: 7278925790004366606}
   visual: {fileID: 1662399379212245044}
   explosion: {fileID: 4069319999897601556}
+  carType: 0
   hornAudio:
     Guid:
       Data1: 311766511
@@ -506,6 +507,14 @@ MonoBehaviour:
       Data3: 921807505
       Data4: 1475426195
     Path: event:/Sfx/InGame/World/Enviro/Env_Car_Horn
+  explosionAudio:
+    Guid:
+      Data1: 201926729
+      Data2: 1172387982
+      Data3: -2030680420
+      Data4: -1348074034
+    Path: event:/Sfx/InGame/World/Enviro/Env_Car_Explosion
+  isAlive: 1
 --- !u!1001 &2005068015473501541
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -636,29 +645,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playOnStart: 1
-  playOnEnable: 1
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 120
-  rotationDuration: 0.3
-  animatePosition: 1
-  loopPositionAmount: -1
-  yoyoPosition: 1
-  xPos: 0
-  yPos: 0.1
-  zPos: 0
-  moveDuration: 0.5
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  playSequenceOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
+  beatSequenceType: 0
 --- !u!1 &1662399379212245044 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 31c396f116056ac4f95de2fcca9c5335, type: 3}
@@ -676,29 +668,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playOnStart: 1
-  playOnEnable: 1
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 1
-  loopPositionAmount: -1
-  yoyoPosition: 1
-  xPos: 0
-  yPos: 0.5
-  zPos: 0
-  moveDuration: 1
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  playSequenceOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
+  beatSequenceType: 0
 --- !u!4 &2042901133717324430 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 31c396f116056ac4f95de2fcca9c5335, type: 3}

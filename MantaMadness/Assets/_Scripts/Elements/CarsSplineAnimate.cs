@@ -29,8 +29,10 @@ public class CarsSplineAnimate : MonoBehaviour
     [SerializeField] private CarType carType = CarType.Car;
 
     [SerializeField] private EventReference hornAudio;
+    [SerializeField] private EventReference explosionAudio;
 
-    private bool isAlive = true;
+    [SerializeField] private bool isAlive = true;
+    public bool IsAlive => isAlive;
 
     private void Awake()
     {
@@ -114,17 +116,22 @@ public class CarsSplineAnimate : MonoBehaviour
         }
     }
 
-    public IEnumerator KillSequence()
+    public virtual IEnumerator KillSequence()
     {
         explosion.Play();
         visual.SetActive(false);
         isAlive = false;
-        UIEffectManager.Instance.ExplosionAction?.Invoke("Armature_TheRock"); 
+
+        OnCarDestroyed();
+
+        RuntimeManager.PlayOneShot(explosionAudio, transform.position);
+        UIEffectManager.Instance.ExplosionAction?.Invoke("Armature_TheRock");
         Game.Instance.player.boostBehaviour.IncrementGauge(BoostAction.CarCrash);
+
         yield return new WaitForSeconds(10f);
+
         visual.SetActive(true);
         isAlive = true;
-        yield return null;
     }
 
     public IEnumerator FriendlyFire()
@@ -136,5 +143,10 @@ public class CarsSplineAnimate : MonoBehaviour
         visual.SetActive(true);
         isAlive = true;
         yield return null;
+    }
+
+    protected virtual void OnCarDestroyed()
+    {
+        // rien par défaut
     }
 }

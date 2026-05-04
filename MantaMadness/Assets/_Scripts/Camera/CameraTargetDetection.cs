@@ -1,9 +1,6 @@
-﻿using FMOD.Studio;
-using FMODUnity;
+﻿using FMODUnity;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraTargetDetection : MonoBehaviour
@@ -32,6 +29,7 @@ public class CameraTargetDetection : MonoBehaviour
     [SerializeField] private LayerMask obstacleMask;
     [SerializeField] private LayerMask jumpargetMask;
     [SerializeField] private LayerMask npcTargetMask;
+    [SerializeField] private float angleWeight = 1.5f;
 
     [Header("Target Lists")]
     [SerializeField] public List<Collider> validJumpTargets = new List<Collider>();
@@ -44,7 +42,10 @@ public class CameraTargetDetection : MonoBehaviour
 
     private CinemachineBrain brain;
 
+    private Collider currentJumpTarget;
 
+    private int targetDashCount = 0;
+    [SerializeField] private string dashCountParameterName = "DashCount";
 
     private void Awake()
     {
@@ -65,6 +66,14 @@ public class CameraTargetDetection : MonoBehaviour
 
         brain = Camera.main.GetComponent<CinemachineBrain>();
         viewAngle = Camera.main.fieldOfView;
+
+        if (ComboManager.Instance != null)
+            ComboManager.Instance.OnComboEnded += ResetTargetDashCount;
+    }
+    private void OnDisable()
+    {
+        if (ComboManager.Instance != null)
+            ComboManager.Instance.OnComboEnded -= ResetTargetDashCount;
     }
 
     private void LateUpdate()
@@ -74,6 +83,23 @@ public class CameraTargetDetection : MonoBehaviour
         DetectJumpTargets();
         DetectNPCTargets();
         DetectShopTargets();
+    }
+
+    private float ComputeTargetScore(Vector3 targetPos)
+    {
+        Vector3 origin = playerTransform.position;
+        Vector3 camForward = Camera.main.transform.forward;
+
+        Vector3 toTarget = targetPos - origin;
+
+        float distance = toTarget.magnitude;
+        float maxDist = jumpDetectionRange; // ou npc/shop selon usage
+        float normalizedDistance = distance / maxDist;
+
+        float angle = Vector3.Angle(camForward, toTarget.normalized);
+        float normalizedAngle = angle / (GetCurrentViewAngle() / 2f);
+
+        return normalizedDistance + normalizedAngle * angleWeight;
     }
 
     private bool IsPlayerCameraActive()
@@ -119,108 +145,73 @@ public class CameraTargetDetection : MonoBehaviour
 
     void DetectJumpTargets()
     {
-        float addRange = jumpDetectionRange - jumpRangeBuffer;
-        float removeRange = jumpDetectionRange + jumpRangeBuffer;
-        float activationRange = jumpDetectionRange * activationRangeMultiplier;
-
-        Collider[] targetsInActivationRange = Physics.OverlapSphere(
+        Collider[] targets = Physics.OverlapSphere(
             playerTransform.position,
-            activationRange,
+            jumpDetectionRange,
             jumpargetMask);
 
-        // --- CLEAN VALID LIST (hysteresis remove) ---
-        for (int i = validJumpTargets.Count - 1; i >= 0; i--)
-        {
-            Collider col = validJumpTargets[i];
-            if (col == null)
-            {
-                validJumpTargets.RemoveAt(i);
-                continue;
-            }
+        Collider bestTarget = null;
+        float bestScore = float.MaxValue;
 
+        foreach (var col in targets)
+        {
+            if (!col.TryGetComponent(out JumpTarget jt)) continue;
+            if (!jt.isAvailable) continue;
+
+            Vector3 dir = (col.transform.position - playerTransform.position).normalized;
             float dist = Vector3.Distance(playerTransform.position, col.transform.position);
 
-            if (dist > removeRange)
-            {
-                validJumpTargets.RemoveAt(i);
+            // Vérif obstacle
+            if (Physics.Raycast(playerTransform.position, dir, dist, obstacleMask))
+                continue;
 
-                JumpTarget jt = col.GetComponent<JumpTarget>();
-                if (jt != null)
-                    jt.SetVisualState(JumpTargetVisualState.OutOfRange, 0f);
+            float score = ComputeTargetScore(col.transform.position);
+
+            if (col == currentJumpTarget)
+            {
+                score *= 0.75f;
+            }
+
+            if (score < bestScore)
+            {
+                bestScore = score;
+                bestTarget = col;
             }
         }
 
-        // --- MAIN LOOP ---
-        foreach (Collider target in targetsInActivationRange)
+        // --- UPDATE VISUALS ---
+        if (currentJumpTarget != null && currentJumpTarget != bestTarget)
         {
-            JumpTarget jumpTar = target.GetComponent<JumpTarget>();
-            if (jumpTar == null)
-                continue;
+            if (currentJumpTarget.TryGetComponent(out JumpTarget oldJT))
+                oldJT.SetAsCurrentTarget(false);
+        }
 
-            if (!jumpTar.isAvailable)
+        validJumpTargets.Clear();
+
+        if (bestTarget != null)
+        {
+            if (bestTarget != currentJumpTarget)
+                PlayTargetDetectedSound();
+
+            validJumpTargets.Add(bestTarget);
+
+            if (bestTarget.TryGetComponent(out JumpTarget jt))
+                jt.SetAsCurrentTarget(true);
+
+            currentJumpTarget = bestTarget;
+        }
+        else
+        {
+            // désactive si plus rien
+            if (currentJumpTarget != null)
             {
-                jumpTar.SetVisualState(JumpTargetVisualState.Inactive);
-                continue;
+                if (currentJumpTarget.TryGetComponent(out JumpTarget jt))
+                    jt.SetAsCurrentTarget(false);
             }
 
-            float distanceToTarget =
-                Vector3.Distance(playerTransform.position, target.transform.position);
-
-            if (distanceToTarget > activationRange)
-            {
-                jumpTar.SetVisualState(JumpTargetVisualState.OutOfRange, 0f);
-                continue;
-            }
-
-            Vector3 directionToTarget =
-                (target.transform.position - playerTransform.position).normalized;
-
-            Vector3 camForward = Camera.main != null ? Camera.main.transform.forward : transform.forward;
-
-            float jumpDetectionAngle = viewAngle + jumpCameraAngleBonus;
-            float angleToTarget = Vector3.Angle(camForward, directionToTarget);
-
-            bool inFOV = angleToTarget < jumpDetectionAngle / 2f;
-
-            bool blocked =
-                Physics.Raycast(transform.position,
-                                directionToTarget,
-                                distanceToTarget,
-                                obstacleMask);
-
-
-            bool inAddRange = distanceToTarget <= addRange;
-
-            if (inAddRange && inFOV && !blocked)
-            {
-                if (!validJumpTargets.Contains(target))
-                {
-                    validJumpTargets.Add(target);
-                    RuntimeManager.PlayOneShot(addTargetSound, Camera.main.transform.position);
-                }
-
-                jumpTar.SetVisualState(JumpTargetVisualState.InRange, 1f);
-            }
-            else
-            {
-                if (validJumpTargets.Contains(target))
-                    validJumpTargets.Remove(target);
-
-                if (distanceToTarget <= jumpDetectionRange + approachingRange)
-                {
-                    float approachingStart = jumpDetectionRange + approachingRange;
-                    float t = Mathf.InverseLerp(approachingStart, addRange, distanceToTarget);
-                    jumpTar.SetVisualState(JumpTargetVisualState.Approaching, t);
-                }
-                else
-                {
-                    jumpTar.SetVisualState(JumpTargetVisualState.OutOfRange, 0f);
-                }
-            }
+            currentJumpTarget = null;
         }
     }
-
-
 
     void DetectNPCTargets()
     {
@@ -410,6 +401,26 @@ public class CameraTargetDetection : MonoBehaviour
         }
     }
 
+    private void PlayTargetDetectedSound()
+    {
+        //PlayerActionFMODManager.Instance.PlayStyleAction(PlayerActionFMOD.STYLE, targetDashCount);
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.BUMP);
+    }
+
+    private void PlayTargetPopSound()
+    {
+        PlayerActionFMODManager.Instance.PlayStyleAction(PlayerActionFMOD.STYLE, targetDashCount);
+    }
+
+    public void NotifyJumpTargetPopped(Collider target)
+    {
+        if (target != currentJumpTarget)
+            return;
+
+        PlayTargetPopSound();
+        targetDashCount = Mathf.Clamp(targetDashCount + 1, 0, 5);
+    }
+
     public void ClearNPCTargets()
     {
         for (int i = validNPCTargets.Count - 1; i >= 0; i--)
@@ -432,4 +443,8 @@ public class CameraTargetDetection : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, jumpDetectionRange);
     }
 
+    private void ResetTargetDashCount()
+    {
+        targetDashCount = 0;
+    }
 }
