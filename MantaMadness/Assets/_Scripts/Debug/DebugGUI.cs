@@ -61,6 +61,7 @@ public class DebugGUI : MonoBehaviour
         GUILayout.Label($"CurrentState : {controller.State}");
         GUILayout.Label($"Current Depth : {Math.Round(controller.CurrentDepth, 2)}");
         GUILayout.Label($"Max Depth : {Math.Round(controller.MaxDepth, 2)}");
+        GUILayout.Label($"Current Collectible Area : {CollectibleAreaManager.CurrentArea}");
 
         if (GUILayout.Button($"Set CRT"))
         {

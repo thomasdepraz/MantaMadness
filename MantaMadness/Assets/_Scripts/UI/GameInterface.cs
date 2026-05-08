@@ -21,6 +21,12 @@ public class GameInterface : MonoBehaviour, IScreen
     public TextMeshProUGUI clamText;
     public TextMeshProUGUI buckieText;
 
+    [Header("UI Current Collectible Area")]
+    public TextMeshProUGUI collectibleAreaName;
+    public TextMeshProUGUI clamAreaCount;
+    public TextMeshProUGUI buckieAreaCount;
+    public TextMeshProUGUI SunAreaCount;
+
     [Header("Sun Overlay Parameters")]
     public Image sunImage;
     public Image sunOverlay;
@@ -99,6 +105,8 @@ public class GameInterface : MonoBehaviour, IScreen
         }
 
         sunImage.transform.localScale = sunScales[0];
+
+        RefreshAreaClamCount();
     }
 
     private void OnDestroy()
@@ -346,5 +354,35 @@ public class GameInterface : MonoBehaviour, IScreen
         coinUiVisual.SetActive(toggle);
         clamUiVisual.SetActive(toggle);
         buckieUiVisual.SetActive(toggle);
+    }
+
+    public void RefreshAreaClamCount()
+    {
+        if (CollectibleAreaManager.CurrentArea == null)
+        {
+            clamAreaCount.text = "";
+            return;
+        }
+
+        clamAreaCount.text =
+            CollectibleAreaManager.CurrentArea.GetClamProgressText();
+    }
+
+    public void RefreshAreaBuckieCount()
+    {
+        if (CollectibleAreaManager.CurrentArea == null)
+        {
+            buckieAreaCount.text = "";
+            return;
+        }
+
+        buckieAreaCount.text =
+            CollectibleAreaManager.CurrentArea.GetBuckieProgressText();
+    }
+
+    public void UpdateAreaName(string name)
+    {
+        Debug.Log("NEW COLLIDER AREA IS" +  name);
+        collectibleAreaName.text = name;
     }
 }

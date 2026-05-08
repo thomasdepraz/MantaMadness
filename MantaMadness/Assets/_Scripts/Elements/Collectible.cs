@@ -3,13 +3,16 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+public enum CollectibleType { normal, super, mega, greyCoin, buckie }
+
+
+
 [ExecuteInEditMode]
-public class Collectible : MonoBehaviour
+public class Collectible : MonoBehaviour, IDataPersistence
 {
     private Coroutine routine;
     
     [SerializeField] private CollectibleType type;
-    public enum CollectibleType { normal, super, mega, greyCoin, buckie}
 
     [SerializeField] private CollectibleRelay relay;
 
@@ -17,6 +20,74 @@ public class Collectible : MonoBehaviour
     private GameObject player;
 
     [SerializeField] private float speed = 0.8f;
+
+    [Header("Save")]
+    [SerializeField] private string collectibleID;
+
+    private CollectibleAreaManager areaManager;
+
+    [SerializeField]
+    private CollectibleState collectibleState = CollectibleState.Active;
+
+    public CollectibleState State => collectibleState;
+    public string ID => collectibleID;
+
+    public void LoadData(GameData data)
+    {
+        if (data.collectibleStates.TryGetValue(collectibleID, out CollectibleState savedState))
+        {
+            collectibleState = savedState;
+        }
+
+        ApplyState();
+    }
+
+    public int GetCollectibleValue()
+    {
+        switch (type)
+        {
+            case CollectibleType.normal:
+                return 1;
+
+            case CollectibleType.super:
+                return 20;
+
+            case CollectibleType.mega:
+                return 100;
+
+            case CollectibleType.buckie:
+                return 1;
+        }
+
+        return 0;
+    }
+
+    public bool IsBuckie()
+    {
+        return type == CollectibleType.buckie;
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        if (data.collectibleStates.ContainsKey(collectibleID))
+        {
+            data.collectibleStates[collectibleID] = collectibleState;
+        }
+        else
+        {
+            data.collectibleStates.Add(
+                collectibleID,
+                collectibleState
+            );
+        }
+    }
+#if UNITY_EDITOR
+    [ContextMenu("Generate GUID")]
+    private void GenerateGUID()
+    {
+        collectibleID = System.Guid.NewGuid().ToString();
+    }
+#endif
 
     private void OnEnable()
     {
@@ -96,13 +167,52 @@ public class Collectible : MonoBehaviour
         //Play particle explosion
         MantaVisuals.instance.PickupParticles();
 
+        collectibleState = CollectibleState.Inactivable;
+
+        if (UIManager.Instance != null && UIManager.Instance.gameInterface != null)
+        {
+            UIManager.Instance.gameInterface.RefreshAreaClamCount();
+            UIManager.Instance.gameInterface.RefreshAreaBuckieCount();
+        }
+
+        if (DataPersistenceManager.Instance != null)
+        {
+            DataPersistenceManager.Instance.SaveGame();
+        }
+
         //deactivate tween
         Sequence tween = DOTween.Sequence().Append(transform.DOScale(0, 0.1f).SetEase(Ease.OutBounce));
         tween.Append(transform.DOJump(transform.position + transform.up, 1, 1, 0.8f));
         
-        tween.onComplete += ()=>gameObject.SetActive(false);
+        tween.onComplete += ()=> gameObject.SetActive(false);
 
         yield return null;
     }
 
+    private void ApplyState()
+    {
+        switch (collectibleState)
+        {
+            case CollectibleState.Active:
+                gameObject.SetActive(true);
+                break;
+
+            case CollectibleState.Activable:
+                gameObject.SetActive(false);
+                break;
+
+            case CollectibleState.Inactivable:
+                gameObject.SetActive(false);
+                break;
+        }
+    }
+
+    public void ActivateCollectible()
+    {
+        if (collectibleState == CollectibleState.Activable)
+        {
+            collectibleState = CollectibleState.Active;
+            gameObject.SetActive(true);
+        }
+    }
 }

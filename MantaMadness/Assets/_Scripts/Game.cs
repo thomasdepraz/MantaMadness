@@ -59,6 +59,8 @@ public class Game : MonoBehaviour, IDataPersistence
             scriptableRendererFeature.SetActive(effect.isActive);
         }
 
+        CollectibleAreaManager.RestoreCurrentArea();
+
         // PLay level Music
         //SoundManager.PlayMusic(Music.THEME_001);
 

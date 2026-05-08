@@ -12,9 +12,13 @@ public class Lilypad : MonoBehaviour
     [SerializeField] private float scaleModifier = 1;
     private LilyPadManager manager;
     [SerializeField]private EventReference audioEvent;
+
+    [SerializeField]
+    private Vector3 originalScale = Vector3.one;
+
     private void Start()
     {
-        if(visual.activeSelf == true)
+        if (!hasBloomed && visual.activeSelf == true)
         {
             visual.SetActive(false);
         }
@@ -35,8 +39,6 @@ public class Lilypad : MonoBehaviour
 
     private void Blooming()
     {
- 
-
         FMOD.Studio.EventInstance audio = RuntimeManager.CreateInstance(audioEvent);
         RuntimeManager.AttachInstanceToGameObject(audio,gameObject);
         audio.start();
@@ -44,6 +46,7 @@ public class Lilypad : MonoBehaviour
         //ENABLE SUB VISUAL
         visual.SetActive(true);
         //TWEEN SSCALE OF MAIN VISUAL
+        visual.transform.localScale = originalScale;
         visual.transform.DOScale(visual.transform.localScale * scaleModifier,0.15f).SetEase(Ease.OutQuad).SetLoops(2,LoopType.Yoyo);
 
         //PARTICLE ACTIVATION
@@ -60,6 +63,7 @@ public class Lilypad : MonoBehaviour
             hasBloomed = true;
 
             visual.SetActive(true);
+            visual.transform.localScale = originalScale;
             visual.transform.DOScale(visual.transform.localScale * scaleModifier, 0.15f).SetEase(Ease.OutQuad).SetLoops(2, LoopType.Yoyo);
 
             foreach (ParticleSystem particle in bloomParticles)
@@ -72,5 +76,18 @@ public class Lilypad : MonoBehaviour
     public void SetManager(LilyPadManager parentManager)
     {
         manager= parentManager;
+    }
+
+    public void RestoreBloomedState()
+    {
+        hasBloomed = true;
+
+        foreach (ParticleSystem particle in bloomParticles)
+        {
+            particle.Play();
+        }
+
+        visual.SetActive(true);
+        visual.transform.localScale = originalScale;
     }
 }

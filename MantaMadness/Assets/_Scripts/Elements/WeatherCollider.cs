@@ -6,6 +6,10 @@ public class WeatherCollider : MonoBehaviour
 
     [SerializeField] private WeatherType newWeather;
 
+    [Header("Collectible Area")]
+    [SerializeField]
+    private string collectibleAreaID;
+
     private void Start()
     {
         relay.HitCollision += WeatherUpdate;
@@ -24,5 +28,6 @@ public class WeatherCollider : MonoBehaviour
     private void WeatherUpdate(SimpleController overload)
     {
         WeatherManager.instance.SetNewWeather(newWeather);
+        WeatherManager.instance.SetCollectibleArea(collectibleAreaID);
     }
 }

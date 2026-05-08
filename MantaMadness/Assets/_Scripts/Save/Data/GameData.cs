@@ -12,6 +12,9 @@ public class GameData
     public int buckieCount;
     public SerializableDictionnary<string, bool> coinsCollected;
 
+    public SerializableDictionnary<string, CollectibleState> collectibleStates;
+    public string currentCollectibleAreaID;
+
     //Checkpoints
     public SerializableDictionnary<string, bool> checkpoints;
 
@@ -32,6 +35,9 @@ public class GameData
 
     // Puzzle destructibles
     public SerializableDictionnary<string, bool> puzzleElements;
+
+    // Lilypad Manager
+    public SerializableDictionnary<string, ModuleState> lilyPadModules;
 
 
     //Player Upgrades Tracking
@@ -73,6 +79,9 @@ public class GameData
         doorsOpened = new SerializableDictionnary<string, bool>();
         shopStands = new SerializableDictionnary<string, ShopStandData>();
         puzzleElements = new SerializableDictionnary<string, bool>();
+        collectibleStates = new SerializableDictionnary<string, CollectibleState>();
+        lilyPadModules = new SerializableDictionnary<string, ModuleState>();
+        currentCollectibleAreaID = "";
 
         doubleJump = false;
         chargeBoost = false;

@@ -1,7 +1,6 @@
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Rendering.LookDev;
 using UnityEngine.SceneManagement;
 
 public enum WeatherType
@@ -285,5 +284,11 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
         int enumLength = System.Enum.GetValues(typeof(FogState)).Length;
         int next = ((int)currentFogState + 1) % enumLength;
         UpdateFog((FogState)next);
+    }
+    public void SetCollectibleArea(string areaID)
+    {
+        if (string.IsNullOrEmpty(areaID))
+            return;
+        CollectibleAreaRegistry.Instance.SetCurrentArea(areaID);
     }
 }

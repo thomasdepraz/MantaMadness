@@ -113,7 +113,7 @@ public class CameraTargetDetection : MonoBehaviour
 
         return playerCameras.Contains(activeCam);
     }
-    private float GetCurrentViewAngle()
+    public float GetCurrentViewAngle()
     {
         if (Camera.main != null)
             return Camera.main.fieldOfView;
@@ -121,7 +121,7 @@ public class CameraTargetDetection : MonoBehaviour
         return viewAngle;
     }
 
-    private Vector3 GetDetectionOrigin()
+    public Vector3 GetDetectionOrigin()
     {   
         if (CameraZone.ActiveZone != null && playerTransform != null)
             return playerTransform.position;
@@ -132,7 +132,7 @@ public class CameraTargetDetection : MonoBehaviour
         return transform.position;
     }
 
-    private Vector3 GetDetectionForward()
+    public Vector3 GetDetectionForward()
     {
         if (CameraZone.ActiveZone != null && playerTransform != null)
             return playerTransform.forward;
