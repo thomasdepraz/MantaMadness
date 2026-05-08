@@ -31,6 +31,7 @@ public class PortalManager : MonoBehaviour
         // Set Velocity to 0
         Game.Instance.player?.LockPlayerForDuration(teleportTransitionDuration);
         PlayTeleportSFX("WarpState", 0);
+        yield return null;
 
         foreach (GameObject level in portal.levelToLoad)
         {
