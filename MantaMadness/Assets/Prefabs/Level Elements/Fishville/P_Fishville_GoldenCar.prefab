@@ -20219,15 +20219,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9beedd74c20601f40b45133b02f77c93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hornAudio: {fileID: 697117157424661924}
-  explosionAudio: {fileID: 4068868545020515717}
   startPoint: 0
   hitBox: {fileID: 2328910065230367103}
   audioHitBox: {fileID: 5251770375470486899}
   visual: {fileID: 8481287291740431184}
   explosion: {fileID: 2494246578993815620}
+  carType: 0
+  hornAudio:
+    Guid:
+      Data1: 311766511
+      Data2: 1221416957
+      Data3: 921807505
+      Data4: 1475426195
+    Path: event:/Sfx/InGame/World/Enviro/Env_Car_Horn
+  explosionAudio:
+    Guid:
+      Data1: 201926729
+      Data2: 1172387982
+      Data3: -2030680420
+      Data4: -1348074034
+    Path: event:/Sfx/InGame/World/Enviro/Env_Car_Explosion
   isAlive: 0
-  rb: {fileID: 1782713571107584351}
   coinName: 
 --- !u!54 &1782713571107584351
 Rigidbody:
@@ -25469,29 +25481,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playOnStart: 1
-  playOnEnable: 1
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 120
-  rotationDuration: 0.3
-  animatePosition: 1
-  loopPositionAmount: -1
-  yoyoPosition: 1
-  xPos: 0
-  yPos: 0.1
-  zPos: 0
-  moveDuration: 0.5
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  playSequenceOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
+  beatSequenceType: 0
 --- !u!1 &8481287291740431184
 GameObject:
   m_ObjectHideFlags: 0
@@ -25544,26 +25539,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playOnStart: 1
-  playOnEnable: 1
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 1
-  loopPositionAmount: -1
-  yoyoPosition: 1
-  xPos: 0
-  yPos: 0.5
-  zPos: 0
-  moveDuration: 1
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  playSequenceOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
+  beatSequenceType: 0

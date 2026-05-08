@@ -59,12 +59,14 @@ public class JumpRailTarget : JumpTarget
 
         isAvailable = false;
 
-        SetVisualState(JumpTargetVisualState.Inactive);
         currentState = JumpTargetVisualState.Inactive;
 
         var col = GetComponent<Collider>();
         if (CameraTargetDetection.Instance != null && col != null)
+        {
+            CameraTargetDetection.Instance.NotifyJumpTargetPopped(col);
             CameraTargetDetection.Instance.validJumpTargets.Remove(col);
+        }
 
         ToggleFunctionElements(false);
 

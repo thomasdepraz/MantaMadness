@@ -1432,8 +1432,15 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             else if (hasHitWalls)
             {
                 if (stompInfo.collider.gameObject.CompareTag("StompCollision"))
+                {
+                    StartStompLandWindow();
+                    stompRoutine = null;
+                    ResetJump();
+                    fallTime = 0f;
                     return;
+                }
 
+                CancelStomp();
                 State = ControllerState.FALLING;
                 rb.AddForce(hoverBehaviour.normalContainer.up * rb.linearVelocity.magnitude / 2f, ForceMode.Acceleration);
             }
@@ -2353,6 +2360,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         //Reset du Stomp
         if(stompRoutine != null)
         {
+            if (isSuperSpinning)
+            {
+                ResetSpin();
+            }
             StopCoroutine(stompRoutine);
             PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.DIVE);
             stompRoutine = null;
@@ -2520,16 +2531,17 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     public void ResetSpin()
     {
-        if (ForcedSpin)
-            return;
+        isSuperSpinning = false;
+        isSpinning = false;
+
+        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GALAXYSPIN);
+        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.SPIN);
 
         spinCancel?.Invoke();
 
         canceledByAction = false;
         currentSpinTime = 0;
         hasSpinBoost = false;
-
-        isSpinning = false;
 
         if (!isRailSpinning)
         {
@@ -2541,12 +2553,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         {
             electricBehaviour.ResetCharge();
         }
-
-        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.SPIN);
-        PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.GALAXYSPIN);
-        //PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.CHARGINGBOOST);
-
-        isSuperSpinning = false;
     }
 
     private void ResetAirSpin()
