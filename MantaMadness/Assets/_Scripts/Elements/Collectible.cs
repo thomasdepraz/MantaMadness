@@ -57,9 +57,12 @@ public class Collectible : MonoBehaviour, IDataPersistence
 
             case CollectibleType.buckie:
                 return 1;
-        }
 
-        return 0;
+            case CollectibleType.greyCoin:
+                return 100;
+            default:
+                return 0;
+        }
     }
 
     public bool IsBuckie()
@@ -132,37 +135,56 @@ public class Collectible : MonoBehaviour, IDataPersistence
             routine = StartCoroutine(PickupRoutine(controller));
         }
     }
+    private void GiveReward()
+    {
+        int value = GetCollectibleValue();
+
+        if (type == CollectibleType.buckie)
+        {
+            CoinManager.Instance.PickupBuckie(value);
+            return;
+        }
+
+        if (type == CollectibleType.mega || type == CollectibleType.greyCoin)
+        {
+            UIManager.Instance.gameInterface.StartCoroutine("pickupMegaClam");
+        }
+
+        CoinManager.Instance.PickupClam(value);
+    }
 
     private IEnumerator PickupRoutine(SimpleController controller)
     {
         //increase boost gauge
-        switch (type)
-        {
-            case CollectibleType.normal:
-                //Increase coincount
-                CoinManager.Instance.PickupClam(1);
-                break;
-            case CollectibleType.super:
-                //Increase coincount
-                CoinManager.Instance.PickupClam(20);
-                break;
-            case CollectibleType.mega:
-                UIManager.Instance.gameInterface.StartCoroutine("pickupMegaClam");
-                //Increase coincount
-                CoinManager.Instance.PickupClam(100);
-                break;
-            case CollectibleType.greyCoin:
-                UIManager.Instance.gameInterface.StartCoroutine("pickupMegaClam");
-                //Increase coincount
-                CoinManager.Instance.PickupClam(100);
-                break;
-            case CollectibleType.buckie:
-                //UIManager.Instance.gameInterface.StartCoroutine("pickupBuckie");
-                CoinManager.Instance.PickupBuckie(1);
-                break;
-            default:
-                break;
-        }
+        //switch (type)
+        //{
+        //    case CollectibleType.normal:
+        //        //Increase coincount
+        //        CoinManager.Instance.PickupClam(1);
+        //        break;
+        //    case CollectibleType.super:
+        //        //Increase coincount
+        //        CoinManager.Instance.PickupClam(20);
+        //        break;
+        //    case CollectibleType.mega:
+        //        UIManager.Instance.gameInterface.StartCoroutine("pickupMegaClam");
+        //        //Increase coincount
+        //        CoinManager.Instance.PickupClam(100);
+        //        break;
+        //    case CollectibleType.greyCoin:
+        //        UIManager.Instance.gameInterface.StartCoroutine("pickupMegaClam");
+        //        //Increase coincount
+        //        CoinManager.Instance.PickupClam(100);
+        //        break;
+        //    case CollectibleType.buckie:
+        //        //UIManager.Instance.gameInterface.StartCoroutine("pickupBuckie");
+        //        CoinManager.Instance.PickupBuckie(1);
+        //        break;
+        //    default:
+        //        break;
+        //}
+
+        GiveReward();
 
         //Play particle explosion
         MantaVisuals.instance.PickupParticles();
@@ -215,4 +237,6 @@ public class Collectible : MonoBehaviour, IDataPersistence
             gameObject.SetActive(true);
         }
     }
+
+
 }

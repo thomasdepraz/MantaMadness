@@ -21,6 +21,8 @@ public class CollectibleAreaRegistry : MonoBehaviour
 
     public void SetCurrentArea(string areaID)
     {
+        Debug.Log("SET CURRENT AREA CALLED : " +areaID +"\nFROM : " +UnityEngine.StackTraceUtility.ExtractStackTrace());
+
         for (int i = 0; i < areas.Count; i++)
         {
             if (areas[i].AreaID == areaID)

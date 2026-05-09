@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class WeatherCollider : MonoBehaviour
 {
@@ -10,13 +11,14 @@ public class WeatherCollider : MonoBehaviour
     [SerializeField]
     private string collectibleAreaID;
 
-    private void Start()
-    {
-        relay.HitCollision += WeatherUpdate;
-    }
+    private bool canTrigger;
 
-    private void OnEnable()
+    private IEnumerator Start()
     {
+        yield return null;
+        yield return null;
+
+        canTrigger = true;
         relay.HitCollision += WeatherUpdate;
     }
 
@@ -27,7 +29,25 @@ public class WeatherCollider : MonoBehaviour
 
     private void WeatherUpdate(SimpleController overload)
     {
+        //WeatherManager.instance.SetNewWeather(newWeather);
+        //WeatherManager.instance.SetCollectibleArea(collectibleAreaID);
+        if (!canTrigger)
+            return;
+
+        Debug.Log(
+    "WEATHER COLLIDER TRIGGERED : " +
+    collectibleAreaID +
+    " FRAME = " +
+    Time.frameCount
+);
+
         WeatherManager.instance.SetNewWeather(newWeather);
-        WeatherManager.instance.SetCollectibleArea(collectibleAreaID);
+
+        if (!string.IsNullOrEmpty(collectibleAreaID))
+        {
+            CollectibleAreaRegistry.Instance.SetCurrentArea(
+                collectibleAreaID
+            );
+        }
     }
 }

@@ -226,7 +226,8 @@ public class PauseMenu : MonoBehaviour
         DOTween.PauseAll();
 
         pauseMenuBackground.SetActive(true);
-
+        UIManager.Instance.ToggleBaseInterface(false);
+        UIManager.Instance.dialogInteractDisplay.ToggleInterface(false);
         previousState = state;
         state = PauseMenuState.DEFAULT;
         UpdateState();
@@ -249,7 +250,7 @@ public class PauseMenu : MonoBehaviour
         isPaused = false;
 
         pauseMenuBackground.SetActive(false);
-
+        UIManager.Instance.ToggleBaseInterface(true);
         previousState = state;
         state = PauseMenuState.NULL;
         UpdateState();

@@ -81,7 +81,7 @@ public class GameData
         puzzleElements = new SerializableDictionnary<string, bool>();
         collectibleStates = new SerializableDictionnary<string, CollectibleState>();
         lilyPadModules = new SerializableDictionnary<string, ModuleState>();
-        currentCollectibleAreaID = "";
+        currentCollectibleAreaID = "SONKI";
 
         doubleJump = false;
         chargeBoost = false;

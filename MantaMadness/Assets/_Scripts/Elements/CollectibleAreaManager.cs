@@ -66,10 +66,7 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        if (data.currentCollectibleAreaID == areaID)
-        {
-            CurrentArea = this;
-        }
+        //Nothing
     }
 
     public int TotalClams
@@ -148,13 +145,12 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
     }
     public string GetClamProgressText()
     {
-        return CollectedClams + " / " + TotalClams;
+        return CollectedClams + "/" + TotalClams;
     }
 
     public string GetBuckieProgressText()
     {
-        Debug.Log("Buckie Area Count " +CollectedBuckies + " / " + TotalBuckies);
-        return CollectedBuckies + " / " + TotalBuckies;
+        return CollectedBuckies + "/" + TotalBuckies;
     }
 
     public static void RestoreCurrentArea()

@@ -27,6 +27,12 @@ public class GameInterface : MonoBehaviour, IScreen
     public TextMeshProUGUI buckieAreaCount;
     public TextMeshProUGUI SunAreaCount;
 
+    [Header("UI otal Collectible Menu")]
+    public TextMeshProUGUI totalClamCountMenu;
+    public TextMeshProUGUI totalBuckieCountMenu;
+    public TextMeshProUGUI totalSunCountMenu;
+
+
     [Header("Sun Overlay Parameters")]
     public Image sunImage;
     public Image sunOverlay;
@@ -85,7 +91,8 @@ public class GameInterface : MonoBehaviour, IScreen
         CoinManager.Instance.coinPickedUp += UpdateCoinCount;
         CoinManager.Instance.buckiePickedUp += UpdateBuckieCount;
         CoinManager.Instance.clamPickedUp += UpdateClamCount;
-        coinText.text = CoinManager.Instance.PickupCoinCount.ToString();
+        //coinText.text = CoinManager.Instance.PickupCoinCount.ToString();
+        totalSunCountMenu.text = CoinManager.Instance.PickupCoinCount.ToString();
         ComboManager.Instance.OnComboLevelChanged += SunComboBehavior;
         MusicManager.OnBeat += SunOnBeatFever;
         MusicManager.OnBeat2 += SunOnBeat;
@@ -122,19 +129,22 @@ public class GameInterface : MonoBehaviour, IScreen
 
     public void UpdateCoinCount(int coinCount)
     {
-        coinText.text = coinCount.ToString();
+        totalSunCountMenu.text = coinCount.ToString();
+        //coinText.text = coinCount.ToString();
         if (GameplayPaused() == false)
             sunCountImage?.transform.DOPunchScale(Vector3.one, 1, 5);
     }
 
     public void UpdateClamCount(int clamCount)
     {
-        clamText.text = clamCount.ToString();
+        //clamText.text = clamCount.ToString();
+        totalClamCountMenu.text = clamCount.ToString();
     }
 
     public void UpdateBuckieCount(int buckieCount)
     {
-        buckieText.text = buckieCount.ToString();
+        //buckieText.text = buckieCount.ToString();
+        totalBuckieCountMenu.text = buckieCount.ToString();
     }
 
     public void toggleSunInterface(bool toggleValue)
@@ -360,12 +370,13 @@ public class GameInterface : MonoBehaviour, IScreen
     {
         if (CollectibleAreaManager.CurrentArea == null)
         {
+            clamText.text = "";
             clamAreaCount.text = "";
             return;
         }
 
-        clamAreaCount.text =
-            CollectibleAreaManager.CurrentArea.GetClamProgressText();
+        clamText.text = "<sketchy>" + CollectibleAreaManager.CurrentArea.GetClamProgressText();
+        clamAreaCount.text = "<sketchy>" + CollectibleAreaManager.CurrentArea.GetClamProgressText();
     }
 
     public void RefreshAreaBuckieCount()
@@ -373,11 +384,11 @@ public class GameInterface : MonoBehaviour, IScreen
         if (CollectibleAreaManager.CurrentArea == null)
         {
             buckieAreaCount.text = "";
+            buckieText.text = "";
             return;
         }
-
-        buckieAreaCount.text =
-            CollectibleAreaManager.CurrentArea.GetBuckieProgressText();
+        buckieText.text = "<sketchy>" + CollectibleAreaManager.CurrentArea.GetBuckieProgressText();
+        buckieAreaCount.text = "<sketchy>" + CollectibleAreaManager.CurrentArea.GetBuckieProgressText();
     }
 
     public void UpdateAreaName(string name)
