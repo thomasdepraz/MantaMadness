@@ -6,7 +6,7 @@ using FMODUnity;
 public class CoinHolder : MonoBehaviour, IDataPersistence
 {
     public string coinName = "null";
-    [SerializeField] private GameObject coin, greyCoin;
+    [SerializeField] private GameObject coin;
     [SerializeField] private ParticleSystem spawnParticle;
     [Header("Cinemachine")]
     [SerializeField] private CinemachineCamera vcam;
@@ -14,7 +14,7 @@ public class CoinHolder : MonoBehaviour, IDataPersistence
     [SerializeField] private bool standaloneCoin;
     [SerializeField] private EventReference ClearSound;
 
-    private bool hasBeenObtained;
+    public bool hasBeenObtained;
 
     private void CheckActivation(bool value)
     {
@@ -37,7 +37,7 @@ public class CoinHolder : MonoBehaviour, IDataPersistence
         if (coin.activeSelf == true && standaloneCoin == false)
         {
             coin.SetActive(false);
-            greyCoin.SetActive(false);
+            //greyCoin.SetActive(false);
             vcam.enabled = false;
         }
         else if (standaloneCoin == true)
@@ -45,13 +45,13 @@ public class CoinHolder : MonoBehaviour, IDataPersistence
             if (hasBeenObtained == false)
             {
                 coin.SetActive(true);
-                greyCoin.SetActive(false);
+                //greyCoin.SetActive(false);
                 vcam.enabled = false;
             }
             else
             {
                 coin.SetActive(false);
-                greyCoin.SetActive(true);
+                //greyCoin.SetActive(true);
                 vcam.enabled = false;
             }
         }
@@ -97,7 +97,7 @@ public class CoinHolder : MonoBehaviour, IDataPersistence
         else
         {
             //greyCoin.transform.localScale = Vector3.zero;
-            greyCoin.SetActive(true);
+            //greyCoin.SetActive(true);
         }
 
             yield return new WaitForSeconds(3f);

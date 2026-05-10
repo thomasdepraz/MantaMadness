@@ -85,6 +85,42 @@ public class Collectible : MonoBehaviour, IDataPersistence
         }
     }
 #if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (Application.isPlaying)
+            return;
+
+        Collectible[] collectibles =
+            FindObjectsByType<Collectible>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None
+            );
+
+        bool duplicateFound = false;
+
+        foreach (Collectible collectible in collectibles)
+        {
+            // skip self
+            if (collectible == this)
+                continue;
+
+            if (collectible.collectibleID == collectibleID)
+            {
+                duplicateFound = true;
+                break;
+            }
+        }
+
+        if (string.IsNullOrEmpty(collectibleID) || duplicateFound)
+        {
+            GenerateGUID();
+
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
+        }
+    }
+
     [ContextMenu("Generate GUID")]
     private void GenerateGUID()
     {

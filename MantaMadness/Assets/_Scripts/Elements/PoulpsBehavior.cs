@@ -1,5 +1,7 @@
+using DG.Tweening;
 using FMODUnity;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Splines;
 
@@ -17,7 +19,7 @@ public class PoulpsBehavior : MonoBehaviour
 
     [Header("Components")]
     [SerializeField] private Transform body;
-    [SerializeField] private GameObject[] toActivate;
+    [SerializeField] private Collectible[] collectible;
     [SerializeField] private Vector3 offset;
 
     [Header ("Poulp Visual + Anim")]
@@ -31,13 +33,20 @@ public class PoulpsBehavior : MonoBehaviour
     [SerializeField] private EventReference poulpMoveLoopReference;
     public FMOD.Studio.EventInstance poulpMoveLoopEvent;
 
+    [Header("Ground Alignment")]
+    [SerializeField] private LayerMask groundMask;
+    [SerializeField] private float raycastHeight = 2f;
+    [SerializeField] private float raycastDistance = 5f;
+    [SerializeField] private float alignSpeed = 10f;
+    [SerializeField] private Transform visualToRotate;
+
     private bool hasActivated =  false;
 
     private void Start()
     {
-        if (toActivate.Length > 0) 
+        if (collectible.Length > 0) 
         {
-            foreach (var item in toActivate)
+            foreach (var item in collectible)
             {
                 item.gameObject.SetActive(false);
             }
@@ -71,28 +80,30 @@ public class PoulpsBehavior : MonoBehaviour
     {
         splinePlayer.Play();
 
-        for (int i = 0; i < toActivate.Length; i++)
+        for (int i = 0; i < collectible.Length; i++)
         {
-            if(i == 0)
+            if (i == 0)
             {
-                toActivate[i].gameObject.SetActive(true);
-                toActivate[i].gameObject.transform.position = body.transform.position + offset;
-                yield return new WaitForSeconds(splinePlayer.Duration / (toActivate.Length + 3));
-            }        
-            //else if (i == toActivate.Length - 2)
-            //{
-            //    toActivate[i].gameObject.SetActive(true);
-            //    toActivate[i].gameObject.transform.position = body.transform.position;
-            //    yield return new WaitForSeconds(splinePlayer.Duration / (toActivate.Length + 1));
-            //}
+                if (collectible[i].State == CollectibleState.Activable)
+                {
+                    collectible[i].ActivateCollectible();
+                    collectible[i].gameObject.transform.position = body.transform.position + offset;
+                    collectible[i].transform.DOMoveY(collectible[i].transform.position.y + 5f, 0.2f).SetEase(Ease.OutQuad).SetLoops(2, LoopType.Yoyo);
+                }
+                yield return new WaitForSeconds(splinePlayer.Duration / (collectible.Length + 3));
+            }
             else
             {
-                toActivate[i].gameObject.SetActive(true);
-                toActivate[i].gameObject.transform.position = body.transform.position + offset;
-                yield return new WaitForSeconds(splinePlayer.Duration / (toActivate.Length + 3));
+                if (collectible[i].State == CollectibleState.Activable)
+                {
+                    collectible[i].ActivateCollectible();
+                    collectible[i].gameObject.transform.position = body.transform.position + offset;
+                    collectible[i].transform.DOMoveY(collectible[i].transform.position.y + 5f,0.2f).SetEase(Ease.OutQuad).SetLoops(2, LoopType.Yoyo);
+                }
+                yield return new WaitForSeconds(splinePlayer.Duration / (collectible.Length + 3));
             }
         }
-        yield return null;
+
     }
 
     private IEnumerator Timer()
@@ -130,11 +141,37 @@ public class PoulpsBehavior : MonoBehaviour
         {
             poulpMoveLoopEvent.set3DAttributes(RuntimeUtils.To3DAttributes(transform));
         }
+
+        AlignToGround();
     }
 
     private void AnimationEventTrigger()
     {
         OnAnimationEvent = true;
+    }
+
+    private void AlignToGround()
+    {
+        Vector3 rayOrigin = transform.position + Vector3.up * raycastHeight;
+
+        if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, raycastDistance, groundMask))
+        {
+            Transform target = visualToRotate != null ? visualToRotate : transform;
+
+            Vector3 forward = target.forward;
+            Vector3 projectedForward = Vector3.ProjectOnPlane(forward, hit.normal).normalized;
+
+            if (projectedForward.sqrMagnitude < 0.001f)
+                return;
+
+            Quaternion targetRotation = Quaternion.LookRotation(projectedForward, hit.normal);
+
+            target.rotation = Quaternion.Slerp(
+                target.rotation,
+                targetRotation,
+                Time.fixedDeltaTime * alignSpeed
+            );
+        }
     }
 
 }

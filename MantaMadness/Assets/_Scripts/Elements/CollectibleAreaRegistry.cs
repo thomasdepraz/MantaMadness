@@ -32,8 +32,7 @@ public class CollectibleAreaRegistry : MonoBehaviour
                 if (UIManager.Instance != null &&
                    UIManager.Instance.gameInterface != null)
                 {
-                    UIManager.Instance.gameInterface.RefreshAreaClamCount();
-                    UIManager.Instance.gameInterface.RefreshAreaBuckieCount();
+                    UIManager.Instance.gameInterface.RefreshAllAreaCount();
                     UIManager.Instance.gameInterface.UpdateAreaName(areas[i].areaName);
                 }
 

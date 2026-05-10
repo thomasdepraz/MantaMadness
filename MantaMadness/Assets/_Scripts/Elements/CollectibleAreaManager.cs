@@ -8,6 +8,7 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
     [SerializeField] public string areaName;
 
     private Collectible[] collectibles;
+    [SerializeField]private CoinHolder[] suns;
 
     public string AreaID => areaID;
 
@@ -50,8 +51,7 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
 
         if (UIManager.Instance != null && UIManager.Instance.gameInterface != null)
         {
-            UIManager.Instance.gameInterface.RefreshAreaClamCount();
-            UIManager.Instance.gameInterface.RefreshAreaBuckieCount();
+            UIManager.Instance.gameInterface.RefreshAllAreaCount();
             UIManager.Instance.gameInterface.UpdateAreaName(areaName);
         }
     }
@@ -143,6 +143,38 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
             return total;
         }
     }
+
+    public int TotalSun
+    {
+        get
+        {
+            int total = 0;
+
+            foreach (var sun in suns)
+            {
+                total += 1;
+            }
+            return total;
+        }
+    }
+
+    public int CollectedSun
+    {
+        get
+        {
+            int total = 0;
+            foreach (var sun in suns)
+            {
+                if (sun.hasBeenObtained)
+                {
+                    total += 1;
+                }
+            }
+            return total;
+        }
+    }
+
+
     public string GetClamProgressText()
     {
         return CollectedClams + "/" + TotalClams;
@@ -151,6 +183,11 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
     public string GetBuckieProgressText()
     {
         return CollectedBuckies + "/" + TotalBuckies;
+    }
+
+    public string GetSunProgressText()
+    {
+        return CollectedSun + "/" + TotalSun;
     }
 
     public static void RestoreCurrentArea()
@@ -168,8 +205,7 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
                 if (UIManager.Instance != null &&
                    UIManager.Instance.gameInterface != null)
                 {
-                    UIManager.Instance.gameInterface.RefreshAreaClamCount();
-                    UIManager.Instance.gameInterface.RefreshAreaBuckieCount();
+                    UIManager.Instance.gameInterface.RefreshAllAreaCount();
                     UIManager.Instance.gameInterface.UpdateAreaName(area.areaName);
                 }
                 return;

@@ -1,8 +1,9 @@
+using FMODUnity;
+using System;
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
-using FMODUnity;
-using System;
+using UnityEngine.WSA;
 
 public class Coin : MonoBehaviour
 {
@@ -55,9 +56,14 @@ public class Coin : MonoBehaviour
         //increase coin count
         CoinManager.Instance.PickupCoin();
 
+
         //Deactivate game object
         routine = null;
         pickedUpCoin.Invoke(true);
+
+        //Update L'UI
+        UIManager.Instance.gameInterface.RefreshAreaSunCount();
+
         gameObject.SetActive(false);
     }
 

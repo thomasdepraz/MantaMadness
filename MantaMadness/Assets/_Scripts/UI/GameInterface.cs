@@ -17,7 +17,7 @@ public class GameInterface : MonoBehaviour, IScreen
     public GameObject coinUiVisual;
     public GameObject clamUiVisual;
     public GameObject buckieUiVisual;
-    public TextMeshProUGUI coinText;
+    public TextMeshProUGUI sunText;
     public TextMeshProUGUI clamText;
     public TextMeshProUGUI buckieText;
 
@@ -113,7 +113,7 @@ public class GameInterface : MonoBehaviour, IScreen
 
         sunImage.transform.localScale = sunScales[0];
 
-        RefreshAreaClamCount();
+        RefreshAllAreaCount();
     }
 
     private void OnDestroy()
@@ -389,6 +389,26 @@ public class GameInterface : MonoBehaviour, IScreen
         }
         buckieText.text = "<sketchy>" + CollectibleAreaManager.CurrentArea.GetBuckieProgressText();
         buckieAreaCount.text = "<sketchy>" + CollectibleAreaManager.CurrentArea.GetBuckieProgressText();
+    }
+
+    public void RefreshAreaSunCount()
+    {
+        Debug.Log("SUN JE SUIS LA");
+        if (CollectibleAreaManager.CurrentArea == null)
+        {
+            SunAreaCount.text = "";
+            sunText.text = "";
+            return;
+        }
+        sunText.text = "<sketchy>" + CollectibleAreaManager.CurrentArea.GetSunProgressText();
+        SunAreaCount.text = "<sketchy>" + CollectibleAreaManager.CurrentArea.GetSunProgressText();
+    }
+
+    public void RefreshAllAreaCount()
+    {
+        RefreshAreaSunCount();
+        RefreshAreaBuckieCount();
+        RefreshAreaClamCount();
     }
 
     public void UpdateAreaName(string name)

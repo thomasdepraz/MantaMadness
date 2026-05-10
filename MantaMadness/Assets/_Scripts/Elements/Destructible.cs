@@ -12,10 +12,10 @@ public class Destructible : MonoBehaviour
     [SerializeField] protected ParticleSystem particle;
     [SerializeField] protected ParticleSystem ImpactParticle;
     [SerializeField] protected DestructibleCollisionRelay hitbox;
-    [SerializeField] protected int clamNumber;
-    [SerializeField] protected GameObject clam;
     [SerializeField] protected bool hard = false;
     [SerializeField] protected EventReference destructionSFX;
+
+    [SerializeField] private Collectible[] collectibleRewards;
 
     public bool isBroken = false;
 
@@ -30,6 +30,8 @@ public class Destructible : MonoBehaviour
             if (remain.activeSelf == true)
                 remain.SetActive(false);
         }
+
+        collectibleRewards = GetComponentsInChildren<Collectible>(true);
     }
 
     public virtual void OnEnable()
@@ -69,20 +71,25 @@ public class Destructible : MonoBehaviour
 
 
         //START SPAWNING CLAMS
-        for (int i = 0; i < clamNumber; i++) 
+        for (int i = 0; i < collectibleRewards.Length; i++)
         {
-            //var radians = 2 * MathF.PI / clamNumber * (i + 1);
-            //var vertical = Mathf.Sin(radians);
-            //var horizontal = Mathf.Cos(radians);
+            Collectible collectible = collectibleRewards[i];
 
-            //var spawnDir = new Vector3(horizontal, 0.25f, vertical);
-            
+            if (collectible == null)
+                continue;
 
-            GameObject newClam = Instantiate(clam, transform.position + new Vector3(0,5f,0), Quaternion.identity);
-            //var spawnPos = newClam.transform.position + spawnDir * 10f;
-            //newClam.transform.DOLocalMove(spawnPos, 1f);
-            newClam.gameObject.GetComponent<Collectible>().MoveToTarget(Game.Instance.player.gameObject);
-            yield return new WaitForSeconds(0.15f);
+            if (collectible.State == CollectibleState.Activable)
+            {
+                collectible.ActivateCollectible();
+
+                collectible.transform.position =transform.position + Vector3.up * 2f;
+
+                collectible.transform.DOJump(collectible.transform.position +UnityEngine.Random.insideUnitSphere * 2f,2f,1,0.4f);
+
+                collectible.MoveToTarget(Game.Instance.player.gameObject);
+
+                yield return new WaitForSeconds(0.15f);
+            }
         }
 
         //END

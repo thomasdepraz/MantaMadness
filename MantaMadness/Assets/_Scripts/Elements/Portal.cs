@@ -23,7 +23,7 @@ public class Portal : WorldCheckpoint
 
     [Header("Collectible Area")]
     [SerializeField]
-    private string collectibleAreaID;
+    public string collectibleAreaID;
 
 
 
@@ -53,10 +53,10 @@ public class Portal : WorldCheckpoint
         player.transform.rotation = new Quaternion(0, teleportPoint.transform.rotation.y, 0, teleportPoint.transform.rotation.w);
         //player.transform.forward = teleportPoint.forward;
 
-        if (!string.IsNullOrEmpty(collectibleAreaID))
-        {
-            CollectibleAreaRegistry.Instance.SetCurrentArea(collectibleAreaID);
-        }
+        //if (!string.IsNullOrEmpty(collectibleAreaID))
+        //{
+        //    CollectibleAreaRegistry.Instance.SetCurrentArea(collectibleAreaID);
+        //}
     }
 
     protected override void OnTriggerEnter(Collider other)

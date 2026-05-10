@@ -54,6 +54,11 @@ public class PortalManager : MonoBehaviour
         MusicManager.Instance.PlayMusic(musicToPlay);
         WeatherManager.instance.SetNewWeather(specialWeatherType);
 
+        if (!string.IsNullOrEmpty(portal.collectibleAreaID))
+        {
+            CollectibleAreaRegistry.Instance.SetCurrentArea(portal.collectibleAreaID);
+        }
+
         yield return new WaitForSeconds(teleportTransitionDuration/2);
         PlayTeleportSFX("WarpState", 1);
         for (int i = 0; i < portals.Count; i++)

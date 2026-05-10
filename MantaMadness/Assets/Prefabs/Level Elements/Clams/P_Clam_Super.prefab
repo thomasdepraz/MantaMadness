@@ -100,30 +100,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playOnStart: 1
-  playOnEnable: 1
-  playOnBeat: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 60
-  zRotation: 0
-  rotationDuration: 1
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  playSequenceOnBeat: 0
+  playSequenceOnEnable: 0
+  tweenSteps: []
+  sequenceLoops: 0
+  sequenceLoopType: 0
+  beatSequenceType: 0
 --- !u!1 &4611842544960491346
 GameObject:
   m_ObjectHideFlags: 0
@@ -197,6 +179,8 @@ MonoBehaviour:
   type: 1
   relay: {fileID: 563734176841788771}
   speed: 0.6
+  collectibleID: 93d04b16-50fe-4b93-884e-501498aebfe0
+  collectibleState: 0
 --- !u!114 &3057018808653083556
 MonoBehaviour:
   m_ObjectHideFlags: 0
