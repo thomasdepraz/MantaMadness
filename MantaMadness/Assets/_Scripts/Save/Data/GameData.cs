@@ -13,7 +13,7 @@ public class GameData
     public SerializableDictionnary<string, bool> coinsCollected;
 
     public SerializableDictionnary<string, CollectibleState> collectibleStates;
-    public string currentCollectibleAreaID;
+    public string currentCollectibleAreaID = "SONKI";
 
     //Checkpoints
     public SerializableDictionnary<string, bool> checkpoints;
@@ -38,6 +38,12 @@ public class GameData
 
     // Lilypad Manager
     public SerializableDictionnary<string, ModuleState> lilyPadModules;
+
+    //Area Sun Rewards On All Clams Collected
+    public SerializableDictionnary<string, bool> areaSunRewards;
+
+    //Level to Load String
+    public string currentLevelID = "WORLD";
 
 
     //Player Upgrades Tracking
@@ -81,7 +87,7 @@ public class GameData
         puzzleElements = new SerializableDictionnary<string, bool>();
         collectibleStates = new SerializableDictionnary<string, CollectibleState>();
         lilyPadModules = new SerializableDictionnary<string, ModuleState>();
-        currentCollectibleAreaID = "SONKI";
+        areaSunRewards = new SerializableDictionnary<string, bool>();
 
         doubleJump = false;
         chargeBoost = false;

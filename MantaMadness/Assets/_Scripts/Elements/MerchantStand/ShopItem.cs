@@ -6,7 +6,8 @@ using UnityEngine;
 public enum ShopItemType
 {
     Ability,
-    Item
+    Item,
+    Sun
 }
 
 public enum ShopCurrency

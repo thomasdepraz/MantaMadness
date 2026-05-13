@@ -3,6 +3,12 @@ using System.Collections;
 using Unity.Cinemachine;
 using FMODUnity;
 
+public enum CoinHolderType
+{
+    Challenge,
+    Shop,
+    AreaClear,
+}
 public class CoinHolder : MonoBehaviour, IDataPersistence
 {
     public string coinName = "null";
@@ -13,6 +19,7 @@ public class CoinHolder : MonoBehaviour, IDataPersistence
     [SerializeField] private CinemachineBlendDefinition blend;
     [SerializeField] private bool standaloneCoin;
     [SerializeField] private EventReference ClearSound;
+    [SerializeField] private CoinHolderType type = CoinHolderType.Challenge;
 
     public bool hasBeenObtained;
 
@@ -88,7 +95,21 @@ public class CoinHolder : MonoBehaviour, IDataPersistence
         //PART 2 SPAWN IN SUN
         RuntimeManager.PlayOneShot(ClearSound, vcam.transform.position);
         spawnParticle.Play();
-        UIEffectManager.Instance.SpecificAction?.Invoke(UiParticles.CHALLENGE, "Armature_Chad");
+
+        //Particle depends on Type
+        switch (type)
+        {
+            case CoinHolderType.Challenge:
+                UIEffectManager.Instance.SpecificAction?.Invoke(UiParticles.CHALLENGE, "Armature_Chad");
+                break;
+            case CoinHolderType.Shop:
+                UIEffectManager.Instance.SpecificAction?.Invoke(UiParticles.SHOPSUN, "Armature_Chad");
+                break;
+            case CoinHolderType.AreaClear:
+                UIEffectManager.Instance.SpecificAction?.Invoke(UiParticles.AREACLEAR, "Armature_Chad");
+                break;
+        }
+
         if (hasBeenObtained == false)
         {
             //coin.transform.localScale = Vector3.zero;
@@ -111,5 +132,13 @@ public class CoinHolder : MonoBehaviour, IDataPersistence
         //reset camera
         CameraManager.Instance.ResetCamera(vcam);
         vcam.enabled = false;
+    }
+
+    public void ForceSpawn()
+    {
+        if (hasBeenObtained)
+            return;
+
+        coin.SetActive(true);
     }
 }

@@ -22,6 +22,8 @@ public enum UiParticles
     MISSINGHAND,
     CHECKPOINT,
     SPEEDLINE,
+    SHOPSUN,
+    AREACLEAR,
 }
 
 public enum WordType

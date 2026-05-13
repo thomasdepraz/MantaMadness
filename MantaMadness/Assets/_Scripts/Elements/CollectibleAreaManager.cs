@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
@@ -9,6 +10,10 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
 
     private Collectible[] collectibles;
     [SerializeField]private CoinHolder[] suns;
+
+    [SerializeField] private CoinHolder sunOnClearEnable;
+
+    private bool allClamsRewardTriggered = false;
 
     public string AreaID => areaID;
 
@@ -62,11 +67,35 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
         {
             data.currentCollectibleAreaID = areaID;
         }
+
+        if (data.areaSunRewards.ContainsKey(areaID))
+        {
+            data.areaSunRewards[areaID] = allClamsRewardTriggered;
+        }
+        else
+        {
+            data.areaSunRewards.Add(areaID,allClamsRewardTriggered);
+        }
     }
 
     public void LoadData(GameData data)
     {
-        //Nothing
+        StartCoroutine(LoadDataDelay(data));
+    }
+
+    private IEnumerator LoadDataDelay(GameData data)
+    {
+        yield return new WaitForSeconds(0.1f);
+        if (data.areaSunRewards.TryGetValue(areaID, out bool triggered))
+        {
+            allClamsRewardTriggered = triggered;
+        }
+
+        if (AreAllClamsCollected())
+        {
+            if (sunOnClearEnable != null)
+                sunOnClearEnable.ForceSpawn();
+        }
     }
 
     public int TotalClams
@@ -212,5 +241,29 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
             }
         }
     }
+    public void CheckAllClamsCollected()
+    {
+        if (allClamsRewardTriggered)
+            return;
 
+        if (CollectedClams >= TotalClams)
+        {
+            allClamsRewardTriggered = true;
+
+            Debug.Log("ALL CLAMS COLLECTED IN AREA : " + areaName);
+
+            OnAllClamsCollected();
+        }
+    }
+
+    public void OnAllClamsCollected()
+    {
+        if (sunOnClearEnable != null)
+            CoinManager.Instance.ActivateCoinHolder(sunOnClearEnable.coinName);
+    }
+
+    public bool AreAllClamsCollected()
+    {
+        return CollectedClams >= TotalClams;
+    }
 }

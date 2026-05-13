@@ -1,6 +1,5 @@
 using UnityEngine;
 using TMPro;
-using FMODUnity;
 
 [RequireComponent(typeof(BoxCollider))]
 public class Portal : WorldCheckpoint
@@ -18,20 +17,16 @@ public class Portal : WorldCheckpoint
     [SerializeField] private MUSICS musicToPlay = MUSICS.NULL;
     [SerializeField] public WeatherType specialWeatherType = WeatherType.MountainTemple;
 
-    [SerializeField] public GameObject[] levelToLoad;
-    [SerializeField] public GameObject[] levelToUnload;
-
     [Header("Collectible Area")]
     [SerializeField]
     public string collectibleAreaID;
-
 
 
     protected override void Start()
     {
         base.Start();
 
-        if(player == null)
+        if (player == null)
         {
             player = Game.Instance.player;
         }
@@ -63,9 +58,10 @@ public class Portal : WorldCheckpoint
     {
         if (other.TryGetComponent(out SimpleController controller))
         {
-            WorldCheckpointManager.Instance.SetCheckpoint(respawnTransform, indexName, displayAreaName, nameToDisplay);
+            WorldCheckpointManager.Instance.SetCheckpoint(respawnTransform, indexName, displayAreaName, nameToDisplay, LevelID);
+            PortalManager.Instance.SetCheckpoint(targetIndex, displayAreaName, nameToDisplay, LevelID);
             PortalManager.Instance.StartCoroutine(PortalManager.Instance.Teleport(targetIndex, enterSecretRoom, musicToPlay,this, specialWeatherType));
-            PortalManager.Instance.SetCheckpoint(targetIndex, displayAreaName, nameToDisplay);
+
         }
     }
 

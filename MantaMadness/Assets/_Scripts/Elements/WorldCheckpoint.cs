@@ -20,6 +20,10 @@ public class WorldCheckpoint : MonoBehaviour
     [SerializeField] private ParticleSystem particle;
     [SerializeField] private EventReference soundToPlay;
 
+    [Header("Level")]
+    [SerializeField] protected string levelID;
+    public string LevelID => levelID;
+
     protected virtual void Start()
     {
         if (!WorldCheckpointManager.Instance.checkpoints.Contains(this))
@@ -32,22 +36,17 @@ public class WorldCheckpoint : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent(out SimpleController controller))
         {
-            WorldCheckpointManager.Instance.SetCheckpoint(respawnTransform, indexName, displayAreaName, nameToDisplay);
-            //if (musicToPlay != MUSICS.NULL)
-            //{
-            //    MusicManager.Instance.PlayMusic(musicToPlay);
-            //}
-            //if(ambientToPlay != AMBIENT.NULL)
-            //{
-            //    MusicManager.Instance.PlayAmbient(ambientToPlay);
-            //}
+            WorldCheckpointManager.Instance.SetCheckpoint(respawnTransform, indexName, displayAreaName, nameToDisplay, LevelID);
         }
     }
 
     public virtual void EnableMat()
     {
         //Enable Flag
-        flag.SetActive(true);
+        if(flag != null)
+        {
+            flag.SetActive(true);
+        }
 
         //Change mat to enablemat
         foreach(MeshRenderer renderer in visuals)
@@ -55,9 +54,17 @@ public class WorldCheckpoint : MonoBehaviour
             renderer.material = enableMat;
         }
         //Play SFX
-        particle.Play();
+        if(particle != null)
+        {
+            particle.Play();
+        }
+
         //Play Particle
-        RuntimeManager.PlayOneShot(soundToPlay, transform.position);
+        if(!soundToPlay.IsNull)
+        {
+            RuntimeManager.PlayOneShot(soundToPlay, transform.position);
+        }
+
         //Play Checkpoint UI particle
         UIParticleManager.Instance.playSpecificUIParticle(UiParticles.CHECKPOINT, "");
     }

@@ -55,7 +55,7 @@ public class WaterFall : MonoBehaviour
         if (!hasStarted)
             return;
 
-        WaterFallAppear();
+        //WaterFallAppear();
     }
 
     private void Start()
@@ -179,6 +179,6 @@ public class WaterFall : MonoBehaviour
 
     public void WaterFallAppear()
     {
-        RuntimeManager.PlayOneShot(waterFallAppear, Game.Instance.player.transform.position);
+        RuntimeManager.PlayOneShot(waterFallAppear, waterFallCamera.transform.position);
     }
 }

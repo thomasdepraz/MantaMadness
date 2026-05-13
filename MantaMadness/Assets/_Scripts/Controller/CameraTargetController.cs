@@ -235,14 +235,17 @@ public class CameraTargetController : MonoBehaviour
         target.position = player.transform.position + offset;
         target.up = currentUp;
 
-        if (toggleFixedCam == false)
+        if (!PauseMenu.instance.isPaused)
         {
-            target.Rotate(new Vector3(currentUp.x + pitch, currentUp.y + yaw, currentUp.z));
-        }
-        else
-        {
-            target.Rotate(player.transform.rotation.eulerAngles);
-            StretchyCamBehavior(lookAction.action.ReadValue<Vector2>());
+            if (toggleFixedCam == false)
+            {
+                target.Rotate(new Vector3(currentUp.x + pitch, currentUp.y + yaw, currentUp.z));
+            }
+            else
+            {
+                target.Rotate(player.transform.rotation.eulerAngles);
+                StretchyCamBehavior(lookAction.action.ReadValue<Vector2>());
+            }
         }
     }
 

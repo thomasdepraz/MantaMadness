@@ -346,6 +346,8 @@ public class OptionsMenu : MonoBehaviour
     {
         if (currentContext == OptionsContext.MainMenu)
             CloseFromMainMenu();
+        else if (currentContext == OptionsContext.PauseMenu)
+            CloseFromPause();
     }
 
 }

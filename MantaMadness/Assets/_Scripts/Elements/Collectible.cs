@@ -233,6 +233,11 @@ public class Collectible : MonoBehaviour, IDataPersistence
             UIManager.Instance.gameInterface.RefreshAreaBuckieCount();
         }
 
+        if (CollectibleAreaManager.CurrentArea != null)
+        {
+            CollectibleAreaManager.CurrentArea.CheckAllClamsCollected();
+        }
+
         if (DataPersistenceManager.Instance != null)
         {
             DataPersistenceManager.Instance.SaveGame();

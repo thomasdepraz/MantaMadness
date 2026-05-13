@@ -101,10 +101,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playSequenceOnBeat: 0
-  playSequenceOnEnable: 0
-  tweenSteps: []
-  sequenceLoops: 0
-  sequenceLoopType: 0
+  playSequenceOnEnable: 1
+  tweenSteps:
+  - animatePosition: 0
+    animateRotation: 1
+    animateScale: 0
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 0, y: 180, z: 0}
+    rotationUseLocal: 1
+    rotationRelative: 1
+    scale: {x: 0, y: 0, z: 0}
+    duration: 3
+    delay: 0
+    ease: 1
+  sequenceLoops: -1
+  sequenceLoopType: 2
   beatSequenceType: 0
 --- !u!1 &4396648012598261199
 GameObject:
@@ -245,7 +258,7 @@ MonoBehaviour:
   type: 2
   relay: {fileID: 8335483318565471033}
   speed: 0.6
-  collectibleID: 8489164e-ac06-4ffc-8fec-6aef6f8f392f
+  collectibleID: a522f481-5163-4301-8f39-31c3b5c97044
   collectibleState: 0
 --- !u!114 &1843412275019264352
 MonoBehaviour:

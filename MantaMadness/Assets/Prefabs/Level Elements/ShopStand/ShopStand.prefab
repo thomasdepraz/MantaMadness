@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   standID: TEST_SHOP_001
-  item: {fileID: 11400000, guid: 27e731ee9992ad44488f1dcd86584ec1, type: 2}
+  item: {fileID: 11400000, guid: 23037137c85910e4bba75e7747631505, type: 2}
   itemNameText: {fileID: 7127716625023678631}
   priceText: {fileID: 8478918918994292214}
   CurrencyIcon: {fileID: 2564514320772284767}
@@ -165,6 +165,7 @@ MonoBehaviour:
       Data4: -1623133211
     Path: event:/Sfx/InGame/Stingers/Stinger_Powerup_Pickup
   shopCurrencyAnimator: {fileID: 2681740089464057086}
+  collectibleRewards: []
 --- !u!65 &7648783899946684628
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1222,9 +1223,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 540f8858d9d639349adfeb8c782ed1f0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8780186185706187624}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 540f8858d9d639349adfeb8c782ed1f0, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 8586935282566676204}
   m_SourcePrefab: {fileID: 100100000, guid: 540f8858d9d639349adfeb8c782ed1f0, type: 3}
 --- !u!1 &5048253561617247767 stripped
@@ -1232,24 +1230,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 540f8858d9d639349adfeb8c782ed1f0, type: 3}
   m_PrefabInstance: {fileID: 5390692274185622342}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8780186185706187624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5048253561617247767}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playSequenceOnBeat: 0
-  playSequenceOnEnable: 0
-  tweenSteps: []
-  sequenceLoops: 0
-  sequenceLoopType: 0
-  beatSequenceType: 0
 --- !u!114 &8586935282566676204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1275,7 +1255,6 @@ MonoBehaviour:
     rotationUseLocal: 0
     rotationRelative: 1
     scale: {x: 0.5, y: 1.5, z: 0.5}
-    scaleRelative: 1
     duration: 0
     delay: 0
     ease: 6

@@ -64,7 +64,7 @@ Transform:
   m_LocalRotation: {x: -0.0000000037252899, y: -0, z: 0.00000002753222, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7048587511517862424}
   - {fileID: 2596951301180473479}
@@ -135,30 +135,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playOnStart: 0
-  playOnEnable: 0
-  playOnBeat: 1
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1.2
-  yScale: 1.2
-  zScale: 1.2
-  scaleDuration: 0
+  playSequenceOnBeat: 1
+  playSequenceOnEnable: 1
+  tweenSteps:
+  - animatePosition: 1
+    animateRotation: 1
+    animateScale: 1
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 0, y: 0, z: 10}
+    rotationUseLocal: 1
+    rotationRelative: 1
+    scale: {x: 0.6, y: 1, z: 1}
+    duration: 0
+    delay: 0
+    ease: 12
+  - animatePosition: 0
+    animateRotation: 1
+    animateScale: 1
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 0, y: 0, z: -20}
+    rotationUseLocal: 1
+    rotationRelative: 1
+    scale: {x: 1, y: 0.6, z: 1}
+    duration: 0
+    delay: 0
+    ease: 12
+  sequenceLoops: -1
+  sequenceLoopType: 1
+  beatSequenceType: 0
 --- !u!1 &2483646469650343359
 GameObject:
   m_ObjectHideFlags: 0
@@ -186,8 +194,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2483646469650343359}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.023194518, y: -0.94094104, z: -0.16804487, w: -0.29300675}
-  m_LocalPosition: {x: -1.808, y: -0.769, z: 2.567}
+  m_LocalRotation: {x: 0.023194514, y: -0.94094104, z: -0.16804487, w: -0.29300672}
+  m_LocalPosition: {x: -1.8080009, y: -0.76900005, z: 2.567003}
   m_LocalScale: {x: 0.36000004, y: 0.35999998, z: 0.35999998}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -485,7 +493,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outOfRangeVisual: {fileID: 46079950169725416}
   inRangeVisual: {fileID: 5760670168107114445}
-  dialogKey: FISHERMAN_001
+  npcName: 
+  dialogStates: []
+  npcState: 0
+  dialogIndex: 0
 --- !u!65 &8996276297858711677
 BoxCollider:
   m_ObjectHideFlags: 0

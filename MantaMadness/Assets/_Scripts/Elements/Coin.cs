@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.WSA;
 
 public class Coin : MonoBehaviour
 {

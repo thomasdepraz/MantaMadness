@@ -33,22 +33,6 @@ public class PortalManager : MonoBehaviour
         PlayTeleportSFX("WarpState", 0);
         yield return null;
 
-        foreach (GameObject level in portal.levelToLoad)
-        {
-            if (level != null)
-            {
-                level.SetActive(true);
-            }
-        }
-
-        foreach(GameObject level in portal.levelToUnload)
-        {
-            if (level != null)
-            {
-                level.SetActive(false);
-            }
-        }
-
         UIManager.Instance.transitionScreen.TransitionInOut();
         FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Warping, 1);
         MusicManager.Instance.PlayMusic(musicToPlay);
@@ -84,7 +68,7 @@ public class PortalManager : MonoBehaviour
             yield return null;
     }
 
-    public void SetCheckpoint(string index, bool areaName, string nameToDisplay)
+    public void SetCheckpoint(string index, bool areaName, string nameToDisplay, string levelID)
     {
         Transform respawnPos = transform;
 
@@ -97,7 +81,7 @@ public class PortalManager : MonoBehaviour
             }
         }
 
-        WorldCheckpointManager.Instance.SetCheckpoint(respawnPos, index, areaName, nameToDisplay);
+        WorldCheckpointManager.Instance.SetCheckpoint(respawnPos, index, areaName, nameToDisplay, levelID);
     }
 
     public void PlayTeleportSFX(string parameterName, float paramValue)

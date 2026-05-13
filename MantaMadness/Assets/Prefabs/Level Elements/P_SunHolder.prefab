@@ -9828,6 +9828,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3177118980680561517}
   - component: {fileID: 4987197658084882393}
+  - component: {fileID: 2348750865778673303}
   m_Layer: 0
   m_Name: CoinHolderCamera
   m_TagString: Untagged
@@ -9843,8 +9844,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4542121383548275955}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.13192019, y: -0.57733124, z: 0.11765984, w: 0.79714614}
-  m_LocalPosition: {x: 43.2, y: 27.9, z: -16}
+  m_LocalRotation: {x: 0.044348776, y: -0.94533795, z: 0.14529626, w: 0.28854552}
+  m_LocalPosition: {x: 18.075321, y: 18.170477, z: 26.850777}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9870,7 +9871,7 @@ MonoBehaviour:
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 0}
+    TrackingTarget: {fileID: 186990393963070932}
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
@@ -9893,6 +9894,19 @@ MonoBehaviour:
       BarrelClipping: 0.25
       Anamorphism: 0
   BlendHint: 0
+--- !u!114 &2348750865778673303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4542121383548275955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e8b78ac948f05a46a6d8339a503172b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LookAtOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &6535446102982300344
 GameObject:
   m_ObjectHideFlags: 0
@@ -14872,6 +14886,8 @@ MonoBehaviour:
       Data3: -323741542
       Data4: -372929876
     Path: event:/Sfx/InGame/Stingers/Stinger_ChallengeClear_Sun
+  type: 0
+  hasBeenObtained: 0
 --- !u!1001 &6190324187563799558
 PrefabInstance:
   m_ObjectHideFlags: 0

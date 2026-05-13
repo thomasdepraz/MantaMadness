@@ -114,4 +114,16 @@ public class CoinManager : MonoBehaviour, IDataPersistence
             }
         }
     }
+
+    public void ForceActivateCoinHolder(string coinName)
+    {
+        for (int i = 0; i < coinHolders.Length; i++)
+        {
+            if (coinHolders[i].coinName == coinName)
+            {
+                coinHolders[i].ForceSpawn();
+            }
+        }
+
+    }
 }

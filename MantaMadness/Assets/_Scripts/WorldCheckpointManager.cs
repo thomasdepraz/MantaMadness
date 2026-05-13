@@ -30,7 +30,7 @@ public class WorldCheckpointManager : MonoBehaviour, IDataPersistence
             }
         }
 
-        StartCoroutine(DelayLoadData());
+        StartCoroutine(DelayLoadData(data));
         //foreach (WorldCheckpoint check in checkpoints)
         //{
         //    if(check.indexName == currentCheckpoint)
@@ -44,9 +44,10 @@ public class WorldCheckpointManager : MonoBehaviour, IDataPersistence
         //}
     }
 
-    private IEnumerator DelayLoadData()
+    private IEnumerator DelayLoadData(GameData data)
     {
         yield return new WaitForSeconds(0.1f);
+
         foreach (WorldCheckpoint check in checkpoints)
         {
             if (check.indexName == currentCheckpoint)
@@ -57,12 +58,16 @@ public class WorldCheckpointManager : MonoBehaviour, IDataPersistence
                 Quaternion rotation;
                 Game.Instance.Respawn(out pos, out rotation);
                 check.EnableMat();
+
+                //WorldLevelManager.Instance.LoadLevel(check.LevelID);
             }
             else
             {
                 check.DisableMat();
             }
         }
+        yield return null;
+        StartCoroutine(WorldLevelManager.Instance.LoadLevel(data.currentLevelID));
     }
 
     public void SaveData(ref GameData data)
@@ -91,7 +96,7 @@ public class WorldCheckpointManager : MonoBehaviour, IDataPersistence
         Game.Instance.SetRespawnTransform(respawnTransform);
     }
 
-    public void SetCheckpoint(Transform respawnTransform, string checkpointIndexName, bool canDisplay, string displayName)
+    public void SetCheckpoint(Transform respawnTransform, string checkpointIndexName, bool canDisplay, string displayName, string levelID)
     {
         if(checkpointIndexName != currentCheckpoint)
         {
@@ -116,6 +121,9 @@ public class WorldCheckpointManager : MonoBehaviour, IDataPersistence
             }
 
             GameData data = DataPersistenceManager.Instance.gameData;
+            data.currentLevelID = levelID;
+
+            StartCoroutine(WorldLevelManager.Instance.LoadLevel(levelID));
 
             //Manage Save Data Checkpoints
             var keys = new List<string>(data.checkpoints.Keys);

@@ -21,7 +21,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private EventReference submitSound;
     [SerializeField] private EventReference navigateSound;
 
-    private bool isPaused = false;
+    public bool isPaused = false;
     private bool ignoreNextInput = false;
 
     private int currentIndex;

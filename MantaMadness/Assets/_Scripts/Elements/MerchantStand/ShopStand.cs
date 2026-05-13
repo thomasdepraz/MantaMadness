@@ -1,5 +1,7 @@
 using FMODUnity;
 using System;
+using System.Collections.Generic;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,10 +31,21 @@ public class ShopStand : MonoBehaviour, IDataPersistence
     [Header("Animation")]
     [SerializeField]private Animator shopCurrencyAnimator;
 
+    [Header("Collectible Rewards")]
+    [SerializeField] private List<Collectible> collectibleRewards = new List<Collectible>();
+    private int currentCollectibleIndex = 0;
+
+    private Collider shopCollider;
+
     private int renewalCount = 0;
     private bool disableShopStand = false;
 
     public bool IsActive => !disableShopStand && renewalCount < item.itemRenewalLimit;
+
+    private void Awake()
+    {
+        shopCollider = GetComponent<Collider>();
+    }
 
     public void Start()
     {
@@ -55,8 +68,6 @@ public class ShopStand : MonoBehaviour, IDataPersistence
         {
             renewalCount = standData.renewalCount;
             disableShopStand = standData.disabled;
-
-
         }
         else
         {
@@ -72,6 +83,24 @@ public class ShopStand : MonoBehaviour, IDataPersistence
         else
         {
             ActivateShop();
+        }
+
+        StartCoroutine(DelayLoadData(data));
+    }
+
+    public IEnumerator DelayLoadData(GameData data)
+    {
+        yield return new WaitForSeconds(0.1f);
+        if (data.shopStands.TryGetValue(standID, out ShopStandData standData))
+        {
+            if (item.type == ShopItemType.Sun)
+            {
+                Debug.Log("Sun count shop is " + renewalCount);
+                if (renewalCount == item.itemRenewalLimit)
+                {
+                    CoinManager.Instance.ForceActivateCoinHolder(item.itemSold);
+                }
+            }
         }
     }
 
@@ -120,13 +149,18 @@ public class ShopStand : MonoBehaviour, IDataPersistence
 
         GameData data = DataPersistenceManager.Instance.gameData;
 
-        if (renewalCount >= item.itemRenewalLimit)
+        bool useCollectibleList =
+            collectibleRewards != null &&
+            collectibleRewards.Count > 0;
+
+        if (!useCollectibleList &&
+            renewalCount >= item.itemRenewalLimit)
         {
             Debug.Log("Renewal limit reached");
             return;
         }
 
-        if(item.currency == ShopCurrency.Clam)
+        if (item.currency == ShopCurrency.Clam)
         {
             if (CoinManager.Instance.ClamCollectibleCount >= item.price)
             {
@@ -143,11 +177,15 @@ public class ShopStand : MonoBehaviour, IDataPersistence
                 {
                     UnlockItem(Game.Instance.player);
                 }
-
-                if (renewalCount >= item.itemRenewalLimit)
+                else if (item.type == ShopItemType.Sun)
                 {
-                    DisableShop();
+                    UnlockSun();
                 }
+
+                //if (renewalCount >= item.itemRenewalLimit)
+                //{
+                //    DisableShop();
+                //}
                 //update clam count
             }
             else
@@ -174,6 +212,10 @@ public class ShopStand : MonoBehaviour, IDataPersistence
                 else if (item.type == ShopItemType.Item)
                 {
                     UnlockItem(Game.Instance.player);
+                }
+                else if (item.type == ShopItemType.Sun)
+                {
+                    UnlockSun();
                 }
 
                 if (renewalCount >= item.itemRenewalLimit)
@@ -213,15 +255,57 @@ public class ShopStand : MonoBehaviour, IDataPersistence
 
     void UnlockItem(SimpleController player) 
     {
-        if(item.itemToSpawn != null)
+        // Item classique
+        if (item.itemToSpawn != null)
         {
-            Instantiate(item.itemToSpawn, player.transform.position, Quaternion.identity);
-        }
-        else
-        {
-            Debug.Log("No Item sets! just wasted money");
+            Instantiate(
+                item.itemToSpawn,
+                player.transform.position,
+                Quaternion.identity
+            );
         }
 
+        // Collectible rewards
+        if (collectibleRewards.Count > 0)
+        {
+            if (currentCollectibleIndex >= collectibleRewards.Count)
+            {
+                Debug.Log("No more collectible rewards");
+                return;
+            }
+
+            Collectible collectible =
+                collectibleRewards[currentCollectibleIndex];
+
+            currentCollectibleIndex++;
+
+            if (collectible != null)
+            {
+                collectible.ActivateCollectible();
+
+                collectible.transform.position =
+                    itemVisualPoint.position;
+
+                collectible.MoveToTarget(player.gameObject);
+            }
+
+            // Disable stand if empty
+            if (currentCollectibleIndex >= collectibleRewards.Count)
+            {
+                DisableShop();
+            }
+        }
+    }
+
+    void UnlockSun()
+    {
+        if (string.IsNullOrEmpty(item.itemSold))
+        {
+            Debug.LogWarning("Sun shop item has no CoinHolder ID");
+            return;
+        }
+        CoinManager.Instance.ActivateCoinHolder(item.itemSold);
+        DisableShop();
     }
 
     private void ActivateShop()
@@ -243,7 +327,9 @@ public class ShopStand : MonoBehaviour, IDataPersistence
     {
         disableShopStand = true;
 
-        CameraTargetDetection.Instance.validShopTargets.Remove(GetComponent<Collider>());
+        if (shopCollider != null)
+            shopCollider.enabled = false;
+
 
         if (visual != null)
         visual.SetActive(false);
