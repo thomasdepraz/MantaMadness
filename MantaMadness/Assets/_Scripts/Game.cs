@@ -49,9 +49,6 @@ public class Game : MonoBehaviour, IDataPersistence
 
     public void Start()
     {
-        //player = GameObject.FindWithTag("Player").GetComponent<SimpleController>();
-
-        //Toggle screen effects
         List<ScriptableRendererFeature> scriptableRendererFeatures = RenderFeatureUtility.GetRenderFeatures();
         foreach(var effect in screenEffectData.ScreenEffects)
         {
@@ -59,13 +56,12 @@ public class Game : MonoBehaviour, IDataPersistence
             scriptableRendererFeature.SetActive(effect.isActive);
         }
 
-        CollectibleAreaManager.RestoreCurrentArea();
+        player = GameObject.FindWithTag("Player").GetComponent<SimpleController>();
 
-        // PLay level Music
-        //SoundManager.PlayMusic(Music.THEME_001);
+        //Toggle screen effects
+        m_SpawnPosition = player.transform.position;
+        m_SpawnRotation = player.transform.rotation;
 
-        //m_SpawnPosition = player.transform.position;
-        //m_SpawnRotation = player.transform.rotation;
     }
 
     public void LoadData(GameData data)
@@ -81,7 +77,7 @@ public class Game : MonoBehaviour, IDataPersistence
     {
         yield return new WaitForSeconds(0.1f);
         StateChange();
-
+        CollectibleAreaManager.RestoreCurrentArea();
     }
 
     public void SaveData(ref GameData data)

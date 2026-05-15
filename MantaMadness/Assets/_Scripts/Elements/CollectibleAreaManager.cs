@@ -221,23 +221,22 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
 
     public static void RestoreCurrentArea()
     {
-        CollectibleAreaManager[] areas =FindObjectsByType<CollectibleAreaManager>(FindObjectsInactive.Include,FindObjectsSortMode.None);
-
         GameData data = DataPersistenceManager.Instance.gameData;
 
-        foreach (var area in areas)
+        foreach (var area in CollectibleAreaRegistry.Instance.areas)
         {
-            if (area.AreaID == data.currentCollectibleAreaID)
             {
-                CurrentArea = area;
-
-                if (UIManager.Instance != null &&
-                   UIManager.Instance.gameInterface != null)
+                if (area.AreaID == data.currentCollectibleAreaID)
                 {
-                    UIManager.Instance.gameInterface.RefreshAllAreaCount();
-                    UIManager.Instance.gameInterface.UpdateAreaName(area.areaName);
+                    CurrentArea = area;
+
+                    if (UIManager.Instance != null && UIManager.Instance.gameInterface != null)
+                    {
+                        UIManager.Instance.gameInterface.RefreshAllAreaCount();
+                        UIManager.Instance.gameInterface.UpdateAreaName(area.areaName);
+                    }
+                    return;
                 }
-                return;
             }
         }
     }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class CollectibleAreaRegistry : MonoBehaviour
+public class CollectibleAreaRegistry : MonoBehaviour, IDataPersistence
 {
     public static CollectibleAreaRegistry Instance;
 
@@ -21,8 +21,6 @@ public class CollectibleAreaRegistry : MonoBehaviour
 
     public void SetCurrentArea(string areaID)
     {
-        Debug.Log("SET CURRENT AREA CALLED : " +areaID +"\nFROM : " +UnityEngine.StackTraceUtility.ExtractStackTrace());
-
         for (int i = 0; i < areas.Count; i++)
         {
             if (areas[i].AreaID == areaID)
@@ -43,5 +41,16 @@ public class CollectibleAreaRegistry : MonoBehaviour
         }
 
         Debug.LogWarning("Collectible Area not found : " + areaID);
+    }
+
+    public void LoadData(GameData data)
+    {
+        //Debug.LogWarning("SET COLLECTIBLE AREA : " + data.currentCollectibleAreaID);
+        //SetCurrentArea(data.currentCollectibleAreaID);
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        //data.currentCollectibleAreaID = CollectibleAreaManager.CurrentArea.AreaID;
     }
 }

@@ -285,10 +285,4 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
         int next = ((int)currentFogState + 1) % enumLength;
         UpdateFog((FogState)next);
     }
-    public void SetCollectibleArea(string areaID)
-    {
-        if (string.IsNullOrEmpty(areaID))
-            return;
-        CollectibleAreaRegistry.Instance.SetCurrentArea(areaID);
-    }
 }

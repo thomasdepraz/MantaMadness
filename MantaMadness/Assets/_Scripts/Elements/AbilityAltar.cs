@@ -24,11 +24,6 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
 
     [SerializeField] private int updateGameStateValue;
 
-    private void Start()
-    {
-        StartCoroutine(StartDelay());
-    }
-
     private IEnumerator StartDelay()
     {
         yield return new WaitForSeconds(0.1f);
@@ -41,6 +36,11 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
         {
             DisablePickup();
         }
+    }
+
+    private void OnEnable()
+    {
+        StartCoroutine(StartDelay());
     }
 
     private void OnDisable()
