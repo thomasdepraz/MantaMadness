@@ -1878,7 +1878,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         {
             if(boostRoutine == null)
             {
-                Boost(controllerData.boostForce, Camera.main.transform.forward);
+                GetCameraAxes(out Vector3 boostForward, out _);
+                Boost(controllerData.boostForce, boostForward);
                 boostBehaviour.IncrementGauge(BoostAction.BoostedDrift);
             }
         }
@@ -2156,6 +2157,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
         ResetJump();
         electricBehaviour?.ResetCharge();
+
+        if (CameraTargetController.instance != null)
+            CameraTargetController.instance.SyncYawPitchToPlayerFacing();
     }
 
     private float GetSpeedRatio()

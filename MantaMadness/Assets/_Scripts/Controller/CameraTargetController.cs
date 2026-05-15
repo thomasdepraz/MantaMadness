@@ -228,22 +228,51 @@ public class CameraTargetController : MonoBehaviour
 
         return angle;
     }
-   
+
+    public void SyncYawPitchToPlayerFacing()
+    {
+        if (player == null)
+            return;
+
+        yaw = WrapAngle(player.transform.eulerAngles.y);
+    }
+
+    private void ApplyTargetRotation()
+    {
+        Vector3 referenceForward = Vector3.ProjectOnPlane(Vector3.forward, currentUp);
+        if (referenceForward.sqrMagnitude < 0.0001f)
+        {
+            referenceForward = Vector3.ProjectOnPlane(player.hoverBehaviour.normalContainer.forward, currentUp);
+        }
+
+        if (referenceForward.sqrMagnitude < 0.0001f)
+            referenceForward = Vector3.Cross(currentUp, Vector3.right);
+
+        referenceForward.Normalize();
+
+        Vector3 forward = Quaternion.AngleAxis(yaw, currentUp) * referenceForward;
+        Vector3 right = Vector3.Cross(currentUp, forward).normalized;
+        Quaternion pitchRotation = Quaternion.AngleAxis(pitch, right);
+        target.rotation = pitchRotation * Quaternion.LookRotation(forward, currentUp);
+    }
 
     private void FixedUpdate()
     {
         target.position = player.transform.position + offset;
-        target.up = currentUp;
 
-        if (!PauseMenu.instance.isPaused)
+        bool canRotateCamera = Time.timeScale > 0f;
+        if (PauseMenu.instance != null && PauseMenu.instance.isPaused)
+            canRotateCamera = false;
+
+        if (canRotateCamera)
         {
             if (toggleFixedCam == false)
             {
-                target.Rotate(new Vector3(currentUp.x + pitch, currentUp.y + yaw, currentUp.z));
+                ApplyTargetRotation();
             }
             else
             {
-                target.Rotate(player.transform.rotation.eulerAngles);
+                target.rotation = Quaternion.Euler(0f, player.transform.rotation.eulerAngles.y, 0f);
                 StretchyCamBehavior(lookAction.action.ReadValue<Vector2>());
             }
         }
