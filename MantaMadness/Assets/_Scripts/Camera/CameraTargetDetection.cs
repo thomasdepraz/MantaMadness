@@ -47,6 +47,8 @@ public class CameraTargetDetection : MonoBehaviour
     private int targetDashCount = 0;
     [SerializeField] private string dashCountParameterName = "DashCount";
 
+    private SimpleController player;
+
     private void Awake()
     {
         if(Instance == null)
@@ -66,6 +68,7 @@ public class CameraTargetDetection : MonoBehaviour
 
         brain = Camera.main.GetComponent<CinemachineBrain>();
         viewAngle = Camera.main.fieldOfView;
+        player = Game.Instance.player;
 
         if (ComboManager.Instance != null)
             ComboManager.Instance.OnComboEnded += ResetTargetDashCount;
@@ -148,6 +151,9 @@ public class CameraTargetDetection : MonoBehaviour
 
     void DetectJumpTargets()
     {
+        if (player.doubleJumpAbility == false)
+            return;
+
         Collider[] targets = Physics.OverlapSphere(
             playerTransform.position,
             jumpDetectionRange,

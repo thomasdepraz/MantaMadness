@@ -10,8 +10,6 @@ public class WorldCheckpoint : MonoBehaviour
     [SerializeField] public string indexName;
     [SerializeField] public bool displayAreaName;
     [SerializeField] public string nameToDisplay;
-    //[SerializeField] public MUSICS musicToPlay = MUSICS.NULL;
-    //[SerializeField] public AMBIENT ambientToPlay = AMBIENT.NULL;
 
     [SerializeField] private MeshRenderer[] visuals;
     [SerializeField] private GameObject flag;

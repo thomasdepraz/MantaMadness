@@ -1960,6 +1960,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         if (!grindAbility)
             return false;
 
+        if (rail.isRoadBorder == true && state == ControllerState.JUMPING)
+            return false;
+
         ComboManager.Instance.AddComboAction(ComboID.RailEnter);
         ComboManager.Instance.SetComboTimerFrozen(true);
 
@@ -2071,6 +2074,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     {
         if(State == ControllerState.SWIMMING)
             return false;
+
+        if (waterfall.isLava && lavaResistanceAbility == false)
+        {
+            Game.Instance.player.Kill(DeathType.DEFAULT);
+            return false;
+        }
 
         CancelActionWindow();
 

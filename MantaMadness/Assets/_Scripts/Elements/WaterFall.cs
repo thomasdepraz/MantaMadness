@@ -25,6 +25,8 @@ public class WaterFall : MonoBehaviour
     public EventReference enterWaterfallShot;
     public EventReference waterFallAppear;
 
+    [SerializeField] public bool isLava = false;
+
 
     private bool hasStarted = false;
 

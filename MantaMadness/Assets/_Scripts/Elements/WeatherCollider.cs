@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class WeatherCollider : MonoBehaviour
+public class WeatherCollider : WorldCheckpoint
 {
     [SerializeField] private CollisionRelay relay;
 
@@ -13,7 +13,21 @@ public class WeatherCollider : MonoBehaviour
 
     private bool canTrigger;
 
-    private IEnumerator Start()
+    private SimpleController player;
+
+    protected override void Start()
+    {
+        base.Start();
+
+        if (player == null)
+        {
+            player = Game.Instance.player;
+        }
+
+        StartCoroutine(DelayStart());
+    }
+
+    private IEnumerator DelayStart()
     {
         yield return null;
         yield return null;
@@ -29,17 +43,8 @@ public class WeatherCollider : MonoBehaviour
 
     private void WeatherUpdate(SimpleController overload)
     {
-        //WeatherManager.instance.SetNewWeather(newWeather);
-        //WeatherManager.instance.SetCollectibleArea(collectibleAreaID);
         if (!canTrigger)
             return;
-
-        Debug.Log(
-    "WEATHER COLLIDER TRIGGERED : " +
-    collectibleAreaID +
-    " FRAME = " +
-    Time.frameCount
-);
 
         WeatherManager.instance.SetNewWeather(newWeather);
 
@@ -49,5 +54,15 @@ public class WeatherCollider : MonoBehaviour
                 collectibleAreaID
             );
         }
+    }
+
+    public override void EnableMat()
+    {
+        //RIEN
+    }
+
+    public override void DisableMat()
+    {
+        //RIEN
     }
 }

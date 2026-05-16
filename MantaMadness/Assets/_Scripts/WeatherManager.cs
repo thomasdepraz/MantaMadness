@@ -10,6 +10,7 @@ public enum WeatherType
     Vulcano,
     MountainTemple,
     Null,
+    SunAltar,
 }
 
 public enum FogState
