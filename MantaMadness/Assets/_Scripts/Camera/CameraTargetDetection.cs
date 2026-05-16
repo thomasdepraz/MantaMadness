@@ -80,9 +80,12 @@ public class CameraTargetDetection : MonoBehaviour
     {
         Physics.SyncTransforms();
 
-        DetectJumpTargets();
-        DetectNPCTargets();
-        DetectShopTargets();
+        if(PauseMenu.instance != null && !PauseMenu.instance.isPaused)
+        {
+            DetectJumpTargets();
+            DetectNPCTargets();
+            DetectShopTargets();
+        }
     }
 
     private float ComputeTargetScore(Vector3 targetPos)

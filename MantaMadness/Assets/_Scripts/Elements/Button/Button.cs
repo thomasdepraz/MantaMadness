@@ -71,7 +71,7 @@ public class Button : MonoBehaviour
         if (other.TryGetComponent(out SimpleController controller))
         {
             if(isActivated == false && routine == null)
-            routine = StartCoroutine(ActivationCoroutine(controller));
+                routine = StartCoroutine(ActivationCoroutine(controller));
         }
     }
 

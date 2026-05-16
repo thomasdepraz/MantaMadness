@@ -1038,21 +1038,23 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         }
     }
 
+    private bool isStomping = false;
     private IEnumerator StompCoroutine(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         State = ControllerState.STOMP;
         fallTime = 0f;
         rb.linearVelocity = Vector3.zero;
+        isStomping = false;
         rb.AddForce(hoverBehaviour.normalContainer.up * controllerData.stompUpForce, ForceMode.VelocityChange);
         triggerAnim.Invoke("StompCharge");
         PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DIVESTART);
         fallTime = 0f;
         StartStompBuildup();
         yield return new WaitUntil(() => stompBuildupWindowEnded);
+        isStomping = true;
         FOVController.instance.FOVEffect(FOVController.FovEffectType.STOMP);
         PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DIVE);
         triggerAnim.Invoke("Stomp");
-        //afterImageEffect.Invoke(controllerData.stompAfterImageEffectTime);
         rb.linearVelocity = Vector3.zero;
         rb.linearDamping = controllerData.stompDamping;
         rb.AddForce(-hoverBehaviour.normalContainer.up * controllerData.stompForce, ForceMode.VelocityChange);
@@ -1429,9 +1431,15 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 ResetJump();
                 fallTime = 0f;
             }
-            else if (hasHitWalls)
+            else if (hasHitWalls && isStomping)
             {
-                if (stompInfo.collider.gameObject.CompareTag("StompCollision"))
+
+                if (stompInfo.collider.gameObject.CompareTag("StompBreak"))
+                {
+                    return;
+                }
+
+                if (stompInfo.collider.gameObject.CompareTag("StompCollision")) // AND IS STOMPING
                 {
                     StartStompLandWindow();
                     stompRoutine = null;
@@ -2371,6 +2379,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             StopCoroutine(stompRoutine);
             PlayerActionFMODManager.Instance.TryStopLoopingSound(PlayerActionFMOD.DIVE);
             stompRoutine = null;
+            isStomping = false;
         }
     }
 
