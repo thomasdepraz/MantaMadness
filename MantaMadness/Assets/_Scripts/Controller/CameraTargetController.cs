@@ -37,6 +37,10 @@ public class CameraTargetController : MonoBehaviour
     static float yawVelocity = 0f;
     static float pitchVelocity = 0f;
 
+    private bool _applicationHasFocus = true;
+    private int _skipLookFramesAfterFocus;
+    private bool _wasPaused;
+
     private SimpleController player;
 
     private bool isControllerDevice = false;
@@ -112,6 +116,44 @@ public class CameraTargetController : MonoBehaviour
         ResetCamRoutine = null;
     }
 
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        SetApplicationFocus(hasFocus);
+    }
+
+    private void OnApplicationPause(bool pauseStatus)
+    {
+        SetApplicationFocus(pauseStatus == false);
+    }
+
+    private void SetApplicationFocus(bool hasFocus)
+    {
+        _applicationHasFocus = hasFocus;
+
+        if (hasFocus == false)
+            return;
+
+        RecoverCameraLook();
+    }
+
+    private void RecoverCameraLook()
+    {
+        yawVelocity = 0f;
+        pitchVelocity = 0f;
+        _skipLookFramesAfterFocus = 1;
+    }
+
+    private bool IsGameplayCameraLookActive()
+    {
+        if (_applicationHasFocus == false)
+            return false;
+
+        if (PauseMenu.instance != null && PauseMenu.instance.isPaused)
+            return false;
+
+        return true;
+    }
+
     private void OnActionPerformed(InputAction.CallbackContext context)
     {
         InputDevice device = context.control.device;
@@ -130,6 +172,20 @@ public class CameraTargetController : MonoBehaviour
     private void Update()
     {
         if (lookAction == null) return;
+
+        bool isPaused = PauseMenu.instance != null && PauseMenu.instance.isPaused;
+        if (_wasPaused && isPaused == false)
+            RecoverCameraLook();
+        _wasPaused = isPaused;
+
+        if (IsGameplayCameraLookActive() == false)
+            return;
+
+        if (_skipLookFramesAfterFocus > 0)
+        {
+            _skipLookFramesAfterFocus--;
+            return;
+        }
 
             Vector2 lookInput = lookAction.action.ReadValue<Vector2>();
 
@@ -260,9 +316,10 @@ public class CameraTargetController : MonoBehaviour
     {
         target.position = player.transform.position + offset;
 
+        if (IsGameplayCameraLookActive() == false)
+            return;
+
         bool canRotateCamera = Time.timeScale > 0f;
-        if (PauseMenu.instance != null && PauseMenu.instance.isPaused)
-            canRotateCamera = false;
 
         if (canRotateCamera)
         {
