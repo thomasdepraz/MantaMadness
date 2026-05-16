@@ -63,7 +63,6 @@ public class Portal : WorldCheckpoint
             WorldCheckpointManager.Instance.SetCheckpoint(respawnTransform, indexName, displayAreaName, nameToDisplay, LevelID);
             PortalManager.Instance.SetCheckpoint(targetIndex, displayAreaName, nameToDisplay, LevelID);
             PortalManager.Instance.StartCoroutine(PortalManager.Instance.Teleport(targetIndex, enterSecretRoom, musicToPlay,this, specialWeatherType));
-
         }
     }
 
