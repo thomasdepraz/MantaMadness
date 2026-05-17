@@ -63,6 +63,7 @@ MonoBehaviour:
   introCinematicTimeline: {fileID: 11400000, guid: d4f6e6ac6867680408a1efece32ba844, type: 2}
   introCheckpoint: {fileID: 0}
   introNpc: {fileID: 0}
+  superGoodJoeNpc: {fileID: 0}
   screenEffectData: {fileID: 11400000, guid: 4b5cffd7e40f85b459610b08b3081e96, type: 2}
   player: {fileID: 0}
   m_SpawnPosition: {x: 0, y: 0, z: 0}
@@ -235,6 +236,9 @@ MonoBehaviour:
     areaSunRewards:
       keys: []
       values: 
+    worldStateUpdateBoxes:
+      keys: []
+      values: 
     currentLevelID: 
     doubleJump: 0
     chargeBoost: 0
@@ -285,7 +289,7 @@ PlayableDirector:
   m_GameObject: {fileID: 711859319428096486}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 3e572876984662c42bd35402419ea74c, type: 2}
+  m_PlayableAsset: {fileID: 11400000, guid: 7960d71877403974e91938a9c8e09196, type: 2}
   m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -417,6 +421,8 @@ PlayableDirector:
     value: {fileID: 0}
   - key: {fileID: -4635068736378319471, guid: 3e572876984662c42bd35402419ea74c, type: 2}
     value: {fileID: 0}
+  - key: {fileID: -4635068736378319471, guid: 7960d71877403974e91938a9c8e09196, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References:
     - f9e258d7db013884daff7141ead731f5: {fileID: 0}
@@ -504,6 +510,13 @@ MonoBehaviour:
     fogState: 0
     music: 6
     ambient: 2
+  - type: 5
+    color: {r: 0.12104155, g: 0.5509571, b: 1.2167859, a: 1}
+    fogColorClose: {r: 0.12104155, g: 0.5509571, b: 1.2167859, a: 1}
+    fogColorFar: {r: 0.042586334, g: 0.296682, b: 0.8207547, a: 1}
+    fogState: 0
+    music: 2
+    ambient: 0
   currentWeather: 0
   ease: 4
   easeDuration: 2
@@ -568,7 +581,9 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
+    - {fileID: 0}
     splinesRoots:
+    - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
@@ -603,3 +618,7 @@ MonoBehaviour:
     - {fileID: 0}
     splinesRoots:
     - {fileID: 0}
+  - levelID: SUNALTAR
+    levelRoots:
+    - {fileID: 0}
+    splinesRoots: []

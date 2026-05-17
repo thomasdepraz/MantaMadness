@@ -19,6 +19,13 @@ public class WorldLevelManager : MonoBehaviour
 
     public IEnumerator LoadLevel(string levelID)
     {
+
+        if (currentLevel == levelID)
+        {
+            Debug.Log($"Level {levelID} already loaded.");
+            yield break;
+        }
+
         currentLevel = levelID;
 
         yield return null;

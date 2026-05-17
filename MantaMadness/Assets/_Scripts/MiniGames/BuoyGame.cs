@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class BuoyGame : MonoBehaviour, ITimer
 {
+    public static BuoyGame currentBuoyGame;
+
     public List<Buoy> buoys = new List<Buoy>();
     public float timeToFinish;
     public string coinName;
@@ -37,6 +39,12 @@ public class BuoyGame : MonoBehaviour, ITimer
 
     public void StartGame()
     {
+        if(currentBuoyGame != null)
+        {
+            currentBuoyGame.Reset();
+        }
+
+        currentBuoyGame = this;
         enabled = true;
         timer = timeToFinish;
         hasStarted = true;

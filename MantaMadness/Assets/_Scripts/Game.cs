@@ -20,6 +20,7 @@ public class Game : MonoBehaviour, IDataPersistence
     public TimelineAsset introCinematicTimeline;
     public WorldCheckpoint introCheckpoint;
     public InteractableNPC introNpc;
+    public InteractableNPC superGoodJoeNpc;
 
     public int gameState { private set; get; }
 
@@ -104,7 +105,7 @@ public class Game : MonoBehaviour, IDataPersistence
                 //}
 
                 //PLAY LE DIALOG DU VIEUX
-                //DialogManager.instance.StartCinematicInteraction(introNpc);
+                DialogManager.instance.StartCinematicInteraction(introNpc);
 
                 //SET POSITION TO FIRST CHECKPOINT POS
                 WorldCheckpointManager.Instance.SetStartCheckpoint(introCheckpoint.respawnTransform);
@@ -130,13 +131,14 @@ public class Game : MonoBehaviour, IDataPersistence
 
                 break;
 
-            //Collect the Missing Hand
+            //Go To Sun Altar
             case 3:
-                //Set Cat poster to State 1
-                if(NPCManager.instance.GetNPCSTate("CATPOSTER") < 1)
-                {
-                    NPCManager.instance.UpdateNPCState("CATPOSTER", 1);
-                }
+                DialogManager.instance.StartCinematicInteraction(superGoodJoeNpc);
+                SetGameState(4);
+                //UPDATE FISHERMAN
+                break;
+             
+            case 4:
                 break;
 
             default:
@@ -209,5 +211,18 @@ public class Game : MonoBehaviour, IDataPersistence
     {
         m_SpawnPosition = respawnTransform.position;
         m_SpawnRotation = respawnTransform.rotation;
+    }
+
+    public void CheckEndGame(int checkValue)
+    {
+        if(checkValue >= 10)
+        {
+            ActivateEndingScreen();
+        }
+    }
+
+    public void ActivateEndingScreen()
+    {
+        //ENDING SCREEN ACTIVATION
     }
 }

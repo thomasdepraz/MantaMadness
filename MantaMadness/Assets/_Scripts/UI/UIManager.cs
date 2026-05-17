@@ -31,6 +31,8 @@ public class UIManager : MonoBehaviour
     public DialogInteractDisplay dialogInteractDisplay;
     [HideInInspector]
     public ShopInteractDisplay shopInteractDisplay;
+    [HideInInspector]
+    public ComboUIController comboUIController;
 
     public void ToggleBaseInterface(bool toggle)
     {

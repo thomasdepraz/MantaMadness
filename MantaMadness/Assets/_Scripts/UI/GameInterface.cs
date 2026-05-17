@@ -303,6 +303,7 @@ public class GameInterface : MonoBehaviour, IScreen
     public void ToggleInterface(bool toggle)
     {
         m_Container.SetActive(toggle);
+        UIManager.Instance.comboUIController.ToggleInterface(toggle);
     }
 
     public void SunComboBehavior(int level)

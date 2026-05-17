@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Collections;
 using DG.Tweening;
 
-public class ComboUIController : MonoBehaviour
+public class ComboUIController : MonoBehaviour, IScreen
 {
     //[SerializeField] TMP_Text comboValueText;
 
@@ -30,6 +30,8 @@ public class ComboUIController : MonoBehaviour
     private TMP_FontAsset defaultFont;
     private Material defaultMaterial;
 
+    public GameObject Container => gameObject;
+
     static string EffectToTag(ComboEffectPreset effect)
     {
         return effect switch
@@ -52,8 +54,24 @@ public class ComboUIController : MonoBehaviour
         };
     }
 
+    public void ToggleInterface(bool toggle)
+    {
+        if (!toggle)
+        {
+            StopFeverSequence();
+        }
+
+        gameObject.SetActive(toggle);
+    }
+
     void Start()
     {
+        if (UIManager.Instance.comboUIController == null)
+        {
+            UIManager.Instance.comboUIController = this;
+        }
+
+
         //Setup
         if (ComboManager.Instance.State == ComboState.Inactive)
         {
@@ -113,6 +131,13 @@ public class ComboUIController : MonoBehaviour
 
         MusicManager.OnBeat -= OnBeatEnableFever;
         MusicManager.OnBeat8 -= OnBeatPlayParticle;
+
+        Root.SetActive(false);
+        feverRoot.SetActive(false);
+        feverBorder.SetActive(false);
+        timerVisualContainer.SetActive(false);
+
+        StopFeverSequence();
     }
 
     private void Update()

@@ -454,6 +454,18 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         {
             ResetAllPlayerActions();
         }
+
+        if (newState == ControllerState.SURFING)
+        {
+            ResetJump();
+            ResetAirSpin();
+
+            if (stompRoutine != null)
+            {
+                StopCoroutine(stompRoutine);
+                stompRoutine = null;
+            }
+        }
     }
 
     private void OnStateExit(ControllerState previousState)
@@ -986,25 +998,25 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             if (strafRoutine == null)
             {
                 strafRoutine = StartCoroutine(StrafCooldownRoutine());
-                if (State == ControllerState.SURFING)
-                {
-                        //ENABLE strafHitbox
-                        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.GRINDRAILDASH);    
-                        GetCameraAxes(out Vector3 forward, out Vector3 right);
-                        if (context.action.name == InputManager.Instance.strafLeft.action.name)
-                        {
-                            rb.linearVelocity = Vector3.zero;
-                            rb.AddForce(-right * controllerData.strafForce + forward * controllerData.strafForwardForce, ForceMode.VelocityChange);
-                            straf.Invoke();
-                        }
-                        else if (context.action.name == InputManager.Instance.strafRight.action.name)
-                        {
-                            rb.linearVelocity = Vector3.zero;
-                            rb.AddForce(right * controllerData.strafForce + forward * controllerData.strafForwardForce, ForceMode.VelocityChange);
-                            straf.Invoke();
-                        }
-                }
-                else if(State == ControllerState.RAIL)
+                //if (State == ControllerState.SURFING)
+                //{
+                //        //ENABLE strafHitbox
+                //        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.GRINDRAILDASH);    
+                //        GetCameraAxes(out Vector3 forward, out Vector3 right);
+                //        if (context.action.name == InputManager.Instance.strafLeft.action.name)
+                //        {
+                //            rb.linearVelocity = Vector3.zero;
+                //            rb.AddForce(-right * controllerData.strafForce + forward * controllerData.strafForwardForce, ForceMode.VelocityChange);
+                //            straf.Invoke();
+                //        }
+                //        else if (context.action.name == InputManager.Instance.strafRight.action.name)
+                //        {
+                //            rb.linearVelocity = Vector3.zero;
+                //            rb.AddForce(right * controllerData.strafForce + forward * controllerData.strafForwardForce, ForceMode.VelocityChange);
+                //            straf.Invoke();
+                //        }
+                //}
+                if(State == ControllerState.RAIL)
                 {
                     if (TryRailTransfer(context))
                         return;
@@ -2966,7 +2978,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             jumpRoutine = StartCoroutine(JumpRoutine());
 
             if (electricBehaviour != null)
-                electricBehaviour.ConsumeCharge();
+                electricBehaviour.BoostConsumeCharge();
 
             electricBehaviour.electricJumpEnd?.Invoke();
 
@@ -3000,7 +3012,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
             while (timer < controllerData.electricJumpDuration)
             {
-                rb.linearVelocity = jumpDirection * controllerData.electricJumpSpeed;
+                rb.linearVelocity = new Vector3(jumpDirection.x, jumpDirection.y + 0.25f, jumpDirection.z) * controllerData.electricJumpSpeed;
 
                 timer += Time.deltaTime;
                 yield return null;
@@ -3011,7 +3023,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             rb.linearVelocity = jumpDirection * controllerData.electricJumpSpeed * controllerData.electricJumpExitVelocityFactor;
 
             if (electricBehaviour != null)
-                electricBehaviour.ConsumeCharge();
+                electricBehaviour.BoostConsumeCharge();
 
             electricBehaviour.electricJumpEnd?.Invoke();
 

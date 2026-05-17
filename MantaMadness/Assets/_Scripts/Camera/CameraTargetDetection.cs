@@ -16,6 +16,10 @@ public class CameraTargetDetection : MonoBehaviour
     [SerializeField] float jumpRangeBuffer =  0.75f;
     [SerializeField] private float jumpCameraAngleBonus = 20f;
 
+    [Header("Target Deadzone")]
+    [SerializeField] private float targetInnerDeadzone = 0.35f;
+    [SerializeField] private float targetOuterDeadzone = 0.50f;
+
     [Header("NPC Target Detection")]
     [SerializeField] private float npcDetectionRange;
     [SerializeField] private float npcFixedCamDetectionRange;
@@ -149,6 +153,31 @@ public class CameraTargetDetection : MonoBehaviour
         return transform.forward;
     }
 
+    private bool IsTargetInsideDeadzone(Vector3 worldPos, bool alreadyTargeted)
+    {
+        Camera cam = Camera.main;
+
+        Vector3 viewportPos = cam.WorldToViewportPoint(worldPos);
+
+        // derrière caméra
+        if (viewportPos.z < 0f)
+            return false;
+
+        // distance au centre écran
+        float dx = viewportPos.x - 0.5f;
+        float dy = viewportPos.y - 0.5f;
+
+        float distFromCenter = Mathf.Sqrt(dx * dx + dy * dy);
+
+        // hysteresis :
+        // une target déjà lockée a une zone de sortie plus grande
+        float limit = alreadyTargeted
+            ? targetOuterDeadzone
+            : targetInnerDeadzone;
+
+        return distFromCenter < limit;
+    }
+
     void DetectJumpTargets()
     {
         if (player.doubleJumpAbility == false)
@@ -166,6 +195,11 @@ public class CameraTargetDetection : MonoBehaviour
         {
             if (!col.TryGetComponent(out JumpTarget jt)) continue;
             if (!jt.isAvailable) continue;
+
+            bool insideDeadzone = IsTargetInsideDeadzone(col.transform.position,col == currentJumpTarget);
+
+            if (!insideDeadzone)
+                continue;
 
             Vector3 dir = (col.transform.position - playerTransform.position).normalized;
             float dist = Vector3.Distance(playerTransform.position, col.transform.position);

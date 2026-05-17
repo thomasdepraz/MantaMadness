@@ -42,6 +42,9 @@ public class GameData
     //Area Sun Rewards On All Clams Collected
     public SerializableDictionnary<string, bool> areaSunRewards;
 
+    //World Update Box
+    public SerializableDictionnary<string, bool> worldStateUpdateBoxes;
+
     //Level to Load String
     public string currentLevelID = "WORLD";
 
@@ -88,6 +91,7 @@ public class GameData
         collectibleStates = new SerializableDictionnary<string, CollectibleState>();
         lilyPadModules = new SerializableDictionnary<string, ModuleState>();
         areaSunRewards = new SerializableDictionnary<string, bool>();
+        worldStateUpdateBoxes = new SerializableDictionnary<string, bool>();
 
         doubleJump = false;
         chargeBoost = false;

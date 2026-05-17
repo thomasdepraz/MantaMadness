@@ -6,7 +6,6 @@ using UnityEngine.InputSystem.Utilities;
 using UnityEngine.InputSystem.XInput;
 using UnityEngine.SceneManagement;
 using static DialogLoader;
-using static Unity.Burst.Intrinsics.X86.Avx;
 
 public class InputManager : MonoBehaviour
 {
@@ -211,7 +210,6 @@ public class InputManager : MonoBehaviour
         // Generic Gamepad (Steam Input, 8BitDo, autres)
         if (device is Gamepad)
         {
-            // Steam Input = Xbox virtuel → on assume Xbox
             SetDevice(InputDeviceType.Xbox);
             return;
         }
@@ -232,4 +230,5 @@ public class InputManager : MonoBehaviour
         playerActionsMap.Disable();
         uiActionsMap.Enable();
     }
+
 }
