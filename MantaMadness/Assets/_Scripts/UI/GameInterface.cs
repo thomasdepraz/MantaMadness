@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
@@ -64,6 +65,15 @@ public class GameInterface : MonoBehaviour, IScreen
     [SerializeField] private RectTransform topBarStartPosition;
     [SerializeField] private RectTransform bottomBarStartPosition;
 
+    [Header("End Screen Parameters")]
+    [SerializeField] private GameObject endScreenVisual;
+    [SerializeField] private GameObject endScreenInteractText;
+    private Vector3 endScreenOriginalScale;
+
+
+    private InputActionMap playerActionsMap;
+    private InputAction interactAction;
+
     private Vector2 GetBarOffset()
     {
         float offsetY = Screen.height * 0.1f;
@@ -101,6 +111,11 @@ public class GameInterface : MonoBehaviour, IScreen
         textEffects.StartManualEffects();
         text.enabled = false;
 
+        endScreenOriginalScale = endScreenVisual.transform.localScale;
+        endScreenVisual.SetActive(false);
+        endScreenInteractText.SetActive(false);
+
+
         if(sunOverlay.IsActive() == true)
         {
             sunOverlay.enabled = false;
@@ -114,6 +129,12 @@ public class GameInterface : MonoBehaviour, IScreen
         sunImage.transform.localScale = sunScales[0];
 
         RefreshAllAreaCount();
+    }
+
+    private void OnEnable()
+    {
+        playerActionsMap = InputSystem.actions.FindActionMap("Player");
+        interactAction = playerActionsMap.FindAction("Interact");
     }
 
     private void OnDestroy()
@@ -304,6 +325,7 @@ public class GameInterface : MonoBehaviour, IScreen
     {
         m_Container.SetActive(toggle);
         UIManager.Instance.comboUIController.ToggleInterface(toggle);
+        UIManager.Instance.boostGaugeInterface.ToggleInterface(toggle);
     }
 
     public void SunComboBehavior(int level)
@@ -416,5 +438,48 @@ public class GameInterface : MonoBehaviour, IScreen
     {
         Debug.Log("NEW COLLIDER AREA IS" +  name);
         collectibleAreaName.text = name;
+    }
+
+    public void ShowEndScreen()
+    {
+        //Show end screen
+        ShowEndScreenRoutine = StartCoroutine(ShowEndScreenCoroutine());
+    }
+
+    private Coroutine ShowEndScreenRoutine;
+    public IEnumerator ShowEndScreenCoroutine()
+    {
+        yield return null;
+        ToggleInterface(false);
+        Game.Instance.player.ForceLock(true);
+
+        endScreenVisual.gameObject.SetActive(true);
+        endScreenVisual.transform.localScale = Vector3.zero;
+        endScreenVisual.transform.DOScale(endScreenOriginalScale, 1.2f).SetEase(Ease.OutQuad);
+        yield return new WaitForSeconds(4f);
+        ShowEndScreenRoutine = null;
+        endScreenInteractText.SetActive(true);
+    }
+
+    public void DisableEndScreen()
+    {
+        if(endScreenVisual.gameObject.activeSelf == true)
+        {
+            //Disable end screen
+            endScreenVisual.gameObject.SetActive(false);
+            Game.Instance.player.ForceLock(false);
+            ToggleInterface(true);
+        }
+    }
+
+    private void Update()
+    {
+        if (interactAction.IsPressed())
+        {
+            if(ShowEndScreenRoutine == null)
+            {
+                DisableEndScreen();
+            }
+        }
     }
 }

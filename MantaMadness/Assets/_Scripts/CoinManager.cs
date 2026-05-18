@@ -92,6 +92,9 @@ public class CoinManager : MonoBehaviour, IDataPersistence
     public void PickupCoin()
     {
         PickupCoinCount++;
+
+        //Check if end game possible
+        Game.Instance.ActivateEndingScreen();
     }
 
     public void PickupClam(int addValue)

@@ -224,5 +224,7 @@ public class Game : MonoBehaviour, IDataPersistence
     public void ActivateEndingScreen()
     {
         //ENDING SCREEN ACTIVATION
+        if (CoinManager.Instance.PickupCoinCount == 10)
+            UIManager.Instance.gameInterface.ShowEndScreen();
     }
 }

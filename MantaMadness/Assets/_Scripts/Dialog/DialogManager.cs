@@ -255,8 +255,9 @@ public class DialogManager : MonoBehaviour
         CinematicManager.instance.PlayCinematic(dialog.cinematic);
 
         //Disable regular UI
-        UIManager.Instance.ToggleBaseInterface(false);
-        UIManager.Instance.dialogInteractDisplay.ToggleInterface(false);
+        //UIManager.Instance.ToggleBaseInterface(false);
+        //UIManager.Instance.dialogInteractDisplay.ToggleInterface(false);
+        UIManager.Instance.gameInterface.ToggleInterface(false);
         yield return new WaitForSeconds(dialog.delayBeforeTextBox);
 
         foreach(GameObject visual in dialogUIVisuals)
@@ -367,7 +368,7 @@ public class DialogManager : MonoBehaviour
             visual.SetActive(false);
         }
 
-        UIManager.Instance.ToggleBaseInterface(true);
         Game.Instance.player.ToggleDialogState(false);
+        UIManager.Instance.gameInterface.ToggleInterface(true);
     }
 }
