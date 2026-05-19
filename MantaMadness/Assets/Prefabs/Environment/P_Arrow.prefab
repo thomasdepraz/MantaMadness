@@ -85,27 +85,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playOnStart: 0
-  playOnEnable: 0
-  playOnBeat: 1
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1.2
-  yScale: 1.2
-  zScale: 1.2
-  scaleDuration: 0
+  playSequenceOnBeat: 1
+  playSequenceOnEnable: 0
+  tweenSteps:
+  - animatePosition: 0
+    animateRotation: 0
+    animateScale: 1
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 0, y: 0, z: 0}
+    rotationUseLocal: 0
+    rotationRelative: 0
+    scale: {x: 1.2, y: 1.2, z: 1.2}
+    duration: 0
+    delay: 0
+    ease: 6
+  sequenceLoops: -1
+  sequenceLoopType: 1
+  beatSequenceType: 1
