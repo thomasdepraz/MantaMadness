@@ -15,7 +15,7 @@ public class Destructible : MonoBehaviour
     [SerializeField] protected bool hard = false;
     [SerializeField] protected EventReference destructionSFX;
 
-    [SerializeField] private Collectible[] collectibleRewards;
+    [SerializeField] protected Collectible[] collectibleRewards;
 
     public bool isBroken = false;
 

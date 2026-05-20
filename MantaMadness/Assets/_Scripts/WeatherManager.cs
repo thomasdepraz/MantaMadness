@@ -11,6 +11,7 @@ public enum WeatherType
     MountainTemple,
     Null,
     SunAltar,
+    Sewer,
 }
 
 public enum FogState
