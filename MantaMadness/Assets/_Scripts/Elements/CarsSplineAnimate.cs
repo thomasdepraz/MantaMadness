@@ -14,9 +14,9 @@ public enum CarType
 public class CarsSplineAnimate : MonoBehaviour
 {
 
-    private SimpleController player;
+    protected SimpleController player;
 
-    private SplineAnimate splineAnimate;
+    protected SplineAnimate splineAnimate;
     [Range(0.0f, 1.0f)]
     [SerializeField] private float startPoint;
 
@@ -26,12 +26,12 @@ public class CarsSplineAnimate : MonoBehaviour
 
     [SerializeField] private ParticleSystem explosion;
 
-    [SerializeField] private CarType carType = CarType.Car;
+    [SerializeField] public CarType carType = CarType.Car;
 
     [SerializeField] private EventReference hornAudio;
     [SerializeField] private EventReference explosionAudio;
 
-    [SerializeField] private bool isAlive = true;
+    [SerializeField] protected bool isAlive = true;
     public bool IsAlive => isAlive;
 
     private void Awake()
@@ -76,7 +76,7 @@ public class CarsSplineAnimate : MonoBehaviour
         }
     }
 
-    private void CollisionCheck(string type)
+    protected virtual void CollisionCheck(string type)
     {
         if(isAlive == true)
         {
@@ -91,7 +91,10 @@ public class CarsSplineAnimate : MonoBehaviour
 
                 if (player.HorizontalVelocity.magnitude > player.controllerData.maxSpeed / 2 || splineAnimate == null)
                 {
-                    StartCoroutine(KillSequence());
+                    if(player.IsLocked == false)
+                    {
+                        StartCoroutine(KillSequence());
+                    }
                 }
                 else
                 {
@@ -102,6 +105,11 @@ public class CarsSplineAnimate : MonoBehaviour
                 }
             }
             else if (type == "goldenCar")
+            {
+                StartCoroutine(FriendlyFire());
+            }
+
+            else if (type == "truck" && carType == CarType.Car)
             {
                 StartCoroutine(FriendlyFire());
             }

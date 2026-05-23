@@ -19,6 +19,17 @@ public class CarCollisionRelay : MonoBehaviour
             if (car.IsAlive)
                 HitCollision?.Invoke("goldenCar");
         }
+        else if (other.TryGetComponent(out CarsSplineAnimate car2))
+        {
+            if (car2.IsAlive)
+            {
+                if(car2.carType == CarType.Truck)
+                {
+                    HitCollision?.Invoke("truck");
+                }
+            }
+
+        }
     }
 
     private void OnTriggerExit(Collider other)
