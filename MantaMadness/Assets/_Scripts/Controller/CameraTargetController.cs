@@ -71,6 +71,15 @@ public class CameraTargetController : MonoBehaviour
 
     public GameObject mantavisual;
 
+    public bool trailerCameraEnabled = false;
+
+    [Header("Trailer Camera")]
+    [SerializeField] private Vector3 trailerOffset = new Vector3(0f, 2f, -6f);
+    [SerializeField] private float trailerPositionSmooth = 8f;
+    [SerializeField] private float trailerRotationSmooth = 8f;
+
+    private Vector3 trailerVelocity;
+
     private void Awake()
     {
         if(instance == null)
@@ -171,7 +180,11 @@ public class CameraTargetController : MonoBehaviour
     private ControllerState currentState = ControllerState.FALLING;
     private void Update()
     {
-        if (lookAction == null) return;
+        if (lookAction == null)
+            return;
+
+        if (trailerCameraEnabled)
+            return;
 
         bool isPaused = PauseMenu.instance != null && PauseMenu.instance.isPaused;
         if (_wasPaused && isPaused == false)
@@ -314,8 +327,6 @@ public class CameraTargetController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        target.position = player.transform.position + offset;
-
         if (IsGameplayCameraLookActive() == false)
             return;
 
@@ -323,6 +334,16 @@ public class CameraTargetController : MonoBehaviour
 
         if (canRotateCamera)
         {
+            // MODE TRAILER
+            if (trailerCameraEnabled)
+            {
+                ApplyTrailerCamera();
+                return;
+            }
+
+            // MODE NORMAL
+            target.position = player.transform.position + offset;
+
             if (toggleFixedCam == false)
             {
                 ApplyTargetRotation();
@@ -407,5 +428,53 @@ public class CameraTargetController : MonoBehaviour
     public void ToggleDebugMod()
     {
         Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void ApplyTrailerCamera()
+    {
+        Vector3 targetUp = player.hoverBehaviour.normalContainer.up;
+
+        // Direction du joueur
+        Vector3 playerForward = Vector3.ProjectOnPlane(player.transform.forward, targetUp).normalized;
+
+        // Position caméra derrière le joueur
+        Vector3 desiredPosition =
+            player.transform.position
+            + targetUp * trailerOffset.y
+            - playerForward * Mathf.Abs(trailerOffset.z);
+
+        // Smooth position
+        target.position = Vector3.SmoothDamp(
+            target.position,
+            desiredPosition,
+            ref trailerVelocity,
+            1f / trailerPositionSmooth
+        );
+
+        // Rotation fixe derrière le joueur
+        Quaternion targetRotation = Quaternion.LookRotation(playerForward, targetUp);
+
+        target.rotation = Quaternion.Slerp(
+            target.rotation,
+            targetRotation,
+            Time.fixedDeltaTime * trailerRotationSmooth
+        );
+    }
+
+    public void ToggleTrailerCamera(bool value)
+    {
+        trailerCameraEnabled = value;
+
+        if (value)
+        {
+            Vector3 up = player.hoverBehaviour.normalContainer.up;
+
+            Vector3 forward = Vector3.ProjectOnPlane(
+                player.transform.forward,
+                up
+            ).normalized;
+
+            target.rotation = Quaternion.LookRotation(forward, up);
+        }
     }
 }

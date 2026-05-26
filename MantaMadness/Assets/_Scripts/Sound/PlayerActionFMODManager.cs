@@ -30,6 +30,7 @@ public enum PlayerActionFMOD
     DIVESTART,
     DIVE,
     DIVELAND,
+    DETECT,
 }
 
 public enum PlayerRailGrindType

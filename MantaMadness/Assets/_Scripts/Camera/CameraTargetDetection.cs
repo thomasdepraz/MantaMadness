@@ -447,7 +447,7 @@ public class CameraTargetDetection : MonoBehaviour
     private void PlayTargetDetectedSound()
     {
         //PlayerActionFMODManager.Instance.PlayStyleAction(PlayerActionFMOD.STYLE, targetDashCount);
-        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.BUMP);
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DETECT);
     }
 
     private void PlayTargetPopSound()

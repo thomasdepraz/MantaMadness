@@ -16,6 +16,7 @@ public class DebugGUI : MonoBehaviour
     private bool toggleAbility = true;
     private bool visualCountToggle = true;
     private bool trailerVisualToggle = true;
+    private bool trailerCamToggle = false;
 
     private void Awake()
     {
@@ -92,11 +93,6 @@ public class DebugGUI : MonoBehaviour
             FmodGlobalParameters.instance.ToggleGlobalParameter(FmodGlobalParamName.G_SecretRoom);
         }
 
-        if (GUILayout.Button($"Toggle Fly Mode"))
-        {
-            FlyMode.instance.SwitchCamMode();
-        }
-
         if (GUILayout.Button($"Unlock All Abilities"))
         {
             controller.DebugUnlockAbilities(toggleAbility);
@@ -124,15 +120,16 @@ public class DebugGUI : MonoBehaviour
             visualCountToggle = !visualCountToggle;
         }
 
-        if (GUILayout.Button($"Toggle Trailer visual"))
-        {
-            MantaVisuals.instance.ToggleTrailerVisuals(trailerVisualToggle);
-            trailerVisualToggle = !trailerVisualToggle;
-        }
-
         if (GUILayout.Button($"Enable Fever"))
         {
             ComboManager.Instance.StartFever();
+        }
+
+        if (GUILayout.Button($"Toggle Trailer Camera"))
+        {
+            CameraTargetController.instance.ToggleTrailerCamera(trailerCamToggle);
+            FOVController.instance.trailerCamEnabled = trailerCamToggle;
+            trailerCamToggle = !trailerCamToggle;
         }
 
         GUILayout.EndArea();

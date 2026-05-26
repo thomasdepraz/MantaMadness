@@ -41,6 +41,8 @@ public class FOVController : MonoBehaviour
     private bool initialized = false;
 
     private float currentEffectTargetFov = 0f;
+
+    public bool trailerCamEnabled = false;
     private void Awake()
     {
         if(instance == null)
@@ -101,6 +103,9 @@ public class FOVController : MonoBehaviour
         if (!initialized || controller == null)
             return;
 
+        if (trailerCamEnabled)
+            return;
+
         var cam = brain.ActiveVirtualCamera as CinemachineCamera;
         if (cam == null) return;
 
@@ -152,6 +157,9 @@ public class FOVController : MonoBehaviour
         var cam = brain.ActiveVirtualCamera as CinemachineCamera;
 
         if (cam == null || !IsPlayerCamera(cam))
+            return;
+
+        if (trailerCamEnabled)
             return;
 
         float targetFov = defaultFOV;
