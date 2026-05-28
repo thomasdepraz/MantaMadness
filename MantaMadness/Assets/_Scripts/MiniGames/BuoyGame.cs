@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Timeline.Actions.MenuPriority;
 
 public class BuoyGame : MonoBehaviour, ITimer
 {
@@ -10,12 +11,12 @@ public class BuoyGame : MonoBehaviour, ITimer
     public string coinName;
     
     private float timer;
-    public float addTime = 0;
-    private int count = 0;
     public bool hasStarted;
 
     public bool Completed { get => completed;}
     private bool completed = false;
+
+    private HashSet<Buoy> collectedBuoys = new();
 
     void Start()
     {
@@ -23,7 +24,7 @@ public class BuoyGame : MonoBehaviour, ITimer
         if(completed == false)
         {
             timer = 0;
-            count = 0;
+
             hasStarted = false;
         }
         for (int i = 0; i < buoys.Count; i++)
@@ -39,7 +40,7 @@ public class BuoyGame : MonoBehaviour, ITimer
 
     public void StartGame()
     {
-        if(currentBuoyGame != null)
+        if(currentBuoyGame != null && currentBuoyGame != this)
         {
             currentBuoyGame.Reset();
         }
@@ -66,12 +67,15 @@ public class BuoyGame : MonoBehaviour, ITimer
 
     public void Collect(Buoy collectedBuoy)
     {
-        if (hasStarted == false)
+        if (!collectedBuoys.Add(collectedBuoy))
+            return;
+
+        if (!hasStarted)
             StartGame();
 
-        Addtime(addTime);
-        count++;
-        if (count >= buoys.Count)
+        Debug.Log($"{collectedBuoys.Count}/{buoys.Count}");
+
+        if (collectedBuoys.Count >= buoys.Count)
         {
             EndGame();
         }
@@ -88,7 +92,7 @@ public class BuoyGame : MonoBehaviour, ITimer
     public void Reset()
     {
         hasStarted = false;
-        count = 0;
+        collectedBuoys.Clear();
         (UIManager.Instance.miniGameTimerInterface as IScreen).Hide();
         for (int i = 0; i < buoys.Count; i++)
         {

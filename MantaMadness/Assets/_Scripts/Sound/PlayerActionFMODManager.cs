@@ -31,6 +31,7 @@ public enum PlayerActionFMOD
     DIVE,
     DIVELAND,
     DETECT,
+    DYNAMOBOOST,
 }
 
 public enum PlayerRailGrindType

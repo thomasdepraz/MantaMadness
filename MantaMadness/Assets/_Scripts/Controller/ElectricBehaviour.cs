@@ -114,18 +114,18 @@ public class ElectricBehaviour : MonoBehaviour
         onElectricChargeUpdated?.Invoke(0f);
     }
 
-    public void BoostConsumeCharge()
-    {
-        if (!isCharged)
-            return;
+    //public void BoostConsumeCharge()
+    //{
+    //    if (!isCharged)
+    //        return;
 
-        remainingElectricUses--;
+    //    remainingElectricUses--;
 
-        if (remainingElectricUses > 0)
-            return;
+    //    if (remainingElectricUses > 0)
+    //        return;
 
-        ConsumeCharge();
-    }
+    //    ConsumeCharge();
+    //}
 
     public void ForceFullCharge()
     {

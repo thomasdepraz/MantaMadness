@@ -38,6 +38,7 @@ public enum ComboID
     RailEnter,
     DynamoJump,
     DynamoBoost,
+    DynamoTargetJump,
 
 }
 

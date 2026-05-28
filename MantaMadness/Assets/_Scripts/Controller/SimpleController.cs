@@ -2494,11 +2494,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             {
                 if (hasSpinBoost == true)
                 {
-                    if (electricBehaviour.IsCharged)
-                    {
-                        ElectricBoost();
-                    }
-                    else
                     {
                         //COMBO
                         ComboManager.Instance.AddComboAction(ComboID.SpinBoost);
@@ -2513,11 +2508,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             {
                 if (hasSpinBoost == true)
                 {
-                    if (electricBehaviour.IsCharged)
-                    {
-                        ElectricBoost();
-                    }
-                    else
                     {
                         //COMBO
                         ComboManager.Instance.AddComboAction(ComboID.SpinAirBoost);
@@ -2874,13 +2864,13 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         electricActionRoutine = StartCoroutine(ElectricJumpCoroutine());
     }
 
-    private void ElectricBoost()
-    {
-        if (electricActionRoutine != null)
-            return;
+    //private void ElectricBoost()
+    //{
+    //    if (electricActionRoutine != null)
+    //        return;
 
-        electricActionRoutine = StartCoroutine(ElectricBoostCoroutine());
-    }
+    //    electricActionRoutine = StartCoroutine(ElectricBoostCoroutine());
+    //}
 
     private void ResetElectricState()
     {
@@ -2927,13 +2917,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             int index = 0;
             float distance = 0;
             Transform target = null;
-            //Play anim
-            triggerAnim.Invoke("TargetJump");
-            playTargetJumpParticles.Invoke();
-            FOVController.instance.FOVEffect(FOVController.FovEffectType.EXPLOSIF);
 
             //COMBO
-            ComboManager.Instance.AddComboAction(ComboID.TargetJump);
+            ComboManager.Instance.AddComboAction(ComboID.DynamoTargetJump);
 
             if (validColliders.Count == 1)
             {
@@ -2965,12 +2951,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             transform.forward = new Vector3(targetDashDirection.x, 0, targetDashDirection.z);
             rb.linearVelocity = targetDashDirection * HorizontalVelocity.magnitude;
 
-            rb.AddForce(targetDashDirection * controllerData.targetBoostFactor, ForceMode.VelocityChange);
+            rb.AddForce(targetDashDirection * controllerData.electricJumpSpeed, ForceMode.VelocityChange);
 
             electricBehaviour.electricJumpStart?.Invoke();
 
             triggerAnim?.Invoke("Boost");
-
+            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DYNAMOBOOST);
             FOVController.instance.FOVEffect(FOVController.FovEffectType.ELECTRICJUMP);
 
             if (jumpRoutine != null)
@@ -2978,7 +2964,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             jumpRoutine = StartCoroutine(JumpRoutine());
 
             if (electricBehaviour != null)
-                electricBehaviour.BoostConsumeCharge();
+                electricBehaviour.ConsumeCharge();
 
             electricBehaviour.electricJumpEnd?.Invoke();
 
@@ -3023,7 +3009,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             rb.linearVelocity = jumpDirection * controllerData.electricJumpSpeed * controllerData.electricJumpExitVelocityFactor;
 
             if (electricBehaviour != null)
-                electricBehaviour.BoostConsumeCharge();
+                electricBehaviour.ConsumeCharge();
 
             electricBehaviour.electricJumpEnd?.Invoke();
 
@@ -3032,62 +3018,62 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         }
     }
 
-    private IEnumerator ElectricBoostCoroutine()
-    {
-        State = ControllerState.ELECTRICACTION;
+    //private IEnumerator ElectricBoostCoroutine()
+    //{
+    //    State = ControllerState.ELECTRICACTION;
 
-        ComboManager.Instance.AddComboAction(ComboID.DynamoJump);
+    //    ComboManager.Instance.AddComboAction(ComboID.DynamoJump);
 
-        CancelActionWindow();
-        CancelStomp();
-        ActionResetSpin();
+    //    CancelActionWindow();
+    //    CancelStomp();
+    //    ActionResetSpin();
 
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+    //    rb.linearVelocity = Vector3.zero;
+    //    rb.angularVelocity = Vector3.zero;
 
 
-        Vector3 jumpDirection = GetElectricJumpDirection();
-        transform.forward = jumpDirection;
+    //    Vector3 jumpDirection = GetElectricJumpDirection();
+    //    transform.forward = jumpDirection;
 
-        Collider playerCollider = GetComponent<Collider>();
-        int playerLayer = gameObject.layer;
+    //    Collider playerCollider = GetComponent<Collider>();
+    //    int playerLayer = gameObject.layer;
 
-        bool previousKinematic = rb.isKinematic;
-        rb.isKinematic = false;
+    //    bool previousKinematic = rb.isKinematic;
+    //    rb.isKinematic = false;
 
-        //Goes through metal layer
-        SetMetalCollision(false);
+    //    //Goes through metal layer
+    //    SetMetalCollision(false);
 
-        FOVController.instance.FOVEffect(FOVController.FovEffectType.ELECTRICJUMP);
+    //    FOVController.instance.FOVEffect(FOVController.FovEffectType.ELECTRICJUMP);
 
-        float timer = 0f;
+    //    float timer = 0f;
 
-        electricBehaviour.electricJumpStart?.Invoke();
+    //    electricBehaviour.electricJumpStart?.Invoke();
 
-        triggerAnim?.Invoke("Boost");
-        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.BOOST);
+    //    triggerAnim?.Invoke("Boost");
+    //    PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.BOOST);
 
-        while (timer < controllerData.electricJumpDuration)
-        {
-            rb.linearVelocity = jumpDirection * controllerData.electricJumpSpeed;
+    //    while (timer < controllerData.electricJumpDuration)
+    //    {
+    //        rb.linearVelocity = jumpDirection * controllerData.electricJumpSpeed;
 
-            timer += Time.deltaTime;
-            yield return null;
-        }
+    //        timer += Time.deltaTime;
+    //        yield return null;
+    //    }
 
-        SetMetalCollision(true);
+    //    SetMetalCollision(true);
 
-        rb.linearVelocity = jumpDirection * controllerData.electricJumpSpeed * controllerData.electricJumpExitVelocityFactor;
+    //    rb.linearVelocity = jumpDirection * controllerData.electricJumpSpeed * controllerData.electricJumpExitVelocityFactor;
 
-        if (electricBehaviour != null)
-            electricBehaviour.BoostConsumeCharge();
+    //    if (electricBehaviour != null)
+    //        electricBehaviour.BoostConsumeCharge();
 
-        if (electricBehaviour.remainingElectricUses > 0)
-            electricBehaviour.onElectricChargeFull?.Invoke();
+    //    if (electricBehaviour.remainingElectricUses > 0)
+    //        electricBehaviour.onElectricChargeFull?.Invoke();
 
-        State = ControllerState.SURFING;
-        electricActionRoutine = null;
-    }
+    //    State = ControllerState.SURFING;
+    //    electricActionRoutine = null;
+    //}
 
     private Vector3 GetElectricJumpDirection()
     {
