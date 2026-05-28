@@ -2956,7 +2956,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             electricBehaviour.electricJumpStart?.Invoke();
 
             triggerAnim?.Invoke("Boost");
-            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DYNAMOBOOST);
+            PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.BOOST);
             FOVController.instance.FOVEffect(FOVController.FovEffectType.ELECTRICJUMP);
 
             if (jumpRoutine != null)
