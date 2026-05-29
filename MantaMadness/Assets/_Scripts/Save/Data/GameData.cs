@@ -13,7 +13,7 @@ public class GameData
     public SerializableDictionnary<string, bool> coinsCollected;
 
     public SerializableDictionnary<string, CollectibleState> collectibleStates;
-    public string currentCollectibleAreaID = "SONKI";
+    public CollectibleArea currentCollectibleAreaID = CollectibleArea.SONKI;
 
     //Checkpoints
     public SerializableDictionnary<string, bool> checkpoints;

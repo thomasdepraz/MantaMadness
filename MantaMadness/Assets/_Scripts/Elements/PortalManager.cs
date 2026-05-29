@@ -38,10 +38,7 @@ public class PortalManager : MonoBehaviour
         MusicManager.Instance.PlayMusic(musicToPlay);
         WeatherManager.instance.SetNewWeather(specialWeatherType);
 
-        if (!string.IsNullOrEmpty(portal.collectibleAreaID))
-        {
-            CollectibleAreaRegistry.Instance.SetCurrentArea(portal.collectibleAreaID);
-        }
+        //CollectibleAreaRegistry.Instance.SetCurrentArea(portal.collectibleAreaID);
 
         yield return new WaitForSeconds(teleportTransitionDuration/2);
         PlayTeleportSFX("WarpState", 1);
@@ -68,7 +65,7 @@ public class PortalManager : MonoBehaviour
             yield return null;
     }
 
-    public void SetCheckpoint(string index, bool areaName, string nameToDisplay, string levelID)
+    public void SetCheckpoint(string index, bool areaName, string nameToDisplay, string levelID, CollectibleArea collectibleArea)
     {
         Transform respawnPos = transform;
 
@@ -81,7 +78,7 @@ public class PortalManager : MonoBehaviour
             }
         }
 
-        WorldCheckpointManager.Instance.SetCheckpoint(respawnPos, index, areaName, nameToDisplay, levelID);
+        WorldCheckpointManager.Instance.SetCheckpoint(respawnPos, index, areaName, nameToDisplay, levelID, collectibleArea);
     }
 
     public void PlayTeleportSFX(string parameterName, float paramValue)

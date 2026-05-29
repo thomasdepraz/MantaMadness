@@ -232,7 +232,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7745814417997729893}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.9816269, z: -0, w: 0.19081034}
+  m_LocalRotation: {x: 0, y: 0.9816272, z: 0, w: 0.1908091}
   m_LocalPosition: {x: 374.3, y: 75.51, z: 243.81}
   m_LocalScale: {x: 1.8622, y: 1.8622, z: 1.8622}
   m_ConstrainProportionsScale: 0
@@ -328,6 +328,46 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3293846311629743217}
     m_Modifications:
+    - target: {fileID: 3461517054804719608, guid: 7c1ca88f041fe6c47b6125d9d55b37e1, type: 3}
+      propertyPath: sequenceLoops
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3461517054804719608, guid: 7c1ca88f041fe6c47b6125d9d55b37e1, type: 3}
+      propertyPath: beatSequenceType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3461517054804719608, guid: 7c1ca88f041fe6c47b6125d9d55b37e1, type: 3}
+      propertyPath: sequenceLoopType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3461517054804719608, guid: 7c1ca88f041fe6c47b6125d9d55b37e1, type: 3}
+      propertyPath: playSequenceOnBeat
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3461517054804719608, guid: 7c1ca88f041fe6c47b6125d9d55b37e1, type: 3}
+      propertyPath: tweenSteps.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3461517054804719608, guid: 7c1ca88f041fe6c47b6125d9d55b37e1, type: 3}
+      propertyPath: tweenSteps.Array.data[0].ease
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3461517054804719608, guid: 7c1ca88f041fe6c47b6125d9d55b37e1, type: 3}
+      propertyPath: tweenSteps.Array.data[0].scale.x
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3461517054804719608, guid: 7c1ca88f041fe6c47b6125d9d55b37e1, type: 3}
+      propertyPath: tweenSteps.Array.data[0].scale.y
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3461517054804719608, guid: 7c1ca88f041fe6c47b6125d9d55b37e1, type: 3}
+      propertyPath: tweenSteps.Array.data[0].scale.z
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3461517054804719608, guid: 7c1ca88f041fe6c47b6125d9d55b37e1, type: 3}
+      propertyPath: tweenSteps.Array.data[0].animateScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6973946333025008401, guid: 7c1ca88f041fe6c47b6125d9d55b37e1, type: 3}
       propertyPath: m_Enabled
       value: 1

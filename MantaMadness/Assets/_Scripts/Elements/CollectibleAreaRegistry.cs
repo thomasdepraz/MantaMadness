@@ -1,6 +1,25 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+
+public enum CollectibleArea
+{
+    SONKI,
+    SHORES,
+    TRIBOULIVILLAGE,
+    MOUNTAINTEMPLE,
+    ANCIENTTEMPLE,
+    CORALLAND,
+    CORALCELLAR,
+    ALIENFIELD,
+    ALIENSHIP,
+    SUNALTAR,
+    OUTSKIRT,
+    SEWER,
+    FISHIVILLE,
+    FRUTIGER,
+    VOLCANINOCORE,
+}
 public class CollectibleAreaRegistry : MonoBehaviour, IDataPersistence
 {
     public static CollectibleAreaRegistry Instance;
@@ -19,7 +38,7 @@ public class CollectibleAreaRegistry : MonoBehaviour, IDataPersistence
         Instance = this;
     }
 
-    public void SetCurrentArea(string areaID)
+    public void SetCurrentArea(CollectibleArea areaID)
     {
         for (int i = 0; i < areas.Count; i++)
         {

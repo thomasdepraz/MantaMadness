@@ -5,7 +5,8 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
 {
     public static CollectibleAreaManager CurrentArea;
 
-    [SerializeField] private string areaID;
+    //[SerializeField] private string areaID;
+    [SerializeField] private CollectibleArea areaID;
     [SerializeField] public string areaName;
 
     private Collectible[] collectibles;
@@ -15,7 +16,7 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
 
     private bool allClamsRewardTriggered = false;
 
-    public string AreaID => areaID;
+    public CollectibleArea AreaID => areaID;
 
     public int TotalCollectibles => collectibles.Length;
 
@@ -68,13 +69,14 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
             data.currentCollectibleAreaID = areaID;
         }
 
-        if (data.areaSunRewards.ContainsKey(areaID))
+        if (data.areaSunRewards.ContainsKey(areaID.ToString()))
         {
-            data.areaSunRewards[areaID] = allClamsRewardTriggered;
+            
+            data.areaSunRewards[areaID.ToString()] = allClamsRewardTriggered;
         }
         else
         {
-            data.areaSunRewards.Add(areaID,allClamsRewardTriggered);
+            data.areaSunRewards.Add(areaID.ToString(),allClamsRewardTriggered);
         }
     }
 
@@ -86,7 +88,7 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
     private IEnumerator LoadDataDelay(GameData data)
     {
         yield return new WaitForSeconds(0.1f);
-        if (data.areaSunRewards.TryGetValue(areaID, out bool triggered))
+        if (data.areaSunRewards.TryGetValue(areaID.ToString(), out bool triggered))
         {
             allClamsRewardTriggered = triggered;
         }

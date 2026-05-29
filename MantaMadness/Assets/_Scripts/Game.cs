@@ -109,7 +109,7 @@ public class Game : MonoBehaviour, IDataPersistence
 
                 //SET POSITION TO FIRST CHECKPOINT POS
                 WorldCheckpointManager.Instance.SetStartCheckpoint(introCheckpoint.respawnTransform);
-                WorldCheckpointManager.Instance.SetCheckpoint(introCheckpoint.respawnTransform, introCheckpoint.indexName, introCheckpoint.displayAreaName, introCheckpoint.nameToDisplay, introCheckpoint.LevelID);
+                WorldCheckpointManager.Instance.SetCheckpoint(introCheckpoint.respawnTransform, introCheckpoint.indexName, introCheckpoint.displayAreaName, introCheckpoint.nameToDisplay, introCheckpoint.LevelID, introCheckpoint.collectibleAreaID);
                 Vector3 pos = Vector3.zero;
                 Quaternion rotation;
                 Respawn(out pos, out rotation);

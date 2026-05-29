@@ -17,11 +17,6 @@ public class Portal : WorldCheckpoint
     [SerializeField] private MUSICS musicToPlay = MUSICS.NULL;
     [SerializeField] public WeatherType specialWeatherType = WeatherType.MountainTemple;
 
-    [Header("Collectible Area")]
-    [SerializeField]
-    public string collectibleAreaID;
-
-
     protected override void Start()
     {
         base.Start();
@@ -60,8 +55,8 @@ public class Portal : WorldCheckpoint
     {
         if (other.TryGetComponent(out SimpleController controller))
         {
-            WorldCheckpointManager.Instance.SetCheckpoint(respawnTransform, indexName, displayAreaName, nameToDisplay, LevelID);
-            PortalManager.Instance.SetCheckpoint(targetIndex, displayAreaName, nameToDisplay, LevelID);
+            //WorldCheckpointManager.Instance.SetCheckpoint(respawnTransform, indexName, displayAreaName, nameToDisplay, LevelID, collectibleAreaID);
+            PortalManager.Instance.SetCheckpoint(targetIndex, displayAreaName, nameToDisplay, LevelID, collectibleAreaID);
             PortalManager.Instance.StartCoroutine(PortalManager.Instance.Teleport(targetIndex, enterSecretRoom, musicToPlay,this, specialWeatherType));
         }
     }

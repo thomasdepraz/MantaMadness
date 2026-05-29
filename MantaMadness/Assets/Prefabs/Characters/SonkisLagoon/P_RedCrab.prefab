@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5439880882466360448}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.06793601, y: -0.8555913, z: -0.063868, w: 0.50918484}
+  m_LocalRotation: {x: -0.0679344, y: -0.8555892, z: -0.06387003, w: 0.5091882}
   m_LocalPosition: {x: 456.89, y: 197.83, z: 52.29}
   m_LocalScale: {x: 3.6252, y: 3.6251998, z: 3.6251998}
   m_ConstrainProportionsScale: 0
@@ -32,7 +32,7 @@ Transform:
   - {fileID: 2549960592615239105}
   - {fileID: 4904646856876802954}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -10.281, y: -118.752, z: 2.983}
 --- !u!1 &9001636053258579570
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,12 +254,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playSequenceOnBeat: 0
+  playSequenceOnBeat: 1
   playSequenceOnEnable: 0
-  tweenSteps: []
-  sequenceLoops: 0
-  sequenceLoopType: 0
-  beatSequenceType: 0
+  tweenSteps:
+  - animatePosition: 0
+    animateRotation: 0
+    animateScale: 1
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 0, y: 0, z: 0}
+    rotationUseLocal: 0
+    rotationRelative: 0
+    scale: {x: 1.2, y: 1.2, z: 1.2}
+    duration: 0
+    delay: 0
+    ease: 30
+  sequenceLoops: -1
+  sequenceLoopType: 1
+  beatSequenceType: 1
 --- !u!1 &5458589280304183520 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8009987137999418058, guid: 2e0736ae0aa087949acdb4ce2f790720, type: 3}
@@ -278,10 +291,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playSequenceOnBeat: 0
-  playSequenceOnEnable: 0
-  tweenSteps: []
-  sequenceLoops: 0
-  sequenceLoopType: 0
+  playSequenceOnEnable: 1
+  tweenSteps:
+  - animatePosition: 1
+    animateRotation: 1
+    animateScale: 0
+    position: {x: 0, y: 5, z: 0}
+    positionUseLocal: 1
+    positionRelative: 0
+    rotation: {x: 0, y: 0, z: 26}
+    rotationUseLocal: 1
+    rotationRelative: 1
+    scale: {x: 0, y: 0, z: 0}
+    duration: 3
+    delay: 0
+    ease: 7
+  sequenceLoops: -1
+  sequenceLoopType: 1
   beatSequenceType: 0
 --- !u!1 &5848094350310730834 stripped
 GameObject:

@@ -7,10 +7,6 @@ public class WeatherCollider : WorldCheckpoint
 
     [SerializeField] private WeatherType newWeather;
 
-    [Header("Collectible Area")]
-    [SerializeField]
-    private string collectibleAreaID;
-
     private bool canTrigger;
 
     private SimpleController player;
@@ -48,12 +44,8 @@ public class WeatherCollider : WorldCheckpoint
 
         WeatherManager.instance.SetNewWeather(newWeather);
 
-        if (!string.IsNullOrEmpty(collectibleAreaID))
-        {
-            CollectibleAreaRegistry.Instance.SetCurrentArea(
-                collectibleAreaID
-            );
-        }
+        CollectibleAreaRegistry.Instance.SetCurrentArea(collectibleAreaID);
+
     }
 
     public override void EnableMat()

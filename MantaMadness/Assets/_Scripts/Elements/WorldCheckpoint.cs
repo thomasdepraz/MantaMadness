@@ -22,6 +22,9 @@ public class WorldCheckpoint : MonoBehaviour
     [SerializeField] protected string levelID;
     public string LevelID => levelID;
 
+    [Header("Collectible Area")]
+    [SerializeField] public CollectibleArea collectibleAreaID;
+
     protected virtual void Start()
     {
         if (!WorldCheckpointManager.Instance.checkpoints.Contains(this))
@@ -34,7 +37,7 @@ public class WorldCheckpoint : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent(out SimpleController controller))
         {
-            WorldCheckpointManager.Instance.SetCheckpoint(respawnTransform, indexName, displayAreaName, nameToDisplay, LevelID);
+            WorldCheckpointManager.Instance.SetCheckpoint(respawnTransform, indexName, displayAreaName, nameToDisplay, LevelID, collectibleAreaID);
         }
     }
 

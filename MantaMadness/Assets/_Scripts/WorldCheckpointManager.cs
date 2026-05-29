@@ -96,7 +96,7 @@ public class WorldCheckpointManager : MonoBehaviour, IDataPersistence
         Game.Instance.SetRespawnTransform(respawnTransform);
     }
 
-    public void SetCheckpoint(Transform respawnTransform, string checkpointIndexName, bool canDisplay, string displayName, string levelID)
+    public void SetCheckpoint(Transform respawnTransform, string checkpointIndexName, bool canDisplay, string displayName, string levelID, CollectibleArea collectibleArea)
     {
         if(checkpointIndexName != currentCheckpoint)
         {
@@ -124,6 +124,8 @@ public class WorldCheckpointManager : MonoBehaviour, IDataPersistence
             data.currentLevelID = levelID;
 
             StartCoroutine(WorldLevelManager.Instance.LoadLevel(levelID));
+
+            CollectibleAreaRegistry.Instance.SetCurrentArea(collectibleArea);
 
             //Manage Save Data Checkpoints
             var keys = new List<string>(data.checkpoints.Keys);
