@@ -49,30 +49,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playOnStart: 0
-  playOnEnable: 1
-  playOnBeat: 0
-  animateRotation: 1
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 180
-  rotationDuration: 2
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 0
-  loopScaleAmount: -1
-  yoyoScale: 0
-  xScale: 1
-  yScale: 1
-  zScale: 1
-  scaleDuration: 0
+  playSequenceOnBeat: 0
+  playSequenceOnEnable: 1
+  tweenSteps:
+  - animatePosition: 0
+    animateRotation: 1
+    animateScale: 0
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 0, y: 0, z: 180}
+    rotationUseLocal: 1
+    rotationRelative: 1
+    scale: {x: 0, y: 0, z: 0}
+    duration: 3
+    delay: 0
+    ease: 1
+  sequenceLoops: -1
+  sequenceLoopType: 2
+  beatSequenceType: 0
 --- !u!1 &393115583063738669
 GameObject:
   m_ObjectHideFlags: 0
@@ -82,7 +77,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 427864929569678849}
-  - component: {fileID: 5911458433817245037}
+  - component: {fileID: 1524252375401908543}
+  - component: {fileID: 1571221100393318250}
   m_Layer: 0
   m_Name: FlowerCircle_FMODEmitter
   m_TagString: Untagged
@@ -105,7 +101,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3076675416915153868}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5911458433817245037
+--- !u!65 &1524252375401908543
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 393115583063738669}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.2, y: 0.2, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1571221100393318250
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -114,28 +131,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 393115583063738669}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f0b226df45927a4891133319e5c352b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -994485469
-      Data2: 1202069814
-      Data3: -487321202
-      Data4: 1007022003
-    Path: event:/Sfx/InGame/World/Enviro/Env_Lilypad_Bloomed_LP
-  Event: 
-  EventPlayTrigger: 11
-  EventStopTrigger: 12
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 1
-  OverrideMinDistance: 0
-  OverrideMaxDistance: 20
+  settings:
+    eventReference:
+      Guid:
+        Data1: -994485469
+        Data2: 1202069814
+        Data3: -487321202
+        Data4: 1007022003
+      Path: event:/Sfx/InGame/World/Enviro/Env_Lilypad_Bloomed_LP
+    overrideAttenuation: 1
+    minDistance: 1
+    maxDistance: 20
+    parameters: []
 --- !u!1 &1558541985093287211
 GameObject:
   m_ObjectHideFlags: 0
@@ -19943,7 +19953,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7058935304181645597}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.68834764, y: -0, z: -0, w: 0.725381}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -0.57200015, y: -0.782, z: 0.099823}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -19951,7 +19961,7 @@ Transform:
   - {fileID: 5003717279602356366}
   - {fileID: 4555932997807315581}
   m_Father: {fileID: 3076675416915153868}
-  m_LocalEulerAnglesHint: {x: 86.999, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &8558791894265116365
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -20017,30 +20027,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playOnStart: 0
-  playOnEnable: 1
-  playOnBeat: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0.5
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 1
-  loopScaleAmount: -1
-  yoyoScale: 1
-  xScale: 1.4
-  yScale: 1.4
-  zScale: 1.4
-  scaleDuration: 0.75
+  playSequenceOnBeat: 0
+  playSequenceOnEnable: 1
+  tweenSteps:
+  - animatePosition: 0
+    animateRotation: 1
+    animateScale: 0
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 90, y: 0, z: 90}
+    rotationUseLocal: 1
+    rotationRelative: 1
+    scale: {x: 0, y: 0, z: 0}
+    duration: 1
+    delay: 0
+    ease: 1
+  sequenceLoops: -1
+  sequenceLoopType: 2
+  beatSequenceType: 0
 --- !u!1 &7095903799926638923
 GameObject:
   m_ObjectHideFlags: 0
@@ -25088,6 +25093,7 @@ MonoBehaviour:
       Data3: 1394322092
       Data4: 1444172008
     Path: event:/Sfx/InGame/World/Enviro/Env_Lilypad_Bloom
+  originalScale: {x: 1, y: 1, z: 1}
 --- !u!65 &6675106881926710448
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -25136,7 +25142,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8428558698757580381}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.68834764, y: -0, z: -0, w: 0.725381}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0.91600037, y: -0.27600002, z: 0.099823}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -25144,7 +25150,7 @@ Transform:
   - {fileID: 8741367172363593021}
   - {fileID: 218793764476978967}
   m_Father: {fileID: 3076675416915153868}
-  m_LocalEulerAnglesHint: {x: 86.999, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &6048772287423238645
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -25210,30 +25216,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playOnStart: 0
-  playOnEnable: 1
-  playOnBeat: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0.5
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 1
-  loopScaleAmount: -1
-  yoyoScale: 1
-  xScale: 1.4
-  yScale: 1.4
-  zScale: 1.4
-  scaleDuration: 0.75
+  playSequenceOnBeat: 0
+  playSequenceOnEnable: 1
+  tweenSteps:
+  - animatePosition: 0
+    animateRotation: 1
+    animateScale: 0
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 90, y: 0, z: 90}
+    rotationUseLocal: 1
+    rotationRelative: 1
+    scale: {x: 0, y: 0, z: 0}
+    duration: 1
+    delay: 0
+    ease: 1
+  sequenceLoops: -1
+  sequenceLoopType: 2
+  beatSequenceType: 0
 --- !u!1 &8555280712714427807
 GameObject:
   m_ObjectHideFlags: 0
@@ -35022,7 +35023,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9120817288276386578}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.68834764, y: -0, z: -0, w: 0.725381}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.97874147, z: 0.099823}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -35030,7 +35031,7 @@ Transform:
   - {fileID: 6449284447290035592}
   - {fileID: 4783145348880277058}
   m_Father: {fileID: 3076675416915153868}
-  m_LocalEulerAnglesHint: {x: 86.999, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &287460012670094341
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -35096,27 +35097,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playOnStart: 0
-  playOnEnable: 1
-  playOnBeat: 0
-  animateRotation: 0
-  loopRotationAmount: -1
-  yoyoRotation: 0
-  xRotation: 0
-  yRotation: 0
-  zRotation: 0
-  rotationDuration: 0.5
-  animatePosition: 0
-  loopPositionAmount: -1
-  yoyoPosition: 0
-  xPos: 0
-  yPos: 0
-  zPos: 0
-  moveDuration: 0
-  animateScale: 1
-  loopScaleAmount: -1
-  yoyoScale: 1
-  xScale: 1.4
-  yScale: 1.4
-  zScale: 1.4
-  scaleDuration: 0.75
+  playSequenceOnBeat: 0
+  playSequenceOnEnable: 1
+  tweenSteps:
+  - animatePosition: 0
+    animateRotation: 1
+    animateScale: 0
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 90, y: 0, z: 90}
+    rotationUseLocal: 1
+    rotationRelative: 1
+    scale: {x: 0, y: 0, z: 0}
+    duration: 1
+    delay: 0
+    ease: 1
+  sequenceLoops: -1
+  sequenceLoopType: 2
+  beatSequenceType: 0

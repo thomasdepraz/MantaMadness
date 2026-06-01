@@ -2,8 +2,6 @@ using Unity.Cinemachine;
 using UnityEngine;
 using System;
 using System.Collections;
-using TMPro;
-using FMOD.Studio;
 using FMODUnity;
 
 public class AbilityAltar : MonoBehaviour, IDataPersistence

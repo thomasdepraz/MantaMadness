@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5027642939242075404}
-  - component: {fileID: 14160576017344765}
+  - component: {fileID: 5119452502600313842}
+  - component: {fileID: 4185964346537252588}
   m_Layer: 13
   m_Name: SFX_Waterfall_Top
   m_TagString: Untagged
@@ -32,7 +33,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3053805037619030548}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &14160576017344765
+--- !u!114 &5119452502600313842
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,28 +42,42 @@ MonoBehaviour:
   m_GameObject: {fileID: 1081619396116617405}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f0b226df45927a4891133319e5c352b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -564216709
-      Data2: 1133935912
-      Data3: -1762737792
-      Data4: 536651329
-    Path: event:/Sfx/InGame/World/Enviro/Env_WaterFall_Top_Loop
-  Event: 
-  EventPlayTrigger: 11
-  EventStopTrigger: 12
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 1
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 200
+  settings:
+    eventReference:
+      Guid:
+        Data1: -564216709
+        Data2: 1133935912
+        Data3: -1762737792
+        Data4: 536651329
+      Path: event:/Sfx/InGame/World/Enviro/Env_WaterFall_Top_Loop
+    overrideAttenuation: 1
+    minDistance: 1
+    maxDistance: 200
+    parameters: []
+--- !u!65 &4185964346537252588
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081619396116617405}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1850931234731895380
 GameObject:
   m_ObjectHideFlags: 0
@@ -5681,6 +5696,7 @@ MonoBehaviour:
       Data3: 1907695536
       Data4: 178069187
     Path: event:/Sfx/InGame/World/Enviro/Env_WaterFall_Appear
+  isLava: 0
 --- !u!64 &7789789104890161087
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5712,7 +5728,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3396549298938951417}
-  - component: {fileID: 2445888514753034825}
+  - component: {fileID: 7469300723752356819}
+  - component: {fileID: 954448757245674351}
   m_Layer: 13
   m_Name: SFX_Waterfall_Base
   m_TagString: Untagged
@@ -5735,7 +5752,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3053805037619030548}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2445888514753034825
+--- !u!114 &7469300723752356819
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5744,28 +5761,42 @@ MonoBehaviour:
   m_GameObject: {fileID: 4356505393203179903}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f0b226df45927a4891133319e5c352b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 2141399599
-      Data2: 1326492782
-      Data3: 24517821
-      Data4: 1288406694
-    Path: event:/Sfx/InGame/World/Enviro/Env_WaterFall_Base_Loop
-  Event: 
-  EventPlayTrigger: 11
-  EventStopTrigger: 12
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 1
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 200
+  settings:
+    eventReference:
+      Guid:
+        Data1: 2141399599
+        Data2: 1326492782
+        Data3: 24517821
+        Data4: 1288406694
+      Path: event:/Sfx/InGame/World/Enviro/Env_WaterFall_Base_Loop
+    overrideAttenuation: 1
+    minDistance: 1
+    maxDistance: 200
+    parameters: []
+--- !u!65 &954448757245674351
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4356505393203179903}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6708429084353899644
 GameObject:
   m_ObjectHideFlags: 0

@@ -3251,6 +3251,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     private IEnumerator BurnDeath()
     {
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DEATHFIRE);
         State = ControllerState.BURN;
         Vector3 force = (NormalContainer.up * controllerData.burnedJumpForce);
         rb.AddForce(force, ForceMode.VelocityChange);
@@ -3261,6 +3262,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private IEnumerator ElectricDeath()
     {
         State = ControllerState.ELECTROCUTED;
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DEATHELECTRIC);
         yield return new WaitForSeconds(0.95f);
 
     }
@@ -3268,6 +3270,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private IEnumerator FlattenDeath()
     {
         State = ControllerState.FLATTEN;
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.DEATHFLATTEN);
         yield return new WaitForSeconds(1.2f);
 
     }

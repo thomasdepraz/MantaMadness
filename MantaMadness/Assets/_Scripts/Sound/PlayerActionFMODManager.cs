@@ -32,6 +32,9 @@ public enum PlayerActionFMOD
     DIVELAND,
     DETECT,
     DYNAMOBOOST,
+    DEATHFIRE,
+    DEATHELECTRIC,
+    DEATHFLATTEN,
 }
 
 public enum PlayerRailGrindType

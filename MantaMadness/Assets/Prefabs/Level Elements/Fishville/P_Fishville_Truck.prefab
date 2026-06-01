@@ -433,7 +433,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3aa6daccd607f804aaa8f8a04f905639, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.28
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3aa6daccd607f804aaa8f8a04f905639, type: 3}
       propertyPath: m_LocalPosition.z
@@ -524,6 +524,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7366657539660612669}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3aa6daccd607f804aaa8f8a04f905639, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 775660174650758197}
     - targetCorrespondingSourceObject: {fileID: -325703299720357967, guid: 3aa6daccd607f804aaa8f8a04f905639, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6108887862059963142}
@@ -549,10 +552,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playSequenceOnBeat: 0
-  playSequenceOnEnable: 0
-  tweenSteps: []
-  sequenceLoops: 0
-  sequenceLoopType: 0
+  playSequenceOnEnable: 1
+  tweenSteps:
+  - animatePosition: 0
+    animateRotation: 1
+    animateScale: 0
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 0, y: 0, z: 180}
+    rotationUseLocal: 1
+    rotationRelative: 1
+    scale: {x: 0, y: 0, z: 0}
+    duration: 1
+    delay: 0
+    ease: 1
+  sequenceLoops: -1
+  sequenceLoopType: 2
   beatSequenceType: 0
 --- !u!4 &7134814126625506213 stripped
 Transform:
@@ -564,6 +580,37 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 3aa6daccd607f804aaa8f8a04f905639, type: 3}
   m_PrefabInstance: {fileID: 7244403767398802510}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &775660174650758197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7514294503742871839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playSequenceOnBeat: 0
+  playSequenceOnEnable: 1
+  tweenSteps:
+  - animatePosition: 1
+    animateRotation: 0
+    animateScale: 0
+    position: {x: 0, y: 2.5, z: 0}
+    positionUseLocal: 1
+    positionRelative: 1
+    rotation: {x: 0, y: 0, z: 0}
+    rotationUseLocal: 0
+    rotationRelative: 0
+    scale: {x: 0, y: 0, z: 0}
+    duration: 2
+    delay: 0
+    ease: 7
+  sequenceLoops: -1
+  sequenceLoopType: 1
+  beatSequenceType: 0
 --- !u!1 &9007972627374081257 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1840835046896672935, guid: 3aa6daccd607f804aaa8f8a04f905639, type: 3}
@@ -582,8 +629,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playSequenceOnBeat: 0
-  playSequenceOnEnable: 0
-  tweenSteps: []
-  sequenceLoops: 0
-  sequenceLoopType: 0
+  playSequenceOnEnable: 1
+  tweenSteps:
+  - animatePosition: 0
+    animateRotation: 1
+    animateScale: 0
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 0, y: 0, z: 180}
+    rotationUseLocal: 1
+    rotationRelative: 1
+    scale: {x: 0, y: 0, z: 0}
+    duration: 1
+    delay: 0
+    ease: 1
+  sequenceLoops: -1
+  sequenceLoopType: 2
   beatSequenceType: 0

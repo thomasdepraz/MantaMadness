@@ -132,7 +132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3881393227329588293}
   - component: {fileID: 9141620730036065059}
-  - component: {fileID: 8134448103025803075}
+  - component: {fileID: 9007302635144967919}
   m_Layer: 0
   m_Name: P_AbilityAltar
   m_TagString: Untagged
@@ -188,7 +188,7 @@ MonoBehaviour:
       Data4: -1623133211
     Path: event:/Sfx/InGame/Stingers/Stinger_Powerup_Pickup
   updateGameStateValue: 0
---- !u!114 &8134448103025803075
+--- !u!114 &9007302635144967919
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -197,28 +197,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 2551050419339556974}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f0b226df45927a4891133319e5c352b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -21327909
-      Data2: 1231726559
-      Data3: 2094217658
-      Data4: -625682168
-    Path: event:/Sfx/InGame/World/Enviro/Env_Powerup_Pad_LP
-  Event: 
-  EventPlayTrigger: 1
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 1
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 1
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 65
+  settings:
+    eventReference:
+      Guid:
+        Data1: -21327909
+        Data2: 1231726559
+        Data3: 2094217658
+        Data4: -625682168
+      Path: event:/Sfx/InGame/World/Enviro/Env_Powerup_Pad_LP
+    overrideAttenuation: 1
+    minDistance: 1
+    maxDistance: 65
+    parameters: []
 --- !u!1 &4600767302071452347
 GameObject:
   m_ObjectHideFlags: 0
@@ -827,7 +820,6 @@ MonoBehaviour:
     rotationUseLocal: 0
     rotationRelative: 1
     scale: {x: 0.8, y: 1.5, z: 0.8}
-    scaleRelative: 0
     duration: 0
     delay: 0
     ease: 6
@@ -841,7 +833,6 @@ MonoBehaviour:
     rotationUseLocal: 0
     rotationRelative: 1
     scale: {x: 1, y: 1, z: 1}
-    scaleRelative: 0
     duration: 0
     delay: 0
     ease: 29
@@ -995,7 +986,6 @@ MonoBehaviour:
     rotationUseLocal: 0
     rotationRelative: 1
     scale: {x: 0.8, y: 1.5, z: 0.8}
-    scaleRelative: 0
     duration: 0.5
     delay: 0
     ease: 6
@@ -1009,7 +999,6 @@ MonoBehaviour:
     rotationUseLocal: 0
     rotationRelative: 1
     scale: {x: 1, y: 1, z: 1}
-    scaleRelative: 0
     duration: 0.5
     delay: 1.2
     ease: 29

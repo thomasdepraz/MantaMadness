@@ -114,13 +114,13 @@ MonoBehaviour:
       Data4: 0
     Path: 
   levelID: 
+  collectibleAreaID: 0
   targetIndex: Lagoon_2
   teleportPoint: {fileID: 7843091450492837395}
   signText: {fileID: 0}
   enterSecretRoom: 0
   musicToPlay: 5
   specialWeatherType: 3
-  collectibleAreaID: 
 --- !u!1 &7196981529733364593
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,7 +130,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 513098887408028504}
-  - component: {fileID: 309566382566622932}
+  - component: {fileID: 781792184397897130}
+  - component: {fileID: 5148496694195331321}
   m_Layer: 0
   m_Name: PortalSFX
   m_TagString: Untagged
@@ -153,7 +154,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6010607674428282569}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &309566382566622932
+--- !u!65 &781792184397897130
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7196981529733364593}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.2, y: 0.2, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5148496694195331321
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,28 +184,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 7196981529733364593}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f0b226df45927a4891133319e5c352b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 361538724
-      Data2: 1136434555
-      Data3: -691369308
-      Data4: 1602701761
-    Path: event:/Sfx/InGame/World/Enviro/Env_WarpVortex_LP
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 1
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 1
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 60
+  settings:
+    eventReference:
+      Guid:
+        Data1: 361538724
+        Data2: 1136434555
+        Data3: -691369308
+        Data4: 1602701761
+      Path: event:/Sfx/InGame/World/Enviro/Env_WarpVortex_LP
+    overrideAttenuation: 1
+    minDistance: 1
+    maxDistance: 60
+    parameters: []
 --- !u!1 &9171516147284857496
 GameObject:
   m_ObjectHideFlags: 0

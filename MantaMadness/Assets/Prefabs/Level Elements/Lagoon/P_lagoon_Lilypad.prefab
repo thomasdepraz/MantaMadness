@@ -4928,10 +4928,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2592699794811831434}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 291.99994, y: 162.68365, z: -89.00001}
   m_LocalScale: {x: 2, y: 2, z: 2}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4408623784431034552}
   - {fileID: 2921497302600912979}
@@ -4981,6 +4981,7 @@ MonoBehaviour:
       Data3: 1394322092
       Data4: 1444172008
     Path: event:/Sfx/InGame/World/Enviro/Env_Lilypad_Bloom
+  originalScale: {x: 1, y: 1, z: 1}
 --- !u!114 &564427122588466513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4997,7 +4998,7 @@ MonoBehaviour:
   detectionMask:
     serializedVersion: 2
     m_Bits: 8209
-  rayOffset: {x: 0, y: 0.75, z: 0}
+  rayOffset: {x: 0, y: 0.2, z: 0}
 --- !u!1 &3653343707240393162
 GameObject:
   m_ObjectHideFlags: 0
@@ -10043,9 +10044,10 @@ GameObject:
   - component: {fileID: 8943604372642784215}
   - component: {fileID: 7640052595281929892}
   - component: {fileID: 4827990520472152608}
-  - component: {fileID: 2060970737321974795}
-  m_Layer: 0
-  m_Name: Plane
+  - component: {fileID: 2109619948470186378}
+  - component: {fileID: 8814235929298226313}
+  m_Layer: 2
+  m_Name: VisualActivated
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10120,7 +10122,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2060970737321974795
+--- !u!114 &2109619948470186378
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10129,25 +10131,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 8256903748812093384}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f0b226df45927a4891133319e5c352b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -994485469
-      Data2: 1202069814
-      Data3: -487321202
-      Data4: 1007022003
-    Path: event:/Sfx/InGame/World/Enviro/Env_Lilypad_Bloomed_LP
-  Event: 
-  EventPlayTrigger: 11
-  EventStopTrigger: 12
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
+  settings:
+    eventReference:
+      Guid:
+        Data1: -994485469
+        Data2: 1202069814
+        Data3: -487321202
+        Data4: 1007022003
+      Path: event:/Sfx/InGame/World/Enviro/Env_Lilypad_Bloomed_LP
+    overrideAttenuation: 0
+    minDistance: 1
+    maxDistance: 20
+    parameters: []
+--- !u!65 &8814235929298226313
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8256903748812093384}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
