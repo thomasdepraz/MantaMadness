@@ -12,6 +12,7 @@ public enum WeatherType
     Null,
     SunAltar,
     Sewer,
+    AlienField,
 }
 
 public enum FogState
@@ -235,6 +236,9 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
                 DataPersistenceManager.Instance.gameData.mainMenuWeatherCondition = currentWeather;
                 break;
             case WeatherType.Shores:
+                DataPersistenceManager.Instance.gameData.mainMenuWeatherCondition = currentWeather;
+                break;
+            case WeatherType.AlienField:
                 DataPersistenceManager.Instance.gameData.mainMenuWeatherCondition = currentWeather;
                 break;
         }

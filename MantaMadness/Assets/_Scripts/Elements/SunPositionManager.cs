@@ -66,6 +66,9 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
                 case WeatherType.City:
                     sunSwitchRoutine = StartCoroutine(SunSwitchPosition(cityPos, SunState.Moon));
                     break;
+                case WeatherType.AlienField:
+                    sunSwitchRoutine = StartCoroutine(SunSwitchPosition(cityPos, SunState.Moon));
+                    break;
                 default:
                     sunSwitchRoutine = StartCoroutine(SunSwitchPosition(shoresPos, SunState.Sun));
                     break;
