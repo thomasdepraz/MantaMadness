@@ -132,6 +132,16 @@ public class DebugGUI : MonoBehaviour
             trailerCamToggle = !trailerCamToggle;
         }
 
+        if (GUILayout.Button($"Add coin"))
+        {
+            CoinManager.Instance.PickupCoin();
+        }
+
+        if (GUILayout.Button($"Reset coin"))
+        {
+            CoinManager.Instance.ResetCoinCount();
+        }
+
         GUILayout.EndArea();
     }
 }

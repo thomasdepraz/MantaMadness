@@ -22,6 +22,8 @@ public class Game : MonoBehaviour, IDataPersistence
     public InteractableNPC introNpc;
     public InteractableNPC superGoodJoeNpc;
 
+    public EndPortalHolder endPortalHolder;
+
     public int gameState { private set; get; }
 
     private void Awake()
@@ -141,6 +143,15 @@ public class Game : MonoBehaviour, IDataPersistence
             case 4:
                 break;
 
+            case 10:
+                NPCManager.instance.UpdateNPCState("SUPERGOODJOE", 1);
+                SetGameState(11);
+                break;
+
+            case 12:
+                NPCManager.instance.UpdateNPCState("SUPERGOODJOE", 2);
+                SetGameState(13);
+                break;
             default:
                 break;
         }
@@ -225,6 +236,15 @@ public class Game : MonoBehaviour, IDataPersistence
     {
         //ENDING SCREEN ACTIVATION
         if (CoinManager.Instance.PickupCoinCount == 20)
-            UIManager.Instance.gameInterface.ShowEndScreen();
+        {
+            // ACTIVATE ENDING SCREEN BEHAVIOR
+            endPortalHolder.CouroutinSpawnStart(player);
+            SetGameState(10);
+        }
+
+        if (CoinManager.Instance.PickupCoinCount == 38)
+        {
+            SetGameState(12);
+        }
     }
 }

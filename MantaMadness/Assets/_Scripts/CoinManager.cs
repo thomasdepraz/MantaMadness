@@ -97,6 +97,11 @@ public class CoinManager : MonoBehaviour, IDataPersistence
         Game.Instance.ActivateEndingScreen();
     }
 
+    public void ResetCoinCount()
+    {
+        PickupCoinCount = 0;
+    }
+
     public void PickupClam(int addValue)
     {
         ClamCollectibleCount += addValue;

@@ -59,7 +59,8 @@ public class GameData
     public bool cat;
     public bool dynamo;
 
-
+    //End Game Active
+    public bool endPortalActive;
 
     public MUSICS gameStartMusic;
     public AMBIENT gameStartAmbient;
@@ -92,6 +93,8 @@ public class GameData
         lilyPadModules = new SerializableDictionnary<string, ModuleState>();
         areaSunRewards = new SerializableDictionnary<string, bool>();
         worldStateUpdateBoxes = new SerializableDictionnary<string, bool>();
+
+        endPortalActive = false;
 
         doubleJump = false;
         chargeBoost = false;
