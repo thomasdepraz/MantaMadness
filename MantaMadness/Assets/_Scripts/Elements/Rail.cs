@@ -89,7 +89,7 @@ public class Rail : MonoBehaviour
         return length;
     }
 
-    public void EnterRail(Vector3 contactPosition, Vector3 intentDirection)
+    public void EnterRail(Vector3 contactPosition, Vector3 intentDirection, bool forceReverseGrind = false)
     {
         contactPosition = transform.InverseTransformPoint(contactPosition);
 
@@ -110,7 +110,7 @@ public class Rail : MonoBehaviour
         Vector3 worldTangent =
             splineContainer.transform.TransformDirection(localTangent).normalized;
 
-        // SÈcuritÈ
+        // Sùcuritù
         if (intentDirection.sqrMagnitude < 0.001f)
             intentDirection = worldTangent;
 
@@ -122,6 +122,8 @@ public class Rail : MonoBehaviour
         {
             case RailDirection.None:
                 dir = dot >= 0f ? 1 : -1;
+                if (forceReverseGrind)
+                    dir *= -1;
                 break;
             case RailDirection.Forward:
                 dir = 1;
@@ -133,14 +135,16 @@ public class Rail : MonoBehaviour
 
         const float edgeThreshold = 0.02f;
 
-        if (currentProgress <= edgeThreshold && dir < 0)
+        if (forceReverseGrind == false)
         {
-            dir = 1;
-        }
-
-        else if (currentProgress >= 1f - edgeThreshold && dir > 0)
-        {
-            dir = -1;
+            if (currentProgress <= edgeThreshold && dir < 0)
+            {
+                dir = 1;
+            }
+            else if (currentProgress >= 1f - edgeThreshold && dir > 0)
+            {
+                dir = -1;
+            }
         }
 
         currentPosition = splineContainer.transform.TransformPoint(nearest);
@@ -161,7 +165,7 @@ public class Rail : MonoBehaviour
         }
         else
         {
-            // Rail non fermÈ : sortie normale
+            // Rail non fermù : sortie normale
             if (dir < 0 && currentProgress < 0f)
                 isIn = false;
             else if (dir > 0 && currentProgress > 1f)

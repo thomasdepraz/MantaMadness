@@ -1958,10 +1958,16 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     public bool EnterRail(Rail rail)
     {
-        return EnterRail(rail, GetRailIntentDirection());
+        GetRailEntryIntent(out Vector3 intent, out bool forceReverseGrind);
+        return EnterRail(rail, intent, forceReverseGrind);
     }
 
     public bool EnterRail(Rail rail, Vector3 forcedDirection)
+    {
+        return EnterRail(rail, forcedDirection, false);
+    }
+
+    public bool EnterRail(Rail rail, Vector3 forcedDirection, bool forceReverseGrind)
     {
         if (State == ControllerState.RAIL)
             return false;
@@ -1987,7 +1993,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         ResetSpin();
 
-        rail.EnterRail(transform.position, forcedDirection);
+        rail.EnterRail(transform.position, forcedDirection, forceReverseGrind);
 
         rb.isKinematic = true;
 
@@ -2008,32 +2014,47 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         return true;
     }
 
-    private Vector3 GetRailIntentDirection()
+    private void GetRailEntryIntent(out Vector3 intent, out bool forceReverseGrind)
     {
-        Transform cam = Camera.main.transform;
-
         Vector3 camForward;
         Vector3 camRight;
 
         GetCameraAxes(out camForward, out camRight);
 
-        // Input prioritaire
         Vector2 move = inputs.moveDirection.action.ReadValue<Vector2>();
 
-        Vector3 intent =
+        forceReverseGrind = IsDeliberateRailReverseInput(move);
+
+        if (forceReverseGrind)
+        {
+            move = Vector2.zero;
+        }
+        else if (move.y < 0f)
+        {
+            move = Vector2.zero;
+        }
+
+        intent =
             camForward * move.y +
             camRight * move.x;
 
-        // Si pas d'input → fallback velocity
         if (intent.sqrMagnitude < 0.01f)
             intent = HorizontalVelocity;
 
-        // Si toujours rien → fallback caméra
         if (intent.sqrMagnitude < 0.01f)
             intent = camForward;
 
         intent.y = 0f;
-        return intent.normalized;
+        intent = intent.normalized;
+    }
+
+    private bool IsDeliberateRailReverseInput(Vector2 move)
+    {
+        float minMagnitude = controllerData.railReverseInputMinMagnitude;
+        if (move.sqrMagnitude < minMagnitude * minMagnitude)
+            return false;
+
+        return Vector2.Angle(move, Vector2.down) <= controllerData.railReverseInputAngle;
     }
 
     private void ReverseRailDirection(UnityEngine.InputSystem.InputAction.CallbackContext context)

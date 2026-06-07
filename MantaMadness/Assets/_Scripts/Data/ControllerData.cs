@@ -146,6 +146,10 @@ public class ControllerData : ScriptableObject
     public float railImpulseForce;
     public float railExitForce;
     public float railTransferForce = 20f;
+    [Range(0f, 90f)]
+    public float railReverseInputAngle = 35f;
+    [Range(0f, 1f)]
+    public float railReverseInputMinMagnitude = 0.5f;
 
     [Header("Bump Parameters")]
     public float bumpDetectionRadius;
