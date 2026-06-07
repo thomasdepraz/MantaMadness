@@ -31,11 +31,16 @@ public class DialogManager : MonoBehaviour
     [Header("Parameters")]
     public float typingSpeed = 0.25f;
 
-    private bool isTyping = false;
-    private bool skipTyping = false;
+    private enum DialogInputPhase
+    {
+        None,
+        Typing,
+        WaitingForAdvance
+    }
+
+    private DialogInputPhase inputPhase = DialogInputPhase.None;
 
     private InputManager inputs;
-    private bool interacted = false;
 
     public EventReference dialogActiveReference;
     public FMOD.Studio.EventInstance dialogActiveEvent;
@@ -127,9 +132,12 @@ public class DialogManager : MonoBehaviour
 
     private void Interacts(InputAction.CallbackContext context)
     {
-        if (isTyping)
+        if (currentSequence == null)
+            return;
+
+        if (inputPhase == DialogInputPhase.Typing)
             skipRequested = true;
-        else
+        else if (inputPhase == DialogInputPhase.WaitingForAdvance)
             nextRequested = true;
     }
 
@@ -225,6 +233,10 @@ public class DialogManager : MonoBehaviour
         currentNpc?.OnDialogStarted();
         CameraTargetDetection.Instance.ClearNPCTargets();
 
+        inputPhase = DialogInputPhase.None;
+        skipRequested = false;
+        nextRequested = false;
+
         if (currentSequenceCount != 0)
         {
             currentSequenceCount = 0;
@@ -247,6 +259,9 @@ public class DialogManager : MonoBehaviour
 
     public IEnumerator Dialog(DialogAsset dialog)
     {
+        inputPhase = DialogInputPhase.None;
+        skipRequested = false;
+
         //Si le NPC doit activer quelque chose pendant le dialog comme un objet
         currentNpc?.OnDialogStepReached(currentSequence.sequenceKey, currentSequenceCount);
 
@@ -280,7 +295,8 @@ public class DialogManager : MonoBehaviour
 
     private IEnumerator TypeText(DialogAsset dialog)
     {
-        isTyping = true;
+        inputPhase = DialogInputPhase.Typing;
+        skipRequested = false;
         string parsedText = DialogLoader.ParseInputs(dialog.dialogText);
         dialogTextBox.text = parsedText;
         RuntimeManager.PlayOneShot(dialog.dialogSound);
@@ -301,10 +317,8 @@ public class DialogManager : MonoBehaviour
         //Enable indicator visual
         dialogIndicator.DOFade(1, 0.5f).SetLoops(-1,LoopType.Yoyo);
 
-        isTyping = false;
-
+        inputPhase = DialogInputPhase.WaitingForAdvance;
         skipRequested = false;
-        nextRequested = false;
 
         yield return StartCoroutine(EndDialog());
     }
@@ -320,6 +334,9 @@ public class DialogManager : MonoBehaviour
     private IEnumerator EndDialog()
     {
         yield return new WaitForEndOfFrame();
+        yield return null;
+
+        nextRequested = false;
 
         yield return new WaitUntil(() => nextRequested);
 
@@ -363,6 +380,9 @@ public class DialogManager : MonoBehaviour
 
         currentSequence = null;
         currentSequenceCount = 0;
+        inputPhase = DialogInputPhase.None;
+        skipRequested = false;
+        nextRequested = false;
         foreach (GameObject visual in dialogUIVisuals)
         {
             visual.SetActive(false);
