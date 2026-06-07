@@ -2008,32 +2008,83 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         return true;
     }
 
+    private bool EnterRailFromTransfer(Rail rail, Vector3 previousGrindDirection, bool invertDirection)
+    {
+        if (State == ControllerState.RAIL)
+            return false;
+
+        if (rail == lastRail && Time.time - lastRailExitTime < railReenterCooldown)
+            return false;
+
+        if (grindAbility == false)
+            return false;
+
+        if (rail.isRoadBorder == true && state == ControllerState.JUMPING)
+            return false;
+
+        ComboManager.Instance.AddComboAction(ComboID.RailEnter);
+        ComboManager.Instance.SetComboTimerFrozen(true);
+
+        ResetJump();
+        ActionResetSpin();
+        CancelActionWindow();
+        railReverseRoutine = null;
+
+        currentRail = rail;
+
+        ResetSpin();
+
+        rail.EnterRailFromTransfer(transform.position, previousGrindDirection, invertDirection);
+
+        rb.isKinematic = true;
+
+        boost.Invoke();
+        enterRail.Invoke();
+
+        enableBoolAnim.Invoke("Grind");
+        triggerAnim("StartGrind");
+
+        PlayerActionFMODManager.Instance.PlayPlayerActionWithParam(
+            PlayerActionFMOD.GRINDRAIL,
+            "L_Grind_Surface",
+            (float)rail.railType
+        );
+
+        CancelStomp();
+
+        return true;
+    }
+
     private Vector3 GetRailIntentDirection()
     {
-        Transform cam = Camera.main.transform;
-
         Vector3 camForward;
         Vector3 camRight;
 
         GetCameraAxes(out camForward, out camRight);
 
-        // Input prioritaire
         Vector2 move = inputs.moveDirection.action.ReadValue<Vector2>();
 
         Vector3 intent =
             camForward * move.y +
             camRight * move.x;
 
-        // Si pas d'input → fallback velocity
         if (intent.sqrMagnitude < 0.01f)
             intent = HorizontalVelocity;
 
-        // Si toujours rien → fallback caméra
         if (intent.sqrMagnitude < 0.01f)
             intent = camForward;
 
         intent.y = 0f;
         return intent.normalized;
+    }
+
+    private bool IsDeliberateRailReverseInput(Vector2 move)
+    {
+        float minMagnitude = controllerData.railReverseInputMinMagnitude;
+        if (move.sqrMagnitude < minMagnitude * minMagnitude)
+            return false;
+
+        return Vector2.Angle(move, Vector2.down) <= controllerData.railReverseInputAngle;
     }
 
     private void ReverseRailDirection(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -2799,6 +2850,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     {
         ResetRailSpin();
 
+        Vector3 previousGrindDirection = NormalContainer.forward;
+        bool invertTransferDirection = IsDeliberateRailReverseInput(
+            inputs.moveDirection.action.ReadValue<Vector2>());
+
         OnRailExit(currentRail);
 
         currentRail = null;
@@ -2834,7 +2889,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         yield return new WaitForSeconds(0.25f);
 
         railDetector.ResetTransferPreview();
-        EnterRail(targetRail);
+        EnterRailFromTransfer(targetRail, previousGrindDirection, invertTransferDirection);
     }
 
     private Coroutine disableCollisionRoutine;
