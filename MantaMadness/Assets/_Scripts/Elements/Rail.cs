@@ -89,11 +89,10 @@ public class Rail : MonoBehaviour
         return length;
     }
 
-    public void EnterRail(Vector3 contactPosition, Vector3 intentDirection, bool forceReverseGrind = false)
+    public void EnterRail(Vector3 contactPosition, Vector3 intentDirection)
     {
         contactPosition = transform.InverseTransformPoint(contactPosition);
 
-        // Nearest spline point
         SplineUtility.GetNearestPoint(
             railSpline,
             contactPosition,
@@ -103,14 +102,11 @@ public class Rail : MonoBehaviour
 
         currentProgress = Mathf.Clamp01(currentProgress);
 
-        // Tangente locale
         railSpline.Evaluate(currentProgress, out _, out float3 localTangent, out _);
 
-        // Tangente world
         Vector3 worldTangent =
             splineContainer.transform.TransformDirection(localTangent).normalized;
 
-        // Sùcuritù
         if (intentDirection.sqrMagnitude < 0.001f)
             intentDirection = worldTangent;
 
@@ -118,12 +114,55 @@ public class Rail : MonoBehaviour
 
         float dot = Vector3.Dot(intentDirection, worldTangent);
 
+        ApplyRailDirectionFromDot(dot);
+        ApplyRailEdgeCorrection();
+
+        currentPosition = splineContainer.transform.TransformPoint(nearest);
+    }
+
+    public void EnterRailFromTransfer(Vector3 contactPosition, Vector3 previousWorldDirection, bool invertDirection)
+    {
+        contactPosition = transform.InverseTransformPoint(contactPosition);
+
+        SplineUtility.GetNearestPoint(
+            railSpline,
+            contactPosition,
+            out float3 nearest,
+            out currentProgress
+        );
+
+        currentProgress = Mathf.Clamp01(currentProgress);
+
+        railSpline.Evaluate(currentProgress, out _, out float3 localTangent, out _);
+
+        Vector3 worldTangent =
+            splineContainer.transform.TransformDirection(localTangent).normalized;
+
+        previousWorldDirection.y = 0f;
+
+        if (previousWorldDirection.sqrMagnitude < 0.001f)
+            previousWorldDirection = worldTangent;
+
+        previousWorldDirection.Normalize();
+
+        float dot = Vector3.Dot(previousWorldDirection, worldTangent);
+
+        ApplyRailDirectionFromDot(dot);
+
+        if (invertDirection)
+            dir *= -1;
+
+        ApplyRailEdgeCorrection();
+
+        currentPosition = splineContainer.transform.TransformPoint(nearest);
+    }
+
+    private void ApplyRailDirectionFromDot(float dot)
+    {
         switch (railDirection)
         {
             case RailDirection.None:
                 dir = dot >= 0f ? 1 : -1;
-                if (forceReverseGrind)
-                    dir *= -1;
                 break;
             case RailDirection.Forward:
                 dir = 1;
@@ -132,22 +171,20 @@ public class Rail : MonoBehaviour
                 dir = -1;
                 break;
         }
+    }
 
+    private void ApplyRailEdgeCorrection()
+    {
         const float edgeThreshold = 0.02f;
 
-        if (forceReverseGrind == false)
+        if (currentProgress <= edgeThreshold && dir < 0)
         {
-            if (currentProgress <= edgeThreshold && dir < 0)
-            {
-                dir = 1;
-            }
-            else if (currentProgress >= 1f - edgeThreshold && dir > 0)
-            {
-                dir = -1;
-            }
+            dir = 1;
         }
-
-        currentPosition = splineContainer.transform.TransformPoint(nearest);
+        else if (currentProgress >= 1f - edgeThreshold && dir > 0)
+        {
+            dir = -1;
+        }
     }
 
     //return false when out

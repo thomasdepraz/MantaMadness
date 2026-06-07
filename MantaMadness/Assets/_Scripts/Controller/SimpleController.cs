@@ -1958,16 +1958,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     public bool EnterRail(Rail rail)
     {
-        GetRailEntryIntent(out Vector3 intent, out bool forceReverseGrind);
-        return EnterRail(rail, intent, forceReverseGrind);
+        return EnterRail(rail, GetRailIntentDirection());
     }
 
     public bool EnterRail(Rail rail, Vector3 forcedDirection)
-    {
-        return EnterRail(rail, forcedDirection, false);
-    }
-
-    public bool EnterRail(Rail rail, Vector3 forcedDirection, bool forceReverseGrind)
     {
         if (State == ControllerState.RAIL)
             return false;
@@ -1993,7 +1987,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         ResetSpin();
 
-        rail.EnterRail(transform.position, forcedDirection, forceReverseGrind);
+        rail.EnterRail(transform.position, forcedDirection);
 
         rb.isKinematic = true;
 
@@ -2014,7 +2008,54 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         return true;
     }
 
-    private void GetRailEntryIntent(out Vector3 intent, out bool forceReverseGrind)
+    private bool EnterRailFromTransfer(Rail rail, Vector3 previousGrindDirection, bool invertDirection)
+    {
+        if (State == ControllerState.RAIL)
+            return false;
+
+        if (rail == lastRail && Time.time - lastRailExitTime < railReenterCooldown)
+            return false;
+
+        if (grindAbility == false)
+            return false;
+
+        if (rail.isRoadBorder == true && state == ControllerState.JUMPING)
+            return false;
+
+        ComboManager.Instance.AddComboAction(ComboID.RailEnter);
+        ComboManager.Instance.SetComboTimerFrozen(true);
+
+        ResetJump();
+        ActionResetSpin();
+        CancelActionWindow();
+        railReverseRoutine = null;
+
+        currentRail = rail;
+
+        ResetSpin();
+
+        rail.EnterRailFromTransfer(transform.position, previousGrindDirection, invertDirection);
+
+        rb.isKinematic = true;
+
+        boost.Invoke();
+        enterRail.Invoke();
+
+        enableBoolAnim.Invoke("Grind");
+        triggerAnim("StartGrind");
+
+        PlayerActionFMODManager.Instance.PlayPlayerActionWithParam(
+            PlayerActionFMOD.GRINDRAIL,
+            "L_Grind_Surface",
+            (float)rail.railType
+        );
+
+        CancelStomp();
+
+        return true;
+    }
+
+    private Vector3 GetRailIntentDirection()
     {
         Vector3 camForward;
         Vector3 camRight;
@@ -2023,18 +2064,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         Vector2 move = inputs.moveDirection.action.ReadValue<Vector2>();
 
-        forceReverseGrind = IsDeliberateRailReverseInput(move);
-
-        if (forceReverseGrind)
-        {
-            move = Vector2.zero;
-        }
-        else if (move.y < 0f)
-        {
-            move = Vector2.zero;
-        }
-
-        intent =
+        Vector3 intent =
             camForward * move.y +
             camRight * move.x;
 
@@ -2045,7 +2075,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             intent = camForward;
 
         intent.y = 0f;
-        intent = intent.normalized;
+        return intent.normalized;
     }
 
     private bool IsDeliberateRailReverseInput(Vector2 move)
@@ -2820,6 +2850,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     {
         ResetRailSpin();
 
+        Vector3 previousGrindDirection = NormalContainer.forward;
+        bool invertTransferDirection = IsDeliberateRailReverseInput(
+            inputs.moveDirection.action.ReadValue<Vector2>());
+
         OnRailExit(currentRail);
 
         currentRail = null;
@@ -2855,7 +2889,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         yield return new WaitForSeconds(0.25f);
 
         railDetector.ResetTransferPreview();
-        EnterRail(targetRail);
+        EnterRailFromTransfer(targetRail, previousGrindDirection, invertTransferDirection);
     }
 
     private Coroutine disableCollisionRoutine;
