@@ -6,6 +6,7 @@ using UnityEngine.Rendering.Universal;
 [ExecuteInEditMode]
 public class DebugGUI : MonoBehaviour
 {
+#if UNITY_EDITOR
     private SimpleController controller;
     List<ScriptableRendererFeature> features = new List<ScriptableRendererFeature>();
 
@@ -144,4 +145,5 @@ public class DebugGUI : MonoBehaviour
 
         GUILayout.EndArea();
     }
+#endif
 }

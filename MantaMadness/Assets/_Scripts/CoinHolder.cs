@@ -121,7 +121,7 @@ public class CoinHolder : MonoBehaviour, IDataPersistence
             //greyCoin.SetActive(true);
         }
 
-            yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(3f);
         //PART 3 RESET TO DEFAULT
 
         //unlock player

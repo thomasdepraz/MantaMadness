@@ -258,6 +258,9 @@ public class CameraTargetDetection : MonoBehaviour
 
     void DetectNPCTargets()
     {
+        if (player.IsLocked)
+            return;
+
         if (DialogManager.instance.currentSequence != null)
         {
             ClearNPCTargets();

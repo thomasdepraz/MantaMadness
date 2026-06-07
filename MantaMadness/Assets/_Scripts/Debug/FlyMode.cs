@@ -10,6 +10,7 @@ public enum FlyModeSpeed
 
 public class FlyMode : MonoBehaviour
 {
+#if UNITY_EDITOR
     public static FlyMode instance;
 
     public bool disableFlyMode = false;
@@ -165,4 +166,5 @@ public class FlyMode : MonoBehaviour
         int next = ((int)speedMode + 1) % enumLength;
         speedMode = (FlyModeSpeed)next;
     }
+#endif
 }
