@@ -997,7 +997,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         {
             if (strafRoutine == null)
             {
-                strafRoutine = StartCoroutine(StrafCooldownRoutine());
                 //if (State == ControllerState.SURFING)
                 //{
                 //        //ENABLE strafHitbox
@@ -1020,7 +1019,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 {
                     if (TryRailTransfer(context))
                         return;
-
+                    strafRoutine = StartCoroutine(StrafCooldownRoutine());
                     StrafOutOfRail(context);
                 }
             }
