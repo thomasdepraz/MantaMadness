@@ -236,6 +236,7 @@ public class Collectible : MonoBehaviour, IDataPersistence
         if (CollectibleAreaManager.CurrentArea != null)
         {
             CollectibleAreaManager.CurrentArea.CheckAllClamsCollected();
+            CollectibleAreaManager.CurrentArea.CheckAllCollectibleCollected();
         }
 
         if (DataPersistenceManager.Instance != null)

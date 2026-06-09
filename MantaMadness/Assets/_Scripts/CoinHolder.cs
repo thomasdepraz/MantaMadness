@@ -30,6 +30,12 @@ public class CoinHolder : MonoBehaviour, IDataPersistence
     public void OnEnable()
     {
         coin.GetComponent<Coin>().pickedUpCoin += CheckActivation;
+        StartCoroutine(LoadDelay());
+    }
+
+    public IEnumerator LoadDelay()
+    {
+        yield return new WaitForSeconds(0.1f);
     }
 
     public void OnDisable()

@@ -20,6 +20,8 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
 
     public int TotalCollectibles => collectibles.Length;
 
+    private SteamSignal signal;
+
     public int CollectedCollectibles
     {
         get
@@ -47,6 +49,11 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
             {
                 CollectibleAreaRegistry.Instance.areas.Add(this);
             }
+        }
+
+        if(GetComponent<SteamSignal>() != null)
+        {
+            signal  = GetComponent<SteamSignal>();
         }
     }
 
@@ -257,6 +264,15 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
         }
     }
 
+    public void CheckAllCollectibleCollected()
+    {
+
+        if(CollectedCollectibles >= TotalCollectibles && CollectedSun >= TotalSun)
+        {
+            OnAllCollectiblesCollected();
+        }
+    }
+
     public void OnAllClamsCollected()
     {
         if (sunOnClearEnable != null)
@@ -266,5 +282,13 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
     public bool AreAllClamsCollected()
     {
         return CollectedClams >= TotalClams;
+    }
+
+    public void OnAllCollectiblesCollected()
+    {
+        if (signal != null)
+        {
+            signal.Trigger();
+        }
     }
 }

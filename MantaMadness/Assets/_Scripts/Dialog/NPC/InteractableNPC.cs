@@ -19,6 +19,8 @@ public class InteractableNPC : MonoBehaviour, IDataPersistence
 
     public Action<int> QuestMarker;
 
+    [SerializeField] private SteamSignal signal;
+
     public virtual void Start()
     {
         if(inRangeVisual.activeSelf == true)
@@ -126,8 +128,16 @@ public class InteractableNPC : MonoBehaviour, IDataPersistence
             stateChangedDuringDialog = false;
             return;
         }
-
+        ActivateAchievement();
         IncrementIndex();
+    }
+
+    public void ActivateAchievement()
+    {
+        if (signal != null)
+        {
+            signal.Trigger();
+        }
     }
 
     public virtual void OnDialogStepReached(string sequenceKey,int dialogIndex) { }

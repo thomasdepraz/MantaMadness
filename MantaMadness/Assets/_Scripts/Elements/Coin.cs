@@ -23,6 +23,7 @@ public class Coin : MonoBehaviour
     private Coroutine routine;
 
     public Action<bool> pickedUpCoin;
+
     private IEnumerator PickupCoroutine(SimpleController controller)
     {
         wait = new WaitForSeconds(c_LockDuration);
@@ -55,13 +56,15 @@ public class Coin : MonoBehaviour
         //increase coin count
         CoinManager.Instance.PickupCoin();
 
-
         //Deactivate game object
         routine = null;
         pickedUpCoin.Invoke(true);
 
         //Update L'UI
         UIManager.Instance.gameInterface.RefreshAreaSunCount();
+
+        //Check area manager bro
+        CollectibleAreaManager.CurrentArea.CheckAllCollectibleCollected();
 
         gameObject.SetActive(false);
     }

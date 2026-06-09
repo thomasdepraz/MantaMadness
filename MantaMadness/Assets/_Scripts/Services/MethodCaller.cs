@@ -22,6 +22,7 @@ public class MethodCaller : MonoBehaviour
 
     public void Trigger()
     {
+        Debug.Log("Heu pk ca marche pas la");
         onTrigger.Invoke();
     }
 }
