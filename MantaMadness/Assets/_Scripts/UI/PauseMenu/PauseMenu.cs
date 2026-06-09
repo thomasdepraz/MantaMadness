@@ -1,9 +1,10 @@
+using DG.Tweening;
+using FMODUnity;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using FMODUnity;
-using System.Collections;
-using DG.Tweening;
+using static MainMenu;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject[] pauseMenuButtons;
 
     [SerializeField] private OptionsMenu optionsMenu;
+    [SerializeField] public ConfirmUnstuck unstuckMenu;
 
     [Header("Sound parameters")]
     [SerializeField] private EventReference submitSound;
@@ -30,6 +32,7 @@ public class PauseMenu : MonoBehaviour
     {
         DEFAULT,
         OPTIONS,
+        UNSTUCK,
         NULL
     }
 
@@ -119,6 +122,12 @@ public class PauseMenu : MonoBehaviour
                 pauseMenuUI.SetActive(false);
                 optionsMenu.OpenFromPauseMenu();
                 break;
+
+            case PauseMenuState.UNSTUCK:
+                pauseMenuUI.SetActive(false);
+                unstuckMenu.Open();
+                break;
+
         }
     }
 
@@ -143,6 +152,14 @@ public class PauseMenu : MonoBehaviour
             return;
         }
 
+
+        if (state == PauseMenuState.UNSTUCK)
+        {
+            unstuckMenu.MoveDown();
+            return;
+        }
+
+
         if (state != PauseMenuState.DEFAULT || ignoreNextInput) return;
 
         PlaySound(navigateSound);
@@ -157,6 +174,12 @@ public class PauseMenu : MonoBehaviour
         if (state == PauseMenuState.OPTIONS)
         {
             optionsMenu.MoveUp();
+            return;
+        }
+
+        if (state == PauseMenuState.UNSTUCK)
+        {
+            unstuckMenu.MoveUp();
             return;
         }
 
@@ -182,6 +205,12 @@ public class PauseMenu : MonoBehaviour
             return;
         }
 
+        else if (state == PauseMenuState.UNSTUCK)
+        {
+            unstuckMenu.Submit();
+            return;
+        }
+
         if (state != PauseMenuState.DEFAULT) return;
 
         switch (currentIndex)
@@ -189,8 +218,9 @@ public class PauseMenu : MonoBehaviour
             case 0: Resume(); break;
             case 1: Respawn(); break;
             case 2: OpenOptions(); break;
-            case 3: LoadMainMenu(); break;
-            case 4: QuitGame(); break;
+            case 3: OpenUnstuck(); break;
+            case 4: LoadMainMenu(); break;
+            case 5: QuitGame(); break;
         }
     }
     private void OpenOptions()
@@ -210,6 +240,12 @@ public class PauseMenu : MonoBehaviour
                 return;
 
             optionsMenu.CloseFromPause();
+            return;
+        }
+
+        if(state == PauseMenuState.UNSTUCK)
+        {
+            unstuckMenu.Cancel();
             return;
         }
         Resume();
@@ -241,7 +277,7 @@ public class PauseMenu : MonoBehaviour
         inputs.EnableUI();
     }
 
-    private void Resume()
+    public void Resume()
     {
         if (!isPaused) return;
 
@@ -335,6 +371,20 @@ public class PauseMenu : MonoBehaviour
         {
             optionsMenu.MoveRight();
         }
+    }
+
+    private void OpenUnstuck()
+    {
+        previousState = state;
+        state = PauseMenuState.UNSTUCK;
+        UpdateState();
+    }
+
+    public void CloseUnstuck()
+    {
+        previousState = state;
+        state = PauseMenuState.DEFAULT;
+        UpdateState();
     }
 
 }

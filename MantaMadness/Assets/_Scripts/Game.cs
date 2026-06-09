@@ -24,6 +24,7 @@ public class Game : MonoBehaviour, IDataPersistence
 
     public EndPortalHolder endPortalHolder;
 
+    public WorldCheckpoint UNSTUCKCheckpoint;
     public int gameState { private set; get; }
 
     private void Awake()
@@ -246,5 +247,14 @@ public class Game : MonoBehaviour, IDataPersistence
         {
             SetGameState(12);
         }
+    }
+
+    public void UnstuckPlayer()
+    {
+        WorldCheckpointManager.Instance.SetStartCheckpoint(UNSTUCKCheckpoint.respawnTransform);
+        WorldCheckpointManager.Instance.SetCheckpoint(UNSTUCKCheckpoint.respawnTransform, UNSTUCKCheckpoint.indexName, UNSTUCKCheckpoint.displayAreaName, UNSTUCKCheckpoint.nameToDisplay, UNSTUCKCheckpoint.LevelID, UNSTUCKCheckpoint.collectibleAreaID);
+        Vector3 pos = Vector3.zero;
+        Quaternion rotation;
+        Respawn(out pos, out rotation);
     }
 }
