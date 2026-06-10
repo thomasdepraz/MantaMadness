@@ -17,7 +17,18 @@ public class ConfirmNewGameMenu : MonoBehaviour
     {
         ToggleVisuals(true);
         currentIndex = 0;
-        options[currentIndex].Select();
+
+        for(int i = 0; i < options.Length; i++)
+        {
+            if(i == currentIndex)
+            {
+                options[i].Select();
+            }
+            else
+            {
+                options[i].Deselect();
+            }
+        }
     }
 
     public void Close()
