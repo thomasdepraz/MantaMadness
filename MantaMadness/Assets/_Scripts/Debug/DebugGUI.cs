@@ -143,6 +143,11 @@ public class DebugGUI : MonoBehaviour
             CoinManager.Instance.ResetCoinCount();
         }
 
+        if (GUILayout.Button($"Reset Steam Achievement"))
+        {
+            SteamSuccess.instance.ResetSteamSuccess();
+        }
+
         GUILayout.EndArea();
     }
 #endif

@@ -15,6 +15,9 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
 
     [SerializeField] private GameObject[] visuals;
 
+    [SerializeField] private SteamSignal signal;
+
+
     [Header("FMOD Sound")]
     public EventReference pickupAltarSound;
 
@@ -33,6 +36,11 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
         if (hasBeenObtained == true)
         {
             DisablePickup();
+        }
+
+        if(GetComponent<SteamSignal>() != null)
+        {
+            signal = GetComponent<SteamSignal>();
         }
     }
 
@@ -68,6 +76,9 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
         RuntimeManager.PlayOneShot(pickupAltarSound, Game.Instance.player.transform.position);
 
         string[] abilityTypeNames = Enum.GetNames(typeof(ControllerAbility));
+
+        // IF SIGNAL EXIST > TRIGGER ACHIEVEMENT
+        signal?.Trigger();
 
         if(updateGameStateValue > 0)
         {
