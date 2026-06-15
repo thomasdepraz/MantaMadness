@@ -10,7 +10,7 @@ public enum FlyModeSpeed
 
 public class FlyMode : MonoBehaviour
 {
-#if UNITY_EDITOR
+
     public static FlyMode instance;
 
     public bool disableFlyMode = false;
@@ -51,7 +51,7 @@ public class FlyMode : MonoBehaviour
         // Cacher le curseur et le verrouiller au centre de l'écran
         flyCam.enabled = false;
     }
-
+#if UNITY_EDITOR
     void Update()
     {
         if(disableFlyMode == false)
@@ -159,12 +159,12 @@ public class FlyMode : MonoBehaviour
         }
 
     }
-
+#endif
     public void SwitchCamSpeed()
     {
         int enumLength = System.Enum.GetValues(typeof(FlyModeSpeed)).Length;
         int next = ((int)speedMode + 1) % enumLength;
         speedMode = (FlyModeSpeed)next;
     }
-#endif
+
 }

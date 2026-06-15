@@ -246,6 +246,7 @@ public class Game : MonoBehaviour, IDataPersistence
         if (CoinManager.Instance.PickupCoinCount == 38)
         {
             SetGameState(12);
+            SteamSuccess.instance.ActivateSteamSuccess(SteamSuccessEnum.ACH_EVENT_ALLJOHNNIES);
         }
     }
 

@@ -33,12 +33,28 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void Start()
     {
-
+        Debug.Log("Persistent data path is" + Application.persistentDataPath);
     }
 
     private void OnApplicationQuit()
     {
         SaveGame();
+    }
+
+    private void OnApplicationPause(bool pauseStatus)
+    {
+        if (pauseStatus)
+        {
+            SaveGame();
+        }
+    }
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        if (!hasFocus)
+        {
+            SaveGame();
+        }
     }
 
     public void NewGame(bool forceNewGame = false)
