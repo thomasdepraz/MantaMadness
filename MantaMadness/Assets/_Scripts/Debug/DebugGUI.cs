@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using static UnityEngine.Rendering.DebugUI;
 
 [ExecuteInEditMode]
 public class DebugGUI : MonoBehaviour
@@ -137,6 +138,12 @@ public class DebugGUI : MonoBehaviour
         {
             CoinManager.Instance.PickupCoin();
         }
+
+        if (GUILayout.Button($"Add 100 clams"))
+        {
+            CoinManager.Instance.PickupClam(100);
+        }
+
 
         if (GUILayout.Button($"Reset coin"))
         {

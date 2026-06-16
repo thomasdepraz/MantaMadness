@@ -42,6 +42,8 @@ public class ShopStand : MonoBehaviour, IDataPersistence
 
     public bool IsActive => !disableShopStand && renewalCount < item.itemRenewalLimit;
 
+    public SteamSignal signal;
+
     private void Awake()
     {
         shopCollider = GetComponent<Collider>();
@@ -56,6 +58,11 @@ public class ShopStand : MonoBehaviour, IDataPersistence
         else
         {
             shopCurrencyAnimator.SetInteger("currencyType", 0);
+        }
+
+        if (GetComponent<SteamSignal>() != null)
+        {
+            signal = GetComponent<SteamSignal>();
         }
 
         ShopIndicatorToggle(false);
@@ -236,6 +243,8 @@ public class ShopStand : MonoBehaviour, IDataPersistence
     void UnlockUpgrade(GameData data, SimpleController player)
     {
         //RuntimeManager.PlayOneShot(pickupAltarSound, Game.Instance.player.transform.position);
+
+        signal?.Trigger();
 
         string[] abilityTypeNames = Enum.GetNames(typeof(ControllerAbility));
 

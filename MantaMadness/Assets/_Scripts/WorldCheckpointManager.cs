@@ -9,6 +9,8 @@ public class WorldCheckpointManager : MonoBehaviour, IDataPersistence
     public string currentCheckpoint {  get; private set; }
     public List<WorldCheckpoint> checkpoints;
 
+    public string storedLevelId;
+
     private void Awake()
     {
         if (Instance == null) 
@@ -67,6 +69,8 @@ public class WorldCheckpointManager : MonoBehaviour, IDataPersistence
             }
         }
         yield return null;
+        if(storedLevelId == null || storedLevelId != data.currentLevelID)
+            storedLevelId = data.currentLevelID;
         StartCoroutine(WorldLevelManager.Instance.LoadLevel(data.currentLevelID));
     }
 
@@ -123,7 +127,11 @@ public class WorldCheckpointManager : MonoBehaviour, IDataPersistence
             GameData data = DataPersistenceManager.Instance.gameData;
             data.currentLevelID = levelID;
 
-            StartCoroutine(WorldLevelManager.Instance.LoadLevel(levelID));
+            if(levelID != storedLevelId)
+            {
+                storedLevelId = levelID;
+                StartCoroutine(WorldLevelManager.Instance.LoadLevel(levelID));
+            }
 
             CollectibleAreaRegistry.Instance.SetCurrentArea(collectibleArea);
 

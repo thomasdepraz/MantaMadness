@@ -40,6 +40,7 @@ public class CollectibleAreaRegistry : MonoBehaviour, IDataPersistence
 
     public void SetCurrentArea(CollectibleArea areaID)
     {
+
         for (int i = 0; i < areas.Count; i++)
         {
             if (areas[i].AreaID == areaID)
