@@ -1,5 +1,80 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &42800292964803200
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 574094346420026552}
+  - component: {fileID: 8160805306154961594}
+  m_Layer: 0
+  m_Name: IntroAreaVCam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &574094346420026552
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 42800292964803200}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.2770369, y: -0.18366171, z: 0.05483386, w: 0.94154775}
+  m_LocalPosition: {x: -770.3931, y: 190.68071, z: -839.88947}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 51371132982364194}
+  m_LocalEulerAnglesHint: {x: 50.591, y: -77.277, z: -42.685}
+--- !u!114 &8160805306154961594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 42800292964803200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Priority:
+    Enabled: 0
+    m_Value: 0
+  OutputChannel: 1
+  StandbyUpdate: 2
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
+  Target:
+    TrackingTarget: {fileID: 0}
+    LookAtTarget: {fileID: 0}
+    CustomLookAtTarget: 0
+  Lens:
+    FieldOfView: 40
+    OrthographicSize: 10
+    NearClipPlane: 0.1
+    FarClipPlane: 5000
+    Dutch: 0
+    ModeOverride: 0
+    PhysicalProperties:
+      GateFit: 2
+      SensorSize: {x: 21.946, y: 16.002}
+      LensShift: {x: 0, y: 0}
+      FocusDistance: 10
+      Iso: 200
+      ShutterSpeed: 0.005
+      Aperture: 16
+      BladeCount: 5
+      Curvature: {x: 2, y: 11}
+      BarrelClipping: 0.25
+      Anamorphism: 0
+  BlendHint: 0
 --- !u!1 &1368908438101867976
 GameObject:
   m_ObjectHideFlags: 0
@@ -31,6 +106,7 @@ Transform:
   m_Children:
   - {fileID: 5998616479063900474}
   - {fileID: 2845180131840638529}
+  - {fileID: 574094346420026552}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1515958017171557547
@@ -60,8 +136,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1515958017171557547}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.041482385, y: 0.66052175, z: -0.036593538, w: 0.7487665}
-  m_LocalPosition: {x: 705.569, y: -1140.2106, z: 528.22614}
+  m_LocalRotation: {x: -0.1966208, y: 0.67951065, z: 0.6788767, w: 0.19680439}
+  m_LocalPosition: {x: -98.36386, y: 424.078, z: 333.84775}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -141,7 +217,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -182,7 +258,7 @@ MonoBehaviour:
   UpdateMethod: 2
   BlendUpdateMethod: 1
   LensModeOverride:
-    Enabled: 0
+    Enabled: 1
     DefaultMode: 2
   DefaultBlend:
     Style: 1
@@ -209,6 +285,8 @@ GameObject:
   - component: {fileID: 1549746208929260246}
   - component: {fileID: 7935350769054971288}
   - component: {fileID: 917680275153397307}
+  - component: {fileID: 5138962795559435685}
+  - component: {fileID: 6278682424958219860}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -224,8 +302,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2107483345854353533}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.041482385, y: 0.66052175, z: -0.036593538, w: 0.7487665}
-  m_LocalPosition: {x: 705.569, y: -1140.2106, z: 528.22614}
+  m_LocalRotation: {x: -0.1966208, y: 0.67951065, z: 0.6788767, w: 0.19680439}
+  m_LocalPosition: {x: -98.36386, y: 424.078, z: 333.84775}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -270,7 +348,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1058783
+    m_Bits: 12548063
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -298,8 +376,9 @@ MonoBehaviour:
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
-  m_Cameras: []
-  m_RendererIndex: 1
+  m_Cameras:
+  - {fileID: 3679624520515779100}
+  m_RendererIndex: 0
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1
@@ -346,7 +425,7 @@ MonoBehaviour:
   UpdateMethod: 2
   BlendUpdateMethod: 1
   LensModeOverride:
-    Enabled: 0
+    Enabled: 1
     DefaultMode: 2
   DefaultBlend:
     Style: 1
@@ -397,24 +476,85 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpDetectionRange: 0
+  activationRangeMultiplier: 1.8
+  approachingRange: 3
   jumpRangeBuffer: 0.75
+  jumpCameraAngleBonus: 20
+  targetInnerDeadzone: 0.35
+  targetOuterDeadzone: 0.5
   npcDetectionRange: 0
+  npcFixedCamDetectionRange: 0
+  shopDetectionRange: 0
+  shopTargetMask:
+    serializedVersion: 2
+    m_Bits: 4194304
   viewAngle: 0
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 8209
+    m_Bits: 0
   jumpargetMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 65536
   npcTargetMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 262144
+  angleWeight: 1.5
   validJumpTargets: []
   validNPCTargets: []
+  validShopTargets: []
   addTargetSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -1094088876
+      Data2: 1273231410
+      Data3: -1214234960
+      Data4: -2132021502
+    Path: event:/Sfx/InGame/Player/Player_Style
+  playerCameras:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  dashCountParameterName: DashCount
+--- !u!95 &5138962795559435685
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2107483345854353533}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6278682424958219860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2107483345854353533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6c947a7ef7112b47be1cf3c25638713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 200
+  audioLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  refreshRate: 0.25
