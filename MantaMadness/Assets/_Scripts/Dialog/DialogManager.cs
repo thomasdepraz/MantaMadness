@@ -11,7 +11,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using UnityEngine.Windows;
 
 public class DialogManager : MonoBehaviour
 {
@@ -299,26 +298,45 @@ public class DialogManager : MonoBehaviour
         skipRequested = false;
         string parsedText = DialogLoader.ParseInputs(dialog.dialogText);
         dialogTextBox.text = parsedText;
-        RuntimeManager.PlayOneShot(dialog.dialogSound);
-        dialogWriter.StartWriter();
 
-        while(dialogWriter.IsWriting == true)
+        yield return null;
+
+        dialogWriter.RestartWriter();
+        RuntimeManager.PlayOneShot(dialog.dialogSound);
+
+        if (parsedText.Length > 0)
+        {
+            yield return new WaitUntil(() => dialogWriter.IsWriting == true);
+        }
+
+        while (dialogWriter.IsWriting == true)
         {
             if (skipRequested)
             {
-                dialogWriter.SkipWriter(true);
                 skipRequested = false;
-                break;
+                dialogWriter.SkipWriter(true);
+
+                if (dialogWriter.IsWriting == false)
+                {
+                    break;
+                }
             }
             yield return null;
         }
-        yield return new WaitUntil(() => dialogTextBox.text == parsedText && dialogWriter.IsWriting == false);
 
-        //Enable indicator visual
+        inputPhase = DialogInputPhase.None;
+        skipRequested = false;
+        nextRequested = false;
+
+        yield return new WaitForEndOfFrame();
+        yield return null;
+
+        skipRequested = false;
+        nextRequested = false;
+
         dialogIndicator.DOFade(1, 0.5f).SetLoops(-1,LoopType.Yoyo);
 
         inputPhase = DialogInputPhase.WaitingForAdvance;
-        skipRequested = false;
 
         yield return StartCoroutine(EndDialog());
     }
@@ -333,11 +351,6 @@ public class DialogManager : MonoBehaviour
 
     private IEnumerator EndDialog()
     {
-        yield return new WaitForEndOfFrame();
-        yield return null;
-
-        nextRequested = false;
-
         yield return new WaitUntil(() => nextRequested);
 
         nextRequested = false;
