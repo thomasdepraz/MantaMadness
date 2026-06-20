@@ -119,6 +119,8 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
 
     private void FixedUpdate()
     {
+        if (hasBeenObtained) return;
+
         if (movingTowardtarget == true && player != null)
         {
             transform.position = Vector3.Lerp(transform.position, player.transform.position, speed);

@@ -26,7 +26,7 @@ public class PortalManager : MonoBehaviour
             }
     }
 
-    public IEnumerator Teleport(string targetIndex, bool secretRoomMusic, MUSICS musicToPlay, Portal portal, WeatherType specialWeatherType)
+    public IEnumerator Teleport(string targetIndex, bool secretRoomMusic, MUSICS musicToPlay, Portal portal, WeatherType specialWeatherType, AreaIntro intro = null)
     {
         // Set Velocity to 0
         Game.Instance.player?.LockPlayerForDuration(teleportTransitionDuration);
@@ -58,9 +58,17 @@ public class PortalManager : MonoBehaviour
         {
             FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_SecretRoom, 0f);
         }
+
+        if (intro != null)
+        {
+            //Play areaintro
+            intro.Play();
+        }
+
         yield return new WaitForSeconds(teleportTransitionDuration / 2);
         FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Warping, 0);
         UIManager.Instance.transitionScreen.TransitionOut();
+
 
             yield return null;
     }

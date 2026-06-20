@@ -1,4 +1,5 @@
 using DG.Tweening;
+using FMOD.Studio;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -49,12 +50,17 @@ public class AreaIntro : MonoBehaviour, IDataPersistence
     public void LoadData(GameData data)
     {
         //TO FILL
-        //has been activated = data.introarea dictionnary
+        data.introAreaCinematic.TryGetValue(areaIntroId, out hasBeenActivated);
     }
 
     public void SaveData(ref GameData data)
     {
         //TO FILL
         //data.introarea dictionnary = hasbeenactivated
+        if (data.introAreaCinematic.ContainsKey(areaIntroId))
+        {
+            data.introAreaCinematic.Remove(areaIntroId);
+        }
+        data.introAreaCinematic.Add(areaIntroId, hasBeenActivated);
     }
 }

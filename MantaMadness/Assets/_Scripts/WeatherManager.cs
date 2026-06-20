@@ -46,7 +46,7 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
     [SerializeField] private weatherColor[] weatherConditions;
 
     public WeatherType currentWeather;
-    private FogState currentFogState;
+    public FogState currentFogState;
 
     [SerializeField] private Ease ease;
     [SerializeField] private float easeDuration;
@@ -291,4 +291,5 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
         int next = ((int)currentFogState + 1) % enumLength;
         UpdateFog((FogState)next);
     }
+
 }

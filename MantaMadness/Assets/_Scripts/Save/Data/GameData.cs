@@ -45,6 +45,9 @@ public class GameData
     //World Update Box
     public SerializableDictionnary<string, bool> worldStateUpdateBoxes;
 
+    //Intro Area
+    public SerializableDictionnary<string, bool> introAreaCinematic;
+
     //Level to Load String
     public string currentLevelID = "WORLD";
 
@@ -93,6 +96,7 @@ public class GameData
         lilyPadModules = new SerializableDictionnary<string, ModuleState>();
         areaSunRewards = new SerializableDictionnary<string, bool>();
         worldStateUpdateBoxes = new SerializableDictionnary<string, bool>();
+        introAreaCinematic = new SerializableDictionnary<string, bool>();
 
         endPortalActive = false;
 

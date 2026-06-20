@@ -16,4 +16,9 @@ public class FogTypeClass : MonoBehaviour
     {
         fogMat = GetComponent<MeshRenderer>().material;
     }
+
+    public void SetFog(FogType type)
+    {
+
+    }
 }

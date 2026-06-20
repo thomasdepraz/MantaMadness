@@ -42,6 +42,8 @@ public class AreaIntroManager : MonoBehaviour
     private IEnumerator PlayIntroRoutine(AreaIntro areaIntro)
     {
         isPlaying = true;
+        FogState savedState = WeatherManager.instance.currentFogState;
+        WeatherManager.instance.UpdateFog(FogState.disabled);
 
         foreach (AreaIntro.IntroStep step in areaIntro.introSteps)
         {
@@ -81,11 +83,13 @@ public class AreaIntroManager : MonoBehaviour
             previousCamera = step.camera;
         }
 
-        EndIntro();
+        EndIntro(savedState);
     }
 
-    private void EndIntro()
+    private void EndIntro(FogState fogState)
     {
+
+        WeatherManager.instance.UpdateFog(fogState);
 
         if (currentAreaIntro != null)
         {
