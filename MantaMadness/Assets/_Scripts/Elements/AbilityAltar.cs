@@ -78,6 +78,7 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
         string[] abilityTypeNames = Enum.GetNames(typeof(ControllerAbility));
 
         // IF SIGNAL EXIST > TRIGGER ACHIEVEMENT
+
         signal?.Trigger();
 
         if(updateGameStateValue > 0)

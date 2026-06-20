@@ -7,6 +7,12 @@ public class SteamSignal : MonoBehaviour
 
     public void Trigger()
     {
+        if (!SteamManager.Initialized)
+        {
+            Debug.Log("[Steam] Ignoré : Steamworks non initialisé.");
+            return;
+        }
+
         SteamSuccess.instance.ActivateSteamSuccess(successID);
     }
 }

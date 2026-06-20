@@ -1,9 +1,8 @@
 using DG.Tweening;
 using System.Collections;
+using TMPro;
 using Unity.Cinemachine;
-using UnityEditor.Overlays;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public enum DoorType
 {
@@ -31,6 +30,8 @@ public class KeyDoor : MonoBehaviour, IDataPersistence
 
     public DoorType doorType = DoorType.Key;
 
+    [SerializeField] private TextMeshProUGUI clamText;
+
     public void LoadData(GameData data)
     {
         data.doorsOpened.TryGetValue(doorID, out isOpen);
@@ -56,6 +57,11 @@ public class KeyDoor : MonoBehaviour, IDataPersistence
         relay.HitCollision += OnPlayerTouchDoor;
 
         keyVisual.SetActive(false);
+
+        if(doorType == DoorType.Clam)
+        {
+            SetClamPriceText();
+        }
     }
 
     private void OnDisable()
@@ -189,5 +195,10 @@ public class KeyDoor : MonoBehaviour, IDataPersistence
 
         CameraManager.Instance.ResetCamera(vcam);
         //MantaCameraController.instance.ActivatePlayerCamera();
+    }
+
+    private void SetClamPriceText()
+    {
+        clamText.text = requiredClamAmount.ToString() + " clams";
     }
 }
