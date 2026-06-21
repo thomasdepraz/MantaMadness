@@ -42,8 +42,10 @@ public class AreaIntroManager : MonoBehaviour
     private IEnumerator PlayIntroRoutine(AreaIntro areaIntro)
     {
         isPlaying = true;
+        UIManager.Instance.gameInterface.ToggleInterfaceAreaIntro(false);
         FogState savedState = WeatherManager.instance.currentFogState;
         WeatherManager.instance.UpdateFog(FogState.disabled);
+        Game.Instance.player.ForceLock(true);
 
         foreach (AreaIntro.IntroStep step in areaIntro.introSteps)
         {
@@ -90,7 +92,8 @@ public class AreaIntroManager : MonoBehaviour
     {
 
         WeatherManager.instance.UpdateFog(fogState);
-
+        UIManager.Instance.gameInterface.ToggleInterfaceAreaIntro(true);
+        Game.Instance.player.ForceLock(false);
         if (currentAreaIntro != null)
         {
             foreach (var step in currentAreaIntro.introSteps)

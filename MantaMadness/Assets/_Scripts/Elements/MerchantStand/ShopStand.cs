@@ -21,7 +21,7 @@ public class ShopStand : MonoBehaviour, IDataPersistence
 
     [Header("Visual")]
     public Transform itemVisualPoint;
-    private GameObject visual;
+    [SerializeField] private GameObject visual;
     public Transform playerPoint;
     public GameObject inRangeVisual;
 
@@ -33,7 +33,7 @@ public class ShopStand : MonoBehaviour, IDataPersistence
 
     [Header("Collectible Rewards")]
     [SerializeField] private List<Collectible> collectibleRewards = new List<Collectible>();
-    private int currentCollectibleIndex = 0;
+    [SerializeField] private int currentCollectibleIndex = 0;
 
     private Collider shopCollider;
 
@@ -188,6 +188,10 @@ public class ShopStand : MonoBehaviour, IDataPersistence
                 {
                     UnlockSun();
                 }
+                else if(item.type == ShopItemType.KeyItem)
+                {
+                    UnlockKeyItem(Game.Instance.player);
+                }
 
                 //if (renewalCount >= item.itemRenewalLimit)
                 //{
@@ -315,6 +319,27 @@ public class ShopStand : MonoBehaviour, IDataPersistence
         }
         CoinManager.Instance.ActivateCoinHolder(item.itemSold);
         DisableShop();
+    }
+
+    void UnlockKeyItem(SimpleController player)
+    {
+        // Item classique
+        if (item.itemToSpawn != null)
+        {
+            Instantiate(
+                item.itemToSpawn,
+                player.transform.position,
+                Quaternion.identity
+            );
+        }
+
+        currentCollectibleIndex++;
+
+        // Disable stand if empty
+        if (currentCollectibleIndex >= collectibleRewards.Count)
+        {
+            DisableShop();
+        }
     }
 
     private void ActivateShop()

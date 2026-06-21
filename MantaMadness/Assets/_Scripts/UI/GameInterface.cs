@@ -324,6 +324,19 @@ public class GameInterface : MonoBehaviour, IScreen
     public void ToggleInterface(bool toggle)
     {
         m_Container.SetActive(toggle);
+        ToggleAreaNameDisplay(toggle);
+        UIManager.Instance.comboUIController.ToggleInterface(toggle);
+        UIManager.Instance.boostGaugeInterface.ToggleInterface(toggle);
+    }
+
+    public void ToggleAreaNameDisplay(bool toggle)
+    {
+        collectibleAreaName.enabled = toggle;
+    }
+
+    public void ToggleInterfaceAreaIntro(bool toggle)
+    {
+        m_Container.SetActive(toggle);
         UIManager.Instance.comboUIController.ToggleInterface(toggle);
         UIManager.Instance.boostGaugeInterface.ToggleInterface(toggle);
     }

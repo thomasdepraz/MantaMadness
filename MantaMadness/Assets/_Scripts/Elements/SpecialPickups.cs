@@ -27,8 +27,11 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
 
     private bool movingTowardtarget = false;
 
+    private Collider collider;
+
     private void Start()
     {
+        collider = GetComponent<Collider>();
         StartCoroutine(StartDelay());
         print("hasbeenobtained" + hasBeenObtained);
     }
@@ -115,6 +118,7 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
             visual.SetActive(false);
         }
         relay.gameObject.SetActive(false);
+        collider.gameObject.SetActive(false);
     }
 
     private void FixedUpdate()

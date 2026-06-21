@@ -7,7 +7,8 @@ public enum ShopItemType
 {
     Ability,
     Item,
-    Sun
+    Sun,
+    KeyItem,
 }
 
 public enum ShopCurrency
