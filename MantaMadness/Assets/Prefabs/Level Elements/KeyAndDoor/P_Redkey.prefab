@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4810806083344091932}
   - component: {fileID: 8823909750095930979}
   - component: {fileID: 8204766458408718611}
+  - component: {fileID: 7713230936518779800}
   m_Layer: 0
   m_Name: P_Redkey
   m_TagString: Untagged
@@ -82,6 +83,37 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7713230936518779800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4876018502101653145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playSequenceOnBeat: 1
+  playSequenceOnEnable: 0
+  tweenSteps:
+  - animatePosition: 0
+    animateRotation: 1
+    animateScale: 0
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 0, y: 360, z: 0}
+    rotationUseLocal: 1
+    rotationRelative: 1
+    scale: {x: 0, y: 0, z: 0}
+    duration: 0
+    delay: 0
+    ease: 0
+  sequenceLoops: -1
+  sequenceLoopType: 0
+  beatSequenceType: 1
 --- !u!1 &6254566353715522481
 GameObject:
   m_ObjectHideFlags: 0

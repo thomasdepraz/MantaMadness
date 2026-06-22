@@ -54,6 +54,9 @@ public class TweenAnimation : MonoBehaviour
     public LoopType sequenceLoopType = LoopType.Restart;
     public BeatType beatSequenceType;
 
+    [Header("Time Settings")]
+    public bool useUnscaledTime = false;
+
     private Vector3 originalScale;
     private Vector3 originalPosition;
     private Quaternion originalRotation;
@@ -181,6 +184,7 @@ public class TweenAnimation : MonoBehaviour
             return;
 
         currentSequence = DOTween.Sequence();
+        currentSequence.SetUpdate(useUnscaledTime);
 
         Vector3 simulatedScale = transform.localScale;
 
@@ -224,6 +228,7 @@ public class TweenAnimation : MonoBehaviour
             if (stepTween != null)
             {
                 stepTween.SetEase(step.ease);
+                stepTween.SetUpdate(useUnscaledTime);
                 currentSequence.Append(stepTween);
             }
         }
@@ -237,7 +242,7 @@ public class TweenAnimation : MonoBehaviour
         if (tweenSteps == null || tweenSteps.Count == 0)
             return;
 
-        if (Time.timeScale == 0f)
+        if (Time.timeScale == 0f && !useUnscaledTime)
         {
             currentBeatStep++;
             if (currentBeatStep >= tweenSteps.Count)
@@ -262,6 +267,7 @@ public class TweenAnimation : MonoBehaviour
                 moveTween.SetRelative();
 
             moveTween.SetEase(step.ease);
+            moveTween.SetUpdate(useUnscaledTime);
 
             if (sequenceLoopType == LoopType.Yoyo)
                 moveTween.SetLoops(2, LoopType.Yoyo);
@@ -277,6 +283,7 @@ public class TweenAnimation : MonoBehaviour
                 rotateTween.SetRelative();
 
             rotateTween.SetEase(step.ease);
+            rotateTween.SetUpdate(useUnscaledTime);
 
             if (sequenceLoopType == LoopType.Yoyo)
                 rotateTween.SetLoops(2, LoopType.Yoyo);
@@ -296,6 +303,7 @@ public class TweenAnimation : MonoBehaviour
             Tween scaleTween = transform.DOScale(targetScale, tweenDuration);
 
             scaleTween.SetEase(step.ease);
+            scaleTween.SetUpdate(useUnscaledTime);
 
             if (sequenceLoopType == LoopType.Yoyo)
                 scaleTween.SetLoops(2, LoopType.Yoyo);

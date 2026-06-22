@@ -29,6 +29,7 @@ public class GameInterface : MonoBehaviour, IScreen
     public TextMeshProUGUI SunAreaCount;
 
     [Header("UI otal Collectible Menu")]
+    public TextMeshProUGUI collectibleAreaNameMenu;
     public TextMeshProUGUI totalClamCountMenu;
     public TextMeshProUGUI totalBuckieCountMenu;
     public TextMeshProUGUI totalSunCountMenu;
@@ -451,6 +452,7 @@ public class GameInterface : MonoBehaviour, IScreen
     {
         Debug.Log("NEW COLLIDER AREA IS" +  name);
         collectibleAreaName.text = name;
+        collectibleAreaNameMenu.text = name;
     }
 
     public void ShowEndScreen()
