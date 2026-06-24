@@ -183,8 +183,7 @@ public class TweenAnimation : MonoBehaviour
         if (tweenSteps == null || tweenSteps.Count == 0)
             return;
 
-        currentSequence = DOTween.Sequence();
-        currentSequence.SetUpdate(useUnscaledTime);
+        currentSequence = DOTween.Sequence().SetUpdate(UpdateType.Normal, useUnscaledTime);
 
         Vector3 simulatedScale = transform.localScale;
 
@@ -228,7 +227,6 @@ public class TweenAnimation : MonoBehaviour
             if (stepTween != null)
             {
                 stepTween.SetEase(step.ease);
-                stepTween.SetUpdate(useUnscaledTime);
                 currentSequence.Append(stepTween);
             }
         }

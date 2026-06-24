@@ -12,12 +12,31 @@ public class UIInventoryItems : MonoBehaviour
     [System.Serializable]
     public struct UIInventoryMeshes
     {
-        public MeshRenderer renderer;
-        public Material defaultMaterial;
-        public Material disableMaterial;
+        public GameObject[] activeRenderer;
+        public GameObject disabledRenderer;
     }
 
     public string id;
     public UiInventoryType type;
-    public UIInventoryMeshes[] meshRenderers;
+    public UIInventoryMeshes meshRenderer;
+
+    public void EnableVisual()
+    {
+        foreach (GameObject renderer in meshRenderer.activeRenderer)
+        {
+            renderer.SetActive(true);
+        }
+
+        meshRenderer.disabledRenderer.SetActive(false);
+    }
+
+    public void DisableVisual()
+    {
+        foreach (GameObject renderer in meshRenderer.activeRenderer)
+        {
+            renderer.SetActive(false);
+        }
+
+        meshRenderer.disabledRenderer.SetActive(true);
+    }
 }

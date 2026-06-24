@@ -1,5 +1,4 @@
 using FMODUnity;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,11 +26,11 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
 
     private bool movingTowardtarget = false;
 
-    private Collider collider;
+    private Collider mainCollider;
 
     private void Start()
     {
-        collider = GetComponent<Collider>();
+        mainCollider = GetComponent<Collider>();
         StartCoroutine(StartDelay());
         print("hasbeenobtained" + hasBeenObtained);
     }
@@ -102,6 +101,7 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
         else
             data.specialPickups.Add(specialPickupName, true);
 
+        UIInventoryManager.Instance.UpdateInventory();
         DisablePickup();
     }
 
@@ -118,7 +118,7 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
             visual.SetActive(false);
         }
         relay.gameObject.SetActive(false);
-        collider.gameObject.SetActive(false);
+        mainCollider.gameObject.SetActive(false);
     }
 
     private void FixedUpdate()

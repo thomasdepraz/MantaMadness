@@ -102,6 +102,7 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
         if (dialogSequenceName != null)
         DialogManager.instance.StartSequence(dialogSequenceName);
 
+        UIInventoryManager.Instance.UpdateInventory();
 
         // Unlock player ability => set the right boolean
         // Lock player
