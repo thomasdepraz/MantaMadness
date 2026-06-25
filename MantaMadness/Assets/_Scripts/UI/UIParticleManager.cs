@@ -24,6 +24,14 @@ public enum UiParticles
     SPEEDLINE,
     SHOPSUN,
     AREACLEAR,
+    REDKEY,
+    PURPLEKEY,
+    BLUEKEY,
+    LIGHTKEY,
+    BLACKKEY,
+    BRONZEKEY,
+    GOLDKEY,
+    DIAMONDKEY,
 }
 
 public enum WordType

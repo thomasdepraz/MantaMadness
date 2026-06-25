@@ -76,6 +76,7 @@ public class MantaVisuals : MonoBehaviour
     public SkinnedMeshRenderer[] catVisual;
     public SkinnedMeshRenderer[] dynamoVisual;
     public Material[] playerMat;
+    public Material lavaResistMat;
     public GameObject playerMantaTrueBody;
     public Material electricMaterial;
     public Material burntMaterial;
@@ -764,6 +765,9 @@ public class MantaVisuals : MonoBehaviour
                visual.enabled = false;
             }
         }
+
+        //SUNSCREEN ABILITY
+        ResetPlayerMat();
     }
 
     public void UpdateAnimatorRatio(float value, float ratio, int id)
@@ -1144,10 +1148,23 @@ public class MantaVisuals : MonoBehaviour
 
         if (mantaBodyVisual.material.mainTexture == electrocutedMaterial.mainTexture)
         {
-            mantaBodyVisual.material = originalMaterials[0];
+            ResetPlayerMat();
         }
 
         yield return null;
+    }
+
+    private void ResetPlayerMat()
+    {
+        if(Game.Instance.player.lavaResistanceAbility == true)
+        {
+            mantaBodyVisual.material = lavaResistMat;
+        }
+        else
+        {
+            mantaBodyVisual.material = originalMaterials[0];
+        }
+
     }
 
     private IEnumerator ResetFlattenDeath()
