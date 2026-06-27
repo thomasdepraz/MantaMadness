@@ -105,6 +105,12 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
             if (sunOnClearEnable != null)
                 sunOnClearEnable.ForceSpawn();
         }
+
+        if(CollectedCollectibles >= TotalCollectibles && CollectedSun >= TotalSun)
+        {
+            OnAllCollectiblesCollected();
+        }
+
     }
 
     public int TotalClams

@@ -19,6 +19,7 @@ public enum CollectibleArea
     FISHIVILLE,
     FRUTIGER,
     VOLCANINOCORE,
+    LAVAHEART,
 }
 public class CollectibleAreaRegistry : MonoBehaviour, IDataPersistence
 {

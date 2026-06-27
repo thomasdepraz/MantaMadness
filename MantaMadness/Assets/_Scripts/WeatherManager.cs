@@ -13,6 +13,7 @@ public enum WeatherType
     SunAltar,
     Sewer,
     AlienField,
+    LavaHeart,
 }
 
 public enum FogState

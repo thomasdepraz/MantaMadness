@@ -25,6 +25,9 @@ GameObject:
   - component: {fileID: 203445003354643157}
   - component: {fileID: 6159512130824064071}
   - component: {fileID: 1728590605370982759}
+  - component: {fileID: 643977332532159393}
+  - component: {fileID: 9214492740616804113}
+  - component: {fileID: 5410896042251524384}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -64,6 +67,8 @@ MonoBehaviour:
   introCheckpoint: {fileID: 0}
   introNpc: {fileID: 0}
   superGoodJoeNpc: {fileID: 0}
+  endPortalHolder: {fileID: 0}
+  UNSTUCKCheckpoint: {fileID: 0}
   screenEffectData: {fileID: 11400000, guid: 4b5cffd7e40f85b459610b08b3081e96, type: 2}
   player: {fileID: 0}
   m_SpawnPosition: {x: 0, y: 0, z: 0}
@@ -88,6 +93,7 @@ MonoBehaviour:
   boostGaugeInterface: {fileID: 0}
   dialogInteractDisplay: {fileID: 0}
   shopInteractDisplay: {fileID: 0}
+  comboUIController: {fileID: 0}
 --- !u!114 &6940516031190403126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,6 +107,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coinHolders:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -158,6 +179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkpoints: []
+  storedLevelId: 
 --- !u!114 &887437798498588529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,7 +230,7 @@ MonoBehaviour:
     collectibleStates:
       keys: []
       values: 
-    currentCollectibleAreaID: 
+    currentCollectibleAreaID: 0
     checkpoints:
       keys: []
       values: 
@@ -239,6 +261,9 @@ MonoBehaviour:
     worldStateUpdateBoxes:
       keys: []
       values: 
+    introAreaCinematic:
+      keys: []
+      values: 
     currentLevelID: 
     doubleJump: 0
     chargeBoost: 0
@@ -248,6 +273,7 @@ MonoBehaviour:
     grind: 0
     cat: 0
     dynamo: 0
+    endPortalActive: 0
     gameStartMusic: 0
     gameStartAmbient: 1
     weatherCondition: 0
@@ -449,6 +475,10 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &5147825935722726309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -490,7 +520,7 @@ MonoBehaviour:
     music: 4
     ambient: 4
   - type: 1
-    color: {r: 0.043952413, g: 0.049159084, b: 0.49041656, a: 1}
+    color: {r: 0.013705945, g: 0.0180997, b: 0.26415092, a: 1}
     fogColorClose: {r: 0.04552332, g: 0.050186414, b: 0.31132078, a: 1}
     fogColorFar: {r: 0.012103953, g: 0.014539724, b: 0.1509434, a: 1}
     fogState: 1
@@ -517,7 +547,29 @@ MonoBehaviour:
     fogState: 0
     music: 2
     ambient: 0
+  - type: 6
+    color: {r: 0.029132938, g: 0.19923171, b: 0.04082101, a: 1}
+    fogColorClose: {r: 0.02830188, g: 0.11320752, b: 0.037123248, a: 0}
+    fogColorFar: {r: 0.122641504, g: 0.042330135, b: 0.010991452, a: 0}
+    fogState: 2
+    music: 3
+    ambient: 2
+  - type: 7
+    color: {r: 0.013705945, g: 0.0180997, b: 0.26415092, a: 1}
+    fogColorClose: {r: 0.04552332, g: 0.050186414, b: 0.31132078, a: 1}
+    fogColorFar: {r: 0.012103953, g: 0.014539724, b: 0.1509434, a: 1}
+    fogState: 1
+    music: 4
+    ambient: 0
+  - type: 8
+    color: {r: 1.216786, g: 0.4281587, b: 0.12741211, a: 1}
+    fogColorClose: {r: 0.7049739, g: 0.267253, b: 0.09643512, a: 1}
+    fogColorFar: {r: 0.4904166, g: 0.17593147, b: 0.053205587, a: 1}
+    fogState: 1
+    music: 2
+    ambient: 0
   currentWeather: 0
+  currentFogState: 0
   ease: 4
   easeDuration: 2
   fogs:
@@ -544,6 +596,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   areas:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -622,3 +684,48 @@ MonoBehaviour:
     levelRoots:
     - {fileID: 0}
     splinesRoots: []
+--- !u!114 &643977332532159393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 711859319428096486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef4bffeda13d7a748973ff9204401c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &9214492740616804113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 711859319428096486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52d085555096ce940b9f0f250912964e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5410896042251524384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 711859319428096486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9439ac9236899264794509d87366eb3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blend:
+    Style: 0
+    Time: 0
+    CustomCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4

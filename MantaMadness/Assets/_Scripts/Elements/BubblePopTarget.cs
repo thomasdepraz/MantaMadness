@@ -19,12 +19,23 @@ public class BubblePopTarget : JumpTarget
         burstParticle.Play();
         visual.SetActive(false);
         yield return new WaitForSeconds(respawnCooldown);
+        ReEnableVisuals();
+        launchRoutine = null;
+
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        ReEnableVisuals();
+    }
+
+    private void ReEnableVisuals()
+    {
         visual.SetActive(true);
         visual.transform.localScale = Vector3.zero;
         visual.transform.DOScale(Vector3.one, 0.75f).SetEase(Ease.OutElastic);
         burstParticle.Play();
-        launchRoutine = null;
-
     }
 
     protected override void OnTriggerEnter(Collider other)

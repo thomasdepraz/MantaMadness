@@ -45,11 +45,20 @@ public class JumpTarget : MonoBehaviour
     {
         player = Game.Instance.player;
     }
-    
-    public void SwitchIndicatorVisibility(bool validTarget)
+
+    protected virtual void OnEnable()
     {
+        isAvailable = true;
+
+        currentState = JumpTargetVisualState.Inactive;
+
+        ToggleFunctionElements(true);
+
+        launchRoutine = null;
 
     }
+
+
     public bool isAvailable = true;
 
     public virtual void DeactivateTarget()
@@ -97,6 +106,8 @@ public class JumpTarget : MonoBehaviour
     public void StartLaunchCoroutine()
     {
         if (launchRoutine != null || !isAvailable) return;
+
+        Debug.Log("ALLO MAMAN, OUE C4EST LA TARGET A LA MERDE");
         launchRoutine = StartCoroutine(LaunchCoroutine());
     }
 

@@ -795,6 +795,9 @@ public class MantaVisuals : MonoBehaviour
                 mat.SetFloat("_BlinkEnabled", 1f);
                 mat.SetFloat("_BlinkSpeed", speed);
             }
+
+            lavaResistMat.SetFloat("_BlinkEnabled", 1f);
+            lavaResistMat.SetFloat("_BlinkSpeed", speed);
         }
         else
         {
@@ -802,6 +805,7 @@ public class MantaVisuals : MonoBehaviour
             {
                 mat.SetFloat("_BlinkEnabled", 0f);
             }
+            lavaResistMat.SetFloat("_BlinkEnabled", 0f);
         }
     }
 

@@ -1,4 +1,7 @@
 using Steamworks;
+using System.Collections;
+using System;
+using TMPEffects.Parameters;
 using UnityEngine;
 
 public enum SteamSuccessEnum
@@ -26,9 +29,10 @@ public enum SteamSuccessEnum
     ACH_AREA_OUTSKIRT,
     ACH_AREA_SEWER,
     ACH_AREA_CITY,
+    ACH_AREA_LAVATREASURE
 }
 
-public class SteamSuccess : MonoBehaviour
+public class SteamSuccess : MonoBehaviour, IDataPersistence
 {
     public static SteamSuccess instance;
 
@@ -42,6 +46,22 @@ public class SteamSuccess : MonoBehaviour
         {
             Destroy(this);
         }
+    }
+
+    public void LoadData(GameData data)
+    {
+        StartCoroutine(LoadDelay(data));
+    }
+
+    private IEnumerator LoadDelay(GameData data)
+    {
+        yield return new WaitForSeconds(0.1f);
+        SyncAchievements(data);
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        //RIEN
     }
 
     void Start()
@@ -58,125 +78,44 @@ public class SteamSuccess : MonoBehaviour
 
     public void ActivateSteamSuccess(SteamSuccessEnum success)
     {
-        switch (success)
+        if (!SteamManager.Initialized)
+            return;
+
+        SteamUserStats.SetAchievement(success.ToString());
+        SteamUserStats.StoreStats();
+    }
+
+    public void SyncAchievements(GameData data)
+    {
+        if (!SteamManager.Initialized || data == null)
+            return;
+        SimpleController player = Game.Instance.player;
+
+        //Player Abilities
+        UnlockIf(player.grindAbility, SteamSuccessEnum.ACH_ABILITY_WINGS);
+        UnlockIf(player.stompAbility, SteamSuccessEnum.ACH_ABILITY_STOMP);
+        UnlockIf(player.doubleJumpAbility, SteamSuccessEnum.ACH_ABILITY_DOUBLEJUMP);
+        UnlockIf(player.dynamoAbility, SteamSuccessEnum.ACH_ABILITY_DYNAMO);
+        UnlockIf(player.alienAntennasAbility, SteamSuccessEnum.ACH_ABILITY_ALIEN);
+        UnlockIf(player.lavaResistanceAbility, SteamSuccessEnum.ACH_ABILITY_LAVARESIST);
+
+        //Special Events
+        //UnlockIf(CoinManager.Instance.PickupCoinCount == 38, SteamSuccessEnum.ACH_EVENT_JOVIAL);
+
+        //Johnnies Count
+        UnlockIf(CoinManager.Instance.PickupCoinCount == 38, SteamSuccessEnum.ACH_EVENT_ALLJOHNNIES);
+
+        //Areas Completed
+        //Thoses ared hnadled through each AreaIntroManager Respectively
+
+        SteamUserStats.StoreStats();
+    }
+
+    private void UnlockIf(bool condition, SteamSuccessEnum achievement)
+    {
+        if (condition)
         {
-            case SteamSuccessEnum.ACH_ABILITY_WINGS:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_ABILITY_WINGS.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_ABILITY_STOMP:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_ABILITY_STOMP.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_ABILITY_DOUBLEJUMP:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_ABILITY_DOUBLEJUMP.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_ABILITY_DYNAMO:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_ABILITY_DYNAMO.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_ABILITY_ALIEN:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_ABILITY_ALIEN.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_ABILITY_LAVARESIST:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_ABILITY_LAVARESIST.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_EVENT_JOVIAL:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_EVENT_JOVIAL.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_EVENT_ALLJOHNNIES:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_EVENT_ALLJOHNNIES.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_AREA_SONKI:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_AREA_SONKI.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_AREA_FRUTTI:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_AREA_FRUTTI.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_AREA_VOLCANINO:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_AREA_VOLCANINO.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_AREA_SUNALTAR:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_AREA_SUNALTAR.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_AREA_SHORES:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_AREA_SHORES.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_AREA_VILLAGE:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_AREA_VILLAGE.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_AREA_MOUNTAINTEMPLE:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_AREA_MOUNTAINTEMPLE.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_AREA_ANCIENTTEMPLE:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_AREA_ANCIENTTEMPLE.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_AREA_CORALLAND:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_AREA_CORALLAND.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_AREA_CORALCELLAR:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_AREA_CORALCELLAR.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_AREA_ALIENFIELD:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_AREA_ALIENFIELD.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_AREA_ALIENSHIP:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_AREA_ALIENSHIP.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_AREA_OUTSKIRT:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_AREA_OUTSKIRT.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_AREA_SEWER:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_AREA_SEWER.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            case SteamSuccessEnum.ACH_AREA_CITY:
-                SteamUserStats.SetAchievement(SteamSuccessEnum.ACH_AREA_CITY.ToString());
-                SteamUserStats.StoreStats();
-                break;
-
-            default:
-                break;
+            SteamUserStats.SetAchievement(achievement.ToString());
         }
     }
 
@@ -185,4 +124,6 @@ public class SteamSuccess : MonoBehaviour
         SteamUserStats.ResetAllStats(true);
         SteamUserStats.StoreStats();
     }
+
+
 }
