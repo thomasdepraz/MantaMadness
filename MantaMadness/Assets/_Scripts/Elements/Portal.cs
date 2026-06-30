@@ -4,20 +4,20 @@ using TMPro;
 [RequireComponent(typeof(BoxCollider))]
 public class Portal : WorldCheckpoint
 {
-    [SerializeField] private string targetIndex;
+    [SerializeField] protected string targetIndex;
 
     public Transform teleportPoint;
-    private SimpleController player;
+    protected SimpleController player;
 
     [SerializeField] public TextMeshProUGUI signText;
 
     [Header("World State Parameters")]
-    [SerializeField] private bool enterSecretRoom = false;
+    [SerializeField] protected bool enterSecretRoom = false;
 
-    [SerializeField] private MUSICS musicToPlay = MUSICS.NULL;
+    [SerializeField] protected MUSICS musicToPlay = MUSICS.NULL;
     [SerializeField] public WeatherType specialWeatherType = WeatherType.MountainTemple;
 
-    [SerializeField] private AreaIntro areaIntro;
+    [SerializeField] protected AreaIntro areaIntro;
 
     protected override void Start()
     {
@@ -39,7 +39,7 @@ public class Portal : WorldCheckpoint
         }
     }
 
-    public void Teleport()
+    public virtual void Teleport()
     {
         player.transform.position = teleportPoint.position;
         player.transform.rotation = new Quaternion(0, teleportPoint.transform.rotation.y, 0, teleportPoint.transform.rotation.w);

@@ -20,6 +20,7 @@ public enum CollectibleArea
     FRUTIGER,
     VOLCANINOCORE,
     LAVAHEART,
+    BACKROOM,
 }
 public class CollectibleAreaRegistry : MonoBehaviour, IDataPersistence
 {

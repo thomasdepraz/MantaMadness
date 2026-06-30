@@ -73,6 +73,35 @@ public class PortalManager : MonoBehaviour
             yield return null;
     }
 
+    public IEnumerator BackroomTeleport(string targetIndex, bool secretRoomMusic, MUSICS musicToPlay, Portal portal, WeatherType specialWeatherType, AMBIENT ambientToPlay, AreaIntro intro = null)
+    {
+        PlayTeleportSFX("WarpState", 0);
+        yield return null;
+
+        MusicManager.Instance.PlayMusic(musicToPlay);
+        MusicManager.Instance.PlayAmbient(ambientToPlay);
+        WeatherManager.instance.SetNewWeather(specialWeatherType);
+
+        for (int i = 0; i < portals.Count; i++)
+        {
+            if (portals[i].indexName == targetIndex)
+            {
+                portals[i].Teleport();
+                break;
+            }
+        }
+
+        if (secretRoomMusic)
+        {
+            FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_SecretRoom, 1f);
+        }
+        else if (!secretRoomMusic)
+        {
+            FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_SecretRoom, 0f);
+        }
+        yield return null;
+    }
+
     public void SetCheckpoint(string index, bool areaName, string nameToDisplay, string levelID, CollectibleArea collectibleArea)
     {
         Transform respawnPos = transform;

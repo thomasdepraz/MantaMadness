@@ -25,6 +25,7 @@ public enum MUSICS
     MUSIC_LEVEL02,
     MUSIC_LEVEL03,
     MUSIC_UFO,
+    MUSIC_BACKROOM,
     NULL,
 }
 
@@ -42,7 +43,7 @@ public class MusicManager : MonoBehaviour, IDataPersistence
     public static MusicManager Instance;
 
 
-    public EventReference music_menu, music_cave, music_level01, music_level02, music_level03, music_null, music_UFO;
+    public EventReference music_menu, music_cave, music_level01, music_level02, music_level03, music_null, music_UFO, music_backroom;
     public FMOD.Studio.EventInstance musicAudioEvent;
 
     public EventReference amb_beach, amb_secret, amb_city, amb_volcano;
@@ -168,6 +169,9 @@ public class MusicManager : MonoBehaviour, IDataPersistence
                 case MUSICS.MUSIC_UFO:
                     musicAudioEvent = RuntimeManager.CreateInstance(music_UFO);
                     break;
+                case MUSICS.MUSIC_BACKROOM:
+                    musicAudioEvent = RuntimeManager.CreateInstance(music_backroom);
+                    break;
                 case MUSICS.NULL:
                     break;
             }
@@ -175,6 +179,7 @@ public class MusicManager : MonoBehaviour, IDataPersistence
             switch (currentAmb)
             {
                 case AMBIENT.NULL:
+                    ambientAudioEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                     break;
                 case AMBIENT.AMB_CITY:
                     ambientAudioEvent = RuntimeManager.CreateInstance(amb_city);
@@ -355,6 +360,10 @@ public class MusicManager : MonoBehaviour, IDataPersistence
             case MUSICS.MUSIC_UFO:
                 musicAudioEvent = RuntimeManager.CreateInstance(music_UFO);
                 break;
+
+            case MUSICS.MUSIC_BACKROOM:
+                musicAudioEvent = RuntimeManager.CreateInstance(music_backroom);
+                break;
         }
 
         // 5. Rebind du callback FMOD (IMPORTANT)
@@ -401,7 +410,7 @@ public class MusicManager : MonoBehaviour, IDataPersistence
         switch (currentAmb)
         {
             case AMBIENT.NULL:
-                break;
+                yield break;
             case AMBIENT.AMB_CITY:
                 ambientAudioEvent = RuntimeManager.CreateInstance(amb_city);
                 break;

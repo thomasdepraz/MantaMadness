@@ -14,6 +14,7 @@ public enum WeatherType
     Sewer,
     AlienField,
     LavaHeart,
+    Backroom,
 }
 
 public enum FogState

@@ -8,6 +8,7 @@ public enum DoorType
 {
     Clam,
     Key,
+    Sun,
 }
 
 public class KeyDoor : MonoBehaviour, IDataPersistence
@@ -17,6 +18,7 @@ public class KeyDoor : MonoBehaviour, IDataPersistence
     [SerializeField] private string doorID;
     [SerializeField] private string requiredPickupName;
     [SerializeField] private int requiredClamAmount;
+    [SerializeField] private int requiredSunAmount;
 
     private bool isOpen = false;
 
@@ -30,7 +32,7 @@ public class KeyDoor : MonoBehaviour, IDataPersistence
 
     public DoorType doorType = DoorType.Key;
 
-    [SerializeField] private TextMeshProUGUI clamText;
+    [SerializeField] private TextMeshProUGUI priceText;
 
     public void LoadData(GameData data)
     {
@@ -61,6 +63,10 @@ public class KeyDoor : MonoBehaviour, IDataPersistence
         if(doorType == DoorType.Clam)
         {
             SetClamPriceText();
+        }
+        else if(doorType == DoorType.Sun)
+        {
+            SetSunPriceText();
         }
     }
 
@@ -95,6 +101,19 @@ public class KeyDoor : MonoBehaviour, IDataPersistence
                 Debug.Log("Not enough clams, you need : " + requiredClamAmount + " clams");
             }
         }
+
+        else if (doorType == DoorType.Sun)
+        {
+            if(CoinManager.Instance.PickupCoinCount >= requiredSunAmount)
+            {
+                OpenDoor();
+            }
+            else
+            {
+                Debug.Log("Not enough Sujn, you need : " + requiredSunAmount + " clams");
+            }
+        }
+
 
     }
 
@@ -199,6 +218,11 @@ public class KeyDoor : MonoBehaviour, IDataPersistence
 
     private void SetClamPriceText()
     {
-        clamText.text = requiredClamAmount.ToString() + " clams";
+        priceText.text = requiredClamAmount.ToString() + " clams";
+    }
+
+    private void SetSunPriceText()
+    {
+        priceText.text = requiredSunAmount.ToString() + " Johnnies";
     }
 }
