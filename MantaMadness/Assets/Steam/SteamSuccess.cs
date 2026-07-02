@@ -29,7 +29,8 @@ public enum SteamSuccessEnum
     ACH_AREA_OUTSKIRT,
     ACH_AREA_SEWER,
     ACH_AREA_CITY,
-    ACH_AREA_LAVATREASURE
+    ACH_AREA_LAVATREASURE,
+    ACH_AREA_BACKROOM,
 }
 
 public class SteamSuccess : MonoBehaviour, IDataPersistence

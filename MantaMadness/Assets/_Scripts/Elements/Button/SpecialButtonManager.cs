@@ -1,17 +1,13 @@
 using DG.Tweening;
-using FMOD.Studio;
-using FMODUnity;
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Timeline;
-using UnityEngine.UI;
 
 public class SpecialButtonManager : MonoBehaviour, IDataPersistence
 {
-    [SerializeField] protected List<SpecialStompButton> buttons = new();
+    [SerializeField] protected List<SpecialButton> buttons = new();
 
     protected int activatedCount;
 
@@ -38,7 +34,7 @@ public class SpecialButtonManager : MonoBehaviour, IDataPersistence
 
     protected virtual void Start()
     {
-        if(controller == null)
+        if (controller == null)
         {
             controller = Game.Instance.player;
         }
@@ -97,7 +93,7 @@ public class SpecialButtonManager : MonoBehaviour, IDataPersistence
         }
     }
 
-    public virtual void RegisterDestruction(SpecialStompButton button)
+    public virtual void RegisterDestruction(SpecialButton button)
     {
         if (!buttons.Contains(button))
             return;
@@ -185,5 +181,4 @@ public class SpecialButtonManager : MonoBehaviour, IDataPersistence
             obj.SetActive(true);
         }
     }
-
 }

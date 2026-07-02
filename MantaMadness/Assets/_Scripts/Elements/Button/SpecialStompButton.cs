@@ -6,7 +6,7 @@ using UnityEngine;
 public class SpecialStompButton : StompButton
 {
 
-    protected SpecialButtonManager manager;
+    protected SpecialStompButtonManager manager;
 
     protected override void Start()
     {
@@ -34,7 +34,7 @@ public class SpecialStompButton : StompButton
         buttonVisual.transform.DOMove(buttonActivatedPos.position, 0.2f).SetEase(Ease.InOutQuad);
         buttonVisualCollision.enabled = false;
     }
-    public void SetManager(SpecialButtonManager newManager)
+    public void SetManager(SpecialStompButtonManager newManager)
     {
         manager = newManager;
     }
