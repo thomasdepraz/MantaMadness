@@ -48,6 +48,9 @@ public class GameInterface : MonoBehaviour, IScreen
         Vector3.one, //FEVER
     };
 
+    [Header("Speed Gauge")]
+    public GameObject speedGaugeObject;
+
     [Header("Cat Ability Parameters")]
     public Image catOverlay;
     public VideoPlayer catVideoPlayer;
@@ -381,9 +384,15 @@ public class GameInterface : MonoBehaviour, IScreen
         {
             sunImage.transform.DOPunchScale(Vector3.one * 0.15f, 0.2f);
         }
+
+        if (speedGaugeObject == null) return;
+        if (ComboManager.Instance.ComboLevel >= 4)
+        {
+            speedGaugeObject.transform.DOPunchScale(Vector3.one * 0.15f, 0.2f);
+        }
     }
 
-    void SunOnBeat(int bar, int beat, float tempo)
+        void SunOnBeat(int bar, int beat, float tempo)
     {
         if (sunImage == null) return;
 
@@ -393,6 +402,12 @@ public class GameInterface : MonoBehaviour, IScreen
         if (ComboManager.Instance.ComboLevel < 4)
         {
             sunImage.transform.DOPunchScale(Vector3.one * 0.15f, 0.2f);
+        }
+
+        if (speedGaugeObject == null) return;
+        if (ComboManager.Instance.ComboLevel < 4)
+        {
+            speedGaugeObject.transform.DOPunchScale(Vector3.one * 0.15f, 0.2f);
         }
     }
 

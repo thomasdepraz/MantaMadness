@@ -30,7 +30,7 @@ public class SpecialButton : Button
     }
     protected override IEnumerator ActivationCoroutine(SimpleController controller)
     {
-        //manager.RegisterDestruction(this);
+        manager.RegisterDestruction(this);
         isActivated = true;
         buttonMesh.material = activatedMaterial;
 

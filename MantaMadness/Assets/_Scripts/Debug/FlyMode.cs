@@ -51,7 +51,7 @@ public class FlyMode : MonoBehaviour
         // Cacher le curseur et le verrouiller au centre de l'écran
         flyCam.enabled = false;
     }
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
     void Update()
     {
         if(disableFlyMode == false)
@@ -159,7 +159,7 @@ public class FlyMode : MonoBehaviour
         }
 
     }
-#endif
+//#endif
     public void SwitchCamSpeed()
     {
         int enumLength = System.Enum.GetValues(typeof(FlyModeSpeed)).Length;

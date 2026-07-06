@@ -23,6 +23,14 @@ public class UnityGPUInstancing : MonoBehaviour
     [SerializeField] private Vector2 widthRange = new Vector2(0.8f, 1.2f);
     [SerializeField] private Vector2 heightRange = new Vector2(0.5f, 2f);
 
+    [Header("Player Detection")]
+    [SerializeField] private float detectionRadius = 10f;
+    [SerializeField] private float disableOffset = 20f;
+    [SerializeField] private LayerMask playerLayer;
+
+    private bool isSetup = false;
+    private bool canRender = false;
+
     /*
     (These properties are used in SetupInstances() function defined later.
     Just allows me to use that snippet in multiple Unity versions...
@@ -104,14 +112,59 @@ public class UnityGPUInstancing : MonoBehaviour
         bounds = rParams.worldBounds;
         MPB = rParams.matProps;
 
-        SetupInstances();
+        //SetupInstances();
+    }
+
+    void StartSetup()
+    {
+        if (!isSetup)
+        {
+            SetupInstances();
+            isSetup = true;
+        }
+
+        canRender = true;
     }
 
     void Update()
     {
-        if (instanceCount <= 0) return;
+        DetectPlayer();
+
+        if (!canRender) return;
 
         Graphics.RenderMeshPrimitives(rParams, mesh, 0, instanceCount);
+    }
+
+    private void DetectPlayer()
+    {
+        Vector3 detectionCenter = spawnPlane.transform.position;
+
+        // Activation
+        if (!canRender)
+        {
+            if (Physics.CheckSphere(
+                detectionCenter,
+                detectionRadius,
+                playerLayer))
+            {
+                StartSetup();
+            }
+        }
+
+        // Désactivation
+        else
+        {
+            bool playerStillNearby = Physics.CheckSphere(
+                detectionCenter,
+                detectionRadius + disableOffset,
+                playerLayer
+            );
+
+            if (!playerStillNearby)
+            {
+                canRender = false;
+            }
+        }
     }
 
     void OnDisable()
@@ -153,5 +206,17 @@ public class UnityGPUInstancing : MonoBehaviour
 
         // Ton shader attend une position relative au centre du bounds
         return worldPoint - bounds.center;
+    }
+    private void OnDrawGizmos()
+    {
+        Vector3 pos = spawnPlane != null
+            ? spawnPlane.transform.position
+            : transform.position;
+
+        // zone activation
+        Gizmos.DrawWireSphere(pos, detectionRadius);
+
+        // zone désactivation
+        Gizmos.DrawWireSphere(pos, detectionRadius + disableOffset);
     }
 }

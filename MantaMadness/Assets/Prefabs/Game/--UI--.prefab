@@ -25978,13 +25978,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 405157410425218135}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.043619405, w: 0.9990483}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.052, y: -0.619, z: -0.311}
   m_LocalScale: {x: 1.4089983, y: 1.4089984, z: 1.4089983}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8083092168912960725}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 5}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1345439834561694200
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -26053,10 +26053,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playSequenceOnBeat: 0
-  playSequenceOnEnable: 0
-  tweenSteps: []
-  sequenceLoops: 0
-  sequenceLoopType: 0
+  playSequenceOnEnable: 1
+  tweenSteps:
+  - animatePosition: 0
+    animateRotation: 1
+    animateScale: 0
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 0, y: 0, z: 20}
+    rotationUseLocal: 1
+    rotationRelative: 1
+    scale: {x: 0, y: 0, z: 0}
+    duration: 0.5
+    delay: 0
+    ease: 18
+  sequenceLoops: -1
+  sequenceLoopType: 1
   beatSequenceType: 0
   useUnscaledTime: 0
 --- !u!1 &438754919712586110
@@ -62723,7 +62736,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2094085898454307938}
-  - component: {fileID: 2926900019362494939}
   m_Layer: 5
   m_Name: UI_SpeedGauge
   m_TagString: Untagged
@@ -62749,25 +62761,6 @@ Transform:
   - {fileID: 8083092168912960725}
   m_Father: {fileID: 2806372163195824920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 3}
---- !u!114 &2926900019362494939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1604513654809972440}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playSequenceOnBeat: 0
-  playSequenceOnEnable: 0
-  tweenSteps: []
-  sequenceLoops: 0
-  sequenceLoopType: 0
-  beatSequenceType: 0
-  useUnscaledTime: 0
 --- !u!1 &1688368522959019836
 GameObject:
   m_ObjectHideFlags: 0
@@ -77841,7 +77834,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 116.15
+  m_fontSize: 116.25
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -78000,10 +77993,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playSequenceOnBeat: 0
-  playSequenceOnEnable: 0
-  tweenSteps: []
-  sequenceLoops: 0
-  sequenceLoopType: 0
+  playSequenceOnEnable: 1
+  tweenSteps:
+  - animatePosition: 0
+    animateRotation: 1
+    animateScale: 0
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 0, y: 0, z: 20}
+    rotationUseLocal: 1
+    rotationRelative: 1
+    scale: {x: 0, y: 0, z: 0}
+    duration: 1.2
+    delay: 0
+    ease: 18
+  sequenceLoops: -1
+  sequenceLoopType: 1
   beatSequenceType: 0
   useUnscaledTime: 0
 --- !u!1 &1929178336883043695
@@ -119595,7 +119601,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 58.05
+  m_fontSize: 58.1
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -212757,13 +212763,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6057599509843448423}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.026176924, w: 0.99965733}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.097, y: -0.322, z: -0.329}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8083092168912960725}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 3}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4464767443022313510
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -212832,10 +212838,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playSequenceOnBeat: 0
-  playSequenceOnEnable: 0
-  tweenSteps: []
-  sequenceLoops: 0
-  sequenceLoopType: 0
+  playSequenceOnEnable: 1
+  tweenSteps:
+  - animatePosition: 0
+    animateRotation: 1
+    animateScale: 0
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 0, y: 0, z: 20}
+    rotationUseLocal: 1
+    rotationRelative: 1
+    scale: {x: 0, y: 0, z: 0}
+    duration: 0.5
+    delay: 0
+    ease: 18
+  sequenceLoops: -1
+  sequenceLoopType: 1
   beatSequenceType: 0
   useUnscaledTime: 0
 --- !u!1 &6123748023576365342
@@ -239049,13 +239068,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7054744836842008094}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.06104851, w: 0.99813485}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.033, y: -0.452, z: -0.329}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8083092168912960725}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 7}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4705007712147325055
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -239124,10 +239143,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playSequenceOnBeat: 0
-  playSequenceOnEnable: 0
-  tweenSteps: []
-  sequenceLoops: 0
-  sequenceLoopType: 0
+  playSequenceOnEnable: 1
+  tweenSteps:
+  - animatePosition: 0
+    animateRotation: 1
+    animateScale: 0
+    position: {x: 0, y: 0, z: 0}
+    positionUseLocal: 0
+    positionRelative: 0
+    rotation: {x: 0, y: 0, z: 20}
+    rotationUseLocal: 1
+    rotationRelative: 1
+    scale: {x: 0, y: 0, z: 0}
+    duration: 0.25
+    delay: 0
+    ease: 18
+  sequenceLoops: -1
+  sequenceLoopType: 1
   beatSequenceType: 0
   useUnscaledTime: 0
 --- !u!1 &7082423501883237322
@@ -271545,7 +271577,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8083092168912960725}
-  - component: {fileID: 1329011305579975027}
   m_Layer: 5
   m_Name: TweenGroup
   m_TagString: Untagged
@@ -271561,7 +271592,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8343719562382674815}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.01745245, w: 0.99984777}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -271571,26 +271602,7 @@ Transform:
   - {fileID: 5280625328406827773}
   - {fileID: 3837178815522597003}
   m_Father: {fileID: 2094085898454307938}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 2}
---- !u!114 &1329011305579975027
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8343719562382674815}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playSequenceOnBeat: 0
-  playSequenceOnEnable: 0
-  tweenSteps: []
-  sequenceLoops: 0
-  sequenceLoopType: 0
-  beatSequenceType: 0
-  useUnscaledTime: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8345261041930060430
 GameObject:
   m_ObjectHideFlags: 0
@@ -296787,6 +296799,7 @@ MonoBehaviour:
   - {x: 0.85, y: 0.85, z: 0.85}
   - {x: 0.9, y: 0.9, z: 0.9}
   - {x: 1, y: 1, z: 1}
+  speedGaugeObject: {fileID: 1604513654809972440}
   catOverlay: {fileID: 1030787741292519796}
   catVideoPlayer: {fileID: 4365202098496232299}
   catParticles:

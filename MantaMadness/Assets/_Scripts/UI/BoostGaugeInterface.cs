@@ -89,7 +89,30 @@ public class BoostGaugeInterface : MonoBehaviour
         {
             state.SetActive(false);
         }
+
+        speedStatesVisuals[index].transform.DOKill();
+        speedStatesVisuals[index].transform.rotation = Quaternion.identity;
         speedStatesVisuals[index].SetActive(true);
+
+        switch (index)
+        {
+            case 0:
+                speedStatesVisuals[index].transform.DORotate(new Vector3(0,0,20), 1.2f).SetEase(Ease.OutQuad).SetLoops(-1, LoopType.Yoyo);
+                break;
+
+            case 1:
+                speedStatesVisuals[index].transform.DORotate(new Vector3(0, 0, 20), 0.5f).SetEase(Ease.OutQuad).SetLoops(-1, LoopType.Yoyo);
+                break;
+
+            case 2:
+                speedStatesVisuals[index].transform.DORotate(new Vector3(0, 0, 20), 0.25f).SetEase(Ease.OutQuad).SetLoops(-1, LoopType.Yoyo);
+                break;
+
+            case 3:
+                speedStatesVisuals[index].transform.DORotate(new Vector3(0, 0, 20), 0.5f).SetEase(Ease.OutQuad).SetLoops(-1, LoopType.Yoyo);
+                break;
+        }
+
     }
 
     private void NeedleRotation()
