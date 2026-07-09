@@ -260,6 +260,8 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
             case FogState.enabled:
                 foreach (FogTypeClass fog in fogs)
                 {
+                    if (fog == null) return;
+
                     if(fog.type != FogTypeClass.FogType.Special)
                     {
                         fog.gameObject.SetActive(true);

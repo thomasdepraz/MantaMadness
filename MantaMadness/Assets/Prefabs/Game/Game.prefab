@@ -25,7 +25,6 @@ GameObject:
   - component: {fileID: 203445003354643157}
   - component: {fileID: 6159512130824064071}
   - component: {fileID: 1728590605370982759}
-  - component: {fileID: 643977332532159393}
   - component: {fileID: 9214492740616804113}
   - component: {fileID: 5410896042251524384}
   m_Layer: 0
@@ -107,6 +106,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coinHolders:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -568,6 +570,13 @@ MonoBehaviour:
     fogState: 1
     music: 2
     ambient: 0
+  - type: 9
+    color: {r: 0.254717, g: 0.089843854, b: 0.0252314, a: 1}
+    fogColorClose: {r: 0.18867922, g: 0.06970681, b: 0.024029901, a: 1}
+    fogColorFar: {r: 0.047169805, g: 0.017823981, b: 0.0064524747, a: 1}
+    fogState: 2
+    music: 6
+    ambient: 0
   currentWeather: 0
   currentFogState: 0
   ease: 4
@@ -596,6 +605,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   areas:
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -684,18 +694,11 @@ MonoBehaviour:
     levelRoots:
     - {fileID: 0}
     splinesRoots: []
---- !u!114 &643977332532159393
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 711859319428096486}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef4bffeda13d7a748973ff9204401c07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  - levelID: LAVATREASURE
+    levelRoots:
+    - {fileID: 0}
+    splinesRoots:
+    - {fileID: 0}
 --- !u!114 &9214492740616804113
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -61,11 +61,11 @@ public class Portal : WorldCheckpoint
             PortalManager.Instance.SetCheckpoint(targetIndex, displayAreaName, nameToDisplay, LevelID, collectibleAreaID);
             if(areaIntro !=  null)
             {
-                PortalManager.Instance.StartCoroutine(PortalManager.Instance.Teleport(targetIndex, enterSecretRoom, musicToPlay, this, specialWeatherType, areaIntro));
+                PortalManager.Instance.StartCoroutine(PortalManager.Instance.Teleport(targetIndex, enterSecretRoom, musicToPlay, specialWeatherType, areaIntro, this));
             }
             else
             {
-                PortalManager.Instance.StartCoroutine(PortalManager.Instance.Teleport(targetIndex, enterSecretRoom, musicToPlay, this, specialWeatherType));
+                PortalManager.Instance.StartCoroutine(PortalManager.Instance.Teleport(targetIndex, enterSecretRoom, musicToPlay, specialWeatherType,null, this));
             }
         }
     }

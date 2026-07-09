@@ -118,7 +118,7 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
             visual.SetActive(false);
         }
         relay.gameObject.SetActive(false);
-        mainCollider.gameObject.SetActive(false);
+        mainCollider.enabled = false;
     }
 
     private void FixedUpdate()

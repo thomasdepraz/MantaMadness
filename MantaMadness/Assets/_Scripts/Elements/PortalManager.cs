@@ -26,7 +26,7 @@ public class PortalManager : MonoBehaviour
             }
     }
 
-    public IEnumerator Teleport(string targetIndex, bool secretRoomMusic, MUSICS musicToPlay, Portal portal, WeatherType specialWeatherType, AreaIntro intro = null)
+    public IEnumerator Teleport(string targetIndex, bool secretRoomMusic, MUSICS musicToPlay,WeatherType specialWeatherType, AreaIntro intro = null, Portal portal = null)
     {
         // Set Velocity to 0
         Game.Instance.player?.LockPlayerForDuration(teleportTransitionDuration);
@@ -73,7 +73,7 @@ public class PortalManager : MonoBehaviour
             yield return null;
     }
 
-    public IEnumerator BackroomTeleport(string targetIndex, bool secretRoomMusic, MUSICS musicToPlay, Portal portal, WeatherType specialWeatherType, AMBIENT ambientToPlay, AreaIntro intro = null)
+    public IEnumerator BackroomTeleport(string targetIndex, bool secretRoomMusic, MUSICS musicToPlay, WeatherType specialWeatherType, AMBIENT ambientToPlay, AreaIntro intro = null, Portal portal = null)
     {
         PlayTeleportSFX("WarpState", 0);
         yield return null;

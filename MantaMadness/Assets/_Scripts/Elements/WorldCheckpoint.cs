@@ -81,6 +81,7 @@ public class WorldCheckpoint : MonoBehaviour
         //Change Mat to disableMat
         foreach (MeshRenderer renderer in visuals)
         {
+            if(renderer != null)
             renderer.material = disableMat;
         }
     }

@@ -156,7 +156,7 @@ public class GameInterface : MonoBehaviour, IScreen
     {
         totalSunCountMenu.text = coinCount.ToString();
         //coinText.text = coinCount.ToString();
-        if (GameplayPaused() == false)
+        if (GameplayPaused() == false && sunCountImage != null)
             sunCountImage?.transform.DOPunchScale(Vector3.one, 1, 5);
     }
 

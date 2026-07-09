@@ -31,7 +31,8 @@ public class Game : MonoBehaviour, IDataPersistence
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(this);
+            Destroy(Instance);
+            Instance = this;
         }
         else
         {
@@ -221,6 +222,8 @@ public class Game : MonoBehaviour, IDataPersistence
 
     public void SetRespawnTransform(Transform respawnTransform)
     {
+        if (respawnTransform == null) return;
+
         m_SpawnPosition = respawnTransform.position;
         m_SpawnRotation = respawnTransform.rotation;
     }

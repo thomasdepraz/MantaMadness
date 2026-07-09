@@ -59,7 +59,7 @@ public class BackroomPortal : Portal
                     //CANCEL PLAYER STOMP
                     controller.ForceLock(true);
                     PortalManager.Instance.SetCheckpoint(targetIndex, displayAreaName, nameToDisplay, LevelID, collectibleAreaID);
-                    PortalManager.Instance.StartCoroutine(PortalManager.Instance.BackroomTeleport(targetIndex, enterSecretRoom, musicToPlay, this, specialWeatherType, ambientToPlay, areaIntro));
+                    PortalManager.Instance.StartCoroutine(PortalManager.Instance.BackroomTeleport(targetIndex, enterSecretRoom, musicToPlay,  specialWeatherType, ambientToPlay, areaIntro, this));
                 }
             }
         }

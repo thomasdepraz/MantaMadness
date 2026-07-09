@@ -22,7 +22,8 @@ public class DataPersistenceManager : MonoBehaviour
     {
         if (Instance != null)
         {
-            Debug.LogError("More than one Data persistence in the scene.");
+            //Debug.LogError("More than one Data persistence in the scene.");
+            Destroy(this);
         }
         Instance = this;
         this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
