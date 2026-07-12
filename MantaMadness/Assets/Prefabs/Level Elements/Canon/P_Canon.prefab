@@ -117,7 +117,7 @@ Transform:
   m_Children:
   - {fileID: 6731576096245111745}
   - {fileID: 7971170854757543792}
-  - {fileID: 3501096932615938769}
+  - {fileID: 5031990428284405778}
   m_Father: {fileID: 6964996444676838664}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1669099555204024688
@@ -642,12 +642,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3966020541720198484}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.001, y: 0.478, z: -1.419}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.0009986798, y: 0.010999411, z: -1.4386513}
+  m_LocalScale: {x: 1, y: 1, z: 1.0138491}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6964996444676838664}
+  m_Father: {fileID: 643536836527483621}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &2447606491358012565
 ParticleSystem:
@@ -5717,7 +5717,6 @@ GameObject:
   - component: {fileID: 3801123719369704527}
   - component: {fileID: 5141769862604855625}
   - component: {fileID: 1677309238474257606}
-  - component: {fileID: 548088058194950084}
   m_Layer: 0
   m_Name: Cube.006
   m_TagString: Untagged
@@ -5793,51 +5792,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &548088058194950084
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5176348676885985055}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playSequenceOnBeat: 1
-  playSequenceOnEnable: 0
-  tweenSteps:
-  - animatePosition: 0
-    animateRotation: 0
-    animateScale: 1
-    position: {x: 0, y: 0, z: 0}
-    positionUseLocal: 0
-    positionRelative: 0
-    rotation: {x: 0, y: 0, z: 0}
-    rotationUseLocal: 0
-    rotationRelative: 0
-    scale: {x: 0.8, y: 1.4, z: 0.8}
-    duration: 0
-    delay: 0
-    ease: 6
-  - animatePosition: 0
-    animateRotation: 0
-    animateScale: 1
-    position: {x: 0, y: 0, z: 0}
-    positionUseLocal: 0
-    positionRelative: 0
-    rotation: {x: 0, y: 0, z: 0}
-    rotationUseLocal: 0
-    rotationRelative: 0
-    scale: {x: 1.4, y: 0.8, z: 1.4}
-    duration: 0
-    delay: 0
-    ease: 30
-  sequenceLoops: -1
-  sequenceLoopType: 1
-  beatSequenceType: 0
-  useUnscaledTime: 0
 --- !u!1 &5359743230770844064
 GameObject:
   m_ObjectHideFlags: 0
@@ -5960,7 +5914,7 @@ Transform:
   - {fileID: 8119833903243998667}
   - {fileID: 3801123719369704527}
   - {fileID: 5798397092438224755}
-  - {fileID: 5031990428284405778}
+  - {fileID: 3501096932615938769}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -91.359, z: 0}
 --- !u!114 &5251968742346120834
@@ -5981,6 +5935,11 @@ MonoBehaviour:
   canonMainShootScale: {x: 1, y: 0.5, z: 2}
   propulsionForce: 150
   target: {fileID: 7971170854757543792}
+  canonType: 0
+  targetIndex: 
+  enterSecretRoom: 0
+  musicToPlay: 7
+  specialWeatherType: 3
   targetCam: {fileID: 8117417749040742878}
 --- !u!65 &2263393937505078331
 BoxCollider:
@@ -6219,7 +6178,6 @@ GameObject:
   - component: {fileID: 723698363458823101}
   - component: {fileID: 3652679200762252273}
   - component: {fileID: 937727636779782919}
-  - component: {fileID: 843689668077885964}
   m_Layer: 0
   m_Name: Cube.004
   m_TagString: Untagged
@@ -6295,51 +6253,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &843689668077885964
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6653257001646127310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playSequenceOnBeat: 1
-  playSequenceOnEnable: 0
-  tweenSteps:
-  - animatePosition: 0
-    animateRotation: 0
-    animateScale: 1
-    position: {x: 0, y: 0, z: 0}
-    positionUseLocal: 0
-    positionRelative: 0
-    rotation: {x: 0, y: 0, z: 0}
-    rotationUseLocal: 0
-    rotationRelative: 0
-    scale: {x: 0.8, y: 1.4, z: 0.8}
-    duration: 0
-    delay: 0
-    ease: 6
-  - animatePosition: 0
-    animateRotation: 0
-    animateScale: 1
-    position: {x: 0, y: 0, z: 0}
-    positionUseLocal: 0
-    positionRelative: 0
-    rotation: {x: 0, y: 0, z: 0}
-    rotationUseLocal: 0
-    rotationRelative: 0
-    scale: {x: 1.4, y: 0.8, z: 1.4}
-    duration: 0
-    delay: 0
-    ease: 30
-  sequenceLoops: -1
-  sequenceLoopType: 1
-  beatSequenceType: 0
-  useUnscaledTime: 0
 --- !u!1 &6953380566563889797
 GameObject:
   m_ObjectHideFlags: 0
@@ -6407,7 +6320,6 @@ GameObject:
   - component: {fileID: 7265449603172522503}
   - component: {fileID: 5429083897584202296}
   - component: {fileID: 1667252075298225644}
-  - component: {fileID: 2834386117363394696}
   m_Layer: 0
   m_Name: Cube.005
   m_TagString: Untagged
@@ -6483,51 +6395,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2834386117363394696
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6968255416503081755}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 717a531579871904c99669597fb16e81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playSequenceOnBeat: 1
-  playSequenceOnEnable: 0
-  tweenSteps:
-  - animatePosition: 0
-    animateRotation: 0
-    animateScale: 1
-    position: {x: 0, y: 0, z: 0}
-    positionUseLocal: 0
-    positionRelative: 0
-    rotation: {x: 0, y: 0, z: 0}
-    rotationUseLocal: 0
-    rotationRelative: 0
-    scale: {x: 0.8, y: 1.4, z: 0.8}
-    duration: 0
-    delay: 0
-    ease: 6
-  - animatePosition: 0
-    animateRotation: 0
-    animateScale: 1
-    position: {x: 0, y: 0, z: 0}
-    positionUseLocal: 0
-    positionRelative: 0
-    rotation: {x: 0, y: 0, z: 0}
-    rotationUseLocal: 0
-    rotationRelative: 0
-    scale: {x: 1.4, y: 0.8, z: 1.4}
-    duration: 0
-    delay: 0
-    ease: 30
-  sequenceLoops: -1
-  sequenceLoopType: 1
-  beatSequenceType: 0
-  useUnscaledTime: 0
 --- !u!1 &7230690680246417959
 GameObject:
   m_ObjectHideFlags: 0
@@ -6553,12 +6420,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7230690680246417959}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.01452854, y: -0.972915, z: -0.13607968, w: 0.18630005}
-  m_LocalPosition: {x: 1.620015, y: -0.4299883, z: 1.4092505}
-  m_LocalScale: {x: 0.90158296, y: 1.1887814, z: 0.92246443}
+  m_LocalRotation: {x: 0.014528541, y: -0.97291493, z: -0.13607968, w: 0.18630005}
+  m_LocalPosition: {x: 1.6200126, y: 0.037011318, z: 1.3899971}
+  m_LocalScale: {x: 0.89999974, y: 1.1875958, z: 0.91240376}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 643536836527483621}
+  m_Father: {fileID: 6964996444676838664}
   m_LocalEulerAnglesHint: {x: -15.033, y: -157.701, z: -4.69}
 --- !u!114 &8117417749040742878
 MonoBehaviour:

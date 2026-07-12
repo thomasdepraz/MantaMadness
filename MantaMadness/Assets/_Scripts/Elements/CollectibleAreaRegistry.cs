@@ -21,6 +21,7 @@ public enum CollectibleArea
     VOLCANINOCORE,
     LAVAHEART,
     BACKROOM,
+    ICELEVEL,
 }
 public class CollectibleAreaRegistry : MonoBehaviour, IDataPersistence
 {

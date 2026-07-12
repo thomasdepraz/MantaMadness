@@ -1946,7 +1946,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     public void EnterAirRail(AirRail rail)
     {
-        if (State != ControllerState.SURFING || currentAirRail != null)
+        if ((State != ControllerState.SURFING && State != ControllerState.FALLING && State != ControllerState.JUMPING) || currentAirRail != null)
             return;
 
         enterAirRail.Invoke(rail);
