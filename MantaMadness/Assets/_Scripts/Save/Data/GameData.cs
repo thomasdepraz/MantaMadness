@@ -48,6 +48,9 @@ public class GameData
     //Intro Area
     public SerializableDictionnary<string, bool> introAreaCinematic;
 
+    //Helix Manager Sequences
+    public SerializableDictionnary<string, int> helixSequences;
+
     //Level to Load String
     public string currentLevelID = "WORLD";
 
@@ -97,6 +100,7 @@ public class GameData
         areaSunRewards = new SerializableDictionnary<string, bool>();
         worldStateUpdateBoxes = new SerializableDictionnary<string, bool>();
         introAreaCinematic = new SerializableDictionnary<string, bool>();
+        helixSequences = new SerializableDictionnary<string, int>();
 
         endPortalActive = false;
 
