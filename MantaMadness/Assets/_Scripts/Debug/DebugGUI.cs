@@ -144,6 +144,12 @@ public class DebugGUI : MonoBehaviour
             CoinManager.Instance.PickupClam(100);
         }
 
+        if (GUILayout.Button($"Add 10 buckies"))
+        {
+            CoinManager.Instance.PickupBuckie(10);
+        }
+
+
 
         if (GUILayout.Button($"Reset coin"))
         {
@@ -153,6 +159,14 @@ public class DebugGUI : MonoBehaviour
         if (GUILayout.Button($"Reset Steam Achievement"))
         {
             SteamSuccess.instance.ResetSteamSuccess();
+        }
+
+        if(GUILayout.Button($"Activate All coins of area"))
+        {
+            foreach(CoinHolder sun in CollectibleAreaManager.CurrentArea.suns)
+            {
+                sun.ForceSpawn();
+            }
         }
 
         GUILayout.EndArea();

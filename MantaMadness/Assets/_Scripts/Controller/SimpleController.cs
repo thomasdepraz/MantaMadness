@@ -1658,8 +1658,18 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         }
     }
 
+    private Coroutine canonAirControlDelay;
+
+    private IEnumerator CanonShotControlDelay()
+    {
+        yield return new WaitForSeconds(3f);
+        canonAirControlDelay = null;
+    }
+
     private void AirControl()
     {
+        if (canonAirControlDelay != null) return;
+
         Vector3 camForward;
         Vector3 camRight;
 
@@ -1721,6 +1731,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         //hard clamp -  probably there is a better way to do this eg. add inverse force
         //ClampHorizontalVelocity(controllerData.maxAirControlSpeed);
     }
+
 
     public Vector3 direction;
     private void Movement()
@@ -1926,6 +1937,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         {
             ForceLock(false);
         }
+        canonAirControlDelay = StartCoroutine(CanonShotControlDelay());
+        State = ControllerState.JUMPING;
         transform.rotation = new Quaternion(0, target.transform.rotation.y, 0, target.transform.rotation.w);
         rb.AddForce(target.forward * propulsionForce, ForceMode.VelocityChange);
         ResetJump();

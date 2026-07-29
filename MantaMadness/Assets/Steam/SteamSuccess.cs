@@ -29,9 +29,10 @@ public enum SteamSuccessEnum
     ACH_AREA_OUTSKIRT,
     ACH_AREA_SEWER,
     ACH_AREA_CITY,
-    ACH_AREA_LAVATREASURE,
+    ACH_AREA_LAVAHEART,
     ACH_AREA_BACKROOM,
     ACH_AREA_ICELEVEL,
+    ACH_EVENT_BACKROOM,
 }
 
 public class SteamSuccess : MonoBehaviour, IDataPersistence
@@ -57,7 +58,7 @@ public class SteamSuccess : MonoBehaviour, IDataPersistence
 
     private IEnumerator LoadDelay(GameData data)
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
         SyncAchievements(data);
     }
 
@@ -105,10 +106,16 @@ public class SteamSuccess : MonoBehaviour, IDataPersistence
         //UnlockIf(CoinManager.Instance.PickupCoinCount == 38, SteamSuccessEnum.ACH_EVENT_JOVIAL);
 
         //Johnnies Count
-        UnlockIf(CoinManager.Instance.PickupCoinCount == 38, SteamSuccessEnum.ACH_EVENT_ALLJOHNNIES);
+        UnlockIf(CoinManager.Instance.AreAllCoinsCollected(), SteamSuccessEnum.ACH_EVENT_ALLJOHNNIES);
 
         //Areas Completed
-        //Thoses ared hnadled through each AreaIntroManager Respectively
+        //HANDLE COLLECTIBLEMANAGER
+        foreach (CollectibleAreaManager area in CollectibleAreaRegistry.Instance.areas)
+        {
+            //UnlockIf(area.CollectedCollectibles >= area.TotalCollectibles && area.CollectedSun >= area.TotalSun, area.signal.successID);
+            area.CheckAllCollectibleCollected();
+        }
+        //Thoses ared hnadled through each AreaCollectibleManager Respectively
 
         SteamUserStats.StoreStats();
     }

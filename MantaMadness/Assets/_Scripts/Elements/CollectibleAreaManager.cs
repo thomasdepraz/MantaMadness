@@ -10,7 +10,7 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
     [SerializeField] public string areaName;
 
     private Collectible[] collectibles;
-    [SerializeField]private CoinHolder[] suns;
+    [SerializeField]public CoinHolder[] suns;
 
     [SerializeField] private CoinHolder sunOnClearEnable;
 
@@ -20,7 +20,7 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
 
     public int TotalCollectibles => collectibles.Length;
 
-    private SteamSignal signal;
+    public SteamSignal signal;
 
     public int CollectedCollectibles
     {
@@ -106,10 +106,10 @@ public class CollectibleAreaManager : MonoBehaviour, IDataPersistence
                 sunOnClearEnable.ForceSpawn();
         }
 
-        if(CollectedCollectibles >= TotalCollectibles && CollectedSun >= TotalSun)
-        {
-            OnAllCollectiblesCollected();
-        }
+        //if(CollectedCollectibles >= TotalCollectibles && CollectedSun >= TotalSun)
+        //{
+        //    OnAllCollectiblesCollected();
+        //}
 
     }
 

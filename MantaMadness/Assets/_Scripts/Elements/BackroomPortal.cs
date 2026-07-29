@@ -8,6 +8,8 @@ public class BackroomPortal : Portal
     [SerializeField] protected AMBIENT ambientToPlay = AMBIENT.NULL;
     private Coroutine cooldownCoroutine = null;
 
+    private SteamSignal signal;
+
     protected override void Start()
     {
         base.Start();
@@ -26,7 +28,8 @@ public class BackroomPortal : Portal
         {
             PortalManager.Instance.portals.Add(this);
         }
-    }
+        signal = GetComponent<SteamSignal>();
+        }
 
     public override void Teleport()
     {
@@ -35,6 +38,7 @@ public class BackroomPortal : Portal
 
         if (CameraTargetController.instance != null)
             CameraTargetController.instance.SyncYawPitchToPlayerFacing();
+
 
         //if (!string.IsNullOrEmpty(collectibleAreaID))
         //{
@@ -56,10 +60,14 @@ public class BackroomPortal : Portal
                 if (cooldownCoroutine == null)
                 {
                     cooldownCoroutine = StartCoroutine(CooldownRoutine(controller));
-                    //CANCEL PLAYER STOMP
                     controller.ForceLock(true);
                     PortalManager.Instance.SetCheckpoint(targetIndex, displayAreaName, nameToDisplay, LevelID, collectibleAreaID);
                     PortalManager.Instance.StartCoroutine(PortalManager.Instance.BackroomTeleport(targetIndex, enterSecretRoom, musicToPlay,  specialWeatherType, ambientToPlay, areaIntro, this));
+
+                    if (signal != null)
+                    {
+                        signal.Trigger();
+                    }
                 }
             }
         }

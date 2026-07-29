@@ -7,8 +7,12 @@ using UnityEngine;
 public class CoinManager : MonoBehaviour, IDataPersistence
 {
     public static CoinManager Instance;
-
     public CoinHolder[] coinHolders;
+    public bool AreAllCoinsCollected()
+    {
+        return PickupCoinCount >= coinHolders.Length;
+    }
+
     private void Awake()
     {
         if(Instance != null && Instance != this)

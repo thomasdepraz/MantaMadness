@@ -57,11 +57,26 @@ public class GameInterface : MonoBehaviour, IScreen
     public ParticleSystem[] catParticles;
 
     [Header("Area Name Parameters")]
-    [SerializeField] private RectTransform startPosition;
-    [SerializeField] private RectTransform endPosition;
     [SerializeField] private RectTransform textRect;
-    [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private TextMeshProUGUI areaNameText;
     [SerializeField] private TextEffect textEffects;
+
+    [SerializeField, Range(0f, 1f)]
+    private float areaNameVisibleHeight = 0.85f;
+
+    [SerializeField]
+    private float areaNameOutsideMargin = 50f;
+
+    [SerializeField]
+    private float areaNameEnterDuration = 1.5f;
+
+    [SerializeField]
+    private float areaNameVisibleDuration = 4f;
+
+    [SerializeField]
+    private float areaNameExitDuration = 1.5f;
+
+    private Coroutine areaNameRoutine;
 
     [Header("Black Bar Effect Parameters")]
     [SerializeField] private RectTransform topBar;
@@ -83,18 +98,90 @@ public class GameInterface : MonoBehaviour, IScreen
         float offsetY = Screen.height * 0.1f;
         return new Vector2(0, offsetY);
     }
-    private Vector2 GetScreenRelativePosition(float xPercent, float yPercent)
-    {
-        return new Vector2(
-            (xPercent - 0.5f) * Screen.width,
-            (yPercent - 0.5f) * Screen.height
-        );
-    }
 
     // FMOD beats still fire while paused; skip new tweens so they cannot stack on resume.
     private static bool GameplayPaused()
     {
         return Time.timeScale == 0f;
+    }
+
+    private Vector2 GetAreaNamePosition(float normalizedHeight, bool outsideScreen)
+    {
+        RectTransform parentRect = textRect.parent as RectTransform;
+
+        if (parentRect == null)
+        {
+            Debug.LogError("AreaNameText doit avoir un RectTransform parent.");
+            return textRect.anchoredPosition;
+        }
+
+        /*
+         * Limites du parent dans son propre espace local.
+         *
+         * Exemple avec pivot 0.5 :
+         * bottom = -540
+         * top    =  540
+         */
+        float parentBottom = parentRect.rect.yMin;
+        float parentTop = parentRect.rect.yMax;
+
+        /*
+         * Position verticale réelle des anchors du texte dans le parent.
+         *
+         * anchoredPosition est un offset par rapport aux anchors,
+         * pas une position locale absolue.
+         */
+        float anchorCenterY = Mathf.Lerp(
+            parentBottom,
+            parentTop,
+            (textRect.anchorMin.y + textRect.anchorMax.y) * 0.5f
+        );
+
+        float targetLocalY;
+
+        if (outsideScreen)
+        {
+            /*
+             * On place le bord inférieur du texte au-dessus du bord supérieur
+             * du parent.
+             *
+             * Avec un pivot à 0.5, il faut ajouter la moitié de la hauteur.
+             * Avec un autre pivot, le calcul reste correct.
+             */
+            float distanceFromPivotToBottom =
+                textRect.rect.height * textRect.pivot.y;
+
+            targetLocalY =
+                parentTop +
+                distanceFromPivotToBottom +
+                areaNameOutsideMargin;
+        }
+        else
+        {
+            /*
+             * Position visible exprimée en pourcentage de la hauteur du parent.
+             *
+             * 0    = bas
+             * 0.5  = milieu
+             * 0.85 = proche du haut
+             * 1    = haut
+             */
+            targetLocalY = Mathf.Lerp(
+                parentBottom,
+                parentTop,
+                normalizedHeight
+            );
+        }
+
+        /*
+         * Conversion de la position locale voulue vers anchoredPosition.
+         */
+        float targetAnchoredY = targetLocalY - anchorCenterY;
+
+        return new Vector2(
+            textRect.anchoredPosition.x,
+            targetAnchoredY
+        );
     }
 
     public void Start()
@@ -111,9 +198,9 @@ public class GameInterface : MonoBehaviour, IScreen
         MusicManager.OnBeat += SunOnBeatFever;
         MusicManager.OnBeat2 += SunOnBeat;
 
-        textRect = text.GetComponent<RectTransform>();
+        textRect = areaNameText.GetComponent<RectTransform>();
         textEffects.StartManualEffects();
-        text.enabled = false;
+        areaNameText.enabled = false;
 
         endScreenOriginalScale = endScreenVisual.transform.localScale;
         endScreenVisual.SetActive(false);
@@ -252,26 +339,71 @@ public class GameInterface : MonoBehaviour, IScreen
     }
     public void StartDisplayCoroutine(string name)
     {
-        StartCoroutine(DisplayCoroutine(name));
+        if (areaNameRoutine != null)
+        {
+            StopCoroutine(areaNameRoutine);
+            areaNameRoutine = null;
+        }
+
+        textRect.DOKill();
+
+        areaNameRoutine = StartCoroutine(DisplayCoroutine(name));
     }
     private IEnumerator DisplayCoroutine(string name)
     {
-        if(text.enabled == false)
-        {
-            text.enabled = true;
-        }
-        text.DOKill();
+        areaNameText.enabled = true;
 
-        text.text = name;
+        // Annule l'animation précédente.
+        textRect.DOKill();
+
+        areaNameText.text = name;
+        textRect.localScale = Vector3.one;
+
+        /*
+         * Force TMP et le Canvas à mettre à jour les dimensions.
+         * Important si le nouveau nom est plus grand ou plus petit.
+         */
+        areaNameText.ForceMeshUpdate();
+        Canvas.ForceUpdateCanvases();
+
+        Vector2 outsidePosition = GetAreaNamePosition(
+            normalizedHeight: 1f,
+            outsideScreen: true
+        );
+
+        Vector2 visiblePosition = GetAreaNamePosition(
+            normalizedHeight: areaNameVisibleHeight,
+            outsideScreen: false
+        );
+
+        // Placement immédiat, complètement au-dessus de l'écran.
+        textRect.anchoredPosition = outsidePosition;
+
+        // L'effet commence une fois le texte correctement placé.
         textEffects.StartManualEffects();
 
-        text.transform.localScale = Vector3.one;
-        textRect.anchoredPosition = startPosition.anchoredPosition;
+        // Descente depuis le haut.
+        Tween enterTween = textRect
+            .DOAnchorPos(visiblePosition, areaNameEnterDuration)
+            .SetEase(Ease.OutQuad)
+            .SetUpdate(true);
 
-        textRect.DOAnchorPos(GetScreenRelativePosition(0.5f,0.85f), 1.5f).SetEase(Ease.OutQuad);
+        yield return enterTween.WaitForCompletion();
 
-        yield return new WaitForSeconds(4f);
-        textRect.DOAnchorPos(GetScreenRelativePosition(0.5f, 1.2f), 1.5f).SetEase(Ease.InQuad);
+        // Temps d'affichage.
+        yield return new WaitForSecondsRealtime(areaNameVisibleDuration);
+
+        // Remontée jusqu'à être complètement hors écran.
+        Tween exitTween = textRect
+            .DOAnchorPos(outsidePosition, areaNameExitDuration)
+            .SetEase(Ease.InQuad)
+            .SetUpdate(true);
+
+        yield return exitTween.WaitForCompletion();
+
+        // Désactivation seulement après la sortie complète.
+        areaNameText.enabled = false;
+        areaNameRoutine = null;
     }
 
     public void ToggleBlackBarEffect(bool enable, float duration)

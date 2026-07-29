@@ -56137,7 +56137,9 @@ MonoBehaviour:
   - {fileID: 6890602899652519664}
   - {fileID: 4053796055318743148}
   - {fileID: 5394503653676973383}
-  mantaBodyVisual: {fileID: 5177569997893001308}
+  mantaBodyVisuals:
+  - {fileID: 5177569997893001308}
+  - {fileID: 7296968408393287643}
   afterImageMat: {fileID: 2100000, guid: d2c13719e2c3b0f4496d286cd93fc979, type: 2}
   superAfterImageMat: {fileID: 2100000, guid: 2f29a0e3daa296a4f83b9b37f0be0ec5, type: 2}
   fadeDuration: 1
@@ -116851,6 +116853,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -30.231945
       objectReference: {fileID: 0}
+    - target: {fileID: -7135954597163833240, guid: 3686c91cfe1ffac4496a5010c31f3434, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: -7131226577173465550, guid: 3686c91cfe1ffac4496a5010c31f3434, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 3.122102e-15
@@ -117295,6 +117301,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 7c05d9f04abcbd5409ba9ee7c74074cc, type: 2}
+    - target: {fileID: -3001417926729671872, guid: 3686c91cfe1ffac4496a5010c31f3434, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 37695b4ad3f1232469fbd519d5ccc906, type: 2}
     - target: {fileID: -2972943782867843878, guid: 3686c91cfe1ffac4496a5010c31f3434, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 58.793247
@@ -118613,6 +118623,11 @@ SkinnedMeshRenderer:
 --- !u!137 &7129260874207969598 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: -3320031808303686235, guid: 3686c91cfe1ffac4496a5010c31f3434, type: 3}
+  m_PrefabInstance: {fileID: 3683056463477890203}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &7296968408393287643 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -3001417926729671872, guid: 3686c91cfe1ffac4496a5010c31f3434, type: 3}
   m_PrefabInstance: {fileID: 3683056463477890203}
   m_PrefabAsset: {fileID: 0}
 --- !u!137 &7468101024440721900 stripped

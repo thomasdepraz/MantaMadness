@@ -228,6 +228,10 @@ public class ShopStand : MonoBehaviour, IDataPersistence
                 {
                     UnlockSun();
                 }
+                else if (item.type == ShopItemType.KeyItem)
+                {
+                    UnlockKeyItem(Game.Instance.player);
+                }
 
                 if (renewalCount >= item.itemRenewalLimit)
                 {

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SteamSignal : MonoBehaviour
 {
-    [SerializeField] private SteamSuccessEnum successID;
+    [SerializeField] public SteamSuccessEnum successID;
 
     public void Trigger()
     {

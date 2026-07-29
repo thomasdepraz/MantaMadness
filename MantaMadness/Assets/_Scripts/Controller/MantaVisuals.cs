@@ -88,7 +88,7 @@ public class MantaVisuals : MonoBehaviour
     public SkinnedMeshRenderer[] flattenVisuals;
 
     [Header("After Image")]
-    public SkinnedMeshRenderer mantaBodyVisual;
+    public SkinnedMeshRenderer[] mantaBodyVisuals;
     public Material afterImageMat;
     public Material superAfterImageMat;
     public float fadeDuration= 1f;
@@ -206,7 +206,7 @@ public class MantaVisuals : MonoBehaviour
         PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.SURF);
 
         originalMaterials = new Material[1];
-        originalMaterials[0] = mantaBodyVisual.sharedMaterial;
+        originalMaterials[0] = mantaBodyVisuals[0].sharedMaterial;
         ToggleTrailerVisuals(false);
     }
 
@@ -255,7 +255,10 @@ public class MantaVisuals : MonoBehaviour
     void SpawnAfterImage()
     {
         Mesh mesh = new Mesh();
-        mantaBodyVisual.BakeMesh(mesh);
+        foreach(SkinnedMeshRenderer visual in mantaBodyVisuals)
+        {
+            visual.BakeMesh(mesh);
+        }
 
         Mesh snapshot = Instantiate(mesh);
 
@@ -268,7 +271,10 @@ public class MantaVisuals : MonoBehaviour
     void SpawnSuperAfterImage()
     {
         Mesh mesh = new Mesh();
-        mantaBodyVisual.BakeMesh(mesh);
+        foreach (SkinnedMeshRenderer visual in mantaBodyVisuals)
+        {
+            visual.BakeMesh(mesh);
+        }
 
         Mesh snapshot = Instantiate(mesh);
 
@@ -1025,11 +1031,17 @@ public class MantaVisuals : MonoBehaviour
         electricVisualActive = enable;
 
         if (enable)
-            mantaBodyVisual.material = electricMaterial;
+            foreach (SkinnedMeshRenderer visual in mantaBodyVisuals)
+            {
+                visual.material = electricMaterial;
+            }
         else
-            mantaBodyVisual.material = originalMaterials[0];
+            foreach (SkinnedMeshRenderer visual in mantaBodyVisuals)
+            {
+                visual.material = originalMaterials[0];
+            }
 
-        if (electricSparkParticles != null)
+                if (electricSparkParticles != null)
         {
             if (enable)
                 electricSparkParticles.Play();
@@ -1062,11 +1074,17 @@ public class MantaVisuals : MonoBehaviour
     {
         if (toggle)
         {
-            mantaBodyVisual.material = burntMaterial;
+            foreach(SkinnedMeshRenderer visual in mantaBodyVisuals)
+            {
+                visual.material = burntMaterial;
+            }
         }
         else
         {
-            mantaBodyVisual.material = originalMaterials[0];
+            foreach (SkinnedMeshRenderer visual in mantaBodyVisuals)
+            {
+                visual.material = originalMaterials[0];
+            }
         }
 
         if (toggle)
@@ -1093,13 +1111,18 @@ public class MantaVisuals : MonoBehaviour
             case DeathType.BURNED:
                 triggerAnimation("Burn");
                 burntParticles.Play();
-                mantaBodyVisual.material = burntMaterial;
+                foreach(SkinnedMeshRenderer visual in mantaBodyVisuals)
+                {
+                    visual.material = burntMaterial;
+                }
                 break;
 
             case DeathType.ELECTROCUTED:
                 triggerAnimation("Electrocuted");
-                electrocutedParticles.Play();
-                mantaBodyVisual.material = electrocutedMaterial;
+                electrocutedParticles.Play(); foreach (SkinnedMeshRenderer visual in mantaBodyVisuals)
+                {
+                    visual.material = electrocutedMaterial;
+                }
                 break;
 
             case DeathType.FLATTEN:
@@ -1138,9 +1161,10 @@ public class MantaVisuals : MonoBehaviour
 
         burntParticles.Stop();
 
-        if (mantaBodyVisual.material.mainTexture == burntMaterial.mainTexture)
+        if (mantaBodyVisuals[0].material.mainTexture == burntMaterial.mainTexture)
         {
-            mantaBodyVisual.material = originalMaterials[0];
+            ResetPlayerMat();
+            //mantaBodyVisuals.material = originalMaterials[0];
         }
     }
 
@@ -1150,7 +1174,7 @@ public class MantaVisuals : MonoBehaviour
 
         electrocutedParticles.Stop();
 
-        if (mantaBodyVisual.material.mainTexture == electrocutedMaterial.mainTexture)
+        if (mantaBodyVisuals[0].material.mainTexture == electrocutedMaterial.mainTexture)
         {
             ResetPlayerMat();
         }
@@ -1162,11 +1186,17 @@ public class MantaVisuals : MonoBehaviour
     {
         if(Game.Instance.player.lavaResistanceAbility == true)
         {
-            mantaBodyVisual.material = lavaResistMat;
+            foreach(SkinnedMeshRenderer visual in mantaBodyVisuals)
+            {
+                visual.material = lavaResistMat;
+            }
         }
         else
         {
-            mantaBodyVisual.material = originalMaterials[0];
+            foreach (SkinnedMeshRenderer visual in mantaBodyVisuals)
+            {
+                visual.material = originalMaterials[0];
+            }
         }
 
     }
