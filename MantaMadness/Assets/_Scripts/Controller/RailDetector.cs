@@ -7,6 +7,7 @@ public class RailDetector : MonoBehaviour
 {
     public SimpleController controller;
     private bool onRail;
+    private bool onReaver;
     private bool onWaterfall;
     private bool transferLocked = false;
 
@@ -115,7 +116,18 @@ public class RailDetector : MonoBehaviour
                 onWaterfall = true;
             }
         }
+
+        else if(other.TryGetComponent(out ReaverBoost reaver) && onReaver is false)
+        {
+            Debug.Log("REAVER BOOST DETECTED");
+            if (controller.EnterReaverBoost(reaver))
+            {
+                Debug.Log("REAVER BOOST ENTERED");
+                onReaver = true;
+            }
+        }
     }
+
 
     void Update()
     {
@@ -148,7 +160,13 @@ public class RailDetector : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         onRail = false;
         onWaterfall = false;
+        onReaver = false;
         coroutine = null;
+    }
+    public void ExitReaver()
+    {
+        if (coroutine == null)
+            coroutine = StartCoroutine(Cooldown());
     }
 
     void DetectRailTransfers()

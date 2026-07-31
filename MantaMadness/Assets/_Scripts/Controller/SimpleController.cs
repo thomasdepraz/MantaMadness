@@ -27,6 +27,7 @@ public enum ControllerState
     BURN,
     ELECTROCUTED,
     FLATTEN,
+    REAVERSURF,
     DEBUG,
 }
 
@@ -40,6 +41,7 @@ public enum ControllerAbility
     GRIND,
     CAT,
     DYNAMO,
+    REAVER,
 }
 
 public enum DeathType
@@ -170,6 +172,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     [SerializeField] public bool grindAbility { get; private set; }
     [SerializeField] public bool catAbility { get; private set; }
     [SerializeField] public bool dynamoAbility { get; private set; }
+    [SerializeField] public bool reaverAbility { get; private set; }
 
     [Header("Ledge Grab")]
     [SerializeField] private float ledgeHeight = 1.5f;
@@ -207,6 +210,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public Vector2 AirControlDirection => airControl;
     public bool InAirRail => currentAirRail != null;
     public bool OnRail => currentRail != null;
+    public bool OnReaverRail => currentReaver != null;
     public bool OnWaterFall => currentWaterFall != null;
     public bool IsLocked => OnRail || InAirRail || forceLocked;
     public bool IsSpinning => isSpinning || isRailSpinning || isSuperSpinning || ForcedSpin;
@@ -280,7 +284,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private WaterBlock currentWaterBlock;
     private AirRail currentAirRail;
     private Rail currentRail;
+    private ReaverBoost currentReaver;
     private Rail lastRail;
+    private ReaverBoost lastReaver;
     private WaterFall currentWaterFall;
     private float maxDivingDepth;
     private float maxDepth;
@@ -365,6 +371,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     public Action style;
     public Action<DeathType> deathStart;
     public Action<DeathType> deathEnd;
+    public Action<ReaverBoost> enterReaverBoost;
+    public Action exitReaverBoost;
 
 
     private void Awake()
@@ -434,6 +442,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         grindAbility = data.grind;
         catAbility = data.cat;
         dynamoAbility = data.dynamo;
+        reaverAbility = data.reaver;
     }
 
     public void SaveData(ref GameData data)
@@ -446,6 +455,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         data.grind = grindAbility;
         data.cat = catAbility;
         data.dynamo = dynamoAbility;
+        data.reaver = reaverAbility;
     }
 
     private void OnStateEnter(ControllerState newState)
@@ -1226,6 +1236,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         bumpRail = Physics.Raycast(hoverBehaviour.normalContainer.position, hoverBehaviour.normalContainer.forward, out RaycastHit railInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
         stompSweetSpot = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit stompInfo, controllerData.stompCancelRange, defaultRaycastLayer.value);
 
+
         if (pendingAntiGravJump)
         {
             pendingAntiGravJump = false;
@@ -1314,6 +1325,23 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             }
 
             return;
+        }
+
+        if (OnReaverRail)
+        {
+            if(!reaverMovementReady)
+                return;
+
+            Vector3 direction = currentReaver.transform.up.normalized;
+
+            Vector3 nextPosition =rb.position +direction * controllerData.reaverSpeed * Time.fixedDeltaTime;
+
+            rb.MovePosition(nextPosition);
+
+            if (currentReaver.HasPassedTop(nextPosition))
+            {
+                ExitReaverBoost();
+            }
         }
 
         if (OnWaterFall)
@@ -2164,6 +2192,95 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         rb.isKinematic = true;
         return true;
 
+    }
+
+    public bool EnterReaverBoost(ReaverBoost reaver)
+    {
+        if (!reaverAbility)
+            return false;
+
+        // On est déjà dans ce Reaver.
+        if (State == ControllerState.REAVERSURF && currentReaver == reaver)
+            return false;
+
+        if (exitReaverCooldownRoutine != null)
+            return false;
+
+        currentReaver = reaver;
+
+        CancelActionWindow();
+
+        State = ControllerState.REAVERSURF;
+
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.isKinematic = true;
+
+        Debug.Log($"Entrée dans le Reaver : {reaver.name}");
+
+        enterReaverBoost?.Invoke(reaver);
+
+        if (reaverStartupRoutine != null)
+            StopCoroutine(reaverStartupRoutine);
+
+        reaverStartupRoutine = StartCoroutine(ReaverBoostStartup(reaver));
+
+        return false;
+    }
+
+    private Coroutine reaverStartupRoutine;
+    private bool reaverMovementReady;
+
+    private IEnumerator ReaverBoostStartup(ReaverBoost reaver)
+    {
+        //Wait le temps que le perso se transforment en Shark fin
+        yield return new WaitForSeconds(0.25f);
+
+        if (currentReaver == reaver)
+        {
+            reaverMovementReady = true;
+            Debug.Log("Mouvement Reaver autorisé");
+        }
+        reaverStartupRoutine = null;
+    }
+
+    private Coroutine exitReaverCooldownRoutine;
+
+    private IEnumerator ExitReaverCooldown()
+    {
+        yield return new WaitForSeconds(0.25f);
+        exitReaverCooldownRoutine = null;
+    }
+
+    private void ExitReaverBoost()
+    {
+        if (!OnReaverRail || currentReaver == null)
+            return;
+
+        Vector3 exitDirection = currentReaver.transform.up.normalized;
+        float exitSpeed = controllerData.reaverJumpForce;
+
+        if (reaverStartupRoutine != null)
+        {
+            StopCoroutine(reaverStartupRoutine);
+            reaverStartupRoutine = null;
+        }
+
+        if(exitReaverCooldownRoutine == null)
+        {
+            exitReaverCooldownRoutine = StartCoroutine(ExitReaverCooldown());
+        }
+
+        reaverMovementReady = false;
+        currentReaver = null;
+
+        rb.isKinematic = false;
+        rb.linearVelocity = exitDirection * exitSpeed;
+
+        State = ControllerState.JUMPING;
+
+        exitReaverBoost?.Invoke();
+        railDetector.ExitReaver();
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -3677,6 +3794,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             grindAbility = true;
             catAbility = true;
             dynamoAbility = true;
+            reaverAbility = true;
         }
         else
         {
@@ -3688,6 +3806,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             grindAbility = false;
             catAbility = false;
             dynamoAbility = false;
+            reaverAbility = false;
         }
         updateEquipmentVisual?.Invoke();
     }

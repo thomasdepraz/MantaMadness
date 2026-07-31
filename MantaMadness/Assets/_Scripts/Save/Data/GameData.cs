@@ -64,6 +64,7 @@ public class GameData
     public bool grind;
     public bool cat;
     public bool dynamo;
+    public bool reaver;
 
     //End Game Active
     public bool endPortalActive;
@@ -112,6 +113,7 @@ public class GameData
         grind = false;
         cat = false;
         dynamo = false;
+        reaver = false;
 
     }
 }

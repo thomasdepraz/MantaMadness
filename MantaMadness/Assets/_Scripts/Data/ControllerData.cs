@@ -162,6 +162,10 @@ public class ControllerData : ScriptableObject
     public float spinForce = 50f;
     public float spinPerfectBonusForce = 70f;
 
+    [Header("Reaver Paramaters")]
+    public float reaverSpeed = 50f;
+    public float reaverJumpForce = 100f;
+
     [Header("Electric Jump")]
     public float electricJumpSpeed = 40f;
     public float electricJumpDuration = 0.35f;

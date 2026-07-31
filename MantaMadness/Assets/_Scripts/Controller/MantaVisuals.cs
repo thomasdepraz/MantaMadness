@@ -83,6 +83,7 @@ public class MantaVisuals : MonoBehaviour
     public Material electrocutedMaterial;
     private Material[] originalMaterials;
     public GameObject mantaHolder;
+    public GameObject playerReaverBody;
 
     [Header("Trailer Visual")]
     public SkinnedMeshRenderer[] flattenVisuals;
@@ -95,6 +96,12 @@ public class MantaVisuals : MonoBehaviour
     public float interval = 0.05f;
     public float strafEffectDuration = 0.75f;
 
+    [Header("Reaver Visual")]
+    [SerializeField] private Vector3 reaverRotationOffset;
+    [SerializeField] private float reaverRotationDuration = 0.2f;
+    [SerializeField] private ParticleSystem reaverImpactParticle;
+    [SerializeField] private ParticleSystem reaverJumpParticle;
+    [SerializeField] private ParticleSystem[] reaverParticlesBoost;
 
     private int driftId = Animator.StringToHash("Drifting");
     private int driftDirId = Animator.StringToHash("DriftDirection");
@@ -155,6 +162,8 @@ public class MantaVisuals : MonoBehaviour
         mantaController.electricBehaviour.electricJumpStart += OnElectricJumpStart;
         mantaController.deathStart += OnDeathStart;
         mantaController.deathEnd += OnDeathEnd;
+        mantaController.enterReaverBoost += OnEnterReaver;
+        mantaController.exitReaverBoost+= OnExitReaver;
 
     }
 
@@ -196,6 +205,8 @@ public class MantaVisuals : MonoBehaviour
         mantaController.electricBehaviour.electricJumpStart -= OnElectricJumpStart;
         mantaController.deathStart -= OnDeathStart;
         mantaController.deathEnd -= OnDeathEnd;
+        mantaController.enterReaverBoost -= OnEnterReaver;
+        mantaController.exitReaverBoost -= OnExitReaver;
 
         EnableElectricVisual(false);
     }
@@ -208,6 +219,7 @@ public class MantaVisuals : MonoBehaviour
         originalMaterials = new Material[1];
         originalMaterials[0] = mantaBodyVisuals[0].sharedMaterial;
         ToggleTrailerVisuals(false);
+        playerReaverBody.SetActive(false);
     }
 
     private void Dash(int dashCount)
@@ -255,11 +267,7 @@ public class MantaVisuals : MonoBehaviour
     void SpawnAfterImage()
     {
         Mesh mesh = new Mesh();
-        foreach(SkinnedMeshRenderer visual in mantaBodyVisuals)
-        {
-            visual.BakeMesh(mesh);
-        }
-
+        mantaBodyVisuals[0].BakeMesh(mesh);
         Mesh snapshot = Instantiate(mesh);
 
         var ghost = AfterImagePool.Instance.GetGhost();
@@ -271,11 +279,7 @@ public class MantaVisuals : MonoBehaviour
     void SpawnSuperAfterImage()
     {
         Mesh mesh = new Mesh();
-        foreach (SkinnedMeshRenderer visual in mantaBodyVisuals)
-        {
-            visual.BakeMesh(mesh);
-        }
-
+        mantaBodyVisuals[0].BakeMesh(mesh);
         Mesh snapshot = Instantiate(mesh);
 
         var ghost = AfterImagePool.Instance.GetGhost();
@@ -630,6 +634,68 @@ public class MantaVisuals : MonoBehaviour
         reverseGrindParticles.SetFloat(ReverseGrindLifeTime, mantaController.railReversePauseTime);
         reverseGrindParticles.Play();
         playerMantaTrueBody.transform.DOLocalRotate(new Vector3(0f,3240f,0f),mantaController.railReversePauseTime, RotateMode.FastBeyond360);
+    }
+
+    public void OnEnterReaver(ReaverBoost reaver)
+    {
+        StartCoroutine(StartReaverBoost(reaver));
+    }
+
+    public void OnExitReaver()
+    {
+        EndReaverBoost();
+    }
+
+    public IEnumerator StartReaverBoost(ReaverBoost reaver)
+    {
+        Tween scaleTween;
+        ToggleMantaVisual(false);
+        playerReaverBody.SetActive(true);
+        playerReaverBody.transform.localScale = Vector3.zero;
+
+        SetReaverVisualRotation(reaver, true);
+        scaleTween = playerReaverBody.transform.DOScale(Vector3.one * 3, 0.25f).SetEase(Ease.OutBack);
+        yield return scaleTween.WaitForCompletion();
+
+        foreach(ParticleSystem particle in reaverParticlesBoost)
+        {
+            particle.Play();
+        }
+    }
+
+    public void EndReaverBoost()
+    {
+        ToggleMantaVisual(true);
+        playerReaverBody.SetActive(false);
+        foreach(ParticleSystem particle in reaverParticlesBoost)
+        {
+            particle.Stop();
+        }
+    }
+
+    private void SetReaverVisualRotation(ReaverBoost reaver, bool instant)
+    {
+        if (reaver == null || playerReaverBody == null)
+            return;
+
+        Vector3 climbDirection = reaver.transform.up.normalized;
+        Vector3 planeNormal = reaver.transform.forward.normalized;
+
+        Quaternion targetRotation =
+            Quaternion.LookRotation(climbDirection, planeNormal);
+
+        targetRotation *= Quaternion.Euler(reaverRotationOffset);
+
+        if (instant)
+        {
+            playerReaverBody.transform.rotation = targetRotation;
+        }
+        else
+        {
+            playerReaverBody.transform
+                .DORotateQuaternion(targetRotation, reaverRotationDuration)
+                .SetEase(Ease.OutSine);
+        }
     }
 
     //public void GrindOnRail()
