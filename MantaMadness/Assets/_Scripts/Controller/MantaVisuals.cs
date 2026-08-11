@@ -73,6 +73,7 @@ public class MantaVisuals : MonoBehaviour
     public SkinnedMeshRenderer alienAntennaVisual;
     public SkinnedMeshRenderer doubleJumpGlassesVisual;
     public SkinnedMeshRenderer grindVisual;
+    public SkinnedMeshRenderer reaverVisual;
     public SkinnedMeshRenderer[] catVisual;
     public SkinnedMeshRenderer[] dynamoVisual;
     public Material[] playerMat;
@@ -653,6 +654,8 @@ public class MantaVisuals : MonoBehaviour
         playerReaverBody.SetActive(true);
         playerReaverBody.transform.localScale = Vector3.zero;
 
+        reaverImpactParticle.Play();
+
         SetReaverVisualRotation(reaver, true);
         scaleTween = playerReaverBody.transform.DOScale(Vector3.one * 3, 0.25f).SetEase(Ease.OutBack);
         yield return scaleTween.WaitForCompletion();
@@ -671,6 +674,8 @@ public class MantaVisuals : MonoBehaviour
         {
             particle.Stop();
         }
+
+        reaverJumpParticle.Play();
     }
 
     private void SetReaverVisualRotation(ReaverBoost reaver, bool instant)
@@ -806,6 +811,15 @@ public class MantaVisuals : MonoBehaviour
             grindVisual.enabled = false;
         }
 
+        if(Game.Instance.player.reaverAbility == true)
+        {
+            reaverVisual.enabled = true;
+        }
+        else
+        {
+            reaverVisual.enabled= false;
+        }
+
         ////CAT ABILITY VISUAL
         //if(Game.Instance.player.catAbility == true)
         //{
@@ -827,14 +841,14 @@ public class MantaVisuals : MonoBehaviour
         {
             foreach (var visual in dynamoVisual)
             {
-               visual.enabled = true;
+                visual.enabled = true;
             }
         }
         else
         {
             foreach (var visual in dynamoVisual)
             {
-               visual.enabled = false;
+                visual.enabled = false;
             }
         }
 

@@ -17,7 +17,6 @@ public class Game : MonoBehaviour, IDataPersistence
 
     //Cinematic / State Points
     //public bool introCinematic = false;
-    public TimelineAsset introCinematicTimeline;
     public WorldCheckpoint introCheckpoint;
     public InteractableNPC introNpc;
     public InteractableNPC superGoodJoeNpc;
@@ -103,21 +102,22 @@ public class Game : MonoBehaviour, IDataPersistence
             //Start the game
             case 0:
                 //Play intro cinematic
-                //if (introCinematicTimeline != null)
-                //{
-                //    CinematicManager.instance.PlayCinematic(introCinematicTimeline);
-                //}
+
+
+
 
                 //PLAY LE DIALOG DU VIEUX
-                DialogManager.instance.StartCinematicInteraction(introNpc);
+                //DialogManager.instance.StartCinematicInteraction(introNpc);
 
                 //SET POSITION TO FIRST CHECKPOINT POS
                 WorldCheckpointManager.Instance.SetStartCheckpoint(introCheckpoint.respawnTransform);
                 WorldCheckpointManager.Instance.SetCheckpoint(introCheckpoint.respawnTransform, introCheckpoint.indexName, introCheckpoint.displayAreaName, introCheckpoint.nameToDisplay, introCheckpoint.LevelID, introCheckpoint.collectibleAreaID);
                 Vector3 pos = Vector3.zero;
-                Quaternion rotation;
-                Respawn(out pos, out rotation);
+                Quaternion rotation = Quaternion.Euler(0, 0, 0);
+                ForceSet(pos, rotation);
                 SetGameState(1);
+
+                CinematicManager.instance.PlayIntroCinematic();
                 break;
 
             case 1:
@@ -218,6 +218,12 @@ public class Game : MonoBehaviour, IDataPersistence
         FmodGlobalParameters.instance.SetGlobalParameter(FmodGlobalParamName.G_Player_Life, 0f);
         player.ForcePosition(position, rotation);
         isRespawning = false;
+    }
+
+    public void ForceSet(Vector3 position, Quaternion rotation)
+    {
+        UIManager.Instance.transitionScreen.TransitionOut();
+        player.ForcePosition(position, rotation);
     }
 
     public void SetRespawnTransform(Transform respawnTransform)

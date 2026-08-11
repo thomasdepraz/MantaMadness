@@ -35,6 +35,7 @@ public enum PlayerActionFMOD
     DEATHFIRE,
     DEATHELECTRIC,
     DEATHFLATTEN,
+    REAVERJUMP,
 }
 
 public enum PlayerRailGrindType

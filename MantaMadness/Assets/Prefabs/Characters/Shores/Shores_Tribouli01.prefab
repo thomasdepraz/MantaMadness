@@ -260,6 +260,7 @@ MonoBehaviour:
     - SHORES_TRIBOULI01_001
   npcState: 0
   dialogIndex: 0
+  signal: {fileID: 0}
 --- !u!65 &5189111245191156333
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -472,7 +473,7 @@ MonoBehaviour:
     scale: {x: 0.6, y: 1.4, z: 0.6}
     duration: 0
     delay: 0
-    ease: 18
+    ease: 1
   - animatePosition: 0
     animateRotation: 1
     animateScale: 1
@@ -489,6 +490,7 @@ MonoBehaviour:
   sequenceLoops: -1
   sequenceLoopType: 0
   beatSequenceType: 0
+  useUnscaledTime: 0
 --- !u!1 &6537386085536652421
 GameObject:
   m_ObjectHideFlags: 0

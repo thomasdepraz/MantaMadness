@@ -28,6 +28,7 @@ public enum ControllerState
     ELECTROCUTED,
     FLATTEN,
     REAVERSURF,
+    REAVERJUMP,
     DEBUG,
 }
 
@@ -701,6 +702,10 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     Vector3 targetDashDirection = Vector3.zero;
     private void AirDash(float jumpForwardForce, float jumpUpForce)
     {
+
+        if (reaverJumpCooldownRoutine != null)
+            return;
+
         jumpCount = 2;
         State = ControllerState.JUMPING;
         //if (conditions pour target dash true)
@@ -1541,7 +1546,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             State == ControllerState.AIRRIDE || 
             State == ControllerState.BOOSTJUMP ||
             State == ControllerState.BUMP ||
-            State == ControllerState.BURN)
+            State == ControllerState.BURN ||
+            State == ControllerState.REAVERJUMP)
         {
             float force = controllerData.gravity;
             if (State == ControllerState.AIRRIDE)
@@ -1655,7 +1661,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             Movement();
         }
 
-        if(State == ControllerState.FALLING || State == ControllerState.DIVING || State == ControllerState.JUMPING)
+        if(State == ControllerState.FALLING || State == ControllerState.DIVING || State == ControllerState.JUMPING || State == ControllerState.REAVERJUMP)
         {
             AirControl();
         }
@@ -1697,6 +1703,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private void AirControl()
     {
         if (canonAirControlDelay != null) return;
+
+        if (reaverJumpCooldownRoutine != null) return;
 
         Vector3 camForward;
         Vector3 camRight;
@@ -1752,6 +1760,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                 }
             }
         }
+
+
 
         rb.linearDamping = 0;
         rb.AddForce(direction * coeff * Time.fixedDeltaTime, ForceMode.VelocityChange);
@@ -2258,7 +2268,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             return;
 
         Vector3 exitDirection = currentReaver.transform.up.normalized;
-        float exitSpeed = controllerData.reaverJumpForce;
+
+        ReaverJump(exitDirection);
 
         if (reaverStartupRoutine != null)
         {
@@ -2274,13 +2285,53 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         reaverMovementReady = false;
         currentReaver = null;
 
-        rb.isKinematic = false;
-        rb.linearVelocity = exitDirection * exitSpeed;
-
-        State = ControllerState.JUMPING;
-
         exitReaverBoost?.Invoke();
         railDetector.ExitReaver();
+    }
+
+    private Coroutine reaverJumpCooldownRoutine;
+
+    private IEnumerator ReaverJumpCooldown()
+    {
+        yield return new WaitForSeconds(0.55f);
+        disableBoolAnim.Invoke("ReaverJump");
+        reaverJumpCooldownRoutine = null;
+        State = ControllerState.FALLING;
+    }
+
+    private void ReaverJump(Vector3 exitDirection)
+    {
+        State = ControllerState.REAVERJUMP;
+
+        rb.isKinematic = false;
+        rb.linearVelocity = exitDirection * controllerData.reaverJumpForce;
+
+        rb.AddForce((NormalContainer.up * controllerData.upwardImpulseForce /* forceMultiplier*/) + (NormalContainer.forward * controllerData.forwardImpulseForce /* forceMultiplier*/), ForceMode.VelocityChange);
+        rb.linearDamping = controllerData.jumpDamping;
+
+        ResetJump();
+
+        Vector3 lookDirection = new Vector3(exitDirection.x, 0f, exitDirection.z).normalized;
+
+        if (lookDirection != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(lookDirection, NormalContainer.up);
+        }
+
+        // PLAY FMOD PLAYER ACTION JUMP SOUND
+        PlayerActionFMODManager.Instance.PlayPlayerAction(PlayerActionFMOD.JUMP);
+
+        //Play anim
+        enableBoolAnim.Invoke("ReaverJump");
+
+        //COMBO
+        //ComboManager.Instance.AddComboAction(ComboID.Jump);
+
+        if (reaverJumpCooldownRoutine != null)
+            return;
+        reaverJumpCooldownRoutine = StartCoroutine(ReaverJumpCooldown());
+
+        return;
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -2301,7 +2352,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             maxDivingDepth = Mathf.Lerp(controllerData.baseDivingDepth, controllerData.maxDivingDepth, controllerData.VelocityToDivingDepthRatio.Evaluate(speedRatio));
         }
 
-        if (State == ControllerState.FALLING || State == ControllerState.JUMPING || State == ControllerState.AIRRIDE || State == ControllerState.BUMP)
+        if (State == ControllerState.FALLING || State == ControllerState.JUMPING || State == ControllerState.AIRRIDE || State == ControllerState.BUMP || State == ControllerState.REAVERJUMP)
         {
             State = ControllerState.SWIMMING;
             rb.linearVelocity = HorizontalVelocity;

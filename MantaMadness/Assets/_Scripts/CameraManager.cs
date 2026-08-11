@@ -28,13 +28,21 @@ public class CameraManager: MonoBehaviour
     private CinemachineBrain brain;
     private CinemachineBlendDefinition defaultBlend;
     private CinemachineCamera defaultCamera;
+    public bool isCinematicPlaying = false;
 
     public void BlendToCamera(CinemachineCamera camera) => BlendToCamera(camera, brain.DefaultBlend);
     public void BlendToCamera(CinemachineCamera camera, CinemachineBlendDefinition blend)
     {
         brain.DefaultBlend = blend;
         camera.gameObject.SetActive(true);
-        camera.Priority = int.MaxValue;
+        camera.Priority = int.MaxValue; 
+        isCinematicPlaying = true;
+        Debug.Log("CINEMATIC PLAYING = " + isCinematicPlaying);
+
+        if (CameraTargetDetection.Instance.validNPCTargets.Count > 0)
+        {
+            CameraTargetDetection.Instance.ClearNPCTargets();
+        }
     }
 
     public void ResetCamera(CinemachineCamera camera)
@@ -44,6 +52,9 @@ public class CameraManager: MonoBehaviour
         camera.gameObject.SetActive(false);
 
         defaultCamera.gameObject.SetActive(true);
+
+        isCinematicPlaying = false;
+        Debug.Log("CINEMATIC PLAYING = " + isCinematicPlaying);
     }
 
     public void AddCameraToStack(Camera camera)

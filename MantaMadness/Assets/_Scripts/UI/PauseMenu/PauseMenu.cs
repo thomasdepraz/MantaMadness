@@ -257,6 +257,10 @@ public class PauseMenu : MonoBehaviour
     {
         if (isPaused) return;
 
+        if (CameraManager.Instance.isCinematicPlaying) return;
+
+        if(CinematicManager.instance.isCinematicPlaying) return;
+
         isPaused = true;
         Time.timeScale = 0f;
         DOTween.PauseAll();

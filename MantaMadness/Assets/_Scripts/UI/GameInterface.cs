@@ -475,6 +475,7 @@ public class GameInterface : MonoBehaviour, IScreen
         m_Container.SetActive(toggle);
         UIManager.Instance.comboUIController.ToggleInterface(toggle);
         UIManager.Instance.boostGaugeInterface.ToggleInterface(toggle);
+        Debug.Log("BON CA DESAC CETTE MERDE OU PAS LA ????");
     }
 
     public void SunComboBehavior(int level)

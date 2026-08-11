@@ -261,6 +261,14 @@ public class CameraTargetDetection : MonoBehaviour
         if (player.IsLocked)
             return;
 
+        if (CinematicManager.instance.isCinematicPlaying)
+            return;
+
+
+        if (CameraManager.Instance.isCinematicPlaying)
+            return;
+ 
+
         if (DialogManager.instance.currentSequence != null)
         {
             ClearNPCTargets();

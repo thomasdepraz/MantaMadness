@@ -11,6 +11,10 @@ public class CinematicManager : MonoBehaviour
     public PlayableDirector cinematicPlayer;
     public List<CinemachineCamera>cinematicCameras = new List<CinemachineCamera>();
 
+    public bool isCinematicPlaying;
+
+    public PlayableDirector gameIntroCinematicPlayer;
+
     private void Awake()
     {
         if(instance == null)
@@ -33,7 +37,10 @@ public class CinematicManager : MonoBehaviour
         ResetCam();
         cinematicPlayer.Play(cinematic);
         MantaCameraController.instance.DeactivatePlayerCamera();
+
+        isCinematicPlaying = true;
     }
+
 
     public void EndCinematic()
     {
@@ -59,5 +66,27 @@ public class CinematicManager : MonoBehaviour
     private void OnCinematicFinished(PlayableDirector director)
     {
         EndCinematic();
+    }
+
+    public void PlayIntroCinematic()
+    {
+        isCinematicPlaying = true;
+
+        ResetCam();
+        UIManager.Instance.gameInterface.ToggleInterfaceAreaIntro(false);
+        gameIntroCinematicPlayer.Play();
+        MantaCameraController.instance.DeactivatePlayerCamera();
+    }
+
+    public void Update()
+    {
+        if(cinematicPlayer.state == PlayState.Playing)
+        {
+            isCinematicPlaying = true;
+        }
+        else
+        {
+            isCinematicPlaying = false;
+        }
     }
 }
