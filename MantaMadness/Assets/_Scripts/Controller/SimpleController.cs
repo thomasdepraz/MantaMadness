@@ -1241,6 +1241,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         bumpRail = Physics.Raycast(hoverBehaviour.normalContainer.position, hoverBehaviour.normalContainer.forward, out RaycastHit railInfo, controllerData.hoverRaycastLength, defaultRaycastLayer.value);
         stompSweetSpot = Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up, out RaycastHit stompInfo, controllerData.stompCancelRange, defaultRaycastLayer.value);
 
+        if(CinematicManager.instance.isCinematicPlaying == true && IsLocked != true)
+        {
+            State = ControllerState.DIALOG;
+            ForceLock(true);
+            return;
+        }
 
         if (pendingAntiGravJump)
         {

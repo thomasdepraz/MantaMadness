@@ -17,6 +17,7 @@ public class WorldCheckpoint : MonoBehaviour
     [SerializeField] private Material disableMat;
     [SerializeField] private ParticleSystem particle;
     [SerializeField] private EventReference soundToPlay;
+    [SerializeField] private bool NoUiParticlePlay;
 
     [Header("Level")]
     [SerializeField] protected string levelID;
@@ -60,14 +61,18 @@ public class WorldCheckpoint : MonoBehaviour
             particle.Play();
         }
 
-        //Play Particle
-        if(!soundToPlay.IsNull)
+        if (!NoUiParticlePlay)
         {
-            RuntimeManager.PlayOneShot(soundToPlay, transform.position);
-        }
+            //Play Particle
+            if (!soundToPlay.IsNull)
+            {
+                RuntimeManager.PlayOneShot(soundToPlay, transform.position);
+            }
 
-        //Play Checkpoint UI particle
-        UIParticleManager.Instance.playSpecificUIParticle(UiParticles.CHECKPOINT, "");
+            //Play Checkpoint UI particle
+
+            UIParticleManager.Instance.playSpecificUIParticle(UiParticles.CHECKPOINT, "");
+        }
     }
     
     public virtual void DisableMat()

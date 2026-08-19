@@ -18,6 +18,9 @@ public class DialogManager : MonoBehaviour
 
     [SerializeField] private List<DialogSequence> dialogSequences;
 
+    [SerializeField] private List<CinematicDialogAsset> cinematicDialogs;
+
+
     [SerializeField] public DialogSequence currentSequence { get; private set; }
 
     [SerializeField] private GameObject[] dialogUIVisuals;
@@ -45,6 +48,8 @@ public class DialogManager : MonoBehaviour
     public FMOD.Studio.EventInstance dialogActiveEvent;
 
     private InteractableNPC currentNpc;
+
+    private CinematicDialogAsset currentCinematicDialog;
 
     private bool skipRequested = false;
     private bool nextRequested = false;
@@ -87,6 +92,15 @@ public class DialogManager : MonoBehaviour
                 asset.sequence[i].speakerName = entry.speaker;
             }
         }
+
+        // Dialogues cinématiques
+        foreach (CinematicDialogAsset asset in cinematicDialogs)
+        {
+            var entry = DialogLoader.GetText(asset.key);
+
+            asset.dialogText = entry.dialog;
+            asset.speakerName = entry.speaker;
+        }
     }
 
     private void OnEnable()
@@ -126,6 +140,13 @@ public class DialogManager : MonoBehaviour
 
             speakerTextBox.text = dialog.speakerName;
             dialogTextBox.text = DialogLoader.ParseInputs(dialog.dialogText);
+        }
+
+        if (currentCinematicDialog != null)
+        {
+            speakerTextBox.text = currentCinematicDialog.speakerName;
+            dialogTextBox.text =
+                DialogLoader.ParseInputs(currentCinematicDialog.dialogText);
         }
     }
 
@@ -202,6 +223,22 @@ public class DialogManager : MonoBehaviour
         {
             currentNpc = npc;
             StartSequence(dialogKey);
+        }
+    }
+
+    public void OnCinematicSignal(string dialogKey)
+    {
+        StartSpecialCinematicDialog(dialogKey);
+    }
+
+    private void StartSpecialCinematicDialog(string key)
+    {
+        foreach (CinematicDialogAsset dialog in cinematicDialogs)
+        {
+            if(dialog.key == key)
+            {
+                StartCoroutine(CinematicDialog(dialog));
+            }
         }
     }
 
@@ -292,6 +329,22 @@ public class DialogManager : MonoBehaviour
         yield return StartCoroutine(TypeText(dialog));
     }
 
+    public IEnumerator CinematicDialog(CinematicDialogAsset dialog)
+    {
+        UIManager.Instance.gameInterface.ToggleInterface(false);
+
+        foreach (GameObject visual in dialogUIVisuals)
+        {
+            visual.SetActive(true);
+        }
+
+        speakerTextBox.text = dialog.speakerName;
+        speakerTextBox.font = dialog.speakerMat;
+
+        dialogTextBox.font = dialog.dialogMat;
+        yield return StartCoroutine(CinematicTypeText(dialog));
+    }
+
     private IEnumerator TypeText(DialogAsset dialog)
     {
         inputPhase = DialogInputPhase.Typing;
@@ -341,12 +394,43 @@ public class DialogManager : MonoBehaviour
         yield return StartCoroutine(EndDialog());
     }
 
+    private IEnumerator CinematicTypeText(CinematicDialogAsset dialog)
+    {
+
+        string parsedText = DialogLoader.ParseInputs(dialog.dialogText);
+        dialogTextBox.text = parsedText;
+
+        yield return null;
+
+        dialogWriter.RestartWriter();
+        RuntimeManager.PlayOneShot(dialog.dialogSound);
+
+        if (parsedText.Length > 0)
+        {
+            yield return new WaitUntil(() => dialogWriter.IsWriting == true);
+        }
+
+        nextRequested = false;
+        yield return new WaitForEndOfFrame();
+        yield return null;
+        nextRequested = false;
+
+    }
+
     private void PlaySoundOnCharWritten(TMPEffects.Components.TMPWriter writer, TMPEffects.CharacterData.CharData c)
     {
         if (c == null) return;
 
-        //if(currentSequence.sequence[currentSequenceCount].dialogSound != null)
-        RuntimeManager.PlayOneShot(currentSequence.sequence[currentSequenceCount].dialogSound);
+        if(currentSequence != null)
+        {
+            //if(currentSequence.sequence[currentSequenceCount].dialogSound != null)
+            RuntimeManager.PlayOneShot(currentSequence.sequence[currentSequenceCount].dialogSound);
+
+        }
+        else if(currentCinematicDialog != null)
+        {
+            RuntimeManager.PlayOneShot(currentCinematicDialog.dialogSound);
+        }
     }
 
     private IEnumerator EndDialog()
@@ -373,6 +457,12 @@ public class DialogManager : MonoBehaviour
             print("Sequence continues");
             yield return null;
         }
+    }
+
+    public void EndCinematicDialog()
+    {
+        nextRequested = false;
+        ResetCinematicDialog();
     }
 
     private void ResetSequence()
@@ -403,5 +493,20 @@ public class DialogManager : MonoBehaviour
 
         Game.Instance.player.ToggleDialogState(false);
         UIManager.Instance.gameInterface.ToggleInterface(true);
+    }
+
+    private void ResetCinematicDialog()
+    {
+        Debug.Log("Stop sequence");
+
+        //STOP DIALOG FMOD EVENT
+        dialogActiveEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        dialogActiveEvent.release();
+
+
+        foreach (GameObject visual in dialogUIVisuals)
+        {
+            visual.SetActive(false);
+        }
     }
 }

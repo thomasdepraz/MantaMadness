@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPEffects.Modifiers;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Timeline;
+using UnityEngine.UIElements;
 
 public class Game : MonoBehaviour, IDataPersistence
 {
@@ -108,16 +110,16 @@ public class Game : MonoBehaviour, IDataPersistence
 
                 //PLAY LE DIALOG DU VIEUX
                 //DialogManager.instance.StartCinematicInteraction(introNpc);
-
-                //SET POSITION TO FIRST CHECKPOINT POS
                 WorldCheckpointManager.Instance.SetStartCheckpoint(introCheckpoint.respawnTransform);
                 WorldCheckpointManager.Instance.SetCheckpoint(introCheckpoint.respawnTransform, introCheckpoint.indexName, introCheckpoint.displayAreaName, introCheckpoint.nameToDisplay, introCheckpoint.LevelID, introCheckpoint.collectibleAreaID);
+                SetGameState(1);
+
                 Vector3 pos = Vector3.zero;
                 Quaternion rotation = Quaternion.Euler(0, 0, 0);
                 ForceSet(pos, rotation);
-                SetGameState(1);
 
                 CinematicManager.instance.PlayIntroCinematic();
+
                 break;
 
             case 1:
@@ -226,6 +228,18 @@ public class Game : MonoBehaviour, IDataPersistence
         player.ForcePosition(position, rotation);
     }
 
+    public void IntroForceSet()
+    {
+        player.ForcePosition(introCheckpoint.respawnTransform.position, introCheckpoint.respawnTransform.rotation);
+        DialogManager.instance.StartCinematicInteraction(introNpc);
+
+    }
+
+    public void IntroEnd(GameObject intro)
+    {
+        intro.SetActive(false);
+    }
+
     public void SetRespawnTransform(Transform respawnTransform)
     {
         if (respawnTransform == null) return;
@@ -267,4 +281,5 @@ public class Game : MonoBehaviour, IDataPersistence
         Quaternion rotation;
         Respawn(out pos, out rotation);
     }
+
 }

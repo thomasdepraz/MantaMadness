@@ -80,7 +80,7 @@ public class CinematicManager : MonoBehaviour
 
     public void Update()
     {
-        if(cinematicPlayer.state == PlayState.Playing)
+        if(cinematicPlayer.state == PlayState.Playing || gameIntroCinematicPlayer.state == PlayState.Playing)
         {
             isCinematicPlaying = true;
         }
