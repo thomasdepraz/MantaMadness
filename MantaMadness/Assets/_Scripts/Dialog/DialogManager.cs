@@ -493,6 +493,7 @@ public class DialogManager : MonoBehaviour
 
         Game.Instance.player.ToggleDialogState(false);
         UIManager.Instance.gameInterface.ToggleInterface(true);
+        Debug.Log("TA MERE EST UNE ENORME PUTE");
     }
 
     private void ResetCinematicDialog()

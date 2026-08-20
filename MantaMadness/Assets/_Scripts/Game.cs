@@ -53,6 +53,8 @@ public class Game : MonoBehaviour, IDataPersistence
     [HideInInspector] public Vector3 m_SpawnPosition;
     [HideInInspector] public Quaternion m_SpawnRotation;
 
+    public GameObject IntroCinematicObject;
+
     public void Start()
     {
         List<ScriptableRendererFeature> scriptableRendererFeatures = RenderFeatureUtility.GetRenderFeatures();
@@ -73,17 +75,21 @@ public class Game : MonoBehaviour, IDataPersistence
     public void LoadData(GameData data)
     {
         gameState = data.GameState;
-
-
         StartCoroutine(DelayLoad());
-
     }
 
     private IEnumerator DelayLoad()
     {
         yield return new WaitForSeconds(0.1f);
+
+        //Check for intro visual activation
+        if (gameState != 0)
+        {
+            IntroCinematicCheck();
+        }
         StateChange();
         CollectibleAreaManager.RestoreCurrentArea();
+
     }
 
     public void SaveData(ref GameData data)
@@ -99,6 +105,8 @@ public class Game : MonoBehaviour, IDataPersistence
 
     public void StateChange()
     {
+
+
         switch (gameState)
         {
             //Start the game
@@ -159,6 +167,8 @@ public class Game : MonoBehaviour, IDataPersistence
             default:
                 break;
         }
+
+
     }
 
     public void Update()
@@ -235,9 +245,16 @@ public class Game : MonoBehaviour, IDataPersistence
 
     }
 
+    public void IntroCinematicCheck()
+    {
+        IntroCinematicObject.SetActive(false);
+    }
+
     public void IntroEnd(GameObject intro)
     {
         intro.SetActive(false);
+        WeatherManager.instance.UpdateFog(FogState.enabled);
+        player.ForceLock(false);
     }
 
     public void SetRespawnTransform(Transform respawnTransform)

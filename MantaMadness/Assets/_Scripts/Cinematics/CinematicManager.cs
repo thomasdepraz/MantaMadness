@@ -44,7 +44,9 @@ public class CinematicManager : MonoBehaviour
 
     public void EndCinematic()
     {
-        if(cinematicPlayer.time != cinematicPlayer.duration)
+        isCinematicPlaying = false;
+
+        if (cinematicPlayer.time != cinematicPlayer.duration)
         {
             cinematicPlayer.time = cinematicPlayer.duration;
             cinematicPlayer.Evaluate();
@@ -75,6 +77,7 @@ public class CinematicManager : MonoBehaviour
         ResetCam();
         UIManager.Instance.gameInterface.ToggleInterfaceAreaIntro(false);
         gameIntroCinematicPlayer.Play();
+        WeatherManager.instance.UpdateFog(FogState.disabled);
         MantaCameraController.instance.DeactivatePlayerCamera();
     }
 
