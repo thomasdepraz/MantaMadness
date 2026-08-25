@@ -26,6 +26,10 @@ public class CameraTargetController : MonoBehaviour
     [Tooltip("Reference to the InputAction for looking (Vector2).")]
     public InputActionProperty lookAction;
 
+    [Header("Camera Velocity Limit")]
+    [SerializeField] private float maxYawVelocity = 600f;
+    [SerializeField] private float maxPitchVelocity = 600f;
+
     public Transform target;
 
     private float pitch;
@@ -167,7 +171,7 @@ public class CameraTargetController : MonoBehaviour
     {
         InputDevice device = context.control.device;
 
-        if (device is Keyboard)
+        if (device is Mouse || device is Keyboard)
         {
             isControllerDevice = false;
         }
@@ -200,9 +204,20 @@ public class CameraTargetController : MonoBehaviour
             return;
         }
 
-            Vector2 lookInput = lookAction.action.ReadValue<Vector2>();
+        Vector2 lookInput = lookAction.action.ReadValue<Vector2>();
 
-        if(isControllerDevice)
+        //if (!isControllerDevice)
+        //{
+        //    Vector2 rawMouse = Mouse.current.delta.ReadValue();
+
+        //    Debug.Log(
+        //        $"RAW={rawMouse.x:F1} | ACTION={lookInput.x:F1} | " +
+        //        $"mouseX={(lookInput.x * sensitivity * Time.deltaTime):F1} | " +
+        //        $"yaw={yaw:F1} | vel={yawVelocity:F1}"
+        //    );
+        //}
+
+        if (isControllerDevice)
         {
             sensitivity = _data.sensitivity_controller;
         }
@@ -280,10 +295,20 @@ public class CameraTargetController : MonoBehaviour
             //yaw = targetYaw;
         }
 
-        yaw = Mathf.SmoothDampAngle(yaw, targetYaw, ref yawVelocity, smoothValue);
+        yaw = Mathf.SmoothDamp(yaw, targetYaw, ref yawVelocity, smoothValue);
         pitch = Mathf.SmoothDampAngle(pitch, targetPitch, ref pitchVelocity, smoothValue);
+
+        yawVelocity = Mathf.Clamp(yawVelocity,-maxYawVelocity, maxYawVelocity);
+
+        pitchVelocity = Mathf.Clamp(pitchVelocity,-maxPitchVelocity,maxPitchVelocity);
+
+        //if (Mathf.Abs(yaw) > 360f)
+        //{
+        //    yaw = Mathf.Repeat(yaw + 180f, 360f) - 180f;
+        //}
+
         // Apply rotation
-        if(ResetCamRoutine == null)
+        if (ResetCamRoutine == null)
         {
             Vector3 targetUp = player.hoverBehaviour.normalContainer.up;
             currentUp = Vector3.Slerp(currentUp, targetUp, Time.deltaTime * 5f);
@@ -350,7 +375,7 @@ public class CameraTargetController : MonoBehaviour
             }
             else
             {
-                target.rotation = Quaternion.Euler(0f, player.transform.rotation.eulerAngles.y, 0f);
+                target.rotation = Quaternion.Euler(0f,player.transform.rotation.eulerAngles.y,0f);
                 StretchyCamBehavior(lookAction.action.ReadValue<Vector2>());
             }
         }
