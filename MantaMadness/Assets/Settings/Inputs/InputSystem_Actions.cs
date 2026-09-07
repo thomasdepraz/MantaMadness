@@ -560,7 +560,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""id"": ""d67f90fa-95d7-43fd-b324-9ef9704d9267"",
                     ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
-                    ""processors"": ""DeltaTimeScale"",
+                    ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Look"",
                     ""isComposite"": false,

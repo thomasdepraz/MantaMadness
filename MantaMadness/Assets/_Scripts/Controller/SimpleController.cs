@@ -1270,6 +1270,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
             spinBehaviour.ToggleCollision(IsSpinning);
         }
 
+        if (canonAirControlLocked && (hasHitWater || hasHitWalls))
+        {
+            canonAirControlLocked = false;
+        }
+
         if (OnRail)
         {
 
@@ -1698,17 +1703,21 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         }
     }
 
-    private Coroutine canonAirControlDelay;
+    private bool canonAirControlLocked = false;
 
-    private IEnumerator CanonShotControlDelay()
-    {
-        yield return new WaitForSeconds(3f);
-        canonAirControlDelay = null;
-    }
+    //private Coroutine canonAirControlDelay;
+
+
+    //private IEnumerator CanonShotControlDelay()
+    //{
+    //    yield return new WaitForSeconds(3f);
+    //    canonAirControlDelay = null;
+    //}
 
     private void AirControl()
     {
-        if (canonAirControlDelay != null) return;
+        if (canonAirControlLocked) return;
+        //if (canonAirControlDelay != null) return;
 
         if (reaverJumpCooldownRoutine != null) return;
 
@@ -1981,7 +1990,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         {
             ForceLock(false);
         }
-        canonAirControlDelay = StartCoroutine(CanonShotControlDelay());
+
+        canonAirControlLocked = true;
         State = ControllerState.JUMPING;
         transform.rotation = new Quaternion(0, target.transform.rotation.y, 0, target.transform.rotation.w);
         rb.AddForce(target.forward * propulsionForce, ForceMode.VelocityChange);

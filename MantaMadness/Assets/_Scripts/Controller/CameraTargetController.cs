@@ -295,10 +295,17 @@ public class CameraTargetController : MonoBehaviour
             //yaw = targetYaw;
         }
 
-        yaw = Mathf.SmoothDamp(yaw, targetYaw, ref yawVelocity, smoothValue);
+        if(state == ControllerState.RAIL || state == ControllerState.STOMP)
+        {
+            yaw = Mathf.SmoothDampAngle(yaw, targetYaw, ref yawVelocity, smoothValue);
+        }
+        else
+        {
+            yaw = Mathf.SmoothDamp(yaw, targetYaw, ref yawVelocity, smoothValue);
+        }
         pitch = Mathf.SmoothDampAngle(pitch, targetPitch, ref pitchVelocity, smoothValue);
 
-        yawVelocity = Mathf.Clamp(yawVelocity,-maxYawVelocity, maxYawVelocity);
+        yawVelocity = Mathf.Clamp(yawVelocity, -maxYawVelocity, maxYawVelocity);
 
         pitchVelocity = Mathf.Clamp(pitchVelocity,-maxPitchVelocity,maxPitchVelocity);
 
