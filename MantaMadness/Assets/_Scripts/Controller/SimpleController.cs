@@ -2222,6 +2222,15 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
     public bool EnterReaverBoost(ReaverBoost reaver)
     {
+        if (reaver.isLava)
+        {
+            if (!lavaResistanceAbility)
+            {
+                Game.Instance.player.Kill(DeathType.BURNED);
+                return false;
+            }
+        }
+
         if (!reaverAbility)
             return false;
 
@@ -2516,6 +2525,9 @@ public class SimpleController : MonoBehaviour, IDataPersistence
                     break;
                 case ControllerAbility.DYNAMO:
                     dynamoAbility = true;
+                    break;
+                case ControllerAbility.REAVER:
+                    reaverAbility = true;
                     break;
                 default:
                     break;

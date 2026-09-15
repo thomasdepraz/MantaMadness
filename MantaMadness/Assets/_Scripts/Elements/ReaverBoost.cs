@@ -7,6 +7,7 @@ public class ReaverBoost : MonoBehaviour
 
     [SerializeField] private BoxCollider boostCollider;
     [SerializeField] private float exitMargin = 0.1f;
+    public bool isLava = false;
 
     private void Awake()
     {

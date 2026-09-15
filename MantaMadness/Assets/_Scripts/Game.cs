@@ -126,7 +126,7 @@ public class Game : MonoBehaviour, IDataPersistence
                 Quaternion rotation = Quaternion.Euler(0, 0, 0);
                 ForceSet(pos, rotation);
 
-                CinematicManager.instance.PlayIntroCinematic();
+                //CinematicManager.instance.PlayIntroCinematic();
 
                 break;
 
