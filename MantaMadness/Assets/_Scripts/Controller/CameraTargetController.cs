@@ -374,7 +374,9 @@ public class CameraTargetController : MonoBehaviour
             }
 
             // MODE NORMAL
-            target.position = player.transform.position + offset;
+            Vector3 targetUp = player.hoverBehaviour.normalContainer.up;
+
+            target.position = player.transform.position + targetUp * offset.y;
 
             if (toggleFixedCam == false)
             {

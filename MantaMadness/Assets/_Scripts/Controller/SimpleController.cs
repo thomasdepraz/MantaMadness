@@ -180,6 +180,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     [SerializeField] private float ledgeForwardOffset = 0.3f;
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] private LayerMask waterLayer;
+    [SerializeField] private LayerMask reaverLayer;
 
     [Header("Ledge Grab - 360")]
     [SerializeField] private float ledgeWallProbeRadius = 0.35f; // rayon du spherecast
@@ -708,6 +709,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         jumpCount = 2;
         State = ControllerState.JUMPING;
+        canonAirControlLocked = false;
         //if (conditions pour target dash true)
         Collider[] colliders = Physics.OverlapSphere(hoverBehaviour.normalContainer.position, controllerData.targetDetectionRadius, controllerData.targetObjectsMask);
         // Check Valid target and choose valid Target
@@ -1717,7 +1719,6 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     private void AirControl()
     {
         if (canonAirControlLocked) return;
-        //if (canonAirControlDelay != null) return;
 
         if (reaverJumpCooldownRoutine != null) return;
 
@@ -2251,6 +2252,11 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         rb.angularVelocity = Vector3.zero;
         rb.isKinematic = true;
 
+        if(Physics.Raycast(hoverBehaviour.normalContainer.position, -hoverBehaviour.normalContainer.up * 10f, out RaycastHit hit, controllerData.hoverRaycastLength, reaverLayer))
+        {
+            rb.MovePosition(hit.normal);
+        }
+
         Debug.Log($"Entrée dans le Reaver : {reaver.name}");
 
         enterReaverBoost?.Invoke(reaver);
@@ -2309,6 +2315,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         reaverMovementReady = false;
         currentReaver = null;
+
+        canonAirControlLocked = true;
 
         exitReaverBoost?.Invoke();
         railDetector.ExitReaver();

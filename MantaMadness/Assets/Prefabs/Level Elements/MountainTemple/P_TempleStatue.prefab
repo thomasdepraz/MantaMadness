@@ -9999,8 +9999,6 @@ MonoBehaviour:
   particle: {fileID: 8745761680544132332}
   ImpactParticle: {fileID: 5469146660890425204}
   hitbox: {fileID: 2126866779174183104}
-  clamNumber: 0
-  clam: {fileID: 0}
   hard: 0
   destructionSFX:
     Guid:
@@ -10009,7 +10007,10 @@ MonoBehaviour:
       Data3: 1716766609
       Data4: -1567115780
     Path: event:/Sfx/InGame/World/Enviro/Env_Rock_Break
+  collectibleRewards: []
+  isBroken: 0
   type: 0
+  id: 
 --- !u!1001 &7558226673547436001
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10077,7 +10078,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 25a6ff10a7e064a4aac88e8919bd87c1, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 85f259722b4e51242a472ff230f9b261, type: 2}
+      objectReference: {fileID: 2100000, guid: 5b829ad7439312f42ac90630747599ec, type: 2}
     - target: {fileID: -7308718804694308083, guid: 25a6ff10a7e064a4aac88e8919bd87c1, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
