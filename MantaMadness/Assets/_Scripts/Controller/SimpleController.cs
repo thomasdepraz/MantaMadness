@@ -2316,7 +2316,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         reaverMovementReady = false;
         currentReaver = null;
 
-        canonAirControlLocked = true;
+        reaverJumpLockRoutine = StartCoroutine(ReaverJumpLockCooldown());
 
         exitReaverBoost?.Invoke();
         railDetector.ExitReaver();
@@ -2330,6 +2330,16 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         disableBoolAnim.Invoke("ReaverJump");
         reaverJumpCooldownRoutine = null;
         State = ControllerState.FALLING;
+    }
+
+    private Coroutine reaverJumpLockRoutine;
+
+    private IEnumerator ReaverJumpLockCooldown()
+    {
+        canonAirControlLocked = true;
+        yield return new WaitForSeconds(2f);
+        canonAirControlLocked = false;
+        reaverJumpLockRoutine = null;
     }
 
     private void ReaverJump(Vector3 exitDirection)
