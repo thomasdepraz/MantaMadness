@@ -6,6 +6,7 @@ public class VolumeManager : MonoBehaviour
 
     [SerializeField] private GameObject defaultVolume;
     [SerializeField] private GameObject underwatertVolume;
+    [SerializeField] private GameObject hauntedTunnelVolume;
 
     private void Awake()
     {
@@ -41,5 +42,10 @@ public class VolumeManager : MonoBehaviour
             underwatertVolume.SetActive(true);
             UIParticleManager.Instance.playSpecificUIParticle(UiParticles.BUBBLE, "");
         }
+    }
+
+    public void toggleTunnel(bool toggleValue)
+    {
+        hauntedTunnelVolume.SetActive(toggleValue);
     }
 }

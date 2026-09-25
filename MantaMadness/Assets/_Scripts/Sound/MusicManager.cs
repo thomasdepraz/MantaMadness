@@ -26,6 +26,7 @@ public enum MUSICS
     MUSIC_LEVEL03,
     MUSIC_UFO,
     MUSIC_BACKROOM,
+    MUSIC_WHY,
     NULL,
 }
 
@@ -43,7 +44,7 @@ public class MusicManager : MonoBehaviour, IDataPersistence
     public static MusicManager Instance;
 
 
-    public EventReference music_menu, music_cave, music_level01, music_level02, music_level03, music_null, music_UFO, music_backroom;
+    public EventReference music_menu, music_cave, music_level01, music_level02, music_level03, music_null, music_UFO, music_backroom,music_why;
     public FMOD.Studio.EventInstance musicAudioEvent;
 
     public EventReference amb_beach, amb_secret, amb_city, amb_volcano;
@@ -62,8 +63,8 @@ public class MusicManager : MonoBehaviour, IDataPersistence
     private int globalBeatCount = 0;
 
 
-    private MUSICS currentMusic;
-    private AMBIENT currentAmb;
+    public MUSICS currentMusic;
+    public AMBIENT currentAmb;
 
 #if UNITY_EDITOR
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -171,6 +172,9 @@ public class MusicManager : MonoBehaviour, IDataPersistence
                     break;
                 case MUSICS.MUSIC_BACKROOM:
                     musicAudioEvent = RuntimeManager.CreateInstance(music_backroom);
+                    break;
+                case MUSICS.MUSIC_WHY:
+                    musicAudioEvent = RuntimeManager.CreateInstance(music_why);
                     break;
                 case MUSICS.NULL:
                     break;
@@ -363,6 +367,10 @@ public class MusicManager : MonoBehaviour, IDataPersistence
 
             case MUSICS.MUSIC_BACKROOM:
                 musicAudioEvent = RuntimeManager.CreateInstance(music_backroom);
+                break;
+
+            case MUSICS.MUSIC_WHY:
+                musicAudioEvent = RuntimeManager.CreateInstance(music_why);
                 break;
         }
 
