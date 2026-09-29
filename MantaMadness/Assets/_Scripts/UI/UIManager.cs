@@ -36,6 +36,9 @@ public class UIManager : MonoBehaviour
 
     public void ToggleBaseInterface(bool toggle)
     {
+        if (Game.Instance.why == true)
+            return;
+
         gameInterface.ToggleInterface(toggle);
         boostGaugeInterface.ToggleInterface(toggle);
         //dialogInteractDisplay.ToggleInterface(toggle);

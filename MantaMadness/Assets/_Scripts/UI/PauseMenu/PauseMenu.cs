@@ -255,6 +255,9 @@ public class PauseMenu : MonoBehaviour
     #region Actions
     private void Pause()
     {
+        if (Game.Instance.why == true)
+            return;
+
         if (isPaused) return;
 
         if (CameraManager.Instance.isCinematicPlaying) return;

@@ -339,6 +339,9 @@ public class GameInterface : MonoBehaviour, IScreen
     }
     public void StartDisplayCoroutine(string name)
     {
+        if (Game.Instance.why == true)
+            return;
+
         if (areaNameRoutine != null)
         {
             StopCoroutine(areaNameRoutine);

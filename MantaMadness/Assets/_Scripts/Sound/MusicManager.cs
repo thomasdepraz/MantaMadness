@@ -311,6 +311,9 @@ public class MusicManager : MonoBehaviour, IDataPersistence
 
     public void PlayMusic(MUSICS newMusic)
     {
+        if (Game.Instance.why == true)
+            return;
+
         if (musicCoroutine != null)
             StopCoroutine(musicCoroutine);
 

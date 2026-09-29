@@ -40,6 +40,9 @@ public class AreaIntro : MonoBehaviour, IDataPersistence
 
     public void Play()
     {
+        if (Game.Instance.why == true)
+            return;
+
         if (!CanPlay()) return;
 
         hasBeenActivated = true;

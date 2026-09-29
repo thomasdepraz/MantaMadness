@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HauntedTunnel : MonoBehaviour
 {
@@ -27,8 +28,14 @@ public class HauntedTunnel : MonoBehaviour
     [SerializeField] private ParticleSystem dark_001, dark_002, dark_003;
     private float endTimer;
     [SerializeField] private float timerDuration;
+    [SerializeField] private GameObject deadFish;
+    [SerializeField] private Transform northEntrance, southEntrance;
+
+    [SerializeField] private CoinHolder CoinToDeac;
+    [SerializeField] private GameObject Coco;
 
     public EventReference bellStinger;
+    public EventReference laugh;
 
     private void Start()
     {
@@ -44,6 +51,8 @@ public class HauntedTunnel : MonoBehaviour
         }
 
         ResetTimer();
+
+        Coco.SetActive(false);
     }
     private void OnDisable()
     {
@@ -56,6 +65,7 @@ public class HauntedTunnel : MonoBehaviour
 
     private IEnumerator CheckTunnelRoutine()
     {
+
         CheckTunnel();
 
         WaitForSeconds wait = new WaitForSeconds(checkInterval);
@@ -92,6 +102,8 @@ public class HauntedTunnel : MonoBehaviour
         }
         else
         {
+            if (Game.Instance.why == true)
+                return;
             //REACTIVATE MUSIC + UI
             MusicManager.Instance.PlayMusic(lastMusic);
             MusicManager.Instance.PlayAmbient(lastAmbient);
@@ -126,14 +138,17 @@ public class HauntedTunnel : MonoBehaviour
             case 1:
                 //Enable ParticleSystem
                 dark_001.Play();
+                RuntimeManager.PlayOneShot(laugh, Camera.main.transform.position);
                 break;
             case 2:
                 //Enable ParticleSystem
                 dark_002.Play();
+                RuntimeManager.PlayOneShot(laugh, Camera.main.transform.position);
                 break;
             case 3:
                 //Launch Last Coroutine
                 dark_003.Play();
+                elements[2].gameObject.SetActive(true);
                 break;
         }
     }
@@ -163,11 +178,50 @@ public class HauntedTunnel : MonoBehaviour
 
     private IEnumerator ThisIsTheEnd()
     {
-        Debug.Log("TIME IS UP!");
+
+
         OnInteraction(3);
         RuntimeManager.PlayOneShot(bellStinger, Camera.main.transform.position);
         WeatherManager.instance.SetNewWeather(WeatherType.Why);
-        yield return null;
+        SunPositionManager.instance.SetSunState(SunState.Why);
+
+        Game.Instance.why = true;
+
+        yield return new WaitForSeconds(25f);
+        switch (CalculateOptimumPosition())
+        {
+            case 0:
+                //SPAWN SOUTH
+                GameObject dead = Instantiate(deadFish, southEntrance.position, Quaternion.identity);
+                dead.GetComponent<DeadFish>().tunnel = this;
+                break;
+            case 1:
+                //SPAWN NORTH
+                GameObject dead2 = Instantiate(deadFish, northEntrance.position, Quaternion.identity);
+                dead2.GetComponent<DeadFish>().tunnel = this;
+                break;
+        }
+
+    }
+
+    public void SpawnAnomaly()
+    {
+        RuntimeManager.PlayOneShot(laugh, Camera.main.transform.position);
+        Coco.SetActive(true);
+        CoinToDeac.gameObject.SetActive(false);
+    }
+
+    private int CalculateOptimumPosition()
+    {
+        float distanceToNorth = Vector3.Distance(northEntrance.position, Game.Instance.player.transform.position);
+        float distanceToSouth = Vector3.Distance(southEntrance.position, Game.Instance.player.transform.position);
+
+        if (distanceToNorth < distanceToSouth)
+            return 0; // SPAWN SOUTH
+        else if (distanceToSouth < distanceToNorth)
+            return 1; //SPAWN NORTH
+        else
+            return 0; //DEFAULT SPAWN SOUTH
     }
 
 #if UNITY_EDITOR

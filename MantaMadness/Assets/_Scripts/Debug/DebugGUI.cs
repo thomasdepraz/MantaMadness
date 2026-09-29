@@ -7,7 +7,7 @@ using static UnityEngine.Rendering.DebugUI;
 [ExecuteInEditMode]
 public class DebugGUI : MonoBehaviour
 {
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
     private SimpleController controller;
     List<ScriptableRendererFeature> features = new List<ScriptableRendererFeature>();
 
@@ -171,5 +171,5 @@ public class DebugGUI : MonoBehaviour
 
         GUILayout.EndArea();
     }
-#endif
+//#endif
 }

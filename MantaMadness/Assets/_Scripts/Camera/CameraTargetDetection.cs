@@ -258,6 +258,9 @@ public class CameraTargetDetection : MonoBehaviour
 
     void DetectNPCTargets()
     {
+        if (Game.Instance.why == true)
+            return;
+
         if (player.IsLocked)
             return;
 
@@ -364,6 +367,9 @@ public class CameraTargetDetection : MonoBehaviour
 
     void DetectShopTargets()
     {
+        if (Game.Instance.why == true)
+            return;
+
         if (validNPCTargets.Count > 0) return;
 
         bool useCameraLogic = IsPlayerCameraActive();

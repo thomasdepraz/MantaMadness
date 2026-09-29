@@ -7,6 +7,7 @@ public enum SunState
 {
     Sun,
     Moon,
+    Why,
 }
 
 public class SunPositionManager : MonoBehaviour, IDataPersistence
@@ -21,6 +22,7 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
     [SerializeField] private Renderer[] sunFaceRenderer;
     [SerializeField] private GameObject[] sunStateVisual;
     [SerializeField] private GameObject[] moonStateVisual;
+    [SerializeField] private GameObject[] whystateVisual;
 
     [SerializeField] private Material sunMat;
     [SerializeField] private Material moonMat;
@@ -122,40 +124,44 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
             sunVisual.transform.DOScale(Vector3.one, 1.5f).SetEase(Ease.InOutQuad);
             yield return new WaitForSeconds(2f);
 
-            if (state == SunState.Sun)
+            if (Game.Instance.why == false)
             {
-                foreach (GameObject visual in sunStateVisual)
+                if (state == SunState.Sun)
                 {
-                    visual.SetActive(true);
-                }
+                    foreach (GameObject visual in sunStateVisual)
+                    {
+                        visual.SetActive(true);
+                    }
 
-                foreach (GameObject visual in moonStateVisual)
-                {
-                    visual.SetActive(false);
-                }
+                    foreach (GameObject visual in moonStateVisual)
+                    {
+                        visual.SetActive(false);
+                    }
 
-                foreach (Renderer renderer in sunFaceRenderer)
+                    foreach (Renderer renderer in sunFaceRenderer)
+                    {
+                        renderer.material = sunMat;
+                    }
+                }
+                else
                 {
-                    renderer.material = sunMat;
+                    foreach (GameObject visual in sunStateVisual)
+                    {
+                        visual.SetActive(false);
+                    }
+
+                    foreach (GameObject visual in moonStateVisual)
+                    {
+                        visual.SetActive(true);
+                    }
+
+                    foreach (Renderer renderer in sunFaceRenderer)
+                    {
+                        renderer.material = moonMat;
+                    }
                 }
             }
-            else
-            {
-                foreach (GameObject visual in sunStateVisual)
-                {
-                    visual.SetActive(false);
-                }
 
-                foreach (GameObject visual in moonStateVisual)
-                {
-                    visual.SetActive(true);
-                }
-
-                foreach (Renderer renderer in sunFaceRenderer)
-                {
-                    renderer.material = moonMat;
-                }
-            }
 
             sunVisual.transform.position = swichPosition.position;
             sunVisual.transform.DOScale(originalScale, 1.5f).SetEase(Ease.InOutQuad);
@@ -177,6 +183,9 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
             case WeatherType.Shores:
                 SetSunState(SunState.Sun);
                 break;
+            case WeatherType.Why:
+                SetSunState(SunState.Why);
+                break;
             default:
                 SetSunState(SunState.Sun);
                 Debug.Log("Default Case quelqu'un ?");
@@ -185,7 +194,7 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
 
     }
 
-    private void SetSunState(SunState state)
+    public void SetSunState(SunState state)
     {
         if (state == SunState.Sun)
         {
@@ -204,7 +213,7 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
                 renderer.material = sunMat;
             }
         }
-        else
+        else if (state == SunState.Moon)
         {
             foreach (GameObject visual in sunStateVisual)
             {
@@ -219,6 +228,28 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
             foreach (Renderer renderer in sunFaceRenderer)
             {
                 renderer.material = moonMat;
+            }
+        }
+        else if(state == SunState.Why)
+        {
+            foreach (GameObject visual in sunStateVisual)
+            {
+                visual.SetActive(true);
+            }
+
+            foreach (GameObject visual in moonStateVisual)
+            {
+                visual.SetActive(false);
+            }
+
+            foreach (Renderer renderer in sunFaceRenderer)
+            {
+                renderer.material = sunMat;
+            }
+
+            foreach (GameObject visual in whystateVisual)
+            {
+                visual.SetActive(false);
             }
         }
     }

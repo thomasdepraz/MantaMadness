@@ -171,6 +171,9 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
 
     public void SetNewWeather(WeatherType newWeather)
     {
+        if (Game.Instance.why == true)
+            return;
+
         if (currentWeather == newWeather)
            return;
 
@@ -249,6 +252,9 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
 
     public void UpdateFog(FogState state)
     {
+        if (Game.Instance.why == true)
+            return;
+
         Debug.Log("Fog State is " + state);
         switch (state)
         {

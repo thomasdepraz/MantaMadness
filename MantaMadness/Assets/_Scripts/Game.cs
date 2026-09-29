@@ -11,6 +11,8 @@ public class Game : MonoBehaviour, IDataPersistence
 {
     public static Game Instance;
 
+    public bool why = false;
+
     private float respawnTimer = -1f;
     private System.Action onTimerFinished;
     private bool isRespawning = false;
@@ -42,6 +44,7 @@ public class Game : MonoBehaviour, IDataPersistence
 
         Application.targetFrameRate = 60;
         player = GameObject.FindWithTag("Player").GetComponent<SimpleController>();
+        Debug.Log("WHY =" + why);
     }
 
     public ScreenEffectData screenEffectData;
