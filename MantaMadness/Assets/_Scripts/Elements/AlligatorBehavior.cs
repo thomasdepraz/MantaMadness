@@ -1,8 +1,11 @@
 using UnityEngine;
 using DG.Tweening;
+using System.Collections;
 
 public class AlligatorBehavior : MonoBehaviour
 {
+    private bool isActive;
+
     public float speed = 20f;
     public float lifeTime = 5f;
 
@@ -12,6 +15,11 @@ public class AlligatorBehavior : MonoBehaviour
 
     private bool isDead = false;
 
+    [SerializeField] private ParticleSystem spawnParticle;
+    [SerializeField] private GameObject[] activeObjects;
+
+    private Coroutine spawnRoutine;
+
     public void Init(Vector3 dir)
     {
         direction = dir;
@@ -20,13 +28,17 @@ public class AlligatorBehavior : MonoBehaviour
 
     public void Start()
     {
+        isActive = false;
         originalScale = transform.localScale;
         transform.localScale = Vector3.zero;
-        transform.DOScale(originalScale, 0.25f).SetEase(Ease.OutBounce);    
+        transform.DOScale(originalScale, 0.25f).SetEase(Ease.OutBounce);
+        spawnRoutine = StartCoroutine(SpawnCoroutine());
     }
 
     private void Update()
     {
+        if (!isActive) return;
+
         transform.position += direction * speed * Time.deltaTime;
 
         if(lifeTime > 0)
@@ -38,6 +50,25 @@ public class AlligatorBehavior : MonoBehaviour
             isDead = true;
             Death();
         }
+    }
+
+    private IEnumerator SpawnCoroutine()
+    {
+        spawnParticle.Play();
+        foreach (GameObject g in activeObjects)
+        {
+            g.SetActive(false);
+        }
+
+        yield return new WaitForSeconds(1.2f);
+
+        spawnParticle.Stop();
+        foreach(GameObject g in activeObjects)
+        {
+            g.SetActive(true);
+        }
+
+        isActive = true;
     }
 
     private void Death()

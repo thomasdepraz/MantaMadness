@@ -1,9 +1,20 @@
+using System.Drawing;
 using UnityEngine;
+using System.Collections;
 
 public class AlligatorArea : MonoBehaviour
 {
     public GameObject alligatorPrefab;
     public SimpleController player;
+
+    [SerializeField] private Transform center;
+    [SerializeField] private Vector3 size;
+    [SerializeField] private LayerMask playerLayer;
+
+    private Coroutine checkCoroutine;
+
+    [Header("Settings")]
+    [SerializeField] private float checkInterval = 0.2f;
 
     public float minSpawnRadius = 10f;
     public float maxSpawnRadius = 20f;
@@ -18,6 +29,10 @@ public class AlligatorArea : MonoBehaviour
     {
         player = Game.Instance.player;
         MusicManager.OnBeat += HandleBeat;
+    }
+    private void OnEnable()
+    {
+        checkCoroutine = StartCoroutine(CheckTunnelRoutine());
     }
 
     private void OnDisable()
@@ -39,6 +54,7 @@ public class AlligatorArea : MonoBehaviour
 
     private void SpawnAlligator()
     {
+        Debug.Log("JE Start le spawn du croco");
         for (int i = 0; i < 10; i++) // 10 tentatives max
         {
             Vector2 circle = Random.insideUnitCircle.normalized * Random.Range(minSpawnRadius, maxSpawnRadius);
@@ -70,22 +86,22 @@ public class AlligatorArea : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playerInside = true;
-            beatCounter = 0; // reset optionnel
-        }
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.CompareTag("Player"))
+    //    {
+    //        playerInside = true;
+    //        beatCounter = 0; // reset optionnel
+    //    }
+    //}
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playerInside = false;
-        }
-    }
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.CompareTag("Player"))
+    //    {
+    //        playerInside = false;
+    //    }
+    //}
 
     private bool IsInCameraView(Vector3 position)
     {
@@ -99,4 +115,44 @@ public class AlligatorArea : MonoBehaviour
 
         return angle < fov * 0.5f;
     }
+    private IEnumerator CheckTunnelRoutine()
+    {
+        CheckTunnel();
+
+        WaitForSeconds wait = new WaitForSeconds(checkInterval);
+
+        while (true)
+        {
+            yield return wait;
+            CheckTunnel();
+        }
+    }
+
+    public void CheckTunnel()
+    {
+        bool isInZone = Physics.CheckBox(center.position, size / 2f, center.rotation, playerLayer);
+
+        if (isInZone == playerInside)
+            return;
+
+
+        Debug.Log("Player is in zone = " + isInZone);
+        playerInside = isInZone;
+    }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        if (center == null)
+            return;
+
+        Gizmos.matrix = Matrix4x4.TRS(
+            center.position,
+            center.rotation,
+            Vector3.one
+        );
+
+        Gizmos.DrawWireCube(Vector3.zero, size);
+    }
+#endif
 }
