@@ -61,6 +61,7 @@ public class TweenAnimation : MonoBehaviour
     private Vector3 originalPosition;
     private Quaternion originalRotation;
 
+    public bool skipCull = false;
     private int currentBeatStep = 0;
     private bool _skipDistanceCull;
     private bool _isDistancePaused;
@@ -89,7 +90,7 @@ public class TweenAnimation : MonoBehaviour
             Debug.Log("DOTween active=" + DOTween.TotalActiveTweens() + " playing=" + DOTween.TotalPlayingTweens());
         }
 
-        if (_skipDistanceCull)
+        if (_skipDistanceCull || skipCull)
             return;
 
         if (Time.time < _nextCullCheckTime)

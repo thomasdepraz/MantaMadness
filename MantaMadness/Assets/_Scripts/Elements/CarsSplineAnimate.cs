@@ -39,6 +39,8 @@ public class CarsSplineAnimate : MonoBehaviour
     private bool _isDistanceCulled;
     private float _nextCullCheckTime;
 
+    public float _pauseDistance;
+    public float _resumeDistance;
     private void Awake()
     {
         if(GetComponent<SplineAnimate>() != null)
@@ -79,8 +81,8 @@ public class CarsSplineAnimate : MonoBehaviour
             return;
 
         float sqrDistance = (transform.position - player.transform.position).sqrMagnitude;
-        float pauseDistanceSqr = DistanceCullBand.PAUSE_DISTANCE * DistanceCullBand.PAUSE_DISTANCE;
-        float resumeDistanceSqr = DistanceCullBand.RESUME_DISTANCE * DistanceCullBand.RESUME_DISTANCE;
+        float pauseDistanceSqr = _pauseDistance * _pauseDistance;
+        float resumeDistanceSqr = _resumeDistance * _resumeDistance;
 
         if (_isDistanceCulled == false && sqrDistance > pauseDistanceSqr)
             ApplyDistanceCull();
