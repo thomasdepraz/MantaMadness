@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Unity.Mathematics.Geometry;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -388,7 +388,7 @@ public class MainMenu : MonoBehaviour
     {
         MusicManager.Instance.StopMusic();
         yield return new WaitForSeconds(0.75f);
-        SceneManager.LoadScene("Main");
+        SceneManager.LoadScene("Loading");
     }
 
     private void ToggleMainVisuals(bool toggleValue)
