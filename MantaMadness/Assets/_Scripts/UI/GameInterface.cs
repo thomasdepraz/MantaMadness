@@ -126,7 +126,7 @@ public class GameInterface : MonoBehaviour, IScreen
         float parentTop = parentRect.rect.yMax;
 
         /*
-         * Position verticale rÈelle des anchors du texte dans le parent.
+         * Position verticale rùelle des anchors du texte dans le parent.
          *
          * anchoredPosition est un offset par rapport aux anchors,
          * pas une position locale absolue.
@@ -142,10 +142,10 @@ public class GameInterface : MonoBehaviour, IScreen
         if (outsideScreen)
         {
             /*
-             * On place le bord infÈrieur du texte au-dessus du bord supÈrieur
+             * On place le bord infùrieur du texte au-dessus du bord supùrieur
              * du parent.
              *
-             * Avec un pivot ‡ 0.5, il faut ajouter la moitiÈ de la hauteur.
+             * Avec un pivot ù 0.5, il faut ajouter la moitiù de la hauteur.
              * Avec un autre pivot, le calcul reste correct.
              */
             float distanceFromPivotToBottom =
@@ -159,7 +159,7 @@ public class GameInterface : MonoBehaviour, IScreen
         else
         {
             /*
-             * Position visible exprimÈe en pourcentage de la hauteur du parent.
+             * Position visible exprimùe en pourcentage de la hauteur du parent.
              *
              * 0    = bas
              * 0.5  = milieu
@@ -199,7 +199,7 @@ public class GameInterface : MonoBehaviour, IScreen
         MusicManager.OnBeat2 += SunOnBeat;
 
         textRect = areaNameText.GetComponent<RectTransform>();
-        textEffects.StartManualEffects();
+        textEffects.enabled = false;
         areaNameText.enabled = false;
 
         endScreenOriginalScale = endScreenVisual.transform.localScale;
@@ -299,7 +299,7 @@ public class GameInterface : MonoBehaviour, IScreen
 
         catOverlay.enabled = true;
 
-        //Get la durÈÈ de la vid
+        //Get la durùù de la vid
         double duration = (double)catVideoPlayer.frameCount / catVideoPlayer.frameRate;
         catVideoPlayer.time = 0;
         catVideoPlayer.Play();
@@ -356,14 +356,14 @@ public class GameInterface : MonoBehaviour, IScreen
     {
         areaNameText.enabled = true;
 
-        // Annule l'animation prÈcÈdente.
+        // Annule l'animation prùcùdente.
         textRect.DOKill();
 
         areaNameText.text = name;
         textRect.localScale = Vector3.one;
 
         /*
-         * Force TMP et le Canvas ‡ mettre ‡ jour les dimensions.
+         * Force TMP et le Canvas ù mettre ù jour les dimensions.
          * Important si le nouveau nom est plus grand ou plus petit.
          */
         areaNameText.ForceMeshUpdate();
@@ -379,10 +379,11 @@ public class GameInterface : MonoBehaviour, IScreen
             outsideScreen: false
         );
 
-        // Placement immÈdiat, complËtement au-dessus de l'Ècran.
+        // Placement immùdiat, complùtement au-dessus de l'ùcran.
         textRect.anchoredPosition = outsidePosition;
 
-        // L'effet commence une fois le texte correctement placÈ.
+        // L'effet commence une fois le texte correctement placù.
+        textEffects.enabled = true;
         textEffects.StartManualEffects();
 
         // Descente depuis le haut.
@@ -396,7 +397,7 @@ public class GameInterface : MonoBehaviour, IScreen
         // Temps d'affichage.
         yield return new WaitForSecondsRealtime(areaNameVisibleDuration);
 
-        // RemontÈe jusqu'‡ Ítre complËtement hors Ècran.
+        // Remontùe jusqu'ù ùtre complùtement hors ùcran.
         Tween exitTween = textRect
             .DOAnchorPos(outsidePosition, areaNameExitDuration)
             .SetEase(Ease.InQuad)
@@ -404,8 +405,9 @@ public class GameInterface : MonoBehaviour, IScreen
 
         yield return exitTween.WaitForCompletion();
 
-        // DÈsactivation seulement aprËs la sortie complËte.
+        // Dùsactivation seulement aprùs la sortie complùte.
         areaNameText.enabled = false;
+        textEffects.enabled = false;
         areaNameRoutine = null;
     }
 

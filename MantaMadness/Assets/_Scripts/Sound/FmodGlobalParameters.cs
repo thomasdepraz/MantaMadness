@@ -29,9 +29,19 @@ public enum FmodGlobalParamName
 
 public class FmodGlobalParameters : MonoBehaviour
 {
+    private const int PARAM_SLOT_COUNT = 16;
+    private const float SPEED_CHANGE_EPSILON = 0.02f;
+    private const float DISCRETE_CHANGE_EPSILON = 0.0001f;
+
     [HideInInspector]public static FmodGlobalParameters instance;
 
     public List<FMODGlobalParamInfo> globalParameters = new List<FMODGlobalParamInfo>();
+
+    private readonly PARAMETER_ID[] _parameterIds = new PARAMETER_ID[PARAM_SLOT_COUNT];
+    private readonly bool[] _hasParameterId = new bool[PARAM_SLOT_COUNT];
+    private readonly float[] _lastSentValue = new float[PARAM_SLOT_COUNT];
+    private readonly bool[] _hasSentValue = new bool[PARAM_SLOT_COUNT];
+    private readonly int[] _parameterListIndex = new int[PARAM_SLOT_COUNT];
 
     public int selectedIndex = 0;
     public string selectedParameterName
@@ -61,30 +71,53 @@ public class FmodGlobalParameters : MonoBehaviour
     {
         globalParameters.Clear();
 
+        for (int slot = 0; slot < PARAM_SLOT_COUNT; slot++)
+        {
+            _hasParameterId[slot] = false;
+            _hasSentValue[slot] = false;
+            _parameterListIndex[slot] = -1;
+        }
+
         var system = RuntimeManager.StudioSystem;
 
         system.getParameterDescriptionCount(out int count);
+        system.getParameterDescriptionList(out PARAMETER_DESCRIPTION[] paramDesc);
+
+        if (paramDesc == null)
+            count = 0;
+        else if (count > paramDesc.Length)
+            count = paramDesc.Length;
 
         for (int i = 0; i < count; i++)
         {
-            system.getParameterDescriptionList(out PARAMETER_DESCRIPTION[] paramDesc);
+            if (paramDesc[i].type != PARAMETER_TYPE.GAME_CONTROLLED)
+                continue;
 
-            if (paramDesc[i].type == PARAMETER_TYPE.GAME_CONTROLLED)
+            int listIndex = globalParameters.Count;
+            globalParameters.Add(new FMODGlobalParamInfo
             {
-                globalParameters.Add(new FMODGlobalParamInfo
-                {
-                    name = paramDesc[i].name,
-                    min = paramDesc[i].minimum,
-                    max = paramDesc[i].maximum,
-                    defaultValue = paramDesc[i].defaultvalue,
-                    value = paramDesc[i].defaultvalue,
-                });
-                //print(globalParameters[i].name);
-            }
+                name = paramDesc[i].name,
+                min = paramDesc[i].minimum,
+                max = paramDesc[i].maximum,
+                defaultValue = paramDesc[i].defaultvalue,
+                value = paramDesc[i].defaultvalue,
+            });
+
+            if (System.Enum.TryParse(paramDesc[i].name, out FmodGlobalParamName parsedName) == false)
+                continue;
+
+            int paramSlot = (int)parsedName;
+            if (paramSlot < 0 || paramSlot >= PARAM_SLOT_COUNT)
+                continue;
+
+            _parameterIds[paramSlot] = paramDesc[i].id;
+            _hasParameterId[paramSlot] = true;
+            _parameterListIndex[paramSlot] = listIndex;
+            _lastSentValue[paramSlot] = paramDesc[i].defaultvalue;
         }
         if(globalParameters.Count == 0)
         {
-            Debug.LogWarning("Aucun paramËtre global trouvÈ dans FMOD.");
+            Debug.LogWarning("Aucun paramùtre global trouvù dans FMOD.");
         }
 
         Debug.Log($"Charge {globalParameters.Count} global parameters from FMOD");
@@ -92,41 +125,43 @@ public class FmodGlobalParameters : MonoBehaviour
 
     public void ToggleGlobalParameter(FmodGlobalParamName paramName)
     {
-        for (int i = 0; i < globalParameters.Count; i++)
-        {
-            if (globalParameters[i].name == paramName.ToString())
-            {
-                if (globalParameters[i].value == 0)
-                {
-                    globalParameters[i].value = 1;
-                    SetParameter(globalParameters[i]);
-                    //print("Toggle value is" + globalParameters[i].value);
-                }
-                else if (globalParameters[i].value == 1)
-                {
-                    globalParameters[i].value = 0;
-                    SetParameter(globalParameters[i]);
-                    //print("Toggle value is" + globalParameters[i].value);
-                }
-            }
-        }
+        int slot = (int)paramName;
+        if (slot < 0 || slot >= PARAM_SLOT_COUNT)
+            return;
+
+        int listIndex = _parameterListIndex[slot];
+        if (listIndex < 0 || listIndex >= globalParameters.Count)
+            return;
+
+        if (globalParameters[listIndex].value == 0f)
+            SetGlobalParameter(paramName, 1f);
+        else if (globalParameters[listIndex].value == 1f)
+            SetGlobalParameter(paramName, 0f);
     }
 
     public void SetGlobalParameter(FmodGlobalParamName paramName, float value)
     {
-        for (int i = 0; i < globalParameters.Count; i++)
-        {
-            if (globalParameters[i].name == paramName.ToString())
-            {
-                globalParameters[i].value = value;
-                SetParameter(globalParameters[i]);
-            }
-        }
-    }
+        int slot = (int)paramName;
+        if (slot < 0 || slot >= PARAM_SLOT_COUNT)
+            return;
 
-    void SetParameter(FMODGlobalParamInfo param)
-    {
-        RuntimeManager.StudioSystem.setParameterByName(param.name, param.value);
-        //print(param.name + "Value = " + param.value);
+        if (_hasParameterId[slot] == false)
+            return;
+
+        float epsilon = paramName == FmodGlobalParamName.G_Player_Speed
+            ? SPEED_CHANGE_EPSILON
+            : DISCRETE_CHANGE_EPSILON;
+
+        if (_hasSentValue[slot] && Mathf.Abs(_lastSentValue[slot] - value) <= epsilon)
+            return;
+
+        _lastSentValue[slot] = value;
+        _hasSentValue[slot] = true;
+
+        int listIndex = _parameterListIndex[slot];
+        if (listIndex >= 0 && listIndex < globalParameters.Count)
+            globalParameters[listIndex].value = value;
+
+        RuntimeManager.StudioSystem.setParameterByID(_parameterIds[slot], value);
     }
 }

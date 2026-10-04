@@ -51,7 +51,12 @@ public class CameraTargetDetection : MonoBehaviour
     private int targetDashCount = 0;
     [SerializeField] private string dashCountParameterName = "DashCount";
 
+    private const int OVERLAP_BUFFER_SIZE = 64;
+
     private SimpleController player;
+    private Collider[] _jumpOverlapBuffer;
+    private Collider[] _npcOverlapBuffer;
+    private Collider[] _shopOverlapBuffer;
 
     private void Awake()
     {
@@ -62,6 +67,10 @@ public class CameraTargetDetection : MonoBehaviour
     }
     private void Start()
     {
+        _jumpOverlapBuffer = new Collider[OVERLAP_BUFFER_SIZE];
+        _npcOverlapBuffer = new Collider[OVERLAP_BUFFER_SIZE];
+        _shopOverlapBuffer = new Collider[OVERLAP_BUFFER_SIZE];
+
         if (playerTransform == null && Game.Instance != null && Game.Instance.player != null)
             playerTransform = Game.Instance.player.transform;
 
@@ -85,7 +94,8 @@ public class CameraTargetDetection : MonoBehaviour
 
     private void LateUpdate()
     {
-        Physics.SyncTransforms();
+        if (_jumpOverlapBuffer == null)
+            return;
 
         if(PauseMenu.instance != null && !PauseMenu.instance.isPaused)
         {
@@ -183,16 +193,18 @@ public class CameraTargetDetection : MonoBehaviour
         if (player.doubleJumpAbility == false)
             return;
 
-        Collider[] targets = Physics.OverlapSphere(
+        int targetCount = Physics.OverlapSphereNonAlloc(
             playerTransform.position,
             jumpDetectionRange,
+            _jumpOverlapBuffer,
             jumpargetMask);
 
         Collider bestTarget = null;
         float bestScore = float.MaxValue;
 
-        foreach (var col in targets)
+        for (int targetIndex = 0; targetIndex < targetCount; targetIndex++)
         {
+            Collider col = _jumpOverlapBuffer[targetIndex];
             if (!col.TryGetComponent(out JumpTarget jt)) continue;
             if (!jt.isAvailable) continue;
 
@@ -280,15 +292,22 @@ public class CameraTargetDetection : MonoBehaviour
 
         bool useCameraLogic = IsPlayerCameraActive();
 
-        Collider[] targetsInRange;
-
+        int targetsInRangeCount;
         if (CameraZone.ActiveZone != null)
         {
-            targetsInRange = Physics.OverlapSphere(GetDetectionOrigin(), npcFixedCamDetectionRange, npcTargetMask);
+            targetsInRangeCount = Physics.OverlapSphereNonAlloc(
+                GetDetectionOrigin(),
+                npcFixedCamDetectionRange,
+                _npcOverlapBuffer,
+                npcTargetMask);
         }
         else
         {
-            targetsInRange = Physics.OverlapSphere(GetDetectionOrigin(), npcDetectionRange, npcTargetMask);
+            targetsInRangeCount = Physics.OverlapSphereNonAlloc(
+                GetDetectionOrigin(),
+                npcDetectionRange,
+                _npcOverlapBuffer,
+                npcTargetMask);
         }
 
 
@@ -306,8 +325,9 @@ public class CameraTargetDetection : MonoBehaviour
             }
         }
 
-        foreach (Collider target in targetsInRange)
+        for (int targetIndex = 0; targetIndex < targetsInRangeCount; targetIndex++)
         {
+            Collider target = _npcOverlapBuffer[targetIndex];
             if (!target.TryGetComponent(out InteractableNPC npc))
                 continue;
 
@@ -374,9 +394,10 @@ public class CameraTargetDetection : MonoBehaviour
 
         bool useCameraLogic = IsPlayerCameraActive();
 
-        Collider[] targetsInRange = Physics.OverlapSphere(
+        int targetsInRangeCount = Physics.OverlapSphereNonAlloc(
             GetDetectionOrigin(),
             shopDetectionRange,
+            _shopOverlapBuffer,
             shopTargetMask);
 
         ShopStand bestShop = null;
@@ -384,8 +405,9 @@ public class CameraTargetDetection : MonoBehaviour
 
         float bestScore = float.MaxValue;
 
-        foreach (Collider target in targetsInRange)
+        for (int targetIndex = 0; targetIndex < targetsInRangeCount; targetIndex++)
         {
+            Collider target = _shopOverlapBuffer[targetIndex];
             if (!target.TryGetComponent(out ShopStand shop)) continue;
             if (!shop.IsActive) continue;
 
