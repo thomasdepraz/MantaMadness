@@ -224,6 +224,8 @@ MonoBehaviour:
       Data4: -1348074034
     Path: event:/Sfx/InGame/World/Enviro/Env_Car_Explosion
   isAlive: 1
+  _pauseDistance: 500
+  _resumeDistance: 600
 --- !u!65 &8652256191130660889
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -570,6 +572,7 @@ MonoBehaviour:
   sequenceLoops: -1
   sequenceLoopType: 2
   beatSequenceType: 0
+  useUnscaledTime: 0
 --- !u!4 &7134814126625506213 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3aa6daccd607f804aaa8f8a04f905639, type: 3}
@@ -611,6 +614,7 @@ MonoBehaviour:
   sequenceLoops: -1
   sequenceLoopType: 1
   beatSequenceType: 0
+  useUnscaledTime: 0
 --- !u!1 &9007972627374081257 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1840835046896672935, guid: 3aa6daccd607f804aaa8f8a04f905639, type: 3}
@@ -647,3 +651,4 @@ MonoBehaviour:
   sequenceLoops: -1
   sequenceLoopType: 2
   beatSequenceType: 0
+  useUnscaledTime: 0

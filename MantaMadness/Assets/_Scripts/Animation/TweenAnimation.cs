@@ -61,7 +61,12 @@ public class TweenAnimation : MonoBehaviour
     private Vector3 originalPosition;
     private Quaternion originalRotation;
 
+    public bool skipCull = false;
     private int currentBeatStep = 0;
+    private bool _skipDistanceCull;
+    private bool _isDistancePaused;
+    private float _nextCullCheckTime;
+    private static bool _loggedTweenCounts;
 
     private void Awake()
     {
@@ -73,27 +78,49 @@ public class TweenAnimation : MonoBehaviour
 
     void Start()
     {
-        //if (playOnBeat == true)
-        //{
-        //    currentBeatStep = 0;
+        _skipDistanceCull = GetComponentInParent<Canvas>() != null;
+        _nextCullCheckTime = Time.time + Random.Range(0f, DistanceCullBand.CHECK_INTERVAL);
+    }
 
-        //    if ( beatSequenceType == BeatType.beat)
-        //    {
-        //        MusicManager.OnBeat += PlayBeatSequence;
-        //    }
-        //    else if(beatSequenceType == BeatType.beat2)
-        //    {
-        //        MusicManager.OnBeat2 += PlayBeatSequence;
-        //    }
-        //    else if (beatSequenceType == BeatType.beat4)
-        //    {
-        //        MusicManager.OnBeat4 += PlayBeatSequence;
-        //    }
-        //    else if (beatSequenceType == BeatType.beat8)
-        //    {
-        //        MusicManager.OnBeat8 += PlayBeatSequence;
-        //    }
-        //}
+    private void Update()
+    {
+        if (_loggedTweenCounts == false && Time.timeSinceLevelLoad > 1f)
+        {
+            _loggedTweenCounts = true;
+            Debug.Log("DOTween active=" + DOTween.TotalActiveTweens() + " playing=" + DOTween.TotalPlayingTweens());
+        }
+
+        if (_skipDistanceCull || skipCull)
+            return;
+
+        if (Time.time < _nextCullCheckTime)
+            return;
+
+        _nextCullCheckTime = Time.time + DistanceCullBand.CHECK_INTERVAL;
+        UpdateDistanceCull();
+    }
+
+    private void UpdateDistanceCull()
+    {
+        if (DistanceCullBand.TryGetPlayerPosition(out Vector3 playerPosition) == false)
+            return;
+
+        float sqrDistance = (transform.position - playerPosition).sqrMagnitude;
+        float pauseDistanceSqr = DistanceCullBand.PAUSE_DISTANCE * DistanceCullBand.PAUSE_DISTANCE;
+        float resumeDistanceSqr = DistanceCullBand.RESUME_DISTANCE * DistanceCullBand.RESUME_DISTANCE;
+
+        if (_isDistancePaused == false && sqrDistance > pauseDistanceSqr)
+        {
+            _isDistancePaused = true;
+            if (currentSequence != null && currentSequence.IsActive())
+                currentSequence.Pause();
+        }
+        else if (_isDistancePaused && sqrDistance < resumeDistanceSqr)
+        {
+            _isDistancePaused = false;
+            if (currentSequence != null && currentSequence.IsActive())
+                currentSequence.Play();
+        }
     }
 
     public void OnEnable()
@@ -124,6 +151,7 @@ public class TweenAnimation : MonoBehaviour
 
     public void OnDisable()
     {
+        _isDistancePaused = false;
         StopTween();
 
         switch (beatSequenceType)
@@ -183,7 +211,7 @@ public class TweenAnimation : MonoBehaviour
         if (tweenSteps == null || tweenSteps.Count == 0)
             return;
 
-        currentSequence = DOTween.Sequence().SetUpdate(UpdateType.Normal, useUnscaledTime);
+        currentSequence = DOTween.Sequence().SetUpdate(UpdateType.Normal, useUnscaledTime).SetRecyclable(true);
 
         Vector3 simulatedScale = transform.localScale;
 
@@ -226,6 +254,7 @@ public class TweenAnimation : MonoBehaviour
 
             if (stepTween != null)
             {
+                stepTween.SetRecyclable(true);
                 stepTween.SetEase(step.ease);
                 currentSequence.Append(stepTween);
             }
@@ -237,6 +266,17 @@ public class TweenAnimation : MonoBehaviour
 
     public void PlayBeatSequence(int bar, int beat, float tempo)
     {
+        if (_isDistancePaused)
+        {
+            if (tweenSteps == null || tweenSteps.Count == 0)
+                return;
+
+            currentBeatStep++;
+            if (currentBeatStep >= tweenSteps.Count)
+                currentBeatStep = 0;
+            return;
+        }
+
         if (tweenSteps == null || tweenSteps.Count == 0)
             return;
 
@@ -264,6 +304,7 @@ public class TweenAnimation : MonoBehaviour
             if (step.positionRelative)
                 moveTween.SetRelative();
 
+            moveTween.SetRecyclable(true);
             moveTween.SetEase(step.ease);
             moveTween.SetUpdate(useUnscaledTime);
 
@@ -280,6 +321,7 @@ public class TweenAnimation : MonoBehaviour
             if (step.rotationRelative)
                 rotateTween.SetRelative();
 
+            rotateTween.SetRecyclable(true);
             rotateTween.SetEase(step.ease);
             rotateTween.SetUpdate(useUnscaledTime);
 
@@ -300,6 +342,7 @@ public class TweenAnimation : MonoBehaviour
 
             Tween scaleTween = transform.DOScale(targetScale, tweenDuration);
 
+            scaleTween.SetRecyclable(true);
             scaleTween.SetEase(step.ease);
             scaleTween.SetUpdate(useUnscaledTime);
 
