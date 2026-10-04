@@ -1,6 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class TransitionInterface : MonoBehaviour, IScreen
 {
@@ -11,8 +12,15 @@ public class TransitionInterface : MonoBehaviour, IScreen
 
     private void Start()
     {
-        UIManager.Instance.transitionScreen = this;
-        TransitionOnLoad();
+        if(UIManager.Instance != null)
+        {
+            UIManager.Instance.transitionScreen = this;
+        }
+
+        if(SceneManager.GetActiveScene().name == "Main")
+        {
+            TransitionOnLoad();
+        }
     }
 
     public void TransitionOnLoad()

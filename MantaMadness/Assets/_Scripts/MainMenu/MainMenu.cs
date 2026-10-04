@@ -33,6 +33,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] public EventReference mainMenuTweakSound;
     [SerializeField] public EventReference startGameSound;
 
+    [SerializeField] private TransitionInterface transitionInterface;
+
     private bool ignoreNextInput = false;
 
     public enum MainMenuState
@@ -387,7 +389,8 @@ public class MainMenu : MonoBehaviour
     public IEnumerator LoadMainCoroutine()
     {
         MusicManager.Instance.StopMusic();
-        yield return new WaitForSeconds(0.75f);
+        transitionInterface.TransitionIn();
+        yield return new WaitForSeconds(1.2f);
         SceneManager.LoadScene("Loading");
     }
 
