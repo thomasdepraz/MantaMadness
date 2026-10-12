@@ -72,54 +72,54 @@ public class CarsSplineAnimate : MonoBehaviour
 
     private void Update()
     {
-        if (Time.time < _nextCullCheckTime)
-            return;
+        //if (Time.time < _nextCullCheckTime)
+        //    return;
 
-        _nextCullCheckTime = Time.time + DistanceCullBand.CHECK_INTERVAL;
+        //_nextCullCheckTime = Time.time + DistanceCullBand.CHECK_INTERVAL;
 
-        if (isAlive == false || splineAnimate == null || player == null)
-            return;
+        //if (isAlive == false || splineAnimate == null || player == null)
+        //    return;
 
-        float sqrDistance = (transform.position - player.transform.position).sqrMagnitude;
-        float pauseDistanceSqr = _pauseDistance * _pauseDistance;
-        float resumeDistanceSqr = _resumeDistance * _resumeDistance;
+        //float sqrDistance = (transform.position - player.transform.position).sqrMagnitude;
+        //float pauseDistanceSqr = _pauseDistance * _pauseDistance;
+        //float resumeDistanceSqr = _resumeDistance * _resumeDistance;
 
-        if (_isDistanceCulled == false && sqrDistance > pauseDistanceSqr)
-            ApplyDistanceCull();
-        else if (_isDistanceCulled && sqrDistance < resumeDistanceSqr)
-            ClearDistanceCull();
+        //if (_isDistanceCulled == false && sqrDistance > pauseDistanceSqr)
+        //    ApplyDistanceCull();
+        //else if (_isDistanceCulled && sqrDistance < resumeDistanceSqr)
+        //    ClearDistanceCull();
     }
 
-    private void ApplyDistanceCull()
-    {
-        _isDistanceCulled = true;
-        splineAnimate.Pause();
-        splineAnimate.enabled = false;
+    //private void ApplyDistanceCull()
+    //{
+    //    _isDistanceCulled = true;
+    //    splineAnimate.Pause();
+    //    splineAnimate.enabled = false;
 
-        if (visual != null)
-            visual.SetActive(false);
+    //    if (visual != null)
+    //        visual.SetActive(false);
 
-        if (_hitCollider != null)
-            _hitCollider.enabled = false;
-        if (_audioCollider != null)
-            _audioCollider.enabled = false;
-    }
+    //    if (_hitCollider != null)
+    //        _hitCollider.enabled = false;
+    //    if (_audioCollider != null)
+    //        _audioCollider.enabled = false;
+    //}
 
-    private void ClearDistanceCull()
-    {
-        _isDistanceCulled = false;
+    //private void ClearDistanceCull()
+    //{
+    //    _isDistanceCulled = false;
 
-        if (visual != null)
-            visual.SetActive(true);
+    //    if (visual != null)
+    //        visual.SetActive(true);
 
-        if (_hitCollider != null)
-            _hitCollider.enabled = true;
-        if (_audioCollider != null)
-            _audioCollider.enabled = true;
+    //    if (_hitCollider != null)
+    //        _hitCollider.enabled = true;
+    //    if (_audioCollider != null)
+    //        _audioCollider.enabled = true;
 
-        splineAnimate.enabled = true;
-        splineAnimate.Play();
-    }
+    //    splineAnimate.enabled = true;
+    //    splineAnimate.Play();
+    //}
 
     private void PlayHorn()
     {
