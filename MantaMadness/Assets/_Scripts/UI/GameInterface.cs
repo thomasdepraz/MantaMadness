@@ -23,12 +23,12 @@ public class GameInterface : MonoBehaviour, IScreen
     public TextMeshProUGUI buckieText;
 
     [Header("UI Current Collectible Area")]
-    public TextMeshProUGUI collectibleAreaName;
+    //public TextMeshProUGUI collectibleAreaName;
     public TextMeshProUGUI clamAreaCount;
     public TextMeshProUGUI buckieAreaCount;
     public TextMeshProUGUI SunAreaCount;
 
-    [Header("UI otal Collectible Menu")]
+    [Header("UI Total Collectible Menu")]
     public TextMeshProUGUI collectibleAreaNameMenu;
     public TextMeshProUGUI totalClamCountMenu;
     public TextMeshProUGUI totalBuckieCountMenu;
@@ -178,10 +178,7 @@ public class GameInterface : MonoBehaviour, IScreen
          */
         float targetAnchoredY = targetLocalY - anchorCenterY;
 
-        return new Vector2(
-            textRect.anchoredPosition.x,
-            targetAnchoredY
-        );
+        return new Vector2(textRect.anchoredPosition.x,targetAnchoredY);
     }
 
     public void Start()
@@ -339,6 +336,8 @@ public class GameInterface : MonoBehaviour, IScreen
     }
     public void StartDisplayCoroutine(string name)
     {
+
+
         if (Game.Instance.why == true)
             return;
 
@@ -347,8 +346,6 @@ public class GameInterface : MonoBehaviour, IScreen
             StopCoroutine(areaNameRoutine);
             areaNameRoutine = null;
         }
-
-        textRect.DOKill();
 
         areaNameRoutine = StartCoroutine(DisplayCoroutine(name));
     }
@@ -360,6 +357,7 @@ public class GameInterface : MonoBehaviour, IScreen
         textRect.DOKill();
 
         areaNameText.text = name;
+
         textRect.localScale = Vector3.one;
 
         /*
@@ -472,7 +470,7 @@ public class GameInterface : MonoBehaviour, IScreen
 
     public void ToggleAreaNameDisplay(bool toggle)
     {
-        collectibleAreaName.enabled = toggle;
+        areaNameText.enabled = toggle;
     }
 
     public void ToggleInterfaceAreaIntro(bool toggle)
@@ -604,7 +602,7 @@ public class GameInterface : MonoBehaviour, IScreen
     public void UpdateAreaName(string name)
     {
         Debug.Log("NEW COLLIDER AREA IS" +  name);
-        collectibleAreaName.text = name;
+        areaNameText.text = name;
         collectibleAreaNameMenu.text = name;
     }
 

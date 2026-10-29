@@ -42,7 +42,7 @@ public static class InputLocalization
                     { "STRAF_RIGHT", "R1" },
                     { "STOMP", "Square" },
                     {"CAT", "Circle" },
-                    {"REVERSE_GRIND", "Square" + "" },
+                    {"REVERSE_GRIND", "Circle" + "" },
                     {"SPIN", "R2" },
                 }
             },

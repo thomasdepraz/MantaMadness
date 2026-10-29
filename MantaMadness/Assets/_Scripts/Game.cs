@@ -106,6 +106,11 @@ public class Game : MonoBehaviour, IDataPersistence
         StateChange();
     }
 
+    private IEnumerator DelayTextDisplayOnGameStart()
+    {
+        yield return new WaitForSeconds(0.1f);
+        UIManager.Instance.gameInterface.StartDisplayCoroutine(" ");
+    }
     public void StateChange()
     {
 
@@ -116,20 +121,18 @@ public class Game : MonoBehaviour, IDataPersistence
             case 0:
                 //Play intro cinematic
 
-
-
-
                 //PLAY LE DIALOG DU VIEUX
                 //DialogManager.instance.StartCinematicInteraction(introNpc);
                 WorldCheckpointManager.Instance.SetStartCheckpoint(introCheckpoint.respawnTransform);
-                WorldCheckpointManager.Instance.SetCheckpoint(introCheckpoint.respawnTransform, introCheckpoint.indexName, introCheckpoint.displayAreaName, introCheckpoint.nameToDisplay, introCheckpoint.LevelID, introCheckpoint.collectibleAreaID);
+                WorldCheckpointManager.Instance.SetCheckpoint(introCheckpoint.respawnTransform, introCheckpoint.indexName, false, "_", introCheckpoint.LevelID, introCheckpoint.collectibleAreaID);
                 SetGameState(1);
 
                 Vector3 pos = Vector3.zero;
                 Quaternion rotation = Quaternion.Euler(0, 0, 0);
                 ForceSet(pos, rotation);
 
-                //CinematicManager.instance.PlayIntroCinematic();
+                StartCoroutine(DelayTextDisplayOnGameStart());
+                CinematicManager.instance.PlayIntroCinematic();
 
                 break;
 

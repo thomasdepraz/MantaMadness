@@ -33,11 +33,17 @@ public class AlligatorArea : MonoBehaviour
     private void OnEnable()
     {
         checkCoroutine = StartCoroutine(CheckTunnelRoutine());
+        if(MusicManager.Instance != null)
+        {
+            MusicManager.OnBeat += HandleBeat;
+        }
     }
 
     private void OnDisable()
     {
         MusicManager.OnBeat -= HandleBeat;
+
+        StopAllCoroutines();
     }
 
     private void HandleBeat(int bar, int beat, float tempo)

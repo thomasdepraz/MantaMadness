@@ -11,7 +11,7 @@ public enum CarType
     Truck,
 }
 
-public class CarsSplineAnimate : MonoBehaviour
+public class Gameobject : MonoBehaviour
 {
 
     protected SimpleController player;

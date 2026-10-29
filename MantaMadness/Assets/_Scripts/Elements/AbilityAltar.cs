@@ -17,6 +17,7 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
 
     [SerializeField] private SteamSignal signal;
 
+    [SerializeField] private GameObject RepeatDialogNPC;
 
     [Header("FMOD Sound")]
     public EventReference pickupAltarSound;
@@ -37,8 +38,12 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
         {
             DisablePickup();
         }
+        else
+        {
+            RepeatDialogNPC.SetActive(false);
+        }
 
-        if(GetComponent<SteamSignal>() != null)
+        if (GetComponent<SteamSignal>() != null)
         {
             signal = GetComponent<SteamSignal>();
         }
@@ -121,6 +126,7 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
         {
             visual.SetActive(false);
         }
+        RepeatDialogNPC.SetActive(true);
         relay.HitCollision -= OnPickup;
         relay.gameObject.SetActive(false);
     }

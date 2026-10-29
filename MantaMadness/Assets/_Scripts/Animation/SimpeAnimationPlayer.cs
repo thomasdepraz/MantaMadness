@@ -7,7 +7,13 @@ public class SimpeAnimationPlayer : MonoBehaviour
 
     private void Start()
     {
-        animator = GetComponent<Animator>();
-        animator.Play(clipName);
+        if(GetComponent<Animator>() != null)
+        {
+            animator = GetComponent<Animator>();
+        }
+        if(animator != null)
+        {
+            animator.Play(clipName);
+        }
     }
 }

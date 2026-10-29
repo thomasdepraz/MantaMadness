@@ -19,7 +19,7 @@ public class CarCollisionRelay : MonoBehaviour
             if (car.IsAlive)
                 HitCollision?.Invoke("goldenCar");
         }
-        else if (other.TryGetComponent(out CarsSplineAnimate car2))
+        else if (other.TryGetComponent(out Gameobject car2))
         {
             if (car2.IsAlive)
             {

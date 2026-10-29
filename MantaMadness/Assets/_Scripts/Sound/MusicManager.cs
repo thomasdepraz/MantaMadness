@@ -153,6 +153,8 @@ public class MusicManager : MonoBehaviour, IDataPersistence
         }
         else if (sceneName == "Main")
         {
+
+            Debug.Log("MUSIQUE ACTUEL FDP + " + currentMusic);
             switch (currentMusic)
             {
                 case MUSICS.MUSIC_CAVE:
@@ -342,6 +344,8 @@ public class MusicManager : MonoBehaviour, IDataPersistence
         currentMusic = newMusic;
 
         // 4. Création du nouvel EventInstance
+
+        Debug.Log("MUSIQUE ACTUEL FDP + " + newMusic);
         switch (currentMusic)
         {
             case MUSICS.MUSIC_MENU:

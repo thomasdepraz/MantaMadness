@@ -3557,6 +3557,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
     }
 
     #region ActionWindows
+
+    public ActionWindow activeActionWindow { get; private set; }
     private void StartActionWindow(ActionWindow window, float duration)
     {
         CancelActionWindow();
@@ -3590,6 +3592,8 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         stompWindow.OnStart = () =>
         {
+            activeActionWindow = stompWindow;
+
             //VFX dans manta visual
             actionWindowActive?.Invoke(stompWindow.Type);
 
@@ -3653,11 +3657,13 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         stompWindow.OnCancel = () =>
         {
             Debug.Log("Stomp Window has been canceled");
+            activeActionWindow = null;
         };
 
         stompWindow.OnEnd = () =>
         {
             actionWindowLocked = false;
+            activeActionWindow = null;
         };
 
         return stompWindow;
@@ -3679,7 +3685,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         stompWindow.OnStart = () =>
         {
-
+            activeActionWindow = stompWindow;
             //VFX dans manta visual
             actionWindowActive?.Invoke(stompWindow.Type);
 
@@ -3744,12 +3750,13 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         stompWindow.OnCancel = () =>
         {
-
+            activeActionWindow = null;
         };
 
         stompWindow.OnEnd = () =>
         {
             actionWindowLocked = false;
+            activeActionWindow = null;
             stompBuildupWindowEnded = true;
         };
 
@@ -3770,6 +3777,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         antiGravWindow.OnStart = () =>
         {
+            activeActionWindow = antiGravWindow;
 
             //VFX dans manta visual
             actionWindowActive?.Invoke(antiGravWindow.Type);
@@ -3817,11 +3825,12 @@ public class SimpleController : MonoBehaviour, IDataPersistence
 
         antiGravWindow.OnCancel = () =>
         {
-
+            activeActionWindow = null;
         };
 
         antiGravWindow.OnEnd = () =>
         {
+            activeActionWindow = null;
             actionWindowLocked = false;
             antiGravJumpApexWindowEnded = true;
         };

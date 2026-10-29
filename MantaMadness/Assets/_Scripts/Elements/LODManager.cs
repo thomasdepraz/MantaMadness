@@ -2,7 +2,7 @@ using System.Drawing;
 using UnityEngine;
 using System.Collections;
 
-public class CarsManager : MonoBehaviour
+public class LODManager : MonoBehaviour
 {
     bool wasInTunnel;
 
@@ -15,7 +15,7 @@ public class CarsManager : MonoBehaviour
 
     private Coroutine checkCoroutine;
 
-    [SerializeField] private CarsSplineAnimate[] cars;
+    [SerializeField] private Gameobject [] gameObjects;
 
     private void OnEnable()
     {
@@ -68,9 +68,9 @@ public class CarsManager : MonoBehaviour
 
     private void ToggleAllCars(bool toggle)
     {
-        foreach(CarsSplineAnimate car in cars)
+        foreach(Gameobject item in gameObjects)
         {
-            car.gameObject.SetActive(toggle);
+            item.gameObject.SetActive(toggle);
         }
     }
 
