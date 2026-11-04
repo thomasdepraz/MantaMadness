@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Splines;
 using System.Collections;
 
-public class GoldenCar : GameObject
+public class GoldenCar : Car
 {
     [SerializeField] private string coinName;
 

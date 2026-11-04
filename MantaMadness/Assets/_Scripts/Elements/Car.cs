@@ -11,7 +11,7 @@ public enum CarType
     Truck,
 }
 
-public class GameObject : MonoBehaviour
+public class Car : MonoBehaviour
 {
 
     protected SimpleController player;

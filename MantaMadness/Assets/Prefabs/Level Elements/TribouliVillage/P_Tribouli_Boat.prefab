@@ -108,7 +108,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 642414144128185943}
-  - component: {fileID: 5981357528482441350}
+  - component: {fileID: 3272715038279352903}
   - component: {fileID: 2125637991115773259}
   m_Layer: 0
   m_Name: P_Tribouli_Boat
@@ -134,7 +134,7 @@ Transform:
   - {fileID: 8991096733732954743}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5981357528482441350
+--- !u!114 &3272715038279352903
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,13 +143,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8570859325955929384}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36b5853217a53f9459a5d9e6903885bb, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c42951f35545034a990a9ad1d6b11cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   startPoint: 0
   hitBox: {fileID: 6114005363090669286}
   audioHitBox: {fileID: 0}
-  visual: {fileID: 7395316122410564958}
+  visual: {fileID: 3224588664999756599}
   explosion: {fileID: 5754894185320086022}
   carType: 1
   hornAudio:
@@ -167,6 +167,8 @@ MonoBehaviour:
       Data4: -1348074034
     Path: event:/Sfx/InGame/World/Enviro/Env_Car_Explosion
   isAlive: 1
+  _pauseDistance: 0
+  _resumeDistance: 0
 --- !u!114 &2125637991115773259
 MonoBehaviour:
   m_ObjectHideFlags: 0

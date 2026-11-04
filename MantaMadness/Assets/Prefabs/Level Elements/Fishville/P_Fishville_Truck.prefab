@@ -142,9 +142,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8137393138338764910}
   - component: {fileID: 5155544534063926855}
-  - component: {fileID: 6807885611599111469}
   - component: {fileID: 8652256191130660889}
   - component: {fileID: 562074647747484915}
+  - component: {fileID: 3483389137827262491}
   m_Layer: 0
   m_Name: P_Fishville_Truck
   m_TagString: Untagged
@@ -191,41 +191,6 @@ MonoBehaviour:
   m_ObjectForwardAxis: 5
   m_ObjectUpAxis: 1
   m_StartOffset: 0
---- !u!114 &6807885611599111469
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8972691756627853233}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36b5853217a53f9459a5d9e6903885bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startPoint: 0.48
-  hitBox: {fileID: 4795624436971059400}
-  audioHitBox: {fileID: 0}
-  visual: {fileID: 7514294503742871839}
-  explosion: {fileID: 6133928060464503884}
-  carType: 2
-  hornAudio:
-    Guid:
-      Data1: 311766511
-      Data2: 1221416957
-      Data3: 921807505
-      Data4: 1475426195
-    Path: event:/Sfx/InGame/World/Enviro/Env_Car_Horn
-  explosionAudio:
-    Guid:
-      Data1: 201926729
-      Data2: 1172387982
-      Data3: -2030680420
-      Data4: -1348074034
-    Path: event:/Sfx/InGame/World/Enviro/Env_Car_Explosion
-  isAlive: 1
-  _pauseDistance: 500
-  _resumeDistance: 600
 --- !u!65 &8652256191130660889
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -274,6 +239,41 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &3483389137827262491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8972691756627853233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c42951f35545034a990a9ad1d6b11cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startPoint: 0
+  hitBox: {fileID: 4795624436971059400}
+  audioHitBox: {fileID: 0}
+  visual: {fileID: 7514294503742871839}
+  explosion: {fileID: 6133928060464503884}
+  carType: 2
+  hornAudio:
+    Guid:
+      Data1: 311766511
+      Data2: 1221416957
+      Data3: 921807505
+      Data4: 1475426195
+    Path: event:/Sfx/InGame/World/Enviro/Env_Car_Horn
+  explosionAudio:
+    Guid:
+      Data1: 201926729
+      Data2: 1172387982
+      Data3: -2030680420
+      Data4: -1348074034
+    Path: event:/Sfx/InGame/World/Enviro/Env_Car_Explosion
+  isAlive: 1
+  _pauseDistance: 0
+  _resumeDistance: 0
 --- !u!1001 &1917193886950690455
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -573,6 +573,7 @@ MonoBehaviour:
   sequenceLoopType: 2
   beatSequenceType: 0
   useUnscaledTime: 0
+  skipCull: 0
 --- !u!4 &7134814126625506213 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3aa6daccd607f804aaa8f8a04f905639, type: 3}
@@ -615,6 +616,7 @@ MonoBehaviour:
   sequenceLoopType: 1
   beatSequenceType: 0
   useUnscaledTime: 0
+  skipCull: 0
 --- !u!1 &9007972627374081257 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1840835046896672935, guid: 3aa6daccd607f804aaa8f8a04f905639, type: 3}
@@ -652,3 +654,4 @@ MonoBehaviour:
   sequenceLoopType: 2
   beatSequenceType: 0
   useUnscaledTime: 0
+  skipCull: 0
