@@ -24,6 +24,7 @@ public class Game : MonoBehaviour, IDataPersistence
     public WorldCheckpoint introCheckpoint;
     public InteractableNPC introNpc;
     public InteractableNPC superGoodJoeNpc;
+    public InteractableNPC goBackNpc;
 
     public EndPortalHolder endPortalHolder;
 
@@ -43,7 +44,7 @@ public class Game : MonoBehaviour, IDataPersistence
         }
 
         Application.targetFrameRate = 60;
-        player = GameObject.FindWithTag("Player").GetComponent<SimpleController>();
+        player = UnityEngine.GameObject.FindWithTag("Player").GetComponent<SimpleController>();
         Debug.Log("WHY =" + why);
     }
 
@@ -56,7 +57,7 @@ public class Game : MonoBehaviour, IDataPersistence
     [HideInInspector] public Vector3 m_SpawnPosition;
     [HideInInspector] public Quaternion m_SpawnRotation;
 
-    public GameObject IntroCinematicObject;
+    public UnityEngine.GameObject IntroCinematicObject;
 
     public void Start()
     {
@@ -67,7 +68,7 @@ public class Game : MonoBehaviour, IDataPersistence
             scriptableRendererFeature.SetActive(effect.isActive);
         }
 
-        player = GameObject.FindWithTag("Player").GetComponent<SimpleController>();
+        player = UnityEngine.GameObject.FindWithTag("Player").GetComponent<SimpleController>();
 
         //Toggle screen effects
         m_SpawnPosition = player.transform.position;
@@ -132,7 +133,7 @@ public class Game : MonoBehaviour, IDataPersistence
                 ForceSet(pos, rotation);
 
                 StartCoroutine(DelayTextDisplayOnGameStart());
-                CinematicManager.instance.PlayIntroCinematic();
+                //CinematicManager.instance.PlayIntroCinematic();
 
                 break;
 
@@ -256,7 +257,7 @@ public class Game : MonoBehaviour, IDataPersistence
         IntroCinematicObject.SetActive(false);
     }
 
-    public void IntroEnd(GameObject intro)
+    public void IntroEnd(UnityEngine.GameObject intro)
     {
         intro.SetActive(false);
         WeatherManager.instance.UpdateFog(FogState.enabled);
@@ -282,10 +283,10 @@ public class Game : MonoBehaviour, IDataPersistence
     public void ActivateEndingScreen()
     {
         //ENDING SCREEN ACTIVATION
-        if (CoinManager.Instance.PickupCoinCount == 20)
+        if (CoinManager.Instance.PickupCoinCount == 30)
         {
             // ACTIVATE ENDING SCREEN BEHAVIOR
-            endPortalHolder.CouroutinSpawnStart(player);
+            endPortalHolder.EnableEndPortalStateActive();
             SetGameState(10);
         }
 

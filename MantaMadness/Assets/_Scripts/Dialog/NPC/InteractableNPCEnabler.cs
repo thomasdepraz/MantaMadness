@@ -5,8 +5,8 @@ using UnityEngine;
 public class StateActivation
 {
     public int requiredState;
-    public GameObject[] objectsToEnable;
-    public GameObject[] objectsToDisable;
+    public UnityEngine.GameObject[] objectsToEnable;
+    public UnityEngine.GameObject[] objectsToDisable;
 }
 
 [System.Serializable]
@@ -16,8 +16,8 @@ public class DialogTrigger
     public int requiredNpcState;   
     public int dialogIndex;        
     public int stateToSet;         
-    public GameObject[] enable;
-    public GameObject[] disable;
+    public UnityEngine.GameObject[] enable;
+    public UnityEngine.GameObject[] disable;
 }
 
 

@@ -18,11 +18,11 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
     [SerializeField] private Transform volcanoPos;
     [SerializeField] private Transform cityPos;
 
-    [SerializeField] private GameObject sunVisual;
+    [SerializeField] private UnityEngine.GameObject sunVisual;
     [SerializeField] private Renderer[] sunFaceRenderer;
-    [SerializeField] private GameObject[] sunStateVisual;
-    [SerializeField] private GameObject[] moonStateVisual;
-    [SerializeField] private GameObject[] whystateVisual;
+    [SerializeField] private UnityEngine.GameObject[] sunStateVisual;
+    [SerializeField] private UnityEngine.GameObject[] moonStateVisual;
+    [SerializeField] private UnityEngine.GameObject[] whystateVisual;
 
     [SerializeField] private Material sunMat;
     [SerializeField] private Material moonMat;
@@ -86,12 +86,12 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
         {
             if (state == SunState.Sun)
             {
-                foreach (GameObject visual in sunStateVisual)
+                foreach (UnityEngine.GameObject visual in sunStateVisual)
                 {
                     visual.SetActive(true);
                 }
 
-                foreach (GameObject visual in moonStateVisual)
+                foreach (UnityEngine.GameObject visual in moonStateVisual)
                 {
                     visual.SetActive(false);
                 }
@@ -103,12 +103,12 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
             }
             else
             {
-                foreach (GameObject visual in sunStateVisual)
+                foreach (UnityEngine.GameObject visual in sunStateVisual)
                 {
                     visual.SetActive(false);
                 }
 
-                foreach (GameObject visual in moonStateVisual)
+                foreach (UnityEngine.GameObject visual in moonStateVisual)
                 {
                     visual.SetActive(true);
                 }
@@ -128,12 +128,12 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
             {
                 if (state == SunState.Sun)
                 {
-                    foreach (GameObject visual in sunStateVisual)
+                    foreach (UnityEngine.GameObject visual in sunStateVisual)
                     {
                         visual.SetActive(true);
                     }
 
-                    foreach (GameObject visual in moonStateVisual)
+                    foreach (UnityEngine.GameObject visual in moonStateVisual)
                     {
                         visual.SetActive(false);
                     }
@@ -145,12 +145,12 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
                 }
                 else
                 {
-                    foreach (GameObject visual in sunStateVisual)
+                    foreach (UnityEngine.GameObject visual in sunStateVisual)
                     {
                         visual.SetActive(false);
                     }
 
-                    foreach (GameObject visual in moonStateVisual)
+                    foreach (UnityEngine.GameObject visual in moonStateVisual)
                     {
                         visual.SetActive(true);
                     }
@@ -198,12 +198,12 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
     {
         if (state == SunState.Sun)
         {
-            foreach (GameObject visual in sunStateVisual)
+            foreach (UnityEngine.GameObject visual in sunStateVisual)
             {
                 visual.SetActive(true);
             }
 
-            foreach (GameObject visual in moonStateVisual)
+            foreach (UnityEngine.GameObject visual in moonStateVisual)
             {
                 visual.SetActive(false);
             }
@@ -215,12 +215,12 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
         }
         else if (state == SunState.Moon)
         {
-            foreach (GameObject visual in sunStateVisual)
+            foreach (UnityEngine.GameObject visual in sunStateVisual)
             {
                 visual.SetActive(false);
             }
 
-            foreach (GameObject visual in moonStateVisual)
+            foreach (UnityEngine.GameObject visual in moonStateVisual)
             {
                 visual.SetActive(true);
             }
@@ -232,12 +232,12 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
         }
         else if(state == SunState.Why)
         {
-            foreach (GameObject visual in sunStateVisual)
+            foreach (UnityEngine.GameObject visual in sunStateVisual)
             {
                 visual.SetActive(true);
             }
 
-            foreach (GameObject visual in moonStateVisual)
+            foreach (UnityEngine.GameObject visual in moonStateVisual)
             {
                 visual.SetActive(false);
             }
@@ -247,7 +247,7 @@ public class SunPositionManager : MonoBehaviour, IDataPersistence
                 renderer.material = sunMat;
             }
 
-            foreach (GameObject visual in whystateVisual)
+            foreach (UnityEngine.GameObject visual in whystateVisual)
             {
                 visual.SetActive(false);
             }

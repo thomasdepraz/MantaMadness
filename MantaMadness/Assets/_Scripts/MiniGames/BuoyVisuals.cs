@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BuoyVisuals : MonoBehaviour
 {
-    public GameObject model;
+    public UnityEngine.GameObject model;
     public new MeshRenderer renderer;
     public Material defaultMaterial;
     public Material completedMaterial;

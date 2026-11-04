@@ -28,14 +28,16 @@ public class HauntedTunnel : MonoBehaviour
     [SerializeField] private ParticleSystem dark_001, dark_002, dark_003;
     private float endTimer;
     [SerializeField] private float timerDuration;
-    [SerializeField] private GameObject deadFish;
+    [SerializeField] private UnityEngine.GameObject deadFish;
     [SerializeField] private Transform northEntrance, southEntrance;
 
     [SerializeField] private CoinHolder CoinToDeac;
-    [SerializeField] private GameObject Coco;
+    [SerializeField] private UnityEngine.GameObject Coco;
 
     public EventReference bellStinger;
     public EventReference laugh;
+
+    public SteamSignal achievement;
 
     private void Start()
     {
@@ -52,6 +54,7 @@ public class HauntedTunnel : MonoBehaviour
 
         ResetTimer();
 
+        if(state < 3)
         Coco.SetActive(false);
     }
     private void OnDisable()
@@ -148,6 +151,7 @@ public class HauntedTunnel : MonoBehaviour
             case 3:
                 //Launch Last Coroutine
                 dark_003.Play();
+                achievement.Trigger();
                 elements[2].gameObject.SetActive(true);
                 break;
         }
@@ -192,12 +196,12 @@ public class HauntedTunnel : MonoBehaviour
         {
             case 0:
                 //SPAWN SOUTH
-                GameObject dead = Instantiate(deadFish, southEntrance.position, Quaternion.identity);
+                UnityEngine.GameObject dead = Instantiate(deadFish, southEntrance.position, Quaternion.identity);
                 dead.GetComponent<DeadFish>().tunnel = this;
                 break;
             case 1:
                 //SPAWN NORTH
-                GameObject dead2 = Instantiate(deadFish, northEntrance.position, Quaternion.identity);
+                UnityEngine.GameObject dead2 = Instantiate(deadFish, northEntrance.position, Quaternion.identity);
                 dead2.GetComponent<DeadFish>().tunnel = this;
                 break;
         }

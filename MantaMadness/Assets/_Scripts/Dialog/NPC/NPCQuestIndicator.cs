@@ -4,7 +4,7 @@ public class NPCQuestIndicator : MonoBehaviour
 {
     [SerializeField] private InteractableNPC npc;
 
-    [SerializeField] private GameObject visual;
+    [SerializeField] private UnityEngine.GameObject visual;
     [SerializeField] private bool useNPCState;
     [SerializeField] private int requiredNPCState;
 

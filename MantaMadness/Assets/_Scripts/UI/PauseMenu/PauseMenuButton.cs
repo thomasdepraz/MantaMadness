@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PauseMenuButton : MonoBehaviour
 {
-    public GameObject cursor;
+    public UnityEngine.GameObject cursor;
 
     public void EnableButton()
     {

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BreakableWall : MonoBehaviour
 {
-    [SerializeField] protected GameObject wall;
+    [SerializeField] protected UnityEngine.GameObject wall;
     [SerializeField] protected ParticleSystem breakParticle;
 
     protected bool isBroken = false;

@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class TestFeverObject : FeverObject
 {
-    [SerializeField] private GameObject defaultVisual;
-    [SerializeField] private GameObject feverVisual;
+    [SerializeField] private UnityEngine.GameObject defaultVisual;
+    [SerializeField] private UnityEngine.GameObject feverVisual;
 
     private void Start()
     {

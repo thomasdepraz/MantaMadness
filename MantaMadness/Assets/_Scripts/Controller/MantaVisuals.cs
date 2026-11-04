@@ -78,13 +78,13 @@ public class MantaVisuals : MonoBehaviour
     public SkinnedMeshRenderer[] dynamoVisual;
     public Material[] playerMat;
     public Material lavaResistMat;
-    public GameObject playerMantaTrueBody;
+    public UnityEngine.GameObject playerMantaTrueBody;
     public Material electricMaterial;
     public Material burntMaterial;
     public Material electrocutedMaterial;
     private Material[] originalMaterials;
-    public GameObject mantaHolder;
-    public GameObject playerReaverBody;
+    public UnityEngine.GameObject mantaHolder;
+    public UnityEngine.GameObject playerReaverBody;
 
     [Header("Trailer Visual")]
     public SkinnedMeshRenderer[] flattenVisuals;

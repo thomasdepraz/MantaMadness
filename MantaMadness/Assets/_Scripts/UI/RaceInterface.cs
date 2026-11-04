@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RaceInterface : MonoBehaviour
 {
-    public GameObject container;
+    public UnityEngine.GameObject container;
     public TextMeshProUGUI lapsText;
     public TextMeshProUGUI timerText;
 

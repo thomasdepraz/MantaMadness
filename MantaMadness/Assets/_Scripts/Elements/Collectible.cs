@@ -17,7 +17,7 @@ public class Collectible : MonoBehaviour, IDataPersistence
     [SerializeField] private CollectibleRelay relay;
 
     private bool movingTowardtarget = false;
-    private GameObject player;
+    private UnityEngine.GameObject player;
 
     [SerializeField] private float speed = 0.8f;
 
@@ -148,7 +148,7 @@ public class Collectible : MonoBehaviour, IDataPersistence
         }
     }
 
-    public void MoveToTarget(GameObject target)
+    public void MoveToTarget(UnityEngine.GameObject target)
     {
         if(movingTowardtarget == false)
         {

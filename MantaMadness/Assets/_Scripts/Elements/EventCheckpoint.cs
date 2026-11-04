@@ -13,8 +13,8 @@ public class EventCheckpoint : WorldCheckpoint, IDataPersistence
 {
     [SerializeField] private string zoneID;
 
-    [SerializeField] private GameObject[] toDeactivate;
-    [SerializeField] private GameObject[] toActivate;
+    [SerializeField] private UnityEngine.GameObject[] toDeactivate;
+    [SerializeField] private UnityEngine.GameObject[] toActivate;
     [SerializeField] private float spawnDelay = 0.2f;
     [SerializeField] private float moveOffset = 5f;
 

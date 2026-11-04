@@ -4,6 +4,6 @@ using UnityEngine;
 public class LevelData
 {
     public string levelID;
-    public GameObject[] levelRoots;
-    public GameObject[] splinesRoots;
+    public UnityEngine.GameObject[] levelRoots;
+    public UnityEngine.GameObject[] splinesRoots;
 }

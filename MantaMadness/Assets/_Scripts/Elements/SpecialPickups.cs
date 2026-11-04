@@ -9,12 +9,15 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
     [SerializeField] private CollectibleRelay relay;
     [SerializeField] private string specialPickupName;
 
-    [SerializeField] private GameObject[] visuals;
+    [SerializeField] private UnityEngine.GameObject[] visuals;
 
     [SerializeField] private int updateGameStateValue;
     [SerializeField] private float speed = 0.8f;
 
-    private GameObject player;
+    [SerializeField] private string NpcName;
+    [SerializeField] private int NpcUpdateState;
+
+    private UnityEngine.GameObject player;
 
     [Header("FMOD Sound")]
     public EventReference pickupSound;
@@ -102,6 +105,12 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
             data.specialPickups.Add(specialPickupName, true);
 
         UIInventoryManager.Instance.UpdateInventory();
+
+        if (NpcName != null && NpcUpdateState != 0)
+        {
+            UpdateNPC();
+        }
+
         DisablePickup();
     }
 
@@ -113,7 +122,7 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
     }
     private void DisablePickup()
     {
-        foreach (GameObject visual in visuals)
+        foreach (UnityEngine.GameObject visual in visuals)
         {
             visual.SetActive(false);
         }
@@ -131,12 +140,18 @@ public class SpecialPickups : MonoBehaviour, IDataPersistence
         }
     }
 
-    public void MoveToTarget(GameObject target)
+    public void MoveToTarget(UnityEngine.GameObject target)
     {
         if (movingTowardtarget == false)
         {
             player = target;
             movingTowardtarget = true;
         }
+    }
+
+    private void UpdateNPC()
+    {
+        Debug.Log("Oue c'est greg");
+        NPCManager.instance.UpdateNPCState(NpcName, NpcUpdateState);
     }
 }

@@ -23,7 +23,7 @@ public class PoulpsBehavior : MonoBehaviour
     [SerializeField] private Vector3 offset;
 
     [Header ("Poulp Visual + Anim")]
-    [SerializeField] private GameObject visual;
+    [SerializeField] private UnityEngine.GameObject visual;
     [SerializeField] private Animator animator;
     [SerializeField] private PoulpsRelay relay;
 

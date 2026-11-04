@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MainMenuButton : MonoBehaviour
 {
-    [SerializeField] private GameObject[] subVisuals;
+    [SerializeField] private UnityEngine.GameObject[] subVisuals;
     [Header("Default Parameters")]
     [SerializeField] private float defaultMatAmplitude = 0.25f;
     [SerializeField] private float defaultMatSpeed = 1f;
@@ -24,7 +24,7 @@ public class MainMenuButton : MonoBehaviour
         GetComponent<MeshRenderer>().material.SetFloat("_Frequency", matFrequency);
 
         //ACtivate and modify sub visuals mat settings
-        foreach (GameObject sub in subVisuals)
+        foreach (UnityEngine.GameObject sub in subVisuals)
         {
             sub.SetActive(true);
             sub.GetComponent<MeshRenderer>().material.SetFloat("_Amplitude", matAmplitude);
@@ -40,7 +40,7 @@ public class MainMenuButton : MonoBehaviour
         GetComponent<MeshRenderer>().material.SetFloat("_Speed", defaultMatSpeed);
         GetComponent<MeshRenderer>().material.SetFloat("_Frequency", defaultMatFrequency);
 
-        foreach (GameObject sub in subVisuals)
+        foreach (UnityEngine.GameObject sub in subVisuals)
         {
             sub.SetActive(false);
         }

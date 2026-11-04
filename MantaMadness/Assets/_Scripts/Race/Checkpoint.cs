@@ -8,7 +8,7 @@ public class Checkpoint : MonoBehaviour
     private int raceIndex;
     public int RaceIndex { get => raceIndex; }
     public Transform respawnTransform;
-    public GameObject[] outlines;
+    public UnityEngine.GameObject[] outlines;
     public MUSICS musicToPlay = MUSICS.NULL;
 
     public void Activate(int raceIndex)
@@ -29,7 +29,7 @@ public class Checkpoint : MonoBehaviour
 
     public void ToggleIndicator(bool toggle)
     {
-        foreach (GameObject objects in outlines)
+        foreach (UnityEngine.GameObject objects in outlines)
         {
             objects.SetActive(toggle);
         }

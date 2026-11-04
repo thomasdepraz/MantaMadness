@@ -12,9 +12,9 @@ public class PauseMenu : MonoBehaviour
 
     [Header("References")]
     public InputManager inputs;
-    [SerializeField] private GameObject pauseMenuUI;
-    [SerializeField] private GameObject pauseMenuBackground;
-    [SerializeField] private GameObject[] pauseMenuButtons;
+    [SerializeField] private UnityEngine.GameObject pauseMenuUI;
+    [SerializeField] private UnityEngine.GameObject pauseMenuBackground;
+    [SerializeField] private UnityEngine.GameObject[] pauseMenuButtons;
 
     [SerializeField] private OptionsMenu optionsMenu;
     [SerializeField] public ConfirmUnstuck unstuckMenu;

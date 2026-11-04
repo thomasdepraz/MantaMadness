@@ -26,8 +26,8 @@ public class SpecialStompButtonManager : MonoBehaviour, IDataPersistence
     protected WaitForSeconds wait;
     protected Coroutine routine;
 
-    public GameObject[] objectsToActivate;
-    public GameObject[] objectsToDeactivate;
+    public UnityEngine.GameObject[] objectsToActivate;
+    public UnityEngine.GameObject[] objectsToDeactivate;
 
     protected const float c_lockDuration = 4f;
 
@@ -35,6 +35,9 @@ public class SpecialStompButtonManager : MonoBehaviour, IDataPersistence
 
     [SerializeField] private string puzzleID;
     private bool isCompleted = false;
+
+    [SerializeField] private string NpcName;
+    [SerializeField] private int NpcUpdateState;
 
     protected virtual void Start()
     {
@@ -60,12 +63,12 @@ public class SpecialStompButtonManager : MonoBehaviour, IDataPersistence
         }
         else
         {
-            foreach (GameObject objects in objectsToActivate)
+            foreach (UnityEngine.GameObject objects in objectsToActivate)
             {
                 objects.SetActive(false);
             }
 
-            foreach (GameObject objects in objectsToDeactivate)
+            foreach (UnityEngine.GameObject objects in objectsToDeactivate)
             {
                 objects.SetActive(true);
             }
@@ -141,7 +144,7 @@ public class SpecialStompButtonManager : MonoBehaviour, IDataPersistence
         yield return new WaitForSeconds(c_lockDuration / 2);
 
 
-        foreach (GameObject objects in objectsToDeactivate)
+        foreach (UnityEngine.GameObject objects in objectsToDeactivate)
         {
             objects.SetActive(false);
         }
@@ -174,15 +177,22 @@ public class SpecialStompButtonManager : MonoBehaviour, IDataPersistence
     private void ApplyCompletedState()
     {
         // désactiver anciens objets
-        foreach (GameObject obj in objectsToDeactivate)
+        foreach (UnityEngine.GameObject obj in objectsToDeactivate)
         {
             obj.SetActive(false);
         }
 
         // activer nouveaux
-        foreach (GameObject obj in objectsToActivate)
+        foreach (UnityEngine.GameObject obj in objectsToActivate)
         {
             obj.SetActive(true);
+        }
+    }
+    public  void UpdateNPC()
+    {
+        if(NpcName != null && NpcUpdateState > 0)
+        {
+            NPCManager.instance.UpdateNPCState(NpcName, NpcUpdateState);
         }
     }
 

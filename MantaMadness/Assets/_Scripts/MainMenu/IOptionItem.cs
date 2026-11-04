@@ -3,7 +3,7 @@ using UnityEngine;
 public abstract class IOptionItem : MonoBehaviour
 {
     [Header("Cursor Visual")]
-    [SerializeField] private GameObject cursor;
+    [SerializeField] private UnityEngine.GameObject cursor;
 
     protected bool isEditing;
 

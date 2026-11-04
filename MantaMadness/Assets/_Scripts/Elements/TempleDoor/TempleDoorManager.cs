@@ -20,16 +20,16 @@ public class TempleDoorManager : SpecialDestructibleManager, IDataPersistence
     [SerializeField] private float crystalDelay = 0.3f;
     [SerializeField] private float endDelay = 1.2f;
 
-    [SerializeField] private GameObject blueCrystal;
-    [SerializeField] private GameObject redCrystal;
-    [SerializeField] private GameObject yellowCrystal;
-    [SerializeField] private GameObject greenCrystal;
-    [SerializeField] private GameObject blueDisabledCrystal;
-    [SerializeField] private GameObject redDisabledCrystal;
-    [SerializeField] private GameObject yellowDisabledCrystal;
-    [SerializeField] private GameObject greenDisabledCrystal;
+    [SerializeField] private UnityEngine.GameObject blueCrystal;
+    [SerializeField] private UnityEngine.GameObject redCrystal;
+    [SerializeField] private UnityEngine.GameObject yellowCrystal;
+    [SerializeField] private UnityEngine.GameObject greenCrystal;
+    [SerializeField] private UnityEngine.GameObject blueDisabledCrystal;
+    [SerializeField] private UnityEngine.GameObject redDisabledCrystal;
+    [SerializeField] private UnityEngine.GameObject yellowDisabledCrystal;
+    [SerializeField] private UnityEngine.GameObject greenDisabledCrystal;
 
-    [SerializeField] private GameObject door;
+    [SerializeField] private UnityEngine.GameObject door;
 
     public void OnDestructibleDestroyed(TempleStatueDestructible destructible)
     {

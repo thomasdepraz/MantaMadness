@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Glass : MonoBehaviour
 {
-    [SerializeField] private GameObject glass;
+    [SerializeField] private UnityEngine.GameObject glass;
     [SerializeField] private ParticleSystem glassParticle;
 
     private bool isBroken = false;

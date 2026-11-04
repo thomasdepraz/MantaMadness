@@ -11,7 +11,7 @@ public enum CarType
     Truck,
 }
 
-public class Gameobject : MonoBehaviour
+public class GameObject : MonoBehaviour
 {
 
     protected SimpleController player;
@@ -22,7 +22,7 @@ public class Gameobject : MonoBehaviour
 
     [SerializeField] private CarCollisionRelay hitBox;
     [SerializeField] private CarCollisionRelay audioHitBox;
-    [SerializeField] private GameObject visual;
+    [SerializeField] private UnityEngine.GameObject visual;
 
     [SerializeField] private ParticleSystem explosion;
 

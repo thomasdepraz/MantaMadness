@@ -18,9 +18,9 @@ public class RailDetector : MonoBehaviour
     [SerializeField] LayerMask railLayer;
     [SerializeField] LayerMask obstacleLayer;
 
-    [SerializeField] GameObject railPreviewPrefab;
-    GameObject leftPreview;
-    GameObject rightPreview;
+    [SerializeField] UnityEngine.GameObject railPreviewPrefab;
+    UnityEngine.GameObject leftPreview;
+    UnityEngine.GameObject rightPreview;
 
     public Rail leftRailCandidate { get; private set; }
     public Rail rightRailCandidate { get; private set; }
@@ -240,7 +240,7 @@ public class RailDetector : MonoBehaviour
         }
     }
 
-    void ShowPreview(GameObject preview, Vector3 pos)
+    void ShowPreview(UnityEngine.GameObject preview, Vector3 pos)
     {
         preview.SetActive(true);
         preview.transform.position = pos;
@@ -271,7 +271,7 @@ public class RailDetector : MonoBehaviour
 
     }
 
-    void HighlightPreview(GameObject preview)
+    void HighlightPreview(UnityEngine.GameObject preview)
     {
         if (preview == null) return;
 

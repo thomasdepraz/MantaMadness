@@ -35,8 +35,8 @@ public class ShopItem : ScriptableObject
     public int itemRenewalLimit = 1;
 
     [Header("Item Visual")]
-    public GameObject visual;
+    public UnityEngine.GameObject visual;
 
     [Header("If is An Item")]
-    public GameObject itemToSpawn;
+    public UnityEngine.GameObject itemToSpawn;
 }

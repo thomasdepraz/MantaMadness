@@ -9,7 +9,7 @@ public class ShopInteractDisplay : MonoBehaviour
 
     private InputActionMap playerActionsMap;
     //[SerializeField] private SpriteRenderer dialogRenderer;
-    public GameObject[] m_container;
+    public UnityEngine.GameObject[] m_container;
 
     private ShopStand currentShop;
     private float holdTime;
@@ -101,7 +101,7 @@ public class ShopInteractDisplay : MonoBehaviour
 
     public void ToggleInterface(bool toggle)
     {
-        foreach (GameObject container in m_container)
+        foreach (UnityEngine.GameObject container in m_container)
         {
             container.SetActive(toggle);
         }

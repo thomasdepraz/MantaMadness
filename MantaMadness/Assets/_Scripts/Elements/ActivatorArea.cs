@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ActivatorArea : MonoBehaviour
 {
-    [SerializeField] private GameObject[] activationList;
+    [SerializeField] private UnityEngine.GameObject[] activationList;
     [SerializeField] private float activationRadius = 20f;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private float checkInterval = 0.5f;
@@ -41,7 +41,7 @@ public class ActivatorArea : MonoBehaviour
 
     private void SetObjectsActive(bool active)
     {
-        foreach (GameObject obj in activationList)
+        foreach (UnityEngine.GameObject obj in activationList)
         {
             if (obj != null)
                 obj.SetActive(active);

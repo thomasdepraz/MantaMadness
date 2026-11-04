@@ -16,7 +16,7 @@ public class AlligatorBehavior : MonoBehaviour
     private bool isDead = false;
 
     [SerializeField] private ParticleSystem spawnParticle;
-    [SerializeField] private GameObject[] activeObjects;
+    [SerializeField] private UnityEngine.GameObject[] activeObjects;
 
     private Coroutine spawnRoutine;
 
@@ -55,7 +55,7 @@ public class AlligatorBehavior : MonoBehaviour
     private IEnumerator SpawnCoroutine()
     {
         spawnParticle.Play();
-        foreach (GameObject g in activeObjects)
+        foreach (UnityEngine.GameObject g in activeObjects)
         {
             g.SetActive(false);
         }
@@ -63,7 +63,7 @@ public class AlligatorBehavior : MonoBehaviour
         yield return new WaitForSeconds(1.2f);
 
         spawnParticle.Stop();
-        foreach(GameObject g in activeObjects)
+        foreach(UnityEngine.GameObject g in activeObjects)
         {
             g.SetActive(true);
         }

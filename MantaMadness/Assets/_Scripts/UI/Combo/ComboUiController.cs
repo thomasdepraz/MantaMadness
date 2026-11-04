@@ -8,15 +8,15 @@ public class ComboUIController : MonoBehaviour, IScreen
 {
     //[SerializeField] TMP_Text comboValueText;
 
-    [SerializeField] GameObject Root;
-    [SerializeField] GameObject feverBorder;
-    [SerializeField] GameObject feverRoot;
-    [SerializeField] GameObject timerVisualContainer;
+    [SerializeField] UnityEngine.GameObject Root;
+    [SerializeField] UnityEngine.GameObject feverBorder;
+    [SerializeField] UnityEngine.GameObject feverRoot;
+    [SerializeField] UnityEngine.GameObject timerVisualContainer;
     [SerializeField] Transform timerScaleObject;
     [SerializeField] private ParticleSystem timerParticle;
 
     [SerializeField] private ParticleSystem feverOverlayParticle;
-    [SerializeField] private GameObject[] feverMainVisualEffect;
+    [SerializeField] private UnityEngine.GameObject[] feverMainVisualEffect;
 
     [SerializeField] private TMPAnimator tmpAnimator;
     [SerializeField] TMP_Text comboNameText;
@@ -30,7 +30,7 @@ public class ComboUIController : MonoBehaviour, IScreen
     private TMP_FontAsset defaultFont;
     private Material defaultMaterial;
 
-    public GameObject Container => gameObject;
+    public UnityEngine.GameObject Container => gameObject;
 
     static string EffectToTag(ComboEffectPreset effect)
     {
@@ -281,7 +281,7 @@ public class ComboUIController : MonoBehaviour, IScreen
         ResetFeverVisuals();
     }
 
-    private IEnumerator DisableAfterDelay(GameObject obj, float delay)
+    private IEnumerator DisableAfterDelay(UnityEngine.GameObject obj, float delay)
     {
         yield return new WaitForSeconds(delay);
         obj.SetActive(false);

@@ -9,7 +9,7 @@ public class DialogInteractDisplay : MonoBehaviour
 
     private InputActionMap playerActionsMap;
     [SerializeField] private SpriteRenderer dialogRenderer;
-    public GameObject[] m_container;
+    public UnityEngine.GameObject[] m_container;
 
 
     private void Start()
@@ -61,7 +61,7 @@ public class DialogInteractDisplay : MonoBehaviour
 
     public void ToggleInterface(bool toggle)
     {
-        foreach (GameObject container in m_container)
+        foreach (UnityEngine.GameObject container in m_container)
         {
             container.SetActive(toggle);
         }

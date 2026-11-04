@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TextureMover : MonoBehaviour
 {
-    public GameObject model;
+    public UnityEngine.GameObject model;
     private Material texture;
 
     private void Awake()

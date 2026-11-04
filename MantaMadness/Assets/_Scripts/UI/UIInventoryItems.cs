@@ -12,8 +12,8 @@ public class UIInventoryItems : MonoBehaviour
     [System.Serializable]
     public struct UIInventoryMeshes
     {
-        public GameObject[] activeRenderer;
-        public GameObject disabledRenderer;
+        public UnityEngine.GameObject[] activeRenderer;
+        public UnityEngine.GameObject disabledRenderer;
     }
 
     public string id;
@@ -22,7 +22,7 @@ public class UIInventoryItems : MonoBehaviour
 
     public void EnableVisual()
     {
-        foreach (GameObject renderer in meshRenderer.activeRenderer)
+        foreach (UnityEngine.GameObject renderer in meshRenderer.activeRenderer)
         {
             renderer.SetActive(true);
         }
@@ -32,7 +32,7 @@ public class UIInventoryItems : MonoBehaviour
 
     public void DisableVisual()
     {
-        foreach (GameObject renderer in meshRenderer.activeRenderer)
+        foreach (UnityEngine.GameObject renderer in meshRenderer.activeRenderer)
         {
             renderer.SetActive(false);
         }

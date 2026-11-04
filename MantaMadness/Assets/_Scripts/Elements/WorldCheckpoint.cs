@@ -12,7 +12,7 @@ public class WorldCheckpoint : MonoBehaviour
     [SerializeField] public string nameToDisplay;
 
     [SerializeField] private MeshRenderer[] visuals;
-    [SerializeField] private GameObject flag;
+    [SerializeField] private UnityEngine.GameObject flag;
     [SerializeField] private Material enableMat;
     [SerializeField] private Material disableMat;
     [SerializeField] private ParticleSystem particle;

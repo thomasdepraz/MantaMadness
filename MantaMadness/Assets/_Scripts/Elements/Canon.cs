@@ -13,7 +13,7 @@ public class Canon : MonoBehaviour
 {
     [Header("Visual")]
     [SerializeField] protected ParticleSystem burstParticle;
-    [SerializeField] private GameObject canonMain;
+    [SerializeField] private UnityEngine.GameObject canonMain;
     [SerializeField] private Vector3 canonMainChargeScale;
     [SerializeField] private Vector3 canonMainShootScale;
     private Vector3 canonMainBaseScale;

@@ -2,7 +2,7 @@
 
 public interface IScreen
 {
-    GameObject Container { get; }
+    UnityEngine.GameObject Container { get; }
 
     public void Show() => ScreenUtility.Toggle(this, true);
 

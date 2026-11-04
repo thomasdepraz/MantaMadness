@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class ConfirmOption : MonoBehaviour
 {
-    [SerializeField] private GameObject cursor;
+    [SerializeField] private UnityEngine.GameObject cursor;
 
     public virtual void Select()
     {

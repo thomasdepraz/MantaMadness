@@ -10,7 +10,7 @@ public class WorldLevelManager : MonoBehaviour
     [SerializeField]
     private List<LevelData> allLevels;
 
-    private string currentLevel;
+    public string currentLevel { get; private set;}
 
     private void Awake()
     {
@@ -37,7 +37,7 @@ public class WorldLevelManager : MonoBehaviour
 
             bool shouldBeActive = level.levelID == levelID;
 
-            foreach(GameObject load in level.levelRoots)
+            foreach(UnityEngine.GameObject load in level.levelRoots)
             {
                 if (load.activeSelf != shouldBeActive)
                 {
@@ -50,7 +50,7 @@ public class WorldLevelManager : MonoBehaviour
             if (level.splinesRoots == null)
                 continue;
 
-            foreach (GameObject load in level.splinesRoots)
+            foreach (UnityEngine.GameObject load in level.splinesRoots)
             {
                 foreach (SplineInstantiate spline in load.GetComponentsInChildren<SplineInstantiate>())
                 {
@@ -60,6 +60,10 @@ public class WorldLevelManager : MonoBehaviour
         }
 
         Debug.Log($"Loaded Level : {levelID}");
+        if(currentLevel == "WORLD")
+        {
+            Game.Instance.endPortalHolder.SpecialEnableEndPortal();
+        }
     }
 
     public string GetCurrentLevel()

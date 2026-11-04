@@ -67,7 +67,7 @@ public class GameData
     public bool reaver;
 
     //End Game Active
-    public bool endPortalActive;
+    public int endPortalState;
 
     public MUSICS gameStartMusic;
     public AMBIENT gameStartAmbient;
@@ -103,7 +103,7 @@ public class GameData
         introAreaCinematic = new SerializableDictionnary<string, bool>();
         helixSequences = new SerializableDictionnary<string, int>();
 
-        endPortalActive = false;
+        endPortalState = 0;
 
         doubleJump = false;
         chargeBoost = false;

@@ -12,7 +12,7 @@ public enum CoinHolderType
 public class CoinHolder : MonoBehaviour, IDataPersistence
 {
     public string coinName = "null";
-    [SerializeField] private GameObject coin;
+    [SerializeField] private UnityEngine.GameObject coin;
     [SerializeField] private ParticleSystem spawnParticle;
     [Header("Cinemachine")]
     [SerializeField] private CinemachineCamera vcam;

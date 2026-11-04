@@ -15,7 +15,7 @@ public class JumpRailTarget : JumpTarget
     public RailEntryDirection entryDirection = RailEntryDirection.Forward;
 
     [Header("Visual")]
-    [SerializeField] private GameObject visual;
+    [SerializeField] private UnityEngine.GameObject visual;
 
     [Header("Particles")]
     [SerializeField] protected ParticleSystem burstParticle;

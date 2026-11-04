@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class ConfirmNewGameMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject[] visuals;
+    [SerializeField] private UnityEngine.GameObject[] visuals;
     [SerializeField] private ConfirmOption[] options;
 
     private int currentIndex;

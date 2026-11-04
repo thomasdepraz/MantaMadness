@@ -18,9 +18,9 @@ public class AlienLaserBeam : MonoBehaviour
     private bool isFiring = false;
     private bool isEnding = false;
 
-    public GameObject laserChargeVisual;
-    public GameObject laserBeam;
-    public GameObject laserChargeDecal;
+    public UnityEngine.GameObject laserChargeVisual;
+    public UnityEngine.GameObject laserBeam;
+    public UnityEngine.GameObject laserChargeDecal;
     protected Vector3 laserBeamOriginalScale;
     protected Vector3 laserChargeVisualOriginalScale;
     protected Vector3 laserChargeDecalOriginalScale;

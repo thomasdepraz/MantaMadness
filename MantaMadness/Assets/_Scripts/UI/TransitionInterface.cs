@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class TransitionInterface : MonoBehaviour, IScreen
 {
-    public GameObject Container { get => container; }
-    public GameObject container;
+    public UnityEngine.GameObject Container { get => container; }
+    public UnityEngine.GameObject container;
 
     public RectTransform fadeTransform;
 

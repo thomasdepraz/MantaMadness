@@ -22,11 +22,11 @@ public class KeyDoor : MonoBehaviour, IDataPersistence
 
     private bool isOpen = false;
 
-    [SerializeField] private GameObject[] deactivateOnOpen;
+    [SerializeField] private UnityEngine.GameObject[] deactivateOnOpen;
 
     [SerializeField] private CinemachineCamera vcam;
     [SerializeField] private CinemachineBlendDefinition blend;
-    [SerializeField] private GameObject keyVisual;
+    [SerializeField] private UnityEngine.GameObject keyVisual;
     [SerializeField] private Transform lockPosition;
     [SerializeField] private ParticleSystem particles;
 
@@ -144,7 +144,7 @@ public class KeyDoor : MonoBehaviour, IDataPersistence
 
     private void ApplyOpenState()
     {
-        foreach (GameObject obj in deactivateOnOpen)
+        foreach (UnityEngine.GameObject obj in deactivateOnOpen)
         {
             obj.SetActive(false);
         }
@@ -191,7 +191,7 @@ public class KeyDoor : MonoBehaviour, IDataPersistence
         keyVisual.SetActive(false);
         particles.Play();
 
-        foreach (GameObject obj in deactivateOnOpen)
+        foreach (UnityEngine.GameObject obj in deactivateOnOpen)
         {
             obj.SetActive(false);
         }
@@ -205,7 +205,7 @@ public class KeyDoor : MonoBehaviour, IDataPersistence
 
     private void OnCinematicFinished()
     {
-        foreach (GameObject obj in deactivateOnOpen)
+        foreach (UnityEngine.GameObject obj in deactivateOnOpen)
         {
             obj.SetActive(false);
         }

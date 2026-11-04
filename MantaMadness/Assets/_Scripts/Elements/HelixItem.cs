@@ -16,7 +16,7 @@ public class HelixItem : MonoBehaviour
 
     [Header("Objects")]
     [Tooltip("Objets normaux activés par cette Helix.")]
-    [SerializeField] private GameObject[] linkedObjects;
+    [SerializeField] private UnityEngine.GameObject[] linkedObjects;
 
     [Tooltip("Collectibles activés par cette Helix.")]
     [SerializeField] private Collectible[] collectibleRewards;
@@ -32,7 +32,7 @@ public class HelixItem : MonoBehaviour
 
     [Header("Helix References")]
     [Tooltip("Visuel de la Helix. Peut être un enfant de cet objet.")]
-    [SerializeField] private GameObject helixVisual;
+    [SerializeField] private UnityEngine.GameObject helixVisual;
     [SerializeField] private ParticleSystem sparkle;
     [SerializeField] private ParticleSystem fogParticle;
     [SerializeField] private ParticleSystem sparkleExplosion;
@@ -42,10 +42,10 @@ public class HelixItem : MonoBehaviour
 
     [Header("Completed State")]
     [Tooltip("Objets à désactiver lorsque cette Helix est terminée.")]
-    [SerializeField] private GameObject[] toDeactivateOnComplete;
+    [SerializeField] private UnityEngine.GameObject[] toDeactivateOnComplete;
 
     [Tooltip("Objets à activer lorsque cette Helix est terminée.")]
-    [SerializeField] private GameObject[] toActivateOnComplete;
+    [SerializeField] private UnityEngine.GameObject[] toActivateOnComplete;
 
     [Header("Cinematic")]
     [SerializeField] private CinemachineCamera vcam;
@@ -100,7 +100,7 @@ public class HelixItem : MonoBehaviour
     {
         if (linkedObjects != null)
         {
-            foreach (GameObject linkedObject in linkedObjects)
+            foreach (UnityEngine.GameObject linkedObject in linkedObjects)
             {
                 if (linkedObject != null)
                 {
@@ -111,7 +111,7 @@ public class HelixItem : MonoBehaviour
 
         if (toActivateOnComplete != null)
         {
-            foreach (GameObject target in toActivateOnComplete)
+            foreach (UnityEngine.GameObject target in toActivateOnComplete)
             {
                 if (target != null)
                 {
@@ -122,7 +122,7 @@ public class HelixItem : MonoBehaviour
 
         if (toDeactivateOnComplete != null)
         {
-            foreach (GameObject target in toDeactivateOnComplete)
+            foreach (UnityEngine.GameObject target in toDeactivateOnComplete)
             {
                 if (target != null)
                 {
@@ -325,7 +325,7 @@ public class HelixItem : MonoBehaviour
 
         if (linkedObjects != null)
         {
-            foreach (GameObject linkedObject in linkedObjects)
+            foreach (UnityEngine.GameObject linkedObject in linkedObjects)
             {
                 if (linkedObject == null)
                     continue;
@@ -367,7 +367,7 @@ public class HelixItem : MonoBehaviour
 
         if (linkedObjects != null)
         {
-            foreach (GameObject linkedObject in linkedObjects)
+            foreach (UnityEngine.GameObject linkedObject in linkedObjects)
             {
                 if (linkedObject != null)
                 {
@@ -467,7 +467,7 @@ public class HelixItem : MonoBehaviour
     {
         if (linkedObjects != null)
         {
-            foreach (GameObject linkedObject in linkedObjects)
+            foreach (UnityEngine.GameObject linkedObject in linkedObjects)
             {
                 if (linkedObject != null)
                 {
@@ -486,7 +486,7 @@ public class HelixItem : MonoBehaviour
     {
         if (toDeactivateOnComplete != null)
         {
-            foreach (GameObject target in toDeactivateOnComplete)
+            foreach (UnityEngine.GameObject target in toDeactivateOnComplete)
             {
                 if (target != null)
                 {
@@ -497,7 +497,7 @@ public class HelixItem : MonoBehaviour
 
         if (toActivateOnComplete != null)
         {
-            foreach (GameObject target in toActivateOnComplete)
+            foreach (UnityEngine.GameObject target in toActivateOnComplete)
             {
                 if (target != null)
                 {
@@ -511,7 +511,7 @@ public class HelixItem : MonoBehaviour
     {
         if (toDeactivateOnComplete != null)
         {
-            foreach (GameObject target in toDeactivateOnComplete)
+            foreach (UnityEngine.GameObject target in toDeactivateOnComplete)
             {
                 if (target != null)
                 {
@@ -522,7 +522,7 @@ public class HelixItem : MonoBehaviour
 
         if (toActivateOnComplete != null)
         {
-            foreach (GameObject target in toActivateOnComplete)
+            foreach (UnityEngine.GameObject target in toActivateOnComplete)
             {
                 if (target != null)
                 {

@@ -22,7 +22,7 @@ public class DebugGUI : MonoBehaviour
 
     private void Awake()
     {
-        controller = GameObject.FindGameObjectWithTag("Player").GetComponent<SimpleController>();
+        controller = UnityEngine.GameObject.FindGameObjectWithTag("Player").GetComponent<SimpleController>();
         features = RenderFeatureUtility.GetRenderFeatures();
         showDebug = false;
     }

@@ -3,12 +3,19 @@ using UnityEngine;
 using UnityEngine.Splines;
 using System.Collections;
 
-public class GoldenCar : Gameobject
+public class GoldenCar : GameObject
 {
     [SerializeField] private string coinName;
 
+    [SerializeField] private string NpcName;
+    [SerializeField] private int NpcUpdateState;
+
     protected override void OnCarDestroyed()
     {
+        if(NpcName != null && NpcUpdateState != 0)
+        {
+            UpdateNPC();
+        }
         CoinManager.Instance.ActivateCoinHolder(coinName);
     }
 
@@ -43,5 +50,11 @@ public class GoldenCar : Gameobject
                 }
             }
         }
+    }
+
+    private void UpdateNPC()
+    {
+        Debug.Log("Oue c'est greg");
+        NPCManager.instance.UpdateNPCState(NpcName, NpcUpdateState);
     }
 }

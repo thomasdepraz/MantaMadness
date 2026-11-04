@@ -10,6 +10,9 @@ public class BackroomPortal : Portal
 
     private SteamSignal signal;
 
+    [SerializeField] private string NpcName;
+    [SerializeField] private int NpcUpdateState;
+
     protected override void Start()
     {
         base.Start();
@@ -64,6 +67,12 @@ public class BackroomPortal : Portal
                     PortalManager.Instance.SetCheckpoint(targetIndex, displayAreaName, nameToDisplay, LevelID, collectibleAreaID);
                     PortalManager.Instance.StartCoroutine(PortalManager.Instance.BackroomTeleport(targetIndex, enterSecretRoom, musicToPlay,  specialWeatherType, ambientToPlay, areaIntro, this));
 
+                    if (NpcName != null && NpcUpdateState != 0)
+                    {
+                        UpdateNPC();
+                    }
+
+
                     if (signal != null)
                     {
                         signal.Trigger();
@@ -88,5 +97,10 @@ public class BackroomPortal : Portal
     public override void DisableMat()
     {
         //RIEN
+    }
+    private void UpdateNPC()
+    {
+        Debug.Log("Oue c'est greg");
+        NPCManager.instance.UpdateNPCState(NpcName, NpcUpdateState);
     }
 }

@@ -7,8 +7,8 @@ using UnityEngine;
 
 public class Destructible : MonoBehaviour
 {
-    [SerializeField] protected GameObject visual;
-    [SerializeField] protected GameObject remain;
+    [SerializeField] protected UnityEngine.GameObject visual;
+    [SerializeField] protected UnityEngine.GameObject remain;
     [SerializeField] protected ParticleSystem particle;
     [SerializeField] protected ParticleSystem ImpactParticle;
     [SerializeField] protected DestructibleCollisionRelay hitbox;

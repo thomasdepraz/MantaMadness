@@ -4,7 +4,7 @@ using System.Collections;
 
 public class AlligatorArea : MonoBehaviour
 {
-    public GameObject alligatorPrefab;
+    public UnityEngine.GameObject alligatorPrefab;
     public SimpleController player;
 
     [SerializeField] private Transform center;
@@ -79,7 +79,7 @@ public class AlligatorArea : MonoBehaviour
                 if (!IsInCameraView(spawnPos))
                     continue;
 
-                GameObject croco = Instantiate(alligatorPrefab, spawnPos, Quaternion.identity);
+                UnityEngine.GameObject croco = Instantiate(alligatorPrefab, spawnPos, Quaternion.identity);
 
                 Vector3 direction = (player.transform.position - spawnPos);
                 direction.y = 0;

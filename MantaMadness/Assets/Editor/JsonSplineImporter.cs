@@ -7,9 +7,9 @@ using UnityEditor.SceneManagement;
 public class JsonSplineImporter : EditorWindow
 {
     public TextAsset jsonFile;
-    public GameObject targetParent; // Optional: put your road mesh here
+    public UnityEngine.GameObject targetParent; // Optional: put your road mesh here
     public float minPointDistance = 0.05f;
-    public GameObject instantiatePrefab;
+    public UnityEngine.GameObject instantiatePrefab;
 
     [MenuItem("Tools/Spline/Import JSON Spline")]
     public static void ShowWindow()
@@ -22,7 +22,7 @@ public class JsonSplineImporter : EditorWindow
         GUILayout.Label("Spline JSON Import", EditorStyles.boldLabel);
 
         jsonFile = (TextAsset)EditorGUILayout.ObjectField("JSON File", jsonFile, typeof(TextAsset), false);
-        targetParent = (GameObject)EditorGUILayout.ObjectField("Parent (optional)", targetParent, typeof(GameObject), true);
+        targetParent = (UnityEngine.GameObject)EditorGUILayout.ObjectField("Parent (optional)", targetParent, typeof(UnityEngine.GameObject), true);
 
         minPointDistance = EditorGUILayout.FloatField(new GUIContent("Min Point Distance", "Minimum distance between points.\n0 disables filtering."), minPointDistance);
 
@@ -39,14 +39,14 @@ public class JsonSplineImporter : EditorWindow
             ImportSplineInstantiate(jsonFile, targetParent);
         }
 
-        instantiatePrefab = (GameObject)EditorGUILayout.ObjectField("Instantiate Prefab",instantiatePrefab,typeof(GameObject),false);
+        instantiatePrefab = (UnityEngine.GameObject)EditorGUILayout.ObjectField("Instantiate Prefab", instantiatePrefab, typeof(UnityEngine.GameObject),false);
     }
 
     // ===============================================================
     //  MAIN IMPORT FUNCTION
     // ===============================================================
 
-    void ImportSpline(TextAsset json, GameObject parent)
+    void ImportSpline(TextAsset json, UnityEngine.GameObject parent)
     {
         if (json == null)
         {
@@ -65,7 +65,7 @@ public class JsonSplineImporter : EditorWindow
         // --------------------------
         // CREATE GAMEOBJECT
         // --------------------------
-        GameObject go = new GameObject(string.IsNullOrEmpty(data.name) ? "ImportedSpline" : data.name);
+        UnityEngine.GameObject go = new UnityEngine.GameObject(string.IsNullOrEmpty(data.name) ? "ImportedSpline" : data.name);
 
         if (parent != null)
         {
@@ -218,7 +218,7 @@ public class JsonSplineImporter : EditorWindow
     //  ALTERNATE IMPORT : SPLINE INSTANTIATE SETUP
     // ===============================================================
 
-    void ImportSplineInstantiate(TextAsset json, GameObject parent)
+    void ImportSplineInstantiate(TextAsset json, UnityEngine.GameObject parent)
     {
         if (json == null)
         {
@@ -237,7 +237,7 @@ public class JsonSplineImporter : EditorWindow
         // --------------------------
         // CREATE GAMEOBJECT
         // --------------------------
-        GameObject go = new GameObject(string.IsNullOrEmpty(data.name)
+        UnityEngine.GameObject go = new UnityEngine.GameObject(string.IsNullOrEmpty(data.name)
             ? "ImportedSpline_Instantiate"
             : data.name + "_Instantiate");
 

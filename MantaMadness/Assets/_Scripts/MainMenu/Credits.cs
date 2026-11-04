@@ -6,7 +6,7 @@ public class Credits : MonoBehaviour
     public static Credits instance;
 
     [Header("All visuals")]
-    [SerializeField] private GameObject[] visuals;
+    [SerializeField] private UnityEngine.GameObject[] visuals;
     private bool blockSubmit;
 
     [Header("Navigation")]
@@ -56,14 +56,14 @@ public class Credits : MonoBehaviour
     {
         if (toggleValue)
         {
-            foreach (GameObject visual in visuals)
+            foreach (UnityEngine.GameObject visual in visuals)
             {
                 visual.SetActive(true);
             }
         }
         else
         {
-            foreach (GameObject visual in visuals)
+            foreach (UnityEngine.GameObject visual in visuals)
             {
                 visual.SetActive(false);
             }

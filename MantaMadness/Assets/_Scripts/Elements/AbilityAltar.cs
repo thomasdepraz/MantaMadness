@@ -13,11 +13,11 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
     //[SerializeField] private ControllerAbility abilityName;
     [SerializeField] private string dialogSequenceName;
 
-    [SerializeField] private GameObject[] visuals;
+    [SerializeField] private UnityEngine.GameObject[] visuals;
 
     [SerializeField] private SteamSignal signal;
 
-    [SerializeField] private GameObject RepeatDialogNPC;
+    [SerializeField] private UnityEngine.GameObject RepeatDialogNPC;
 
     [Header("FMOD Sound")]
     public EventReference pickupAltarSound;
@@ -122,7 +122,7 @@ public class AbilityAltar : MonoBehaviour, IDataPersistence
 
     private void DisablePickup()
     {
-        foreach(GameObject visual in visuals)
+        foreach(UnityEngine.GameObject visual in visuals)
         {
             visual.SetActive(false);
         }

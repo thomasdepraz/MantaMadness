@@ -64,8 +64,8 @@ public class MainMenu : MonoBehaviour
     private MainMenuState state;
     private MainMenuState previousState;
 
-    [SerializeField]private GameObject[] mainMenuButtons;
-    [SerializeField] private GameObject[] mainVisuals;
+    [SerializeField]private UnityEngine.GameObject[] mainMenuButtons;
+    [SerializeField] private UnityEngine.GameObject[] mainVisuals;
     private int _defaultStateIndex;
     public int defaultStateIndex
     {
@@ -396,7 +396,7 @@ public class MainMenu : MonoBehaviour
 
     private void ToggleMainVisuals(bool toggleValue)
     {
-        foreach(GameObject visual in mainVisuals)
+        foreach(UnityEngine.GameObject visual in mainVisuals)
         {
             visual.SetActive(toggleValue);
         }

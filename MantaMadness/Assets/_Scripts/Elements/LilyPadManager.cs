@@ -21,8 +21,8 @@ public class LilyPadManager : MonoBehaviour, IDataPersistence
     [SerializeField] private string moduleID;
 
     [SerializeField] private Lilypad[] lilypads;
-    [SerializeField] private GameObject[] toDeactivate;
-    [SerializeField] private GameObject[] toActivate;
+    [SerializeField] private UnityEngine.GameObject[] toDeactivate;
+    [SerializeField] private UnityEngine.GameObject[] toActivate;
 
     [Header("Collectible Rewards")]
     [SerializeField] private Collectible[] collectibleRewards;

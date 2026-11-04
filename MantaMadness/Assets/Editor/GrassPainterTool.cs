@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class GrassPainterTool : EditorWindow
 {
-    GameObject prefab;
+    UnityEngine.GameObject prefab;
     Transform parent;
 
     LayerMask paintLayer;
@@ -30,7 +30,7 @@ public class GrassPainterTool : EditorWindow
 
     void OnGUI()
     {
-        prefab = (GameObject)EditorGUILayout.ObjectField("Prefab", prefab, typeof(GameObject), false);
+        prefab = (UnityEngine.GameObject)EditorGUILayout.ObjectField("Prefab", prefab, typeof(UnityEngine.GameObject), false);
         parent = (Transform)EditorGUILayout.ObjectField("Parent", parent, typeof(Transform), true);
 
         paintLayer = LayerMaskField("Paint Layer", paintLayer);
@@ -113,7 +113,7 @@ public class GrassPainterTool : EditorWindow
                 if (!IsFarEnough(hit.point))
                     continue;
 
-                GameObject obj = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
+                UnityEngine.GameObject obj = (UnityEngine.GameObject)PrefabUtility.InstantiatePrefab(prefab);
 
                 Undo.RegisterCreatedObjectUndo(obj, "Paint Grass");
 

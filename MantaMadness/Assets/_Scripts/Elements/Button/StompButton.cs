@@ -5,7 +5,7 @@ using System.Collections;
 public class StompButton : Button
 {
 
-    [SerializeField] protected GameObject buttonVisual;
+    [SerializeField] protected UnityEngine.GameObject buttonVisual;
     [SerializeField] protected Collider buttonVisualCollision;
     [SerializeField] protected Transform buttonOriginalPos;
     [SerializeField] protected Transform buttonActivatedPos;

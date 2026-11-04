@@ -6,7 +6,7 @@ public class AfterImagePool : MonoBehaviour
     public static AfterImagePool Instance;
 
     [Tooltip("Prefab doit contenir AfterImageGhost component.")]
-    public GameObject ghostPrefab;
+    public UnityEngine.GameObject ghostPrefab;
     public int poolSize = 20;
     public float ghostFadeSpeed = 10f;
 
@@ -23,7 +23,7 @@ public class AfterImagePool : MonoBehaviour
 
         for (int i = 0; i < poolSize; i++)
         {
-            GameObject obj = Instantiate(ghostPrefab, transform);
+            UnityEngine.GameObject obj = Instantiate(ghostPrefab, transform);
             var ghost = obj.GetComponent<AfterImageGhost>();
             if (ghost == null)
             {
@@ -73,7 +73,7 @@ public class AfterImagePool : MonoBehaviour
     {
         for (int i = 0; i < additional; i++)
         {
-            GameObject obj = Instantiate(ghostPrefab, transform);
+            UnityEngine.GameObject obj = Instantiate(ghostPrefab, transform);
             var ghost = obj.GetComponent<AfterImageGhost>();
             obj.SetActive(false);
             pool.Add(ghost);

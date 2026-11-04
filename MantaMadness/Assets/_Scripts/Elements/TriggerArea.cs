@@ -3,11 +3,11 @@ using UnityEngine;
 [RequireComponent (typeof(Collider))]
 public class TriggerArea : MonoBehaviour
 {
-    [SerializeField] private GameObject[] toActivate;
+    [SerializeField] private UnityEngine.GameObject[] toActivate;
 
     private void Start()
     {
-        foreach(GameObject element in toActivate)
+        foreach(UnityEngine.GameObject element in toActivate)
         {
             if (element.activeSelf == true)
             {
@@ -28,7 +28,7 @@ public class TriggerArea : MonoBehaviour
     {
         if (toActivate.Length > 0)
         {
-            foreach(GameObject element in toActivate)
+            foreach(UnityEngine.GameObject element in toActivate)
             {
                 if(element.gameObject.activeSelf == false)
                 {

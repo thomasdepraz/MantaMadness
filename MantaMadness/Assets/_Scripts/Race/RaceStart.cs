@@ -12,7 +12,7 @@ public class RaceStart : MonoBehaviour
     private RaceManager raceManager;
 
 
-    public GameObject[] toActivateArray;
+    public UnityEngine.GameObject[] toActivateArray;
     public Transform endTeleportTransform; 
 
     private void Awake()
@@ -100,14 +100,14 @@ public class RaceStart : MonoBehaviour
     {
         if(toggle == true)
         {
-            foreach(GameObject objects in toActivateArray)
+            foreach(UnityEngine.GameObject objects in toActivateArray)
             {
                 objects.SetActive(true);
             }
         }
         else
         {
-            foreach (GameObject objects in toActivateArray)
+            foreach (UnityEngine.GameObject objects in toActivateArray)
             {
                 objects.SetActive(false);
             }

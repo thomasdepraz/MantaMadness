@@ -11,6 +11,7 @@ public class Why : MonoBehaviour
     [SerializeField] private LayerMask playerLayer;
     public EventReference laugh;
 
+    public SteamSignal achievement;
 
     private void OnEnable()
     {
@@ -51,6 +52,7 @@ public class Why : MonoBehaviour
         RuntimeManager.PlayOneShot(laugh, Camera.main.transform.position);
         Time.timeScale = 0f;
         yield return new WaitForSecondsRealtime(1.5f);
+        achievement.Trigger();
         Application.Quit();
     }
 

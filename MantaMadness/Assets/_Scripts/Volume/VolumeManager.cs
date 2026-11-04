@@ -4,9 +4,9 @@ public class VolumeManager : MonoBehaviour
 {
     public static VolumeManager Instance;
 
-    [SerializeField] private GameObject defaultVolume;
-    [SerializeField] private GameObject underwatertVolume;
-    [SerializeField] private GameObject hauntedTunnelVolume;
+    [SerializeField] private UnityEngine.GameObject defaultVolume;
+    [SerializeField] private UnityEngine.GameObject underwatertVolume;
+    [SerializeField] private UnityEngine.GameObject hauntedTunnelVolume;
 
     private void Awake()
     {

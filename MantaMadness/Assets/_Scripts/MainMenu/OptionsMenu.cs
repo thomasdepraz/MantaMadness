@@ -10,7 +10,7 @@ public class OptionsMenu : MonoBehaviour
     public static OptionsMenu instance;
 
     [Header("All visuals")]
-    [SerializeField] private GameObject[] visuals;
+    [SerializeField] private UnityEngine.GameObject[] visuals;
 
     [Header("UI")]
     [SerializeField] private TMP_Dropdown resolutionDropdown;
@@ -255,14 +255,14 @@ public class OptionsMenu : MonoBehaviour
     {
         if (toggleValue)
         {
-            foreach(GameObject visual in visuals)
+            foreach(UnityEngine.GameObject visual in visuals)
             {
                 visual.SetActive(true);
             }
         }
         else
         {
-            foreach (GameObject visual in visuals)
+            foreach (UnityEngine.GameObject visual in visuals)
             {
                 visual.SetActive(false);
             }

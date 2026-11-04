@@ -1,4 +1,3 @@
-using System.Drawing;
 using UnityEngine;
 using System.Collections;
 
@@ -15,7 +14,7 @@ public class LODManager : MonoBehaviour
 
     private Coroutine checkCoroutine;
 
-    [SerializeField] private Gameobject [] gameObjects;
+    [SerializeField] private GameObject [] gameObjects;
 
     private void OnEnable()
     {
@@ -68,7 +67,7 @@ public class LODManager : MonoBehaviour
 
     private void ToggleAllCars(bool toggle)
     {
-        foreach(Gameobject item in gameObjects)
+        foreach(GameObject item in gameObjects)
         {
             item.gameObject.SetActive(toggle);
         }

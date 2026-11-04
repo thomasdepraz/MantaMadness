@@ -5,7 +5,7 @@ using System.Collections;
 [RequireComponent(typeof(Collider))]
 public class CollectibleRelay : MonoBehaviour
 {
-    public Action<GameObject> HitCollision;
+    public Action<UnityEngine.GameObject> HitCollision;
 
     private void OnTriggerEnter(Collider other)
     {

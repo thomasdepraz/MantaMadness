@@ -4,12 +4,12 @@ using UnityEngine.UI;
 
 public class BoostGaugeInterface : MonoBehaviour
 {
-    public GameObject[] m_container;
-    public GameObject speedGauge;
-    public GameObject speedNeedle;
-    public GameObject[] speedStatesVisuals;
-    public GameObject speedStatesTween;
-    public GameObject[] boostBubblesVisuals;
+    public UnityEngine.GameObject[] m_container;
+    public UnityEngine.GameObject speedGauge;
+    public UnityEngine.GameObject speedNeedle;
+    public UnityEngine.GameObject[] speedStatesVisuals;
+    public UnityEngine.GameObject speedStatesTween;
+    public UnityEngine.GameObject[] boostBubblesVisuals;
     public Material[] bubbleMaterials;
     public ParticleSystem[] boostBubblesParticles;
 
@@ -21,14 +21,14 @@ public class BoostGaugeInterface : MonoBehaviour
     private bool overdrive = false;
     private void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<SimpleController>();
+        player = UnityEngine.GameObject.FindGameObjectWithTag("Player").GetComponent<SimpleController>();
     }
 
     private void Start()
     {
         UIManager.Instance.boostGaugeInterface = this;
 
-        foreach(GameObject state in speedStatesVisuals)
+        foreach(UnityEngine.GameObject state in speedStatesVisuals)
         {
             if (state == speedStatesVisuals[0])
             {
@@ -41,7 +41,7 @@ public class BoostGaugeInterface : MonoBehaviour
         }
         speedNeedle.transform.Rotate(new Vector3(0, 0, needleStartRotationZ));
 
-        foreach(GameObject bubble in boostBubblesVisuals)
+        foreach(UnityEngine.GameObject bubble in boostBubblesVisuals)
         {
             ResetBubble(bubble);
         }
@@ -85,7 +85,7 @@ public class BoostGaugeInterface : MonoBehaviour
 
     private void StateChange(int index)
     {
-        foreach (GameObject state in speedStatesVisuals)
+        foreach (UnityEngine.GameObject state in speedStatesVisuals)
         {
             state.SetActive(false);
         }
@@ -144,7 +144,7 @@ public class BoostGaugeInterface : MonoBehaviour
         }
     }
 
-    public void ResetBubble(GameObject bubble)
+    public void ResetBubble(UnityEngine.GameObject bubble)
     {
         bubble.transform.localScale = Vector3.zero;
         bubble.GetComponent<MeshRenderer>().material = bubbleMaterials[0];
@@ -172,7 +172,7 @@ public class BoostGaugeInterface : MonoBehaviour
 
     public void ToggleInterface(bool toggle)
     {
-        foreach (GameObject container in m_container)
+        foreach (UnityEngine.GameObject container in m_container)
         {
             container.SetActive(toggle);
         }

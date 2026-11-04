@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class TimerInterface : MonoBehaviour, IScreen
 {
-    public GameObject Container { get => container; }
-    public GameObject container;
-    public GameObject timerPanel;
+    public UnityEngine.GameObject Container { get => container; }
+    public UnityEngine.GameObject container;
+    public UnityEngine.GameObject timerPanel;
     public TextMeshProUGUI timerText;
     public ITimer currentTimer;
 

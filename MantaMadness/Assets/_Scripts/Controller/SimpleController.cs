@@ -1969,7 +1969,7 @@ public class SimpleController : MonoBehaviour, IDataPersistence
         }
     }
 
-    public void StopByTargetImpact(GameObject target)
+    public void StopByTargetImpact(UnityEngine.GameObject target)
     {
         togglePlayerBodyVisual.Invoke(false);
 

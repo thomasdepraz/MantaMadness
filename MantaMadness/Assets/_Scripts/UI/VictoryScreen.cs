@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class VictoryScreen : MonoBehaviour, IScreen
 {
-    public GameObject Container { get => container; }
-    public GameObject container;
+    public UnityEngine.GameObject Container { get => container; }
+    public UnityEngine.GameObject container;
 
     public TextMeshProUGUI timer;
     public TextMeshProUGUI deathCount;

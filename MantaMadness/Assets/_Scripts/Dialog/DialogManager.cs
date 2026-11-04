@@ -23,7 +23,7 @@ public class DialogManager : MonoBehaviour
 
     [SerializeField] public DialogSequence currentSequence { get; private set; }
 
-    [SerializeField] private GameObject[] dialogUIVisuals;
+    [SerializeField] private UnityEngine.GameObject[] dialogUIVisuals;
 
     [SerializeField] private TextMeshProUGUI speakerTextBox;
     [SerializeField] private TextMeshProUGUI dialogTextBox;
@@ -72,12 +72,12 @@ public class DialogManager : MonoBehaviour
         inputs.interact.action.performed += Interacts;
         inputs.interact.action.performed += StartNPCInteraction;
 
-        speakerTextBox = GameObject.Find("DialogSpeaker").GetComponent<TextMeshProUGUI>();
-        dialogTextBox = GameObject.Find("DialogContent").GetComponent<TextMeshProUGUI>();
-        dialogIndicator = GameObject.Find("DialogIndicator").GetComponent<Image>();
+        speakerTextBox = UnityEngine.GameObject.Find("DialogSpeaker").GetComponent<TextMeshProUGUI>();
+        dialogTextBox = UnityEngine.GameObject.Find("DialogContent").GetComponent<TextMeshProUGUI>();
+        dialogIndicator = UnityEngine.GameObject.Find("DialogIndicator").GetComponent<Image>();
         dialogIndicator.color = new Color(255, 255, 255, 0);
         dialogWriter.OnCharacterShown.AddListener(PlaySoundOnCharWritten);
-        foreach (GameObject visual in dialogUIVisuals)
+        foreach (UnityEngine.GameObject visual in dialogUIVisuals)
         {
             visual.SetActive(false);
         }
@@ -311,7 +311,7 @@ public class DialogManager : MonoBehaviour
         UIManager.Instance.gameInterface.ToggleInterface(false);
         yield return new WaitForSeconds(dialog.delayBeforeTextBox);
 
-        foreach(GameObject visual in dialogUIVisuals)
+        foreach(UnityEngine.GameObject visual in dialogUIVisuals)
         {
             visual.SetActive(true);
         }
@@ -333,7 +333,7 @@ public class DialogManager : MonoBehaviour
     {
         UIManager.Instance.gameInterface.ToggleInterface(false);
 
-        foreach (GameObject visual in dialogUIVisuals)
+        foreach (UnityEngine.GameObject visual in dialogUIVisuals)
         {
             visual.SetActive(true);
         }
@@ -486,7 +486,7 @@ public class DialogManager : MonoBehaviour
         inputPhase = DialogInputPhase.None;
         skipRequested = false;
         nextRequested = false;
-        foreach (GameObject visual in dialogUIVisuals)
+        foreach (UnityEngine.GameObject visual in dialogUIVisuals)
         {
             visual.SetActive(false);
         }
@@ -505,7 +505,7 @@ public class DialogManager : MonoBehaviour
         dialogActiveEvent.release();
 
 
-        foreach (GameObject visual in dialogUIVisuals)
+        foreach (UnityEngine.GameObject visual in dialogUIVisuals)
         {
             visual.SetActive(false);
         }

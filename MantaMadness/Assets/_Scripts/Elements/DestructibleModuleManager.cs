@@ -6,8 +6,8 @@ using System.Collections;
 
 public class DestructibleModuleManager : SpecialDestructibleManager
 {
-    [SerializeField] private GameObject[] toDeactivate;
-    [SerializeField] private GameObject[] toActivate;
+    [SerializeField] private UnityEngine.GameObject[] toDeactivate;
+    [SerializeField] private UnityEngine.GameObject[] toActivate;
     [SerializeField] private float spawnTime = 2f;
 
     [SerializeField] private CinemachineCamera vcam;

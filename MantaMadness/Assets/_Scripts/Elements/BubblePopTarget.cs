@@ -8,7 +8,7 @@ using DG.Tweening;
 public class BubblePopTarget : JumpTarget
 {
     [Header("Visual")]
-    [SerializeField] private GameObject visual;
+    [SerializeField] private UnityEngine.GameObject visual;
     [Header("Particles")]
     [SerializeField] protected ParticleSystem burstParticle;
     [Header("Parameters")]

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Lilypad : MonoBehaviour
 {
-    [SerializeField] private GameObject visual;
+    [SerializeField] private UnityEngine.GameObject visual;
     [SerializeField] private ParticleSystem[] bloomParticles;
     private bool hasBloomed = false;
     [SerializeField] private float scaleModifier = 1;

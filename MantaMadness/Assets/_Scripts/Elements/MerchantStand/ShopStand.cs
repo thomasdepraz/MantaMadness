@@ -21,9 +21,9 @@ public class ShopStand : MonoBehaviour, IDataPersistence
 
     [Header("Visual")]
     public Transform itemVisualPoint;
-    [SerializeField] private GameObject visual;
+    [SerializeField] private UnityEngine.GameObject visual;
     public Transform playerPoint;
-    public GameObject inRangeVisual;
+    public UnityEngine.GameObject inRangeVisual;
 
     [Header("Audio")]
     public EventReference abilitySound;

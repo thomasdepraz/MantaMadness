@@ -34,6 +34,8 @@ public enum SteamSuccessEnum
     ACH_AREA_BACKROOM,
     ACH_AREA_ICELEVEL,
     ACH_EVENT_BACKROOM,
+    ACH_EVENT_WHY,
+    ACH_EVENT_WHYEND,
 }
 
 public class SteamSuccess : MonoBehaviour, IDataPersistence

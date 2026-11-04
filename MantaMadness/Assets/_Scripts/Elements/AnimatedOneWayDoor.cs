@@ -3,7 +3,7 @@ using UnityEngine;
 public class AnimatedOneWayDoor : MonoBehaviour
 {
     [SerializeField] private Animator animator;
-    [SerializeField] private GameObject[] objectsToDeactivate;
+    [SerializeField] private UnityEngine.GameObject[] objectsToDeactivate;
     [SerializeField] private ParticleSystem[] particles;
     [SerializeField] private bool isOpen;
 
@@ -47,7 +47,7 @@ public class AnimatedOneWayDoor : MonoBehaviour
 
         if (objectsToDeactivate.Length > 0)
         {
-            foreach (GameObject visual in objectsToDeactivate)
+            foreach (UnityEngine.GameObject visual in objectsToDeactivate)
             {
                 visual.SetActive(false);
             }

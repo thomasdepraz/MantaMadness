@@ -4,8 +4,8 @@ using System.Collections;
 
 public class DefaultButtonActivation : MonoBehaviour, IButtonAction
 {
-    [SerializeField] private GameObject[] objectsToActivate;
-    [SerializeField] private GameObject[] objectsToDeactivate;
+    [SerializeField] private UnityEngine.GameObject[] objectsToActivate;
+    [SerializeField] private UnityEngine.GameObject[] objectsToDeactivate;
     [SerializeField] private float spawnTime = 0.05f;
 
     public void Execute()
@@ -15,7 +15,7 @@ public class DefaultButtonActivation : MonoBehaviour, IButtonAction
 
     private IEnumerator Routine()
     {
-        foreach (GameObject obj in objectsToDeactivate)
+        foreach (UnityEngine.GameObject obj in objectsToDeactivate)
         {
             obj.SetActive(false);
         }
@@ -24,7 +24,7 @@ public class DefaultButtonActivation : MonoBehaviour, IButtonAction
         {
             for (int i = 0; i < objectsToActivate.Length; i++)
             {
-                GameObject obj = objectsToActivate[i];
+                UnityEngine.GameObject obj = objectsToActivate[i];
 
                 obj.SetActive(true);
 

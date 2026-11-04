@@ -10,14 +10,14 @@ using UnityEngine.Video;
 
 public class GameInterface : MonoBehaviour, IScreen
 {
-    public GameObject Container => m_Container;
-    public GameObject m_Container;
+    public UnityEngine.GameObject Container => m_Container;
+    public UnityEngine.GameObject m_Container;
 
     public Camera uiCamera;
     [Header("UI Ressources Parameters")]
-    public GameObject coinUiVisual;
-    public GameObject clamUiVisual;
-    public GameObject buckieUiVisual;
+    public UnityEngine.GameObject coinUiVisual;
+    public UnityEngine.GameObject clamUiVisual;
+    public UnityEngine.GameObject buckieUiVisual;
     public TextMeshProUGUI sunText;
     public TextMeshProUGUI clamText;
     public TextMeshProUGUI buckieText;
@@ -49,7 +49,7 @@ public class GameInterface : MonoBehaviour, IScreen
     };
 
     [Header("Speed Gauge")]
-    public GameObject speedGaugeObject;
+    public UnityEngine.GameObject speedGaugeObject;
 
     [Header("Cat Ability Parameters")]
     public Image catOverlay;
@@ -85,8 +85,8 @@ public class GameInterface : MonoBehaviour, IScreen
     [SerializeField] private RectTransform bottomBarStartPosition;
 
     [Header("End Screen Parameters")]
-    [SerializeField] private GameObject endScreenVisual;
-    [SerializeField] private GameObject endScreenInteractText;
+    [SerializeField] private UnityEngine.GameObject endScreenVisual;
+    [SerializeField] private UnityEngine.GameObject endScreenInteractText;
     private Vector3 endScreenOriginalScale;
 
 

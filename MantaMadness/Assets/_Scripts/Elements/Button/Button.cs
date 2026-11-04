@@ -21,8 +21,8 @@ public class Button : MonoBehaviour
     protected WaitForSeconds wait;
     protected Coroutine routine;
 
-    public GameObject[] objectsToActivate;
-    public GameObject[] objectsToDeactivate;
+    public UnityEngine.GameObject[] objectsToActivate;
+    public UnityEngine.GameObject[] objectsToDeactivate;
 
     protected const float c_lockDuration = 4f;
     protected bool isActivated = false;
@@ -40,12 +40,12 @@ public class Button : MonoBehaviour
     {
         if(isActivated == false)
         {
-            foreach (GameObject objects in objectsToActivate)
+            foreach (UnityEngine.GameObject objects in objectsToActivate)
             {
                 objects.SetActive(false);
             }
 
-            foreach (GameObject objects in objectsToDeactivate)
+            foreach (UnityEngine.GameObject objects in objectsToDeactivate)
             {
                 objects.SetActive(true);
             }

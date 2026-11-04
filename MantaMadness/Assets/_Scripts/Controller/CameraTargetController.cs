@@ -73,7 +73,7 @@ public class CameraTargetController : MonoBehaviour
 
     private InputManager inputs;
 
-    public GameObject mantavisual;
+    public UnityEngine.GameObject mantavisual;
 
     public bool trailerCameraEnabled = false;
 

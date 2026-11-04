@@ -5,8 +5,8 @@ using UnityEngine.InputSystem.LowLevel;
 
 public class InteractableNPC : MonoBehaviour, IDataPersistence
 {
-    [SerializeField] protected GameObject outOfRangeVisual;
-    [SerializeField] protected GameObject inRangeVisual;
+    [SerializeField] protected UnityEngine.GameObject outOfRangeVisual;
+    [SerializeField] protected UnityEngine.GameObject inRangeVisual;
     [SerializeField] public string npcName;
 
     [SerializeField] protected NPCDialogState[] dialogStates;
