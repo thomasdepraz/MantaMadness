@@ -316,7 +316,7 @@ public class PauseMenu : MonoBehaviour
     private void LoadMainMenu()
     {
         Time.timeScale = 1f;
-        DOTween.PlayAll();
+        DOTween.KillAll();
         SceneManager.LoadScene("MainMenu");
         DataPersistenceManager.Instance.SaveGame();
     }
