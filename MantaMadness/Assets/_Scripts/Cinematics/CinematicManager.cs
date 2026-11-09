@@ -14,6 +14,7 @@ public class CinematicManager : MonoBehaviour
     public bool isCinematicPlaying;
 
     public PlayableDirector gameIntroCinematicPlayer;
+    public PlayableDirector gameEndingCinematicPlayer;
 
     private void Awake()
     {
@@ -81,9 +82,20 @@ public class CinematicManager : MonoBehaviour
         MantaCameraController.instance.DeactivatePlayerCamera();
     }
 
+    public void PlayEndingCinematic()
+    {
+        isCinematicPlaying = true;
+
+        ResetCam();
+        UIManager.Instance.gameInterface.ToggleInterfaceAreaIntro(false);
+        gameEndingCinematicPlayer.Play();
+        WeatherManager.instance.UpdateFog(FogState.disabled);
+        MantaCameraController.instance.DeactivatePlayerCamera();
+    }
+
     public void Update()
     {
-        if(cinematicPlayer.state == PlayState.Playing || gameIntroCinematicPlayer.state == PlayState.Playing)
+        if(cinematicPlayer.state == PlayState.Playing || gameIntroCinematicPlayer.state == PlayState.Playing  || gameEndingCinematicPlayer.state == PlayState.Playing)
         {
             isCinematicPlaying = true;
         }

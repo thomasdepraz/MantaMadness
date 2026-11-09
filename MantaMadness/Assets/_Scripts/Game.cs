@@ -133,7 +133,7 @@ public class Game : MonoBehaviour, IDataPersistence
                 ForceSet(pos, rotation);
 
                 StartCoroutine(DelayTextDisplayOnGameStart());
-                //CinematicManager.instance.PlayIntroCinematic();
+                CinematicManager.instance.PlayIntroCinematic();
 
                 break;
 
@@ -142,7 +142,6 @@ public class Game : MonoBehaviour, IDataPersistence
 
             //Collect the Frutti wings
             case 2:
-                Debug.Log("Ca marche pas ou quoi ? also le state = " + gameState);
                 //Set Fisherman to state 1
                 NPCManager.instance.UpdateNPCState("FISHERMAN", 1);
                 //Set Red moai to state 1

@@ -35,6 +35,8 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] private TransitionInterface transitionInterface;
 
+
+
     private bool ignoreNextInput = false;
 
     public enum MainMenuState
