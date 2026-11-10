@@ -58,6 +58,7 @@ public class Game : MonoBehaviour, IDataPersistence
     [HideInInspector] public Quaternion m_SpawnRotation;
 
     public UnityEngine.GameObject IntroCinematicObject;
+    public UnityEngine.GameObject EndCinematicObject;
 
     public void Start()
     {
@@ -91,6 +92,9 @@ public class Game : MonoBehaviour, IDataPersistence
         {
             IntroCinematicCheck();
         }
+        
+        EndCinematicObject.SetActive(false);
+
         StateChange();
         CollectibleAreaManager.RestoreCurrentArea();
 
@@ -103,8 +107,11 @@ public class Game : MonoBehaviour, IDataPersistence
 
     public void SetGameState(int stateIndex)
     {
-        gameState = stateIndex;
-        StateChange();
+        if(stateIndex > gameState)
+        {
+            gameState = stateIndex;
+            StateChange();
+        }
     }
 
     private IEnumerator DelayTextDisplayOnGameStart()
@@ -164,6 +171,9 @@ public class Game : MonoBehaviour, IDataPersistence
             case 10:
                 NPCManager.instance.UpdateNPCState("SUPERGOODJOE", 1);
                 SetGameState(11);
+                break;
+
+            case 11:
                 break;
 
             case 12:

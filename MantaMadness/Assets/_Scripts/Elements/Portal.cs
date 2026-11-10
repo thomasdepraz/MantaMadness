@@ -19,6 +19,8 @@ public class Portal : WorldCheckpoint
 
     [SerializeField] protected AreaIntro areaIntro;
 
+    [SerializeField] private bool isEndPortal = false;
+
     protected override void Start()
     {
         base.Start();
@@ -66,6 +68,17 @@ public class Portal : WorldCheckpoint
             else
             {
                 PortalManager.Instance.StartCoroutine(PortalManager.Instance.Teleport(targetIndex, enterSecretRoom, musicToPlay, specialWeatherType,null, this));
+            }
+
+            if(isEndPortal)
+            {
+                Debug.Log("OK je suis dans le end portal");
+                if(Game.Instance.gameState == 11)
+                {
+                    Debug.Log("Ok je lance la cinématique");
+                    Game.Instance.EndCinematicObject.SetActive(true);
+                    CinematicManager.instance.PlayEndingCinematic();
+                }
             }
         }
     }
