@@ -5,7 +5,7 @@ public class SimpeAnimationPlayer : MonoBehaviour
     [SerializeField] private Animator animator;
     public string clipName;
 
-    private void Start()
+    private void OnEnable()
     {
         if(GetComponent<Animator>() != null)
         {

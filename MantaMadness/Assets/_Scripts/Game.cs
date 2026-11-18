@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPEffects.Modifiers;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Timeline;
 using UnityEngine.UIElements;
@@ -177,8 +178,17 @@ public class Game : MonoBehaviour, IDataPersistence
                 break;
 
             case 12:
-                NPCManager.instance.UpdateNPCState("SUPERGOODJOE", 2);
+                WorldCheckpointManager.Instance.SetStartCheckpoint(introCheckpoint.respawnTransform);
+                WorldCheckpointManager.Instance.SetCheckpoint(introCheckpoint.respawnTransform, introCheckpoint.indexName, false, "_", introCheckpoint.LevelID, introCheckpoint.collectibleAreaID);
+                player.ForcePosition(introCheckpoint.respawnTransform.position, introCheckpoint.respawnTransform.rotation);
+                NPCManager.instance.UpdateNPCState("FISHERMAN", 2);
                 SetGameState(13);
+                DialogManager.instance.StartCinematicInteraction(introNpc);
+                break;
+
+            case 14:
+                NPCManager.instance.UpdateNPCState("SUPERGOODJOE", 2);
+                SetGameState(15);
                 break;
             default:
                 break;
@@ -258,7 +268,6 @@ public class Game : MonoBehaviour, IDataPersistence
     {
         player.ForcePosition(introCheckpoint.respawnTransform.position, introCheckpoint.respawnTransform.rotation);
         DialogManager.instance.StartCinematicInteraction(introNpc);
-
     }
 
     public void IntroCinematicCheck()
@@ -271,6 +280,16 @@ public class Game : MonoBehaviour, IDataPersistence
         intro.SetActive(false);
         WeatherManager.instance.UpdateFog(FogState.enabled);
         player.ForceLock(false);
+    }
+
+    public void EndingEnd(GameObject ending)
+    {
+        CinematicManager.instance.EndCinematic();
+        ending.SetActive(false);
+        player.ForceLock(false);
+        player.State = ControllerState.SURFING;
+
+        SetGameState(12);
     }
 
     public void SetRespawnTransform(Transform respawnTransform)
@@ -299,9 +318,9 @@ public class Game : MonoBehaviour, IDataPersistence
             SetGameState(10);
         }
 
-        if (CoinManager.Instance.AreAllCoinsCollected() == true)
+        if (CoinManager.Instance.AreAllCoinsCollected())
         {
-            SetGameState(12);
+            SetGameState(14);
             SteamSuccess.instance.ActivateSteamSuccess(SteamSuccessEnum.ACH_EVENT_ALLJOHNNIES);
         }
     }

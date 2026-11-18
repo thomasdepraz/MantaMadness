@@ -77,6 +77,7 @@ public class CinematicManager : MonoBehaviour
 
         ResetCam();
         UIManager.Instance.gameInterface.ToggleInterfaceAreaIntro(false);
+
         gameIntroCinematicPlayer.Play();
         WeatherManager.instance.UpdateFog(FogState.disabled);
         MantaCameraController.instance.DeactivatePlayerCamera();

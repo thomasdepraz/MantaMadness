@@ -72,13 +72,14 @@ public class Portal : WorldCheckpoint
 
             if(isEndPortal)
             {
-                Debug.Log("OK je suis dans le end portal");
                 if(Game.Instance.gameState == 11)
                 {
-                    Debug.Log("Ok je lance la cinématique");
-                    Game.Instance.EndCinematicObject.SetActive(true);
-                    CinematicManager.instance.PlayEndingCinematic();
+                   Game.Instance.EndCinematicObject.SetActive(true);
+                   CinematicManager.instance.PlayEndingCinematic();
                 }
+
+                //Game.Instance.EndCinematicObject.SetActive(true);
+                //CinematicManager.instance.PlayEndingCinematic();
             }
         }
     }

@@ -17,6 +17,11 @@ public class WorldLevelManager : MonoBehaviour
         Instance = this;
     }
 
+    public void LoadLevelFunction(string levelID)
+    {
+        StartCoroutine(LoadLevel(levelID));
+    }
+
     public IEnumerator LoadLevel(string levelID)
     {
 
