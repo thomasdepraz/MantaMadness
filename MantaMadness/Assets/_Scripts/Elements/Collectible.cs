@@ -231,6 +231,15 @@ public class Collectible : MonoBehaviour, IDataPersistence
         {
             UIManager.Instance.gameInterface.RefreshAreaClamCount();
             UIManager.Instance.gameInterface.RefreshAreaBuckieCount();
+
+            if(type == CollectibleType.buckie)
+            {
+                UIManager.Instance.gameInterface.EnableUICounter(PickupType.Buckie);
+            }
+            else
+            {
+                UIManager.Instance.gameInterface.EnableUICounter(PickupType.Clam);
+            }
         }
 
         if (CollectibleAreaManager.CurrentArea != null)

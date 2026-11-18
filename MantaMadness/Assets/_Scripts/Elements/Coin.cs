@@ -61,6 +61,7 @@ public class Coin : MonoBehaviour
         pickedUpCoin.Invoke(true);
 
         //Update L'UI
+        UIManager.Instance.gameInterface.EnableUICounter(PickupType.Sun);
         UIManager.Instance.gameInterface.RefreshAreaSunCount();
 
         //Check area manager bro

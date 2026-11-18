@@ -8,6 +8,12 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
+public enum PickupType
+{
+    Clam,
+    Buckie,
+    Sun,
+}
 public class GameInterface : MonoBehaviour, IScreen
 {
     public UnityEngine.GameObject Container => m_Container;
@@ -21,6 +27,8 @@ public class GameInterface : MonoBehaviour, IScreen
     public TextMeshProUGUI sunText;
     public TextMeshProUGUI clamText;
     public TextMeshProUGUI buckieText;
+    public RectTransform OriginalUiCounterPos;
+    public RectTransform TargetUiCounterPos;
 
     [Header("UI Current Collectible Area")]
     //public TextMeshProUGUI collectibleAreaName;
@@ -215,6 +223,8 @@ public class GameInterface : MonoBehaviour, IScreen
         }
 
         sunImage.transform.localScale = sunScales[0];
+
+        ResetUICounter();
 
         RefreshAllAreaCount();
     }
@@ -581,7 +591,6 @@ public class GameInterface : MonoBehaviour, IScreen
 
     public void RefreshAreaSunCount()
     {
-        Debug.Log("SUN JE SUIS LA");
         if (CollectibleAreaManager.CurrentArea == null)
         {
             SunAreaCount.text = "";
@@ -647,5 +656,163 @@ public class GameInterface : MonoBehaviour, IScreen
                 DisableEndScreen();
             }
         }
+    }
+
+    public void EnableUICounter(PickupType type)
+    {
+        switch (type)
+        {
+            case PickupType.Sun:
+                if (TweenSunCoroutine == null && SunUiCoroutine == null)
+                {
+                    //ResetUICounter();
+                    TweenSunCoroutine = StartCoroutine(TweenUi(PickupType.Sun));
+                }
+                else if (TweenSunCoroutine != null && SunUiCoroutine == null)
+                {
+                    return;
+                }
+                else if (TweenSunCoroutine == null && SunUiCoroutine != null)
+                {
+                    StopCoroutine(SunUiCoroutine);
+                    SunUiCoroutine = StartCoroutine(UiCooldown(PickupType.Sun));
+                }
+                break;
+
+            case PickupType.Buckie:
+                if (SunUiCoroutine == null && TweenSunCoroutine == null)
+                {
+                    if (TweenBuckieCoroutine == null && BuckieUiCoroutine == null)
+                    {
+                        ResetUICounter();
+                        TweenBuckieCoroutine = StartCoroutine(TweenUi(PickupType.Buckie));
+                    }
+                    else if (TweenBuckieCoroutine != null && BuckieUiCoroutine == null)
+                    {
+                        return;
+                    }
+                    else if (TweenBuckieCoroutine == null && BuckieUiCoroutine != null)
+                    {
+                        StopCoroutine(BuckieUiCoroutine);
+                        BuckieUiCoroutine = StartCoroutine(UiCooldown(PickupType.Buckie));
+                    }
+                }
+
+                break;
+
+            case PickupType.Clam:
+                if (SunUiCoroutine == null && TweenSunCoroutine == null)
+                {
+                    if(BuckieUiCoroutine == null && TweenBuckieCoroutine == null)
+                    {
+                        if(TweenClamCoroutine == null && ClamUiCoroutine == null)
+                        {
+                            TweenClamCoroutine = StartCoroutine(TweenUi(PickupType.Clam));
+                        }
+                        else if(TweenClamCoroutine != null && ClamUiCoroutine == null)
+                        {
+                            return;
+                        }
+                        else if(TweenClamCoroutine == null && ClamUiCoroutine != null)
+                        {
+                            StopCoroutine(ClamUiCoroutine);
+                            ClamUiCoroutine = StartCoroutine(UiCooldown(PickupType.Clam));
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    private Coroutine TweenSunCoroutine;
+    private Coroutine TweenBuckieCoroutine;
+    private Coroutine TweenClamCoroutine;
+    private Coroutine SunUiCoroutine;
+    private Coroutine BuckieUiCoroutine;
+    private Coroutine ClamUiCoroutine;
+
+    private IEnumerator TweenUi(PickupType type)
+    {
+        switch (type)
+        {
+            case PickupType.Clam:
+                clamUiVisual.transform.DOKill();
+                clamUiVisual.transform.DOMove(TargetUiCounterPos.position, 1f);
+                break;
+
+            case PickupType.Sun:
+                coinUiVisual.transform.DOKill();
+                coinUiVisual.transform.DOMove(TargetUiCounterPos.position, 1f);
+                break;
+
+            case PickupType.Buckie:
+                buckieUiVisual.transform.DOKill();
+                buckieUiVisual.transform.DOMove(TargetUiCounterPos.position, 1f);
+                break;
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        switch (type)
+        {
+            case PickupType.Clam:
+                TweenClamCoroutine = null;
+                ClamUiCoroutine = StartCoroutine(UiCooldown(PickupType.Clam));
+                break;
+
+            case PickupType.Sun:
+                TweenSunCoroutine = null;
+                ClamUiCoroutine = StartCoroutine(UiCooldown(PickupType.Sun));
+                break;
+
+            case PickupType.Buckie:
+                TweenBuckieCoroutine = null;
+                ClamUiCoroutine = StartCoroutine(UiCooldown(PickupType.Buckie));
+                break;
+        }
+    }
+
+    private IEnumerator UiCooldown(PickupType type)
+    {
+        yield return new WaitForSeconds(3f);
+        if(type == PickupType.Clam)
+        {
+            ClamUiCoroutine = null;
+            clamUiVisual.transform.DOKill();
+            clamUiVisual.transform.DOMove(OriginalUiCounterPos.position, 1f);
+        }
+        else if(type == PickupType.Sun)
+        {
+            SunUiCoroutine = null;
+            coinUiVisual.transform.DOKill();
+            coinUiVisual.transform.DOMove(OriginalUiCounterPos.position, 1f);
+        }
+        else if(type== PickupType.Buckie)
+        {
+            BuckieUiCoroutine = null;
+            buckieUiVisual.transform.DOKill();
+            buckieUiVisual.transform.DOMove(OriginalUiCounterPos.position, 1f);
+        }
+        // Tween Out Current UI (depend on type)
+    }
+
+    public void ResetUICoroutines()
+    {
+        ClamUiCoroutine = null;
+        BuckieUiCoroutine = null;
+        SunUiCoroutine = null;
+        SunUiCoroutine = null;
+        BuckieUiCoroutine = null;
+        ClamUiCoroutine = null;
+    }
+
+    public void ResetUICounter()
+    {
+        coinUiVisual.transform.DOKill();
+        coinUiVisual.transform.position = OriginalUiCounterPos.position;
+        buckieUiVisual.transform.DOKill();
+        buckieUiVisual.transform.position = OriginalUiCounterPos.position;
+        clamUiVisual.transform.DOKill();
+        clamUiVisual.transform.position = OriginalUiCounterPos.position;
     }
 }

@@ -48,7 +48,7 @@ public class WeatherManager : MonoBehaviour, IDataPersistence
 
     [SerializeField] private weatherColor[] weatherConditions;
 
-    public WeatherType currentWeather;
+    public WeatherType currentWeather = WeatherType.Shores;
     public FogState currentFogState;
 
     [SerializeField] private Ease ease;
