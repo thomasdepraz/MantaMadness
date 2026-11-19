@@ -22,6 +22,7 @@ public enum CollectibleArea
     LAVAHEART,
     BACKROOM,
     ICELEVEL,
+    FINALBRIDGE,
 }
 public class CollectibleAreaRegistry : MonoBehaviour, IDataPersistence
 {
